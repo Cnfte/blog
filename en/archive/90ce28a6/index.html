@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- SEO & Metadata -->
+    <title>Internet Science Popularization Series - What is DNS? - Cnfteの博客</title>
+    <meta name="description" content="What is DNS? Imagine the internet as a vast city, home to countless websites and servers, each with its own "address," which is a string of numbers like 19...">
+    <link rel="icon" href="https://www.img520.com/AVcrrd.jpg">
+    
+    <!-- 极客字体引用：强制同步加载确保移动端第一时间渲染 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #0a0a0a;
+            --text: #ffffff;
+            --text-muted: #a0a0a0;
+            --border: #222222;
+            --code-bg: #050505;
+            --accent: #ffffff;
+            --selection: #333333;
+        }
+
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --surface: #fafafa;
+            --text: #1d1d1f;
+            --text-muted: #505050;
+            --border: #e0e0e0;
+            --code-bg: #f5f5f5;
+            --selection: #eeeeee;
+        }
+
+        /* 基础复位 & 消除移动端点击蓝色背景 */
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent !important; 
+        }
+        
+        /* 强力锁定链接颜色，防止变紫/变蓝 */
+        a, a:visited, a:active {
+            color: inherit !important;
+            text-decoration: none !important;
+            outline: none !important;
+        }
+
+        body { 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            background: var(--bg); color: var(--text); 
+            line-height: 1.8; overflow-x: hidden; width: 100%;
+            transition: background 0.3s;
+        }
+
+        .mono { font-family: 'Fira Code', monospace !important; }
+        ::selection { background: var(--selection); }
+
+        /* 顶部进度条 */
+        #progress { position: fixed; top: 0; left: 0; width: 0%; height: 2px; background: var(--text); z-index: 2001; }
+
+        /* 极简顶部导航栏 */
+        nav { 
+            position: sticky; top: 0; z-index: 1000; background: var(--bg); 
+            border-bottom: 2px solid var(--border); padding: 0 5%; height: 64px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { font-weight: 900; font-size: 1.1rem; letter-spacing: -1px; }
+
+        /* 文章头部：彻底解决标题被导航栏遮挡问题 */
+        .post-header { 
+            padding: 140px 20px 60px; /* 增加顶部 Padding 确保空间充足 */
+            text-align: left; 
+            border-bottom: 1px solid var(--border); 
+            max-width: 1400px; margin: 0 auto; 
+            background: var(--surface);
+        }
+        .post-path { font-family: 'Fira Code', monospace; color: var(--text-muted); font-size: 0.75rem; margin-bottom: 20px; text-transform: uppercase; }
+        .post-header h1 { 
+            font-size: clamp(2rem, 5vw, 3.5rem); 
+            font-weight: 900; 
+            letter-spacing: -2px; 
+            line-height: 1.2; 
+            margin-bottom: 30px;
+            display: block; 
+        }
+
+        /* 响应式主架构 */
+        .main-wrapper { 
+            max-width: 1400px; margin: 0 auto; 
+            display: flex; flex-direction: row; 
+            align-items: stretch;
+        }
+
+        main { flex: 1; min-width: 0; } /* 解决 Flex 容器内溢出的核心 */
+
+        article.content { 
+            padding: 60px; border-right: 1px solid var(--border);
+            font-size: 1.125rem;
+        }
+
+        /* 正文样式 */
+        .content h2 { font-size: 1.8rem; margin: 2.5em 0 1.2em; font-weight: 900; border-bottom: 4px solid var(--text); padding-bottom: 10px; display: inline-block; }
+        .content h3 { font-size: 1.4rem; margin: 2em 0 1em; font-weight: 700; color: var(--text); border-left: 4px dashed var(--border); padding-left: 15px; }
+        .content p { margin-bottom: 2.2rem; text-align: justify; }
+        .content a { color: var(--text); text-decoration: underline !important; font-weight: 700; text-underline-offset: 4px; }
+        .content img { max-width: 100%; border: 1px solid var(--border); margin: 30px 0; display: block; height: auto; padding: 5px; }
+
+        /* --- 代码块彻底锁死修复方案 --- */
+        pre { 
+            background: var(--code-bg) !important; 
+            padding: 40px 20px 20px !important; 
+            border: 1px solid var(--border) !important;
+            margin: 2.5rem 0; position: relative; 
+            display: block !important; 
+            width: 100% !important; 
+            max-width: 100% !important; 
+            overflow-x: auto !important; 
+            white-space: pre !important; 
+            word-wrap: normal !important;
+            box-sizing: border-box !important;
+            border-radius: 0;
+        }
+        pre code { font-family: 'Fira Code', monospace !important; font-size: 0.95rem !important; display: block; min-width: fit-content; line-height: 1.6; }
+
+        /* 侧边栏加固：解决垂直堆叠 Bug */
+        aside { 
+            width: 360px; flex-shrink: 0; min-width: 320px;
+            padding: 60px 40px; background: var(--surface);
+            position: sticky; top: 64px; height: calc(100vh - 64px); 
+            overflow-y: auto;
+        }
+        .widget { margin-bottom: 60px; width: 100%; }
+        .widget-title { font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 25px; text-transform: uppercase; border-left: 4px solid var(--text); padding-left: 12px; }
+
+        /* 作者简介样式：锁定正常排版，防止单字符垂直显示 */
+        .bio-text {
+            font-size: 0.9rem; color: var(--text-muted); 
+            margin-top: 15px; line-height: 1.6;
+            word-break: normal !important; 
+            white-space: normal !important; 
+            display: block !important; width: 100% !important;
+            text-align: center;
+        }
+
+        /* 悬浮按钮修复：高对比度黑白方块 */
+        .float-bar { position: fixed; bottom: 30px; right: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 1000; }
+        .float-btn { 
+            width: 52px; height: 52px; 
+            background: var(--text) !important; /* 深色模式下它是白色 */
+            color: var(--bg) !important;       /* 强制图标显示为黑色 */
+            border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; font-size: 1.3rem; border-radius: 0; 
+            box-shadow: 6px 6px 0px var(--border);
+            transition: 0.1s;
+        }
+        .float-btn i, .float-btn svg { color: var(--bg) !important; pointer-events: none; }
+        .float-btn:active { transform: translate(2px, 2px); box-shadow: none; }
+
+        .copy-btn { position: absolute; top: 0; right: 0; background: var(--border); color: var(--text); border: none; padding: 8px 15px; font-size: 0.65rem; cursor: pointer; font-family: 'Fira Code', monospace; font-weight: 700; text-transform: uppercase; }
+
+        /* 系统日志组件 */
+        .sys-log { 
+            background: #000; border: 1px solid #333; padding: 20px; 
+            font-family: 'Fira Code', monospace; font-size: 0.75rem; color: #00ff00; line-height: 1.6;
+        }
+
+        /* 移动端强力适配逻辑：1024px 以下强制单栏并撑满 */
+        @media (max-width: 1024px) {
+            .main-wrapper { flex-direction: column !important; }
+            article.content { padding: 40px 25px; border-right: none !important; width: 100% !important; }
+            aside { 
+                width: 100% !important; flex-shrink: 0;
+                border-left: none !important; border-top: 2px solid var(--border); 
+                position: static !important; height: auto !important; 
+                padding: 40px 25px !important;
+            }
+            .post-header { padding: 100px 20px 40px; }
+            /* 代码块移动端全宽显示 */
+            pre { margin: 2rem -25px; border-left: none; border-right: none; padding: 45px 25px 25px !important; }
+        }
+
+        footer { padding: 80px 20px; text-align: center; border-top: 2px solid var(--border); font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted); background: var(--surface); }
+    </style>
+</head>
+<body>
+    <div id="progress" aria-hidden="true"></div>
+    <nav aria-label="Global Navigation">
+        <a href="/" class="logo mono">CNFTE://ROOT</a>
+        <div class="mono" style="font-size: 0.75rem; cursor: pointer; border: 1px solid var(--border); padding: 6px 12px;" onclick="toggleTheme()">[ENV_MODE: <span id="mode-text">DARK</span>]</div>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-path">/ROOT/NODES/POSTS/2026/01/24</div>
+        <h1>Internet Science Popularization Series - What is DNS?</h1>
+        <div class="mono" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 15px;">
+            STAMP: 2026-01-24 // REF_ID: 90ce28a6 // AUTH: VERIFIED
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <main>
+            <article class="content" id="article-main">
+                <h3 id="what-is-dns">What is DNS?</h3>
+<p>Imagine the internet as a vast city, home to countless websites and servers, each with its own "address," which is a string of numbers like <code>192.168.1.1</code>. We call this an <strong>IP address</strong>.</p>
+<p>However, humans can't easily remember so many numerical addresses; we're more accustomed to remembering names, such as <code>www.baidu.com</code> or <code>www.google.com</code>.</p>
+<p><strong>DNS (Domain Name System)</strong> is like a <strong>telephone book</strong> or <strong>address book</strong> for this city. Its main job is to translate the website names we're familiar with (domain names) into their corresponding numerical addresses (IP addresses).</p>
+<p>So, simply put, <strong>DNS is a translator on the internet, specifically responsible for translating website names into IP addresses.</strong></p>
+<hr />
+<h3 id="what-is-dns-used-for">What is DNS used for?</h3>
+<p>With this DNS translator, we can conveniently access various services on the internet.</p>
+<ol>
+<li><strong>Convenient memory and access:</strong> Without DNS, every time we wanted to access Baidu, we would have to remember Baidu's server IP address – that would be incredibly inconvenient! With DNS, we only need to enter <code>www.baidu.com</code>, and DNS will help us find it.</li>
+<li><strong>Website migration and IP address changes:</strong> Website servers may move (IP addresses change) or be upgraded. If we had to update the IP addresses we remembered every time, it would be a disaster. But with DNS, only the IP address in the DNS record needs to be updated, and users won't even notice, still able to access the website normally. DNS acts as an intermediary, hiding the complex changes behind the scenes.</li>
+<li><strong>Load balancing:</strong> A large website may have several servers providing services to distribute the load. DNS can direct access requests to different servers depending on the situation, preventing any single server from becoming overloaded and causing website slowdowns.</li>
+</ol>
+<hr />
+<h3 id="what-is-the-role-of-dns-on-the-internet">What is the role of DNS on the internet?</h3>
+<p>DNS holds a very important position on the internet; it is arguably <strong>one of the cornerstones of the internet</strong>.</p>
+<p>You can think of it as the <strong>internet's navigation system</strong>. Without navigation, you might not be able to find where you want to go. DNS is the guide, telling your computer where the website you want to visit "lives" (its IP address). If DNS fails, access to the entire internet will be severely affected, just like a navigation system malfunctioning – people won't be able to find their way.</p>
+<hr />
+<h3 id="everyday-uses-of-dns">Everyday Uses of DNS</h3>
+<p>In fact, you use DNS every day without even realizing it:</p>
+<ul>
+<li><strong>Browsing the web:</strong> When you type a website address into your browser or click a link, your computer uses DNS to look up the corresponding IP address before connecting to the website server.</li>
+<li><strong>Using apps:</strong> Many mobile apps also need to connect to servers on the internet, such as WeChat, Weibo, and TikTok. They also use DNS in the background to find the servers.</li>
+<li><strong>Sending and receiving emails:</strong> Sending and receiving emails also requires DNS to find the email server address.</li>
+<li><strong>Online gaming:</strong> When playing online games, DNS helps your game client find the game server.</li>
+</ul>
+<p><strong>In short, whenever your device needs to connect to a service on the internet, DNS is silently working for you.</strong></p>
+<hr />
+<h3 id="the-dangers-of-dns-poisoning-and-the-specific-process-of-dns-poisoning">The Dangers of DNS Poisoning and the Specific Process of DNS Poisoning</h3>
+<h4 id="the-dangers-of-dns-poisoning">The Dangers of DNS Poisoning</h4>
+<p>DNS poisoning is like someone tampering with that "address book," changing the correct addresses to incorrect ones.</p>
+<p><strong>The dangers mainly include:</strong></p>
+<ol>
+<li><strong>Inability to access legitimate websites:</strong> For example, if you type <code>www.baidu.com</code>, DNS might redirect you to a fake, unrelated server, preventing you from accessing Baidu.</li>
+<li><strong>Being redirected to phishing or malicious websites:</strong> Even worse, scammers might poison the domain name of a bank website to point to a fake phishing website. You think you're accessing the bank, but in reality, all your account numbers and passwords will be stolen by the scammers.</li>
+<li><strong>Network security risks:</strong> Viruses, Trojans, and other malicious software can also use DNS poisoning to redirect users to websites that download malicious programs.</li>
+<li><strong>Impact on normal business operations:</strong> For businesses, DNS poisoning can prevent customers from accessing their official website or services, causing economic losses and reputational damage.</li>
+</ol>
+<h4 id="specific-process-of-dns-poisoning-simplified-version">Specific Process of DNS Poisoning (Simplified Version)</h4>
+<p>Scammers who want to poison your DNS usually use some technical means to make the DNS server used by your computer or home router return incorrect IP addresses.</p>
+<p><strong>A common scenario is this:</strong></p>
+<ol>
+<li><strong>The scammer controls a DNS server:</strong> The scammer may control one or more DNS servers through various means. 2. <strong>Modifying DNS Records:</strong> On the compromised DNS server, the scammers change the domain name of a commonly used website (such as the bank's official website <code>www.bank.com</code>) to point to a fake IP address. This fake IP address points to a phishing website set up by the scammers.</li>
+<li><strong>Inducing your device to use this compromised DNS:</strong></li>
+<li><strong>Method 1 (Router):</strong> If your home router is configured to use this compromised DNS server, all devices connected to your router will receive the wrong IP address when querying <code>www.bank.com</code>. </li>
+<li><strong>Method 2 (Local hosts file):</strong> Some viruses or malware directly modify your computer's local <code>hosts</code> file. This file acts like a "small address book" on your computer, with a higher priority than external DNS servers. If it contains an entry for <code>www.bank.com</code> pointing to a wrong IP address, the computer will prioritize using this incorrect address. </li>
+<li><strong>Method 3 (DNS Hijacking):</strong> In some network environments (such as insecure public Wi-Fi), scammers may use technical means to "hijack" your DNS query requests, unknowingly redirecting your requests to the compromised DNS server.</li>
+<li><strong>Accessing the website, being redirected to the wrong address:</strong> When you type <code>www.bank.com</code>, your computer will connect to the fake website set up by the scammers based on the compromised DNS information.</li>
+<li><strong>Stealing information:</strong> This fake website looks exactly like the real one. When you enter your account, password, and bank card information, this information will be easily obtained by the scammers.</li>
+</ol>
+<p><strong>In short, DNS poisoning is when someone secretly modifies the internet's "address book," changing the "good place" you intended to go to into a "bad place," leading you to be scammed.</strong></p>
+<hr />
+<h3 id="common-dns-resolution-addresses">Common DNS Resolution Addresses</h3>
+<p>These are the server addresses that provide DNS resolution services. You can think of them as different "address book administrators." Different service providers may offer different resolution speeds, stability, and security. * <strong>Baidu DNS:</strong>
++ Primary DNS Server: <code>180.76.76.76</code>
++ Secondary DNS Server: <code>~.~.~.~</code>
+* <strong>Alibaba Cloud DNS:</strong>
++ Primary DNS Server: <code>223.5.5.5</code>
++ Secondary DNS Server: <code>223.6.6.6</code>
+* <strong>Tencent Cloud DNS:</strong>
++ Primary DNS Server: <code>119.29.29.29</code>
++ Secondary DNS Server: <code>119.28.28.28</code>
+* <strong>China Telecom DNS:</strong>
++ Primary DNS Server: <code>114.114.114.114</code>
++ Secondary DNS Server: <code>114.114.115.115</code>
+* <strong>Google Public DNS:</strong>
++ Primary DNS Server: <code>8.8.8.8</code>
++ Secondary DNS Server: <code>8.8.4.4</code>
+* <strong>Cloudflare DNS:</strong>
++ Primary DNS Server: <code>1.1.1.1</code>
++ Secondary DNS Server: <code>1.0.0.1</code></p>
+<p><strong>You can manually change the DNS server address in your computer or router's network settings based on your network conditions and preferences. This can sometimes improve access speed or resolve some network issues.</strong></p>
+            </article>
+
+            <!-- 极客版权区域 -->
+            <section style="padding: 0 60px 60px; font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted);" aria-label="Integrity Card">
+                <div style="border: 1px solid var(--border); padding: 35px; background: var(--surface);">
+                    <div># SOURCE_NODE: <span id="page-url" style="word-break: break-all; color: var(--text);"></span></div>
+                    <div># LICENSE: CC-BY-NC-SA-4.0</div>
+                    <div># INTEGRITY_STATUS: VALIDATED_ENCRYPTED</div>
+                    <div style="margin-top: 20px; color: var(--text);">// EOF_SIGNAL_RECEIVED</div>
+                </div>
+            </section>
+        </main>
+
+        <aside>
+            <section class="widget" aria-label="User Identifier">
+                <h3 class="widget-title">IDENT_AUTH</h3>
+                <div style="border: 1px solid var(--border); padding: 35px 20px; text-align: center; background: var(--bg);">
+                    <img src="https://edgeoneimg.cdn.sn/i/696b4d5b58c71_1768639835.webp" style="width: 72px; height: 72px; filter: grayscale(1); border: 1px solid var(--border); padding: 4px; margin-bottom: 20px;" alt="Avatar">
+                    <div class="mono" style="font-weight: 900; font-size: 1.2rem; color: var(--text);">Cnfte</div>
+                    <!-- 核心修复：作者简介 -->
+                    <div class="bio-text mono">"滚滚长江东逝水，浪花淘尽英雄。"</div>
+                </div>
+            </section>
+
+            <section class="widget" aria-label="System Metrics">
+                <h3 class="widget-title">SYSTEM_LOG</h3>
+                <div class="sys-log">
+                    <div>[OK] NODE_STATE: STABLE</div>
+                    <div>[OK] UPTIME: 17M_READ</div>
+                    <div>[OK] CLOCK: <span id="live-clock">00:00:00</span></div>
+                    <div style="color: #333">-----------------------</div>
+                    <div>$ tail -f blog.log</div>
+                    <div>> Reading node...</div>
+                    <div style="color: #00ff00;">> Internet Sci...</div>
+                </div>
+            </section>
+
+            
+            <section class="widget" aria-label="Table of Contents">
+                <h3 class="widget-title">STRUCTURE_TOC</h3>
+                <div class="toc-box" id="toc-container">
+                    <div class="toc">
+<ul>
+<li><a href="#what-is-dns">What is DNS?</a></li>
+<li><a href="#what-is-dns-used-for">What is DNS used for?</a></li>
+<li><a href="#what-is-the-role-of-dns-on-the-internet">What is the role of DNS on the internet?</a></li>
+<li><a href="#everyday-uses-of-dns">Everyday Uses of DNS</a></li>
+<li><a href="#the-dangers-of-dns-poisoning-and-the-specific-process-of-dns-poisoning">The Dangers of DNS Poisoning and the Specific Process of DNS Poisoning</a><ul>
+<li><a href="#the-dangers-of-dns-poisoning">The Dangers of DNS Poisoning</a></li>
+<li><a href="#specific-process-of-dns-poisoning-simplified-version">Specific Process of DNS Poisoning (Simplified Version)</a></li>
+</ul>
+</li>
+<li><a href="#common-dns-resolution-addresses">Common DNS Resolution Addresses</a></li>
+</ul>
+</div>
+
+                </div>
+            </section>
+            
+        </aside>
+    </div>
+
+    <div class="float-bar">
+        <button class="float-btn" onclick="copyLink()" aria-label="Share"><i class="fa-solid fa-share-nodes"></i></button>
+        <button class="float-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Back to Top"><i class="fa-solid fa-chevron-up"></i></button>
+    </div>
+
+    <footer>
+        <p class="mono">TERMINAL_BLOG_ENGINE v3.0.5 // © 2026 Cnfte</p>
+        <p class="mono" style="font-size: 0.75rem; margin-top: 15px; opacity: 0.5;">Copyright © 2026 Cnfte 阿巴阿巴阿巴阿巴阿巴阿巴</p>
+    </footer>
+
+    <script>
+        // 1. 初始化 URL
+        document.getElementById('page-url').innerText = window.location.href;
+
+        // 2. 系统时钟
+        setInterval(() => {
+            document.getElementById('live-clock').innerText = new Date().toTimeString().split(' ')[0];
+        }, 1000);
+
+        // 3. 滚动进度监听与 TOC 高亮
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            document.getElementById("progress").style.width = (winScroll / height * 100) + "%";
+            
+            const sections = document.querySelectorAll('.content h2, .content h3');
+            const tocLinks = document.querySelectorAll('.toc-box a');
+            let activeId = '';
+            sections.forEach(s => {
+                if (s.getBoundingClientRect().top < 100) activeId = s.getAttribute('id');
+            });
+            tocLinks.forEach(l => {
+                l.classList.toggle('active', l.getAttribute('href') === '#' + activeId);
+            });
+        });
+
+        // 4. 代码块复制增强
+        document.querySelectorAll('pre').forEach(block => {
+            const btn = document.createElement('button');
+            btn.className = 'copy-btn mono';
+            btn.innerText = 'COPY';
+            btn.onclick = () => {
+                navigator.clipboard.writeText(block.querySelector('code').innerText).then(() => {
+                    btn.innerText = 'DONE'; setTimeout(() => btn.innerText = 'COPY', 2000);
+                });
+            };
+            block.appendChild(btn);
+        });
+
+        // 5. 主题控制
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const target = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', target);
+            document.getElementById('mode-text').innerText = target.toUpperCase();
+            localStorage.setItem('geek-theme', target);
+        }
+        
+        const savedTheme = localStorage.getItem('geek-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.getElementById('mode-text').innerText = savedTheme.toUpperCase();
+
+        function copyLink() { navigator.clipboard.writeText(window.location.href); alert("LINK_COPIED_TO_CLIPBOARD"); }
+    </script>
+</body>
+</html>

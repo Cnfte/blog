@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- SEO & Metadata -->
+    <title>Internet Science Popularization Series - What are HTTP and HTTPS? - Cnfteの博客</title>
+    <meta name="description" content="Hello everyone! Today we're going to talk about two terms we often encounter when browsing the internet: HTTP and HTTPS. They sound a bit technical, but th...">
+    <link rel="icon" href="https://www.img520.com/AVcrrd.jpg">
+    
+    <!-- 极客字体引用：强制同步加载确保移动端第一时间渲染 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #0a0a0a;
+            --text: #ffffff;
+            --text-muted: #a0a0a0;
+            --border: #222222;
+            --code-bg: #050505;
+            --accent: #ffffff;
+            --selection: #333333;
+        }
+
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --surface: #fafafa;
+            --text: #1d1d1f;
+            --text-muted: #505050;
+            --border: #e0e0e0;
+            --code-bg: #f5f5f5;
+            --selection: #eeeeee;
+        }
+
+        /* 基础复位 & 消除移动端点击蓝色背景 */
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent !important; 
+        }
+        
+        /* 强力锁定链接颜色，防止变紫/变蓝 */
+        a, a:visited, a:active {
+            color: inherit !important;
+            text-decoration: none !important;
+            outline: none !important;
+        }
+
+        body { 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            background: var(--bg); color: var(--text); 
+            line-height: 1.8; overflow-x: hidden; width: 100%;
+            transition: background 0.3s;
+        }
+
+        .mono { font-family: 'Fira Code', monospace !important; }
+        ::selection { background: var(--selection); }
+
+        /* 顶部进度条 */
+        #progress { position: fixed; top: 0; left: 0; width: 0%; height: 2px; background: var(--text); z-index: 2001; }
+
+        /* 极简顶部导航栏 */
+        nav { 
+            position: sticky; top: 0; z-index: 1000; background: var(--bg); 
+            border-bottom: 2px solid var(--border); padding: 0 5%; height: 64px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { font-weight: 900; font-size: 1.1rem; letter-spacing: -1px; }
+
+        /* 文章头部：彻底解决标题被导航栏遮挡问题 */
+        .post-header { 
+            padding: 140px 20px 60px; /* 增加顶部 Padding 确保空间充足 */
+            text-align: left; 
+            border-bottom: 1px solid var(--border); 
+            max-width: 1400px; margin: 0 auto; 
+            background: var(--surface);
+        }
+        .post-path { font-family: 'Fira Code', monospace; color: var(--text-muted); font-size: 0.75rem; margin-bottom: 20px; text-transform: uppercase; }
+        .post-header h1 { 
+            font-size: clamp(2rem, 5vw, 3.5rem); 
+            font-weight: 900; 
+            letter-spacing: -2px; 
+            line-height: 1.2; 
+            margin-bottom: 30px;
+            display: block; 
+        }
+
+        /* 响应式主架构 */
+        .main-wrapper { 
+            max-width: 1400px; margin: 0 auto; 
+            display: flex; flex-direction: row; 
+            align-items: stretch;
+        }
+
+        main { flex: 1; min-width: 0; } /* 解决 Flex 容器内溢出的核心 */
+
+        article.content { 
+            padding: 60px; border-right: 1px solid var(--border);
+            font-size: 1.125rem;
+        }
+
+        /* 正文样式 */
+        .content h2 { font-size: 1.8rem; margin: 2.5em 0 1.2em; font-weight: 900; border-bottom: 4px solid var(--text); padding-bottom: 10px; display: inline-block; }
+        .content h3 { font-size: 1.4rem; margin: 2em 0 1em; font-weight: 700; color: var(--text); border-left: 4px dashed var(--border); padding-left: 15px; }
+        .content p { margin-bottom: 2.2rem; text-align: justify; }
+        .content a { color: var(--text); text-decoration: underline !important; font-weight: 700; text-underline-offset: 4px; }
+        .content img { max-width: 100%; border: 1px solid var(--border); margin: 30px 0; display: block; height: auto; padding: 5px; }
+
+        /* --- 代码块彻底锁死修复方案 --- */
+        pre { 
+            background: var(--code-bg) !important; 
+            padding: 40px 20px 20px !important; 
+            border: 1px solid var(--border) !important;
+            margin: 2.5rem 0; position: relative; 
+            display: block !important; 
+            width: 100% !important; 
+            max-width: 100% !important; 
+            overflow-x: auto !important; 
+            white-space: pre !important; 
+            word-wrap: normal !important;
+            box-sizing: border-box !important;
+            border-radius: 0;
+        }
+        pre code { font-family: 'Fira Code', monospace !important; font-size: 0.95rem !important; display: block; min-width: fit-content; line-height: 1.6; }
+
+        /* 侧边栏加固：解决垂直堆叠 Bug */
+        aside { 
+            width: 360px; flex-shrink: 0; min-width: 320px;
+            padding: 60px 40px; background: var(--surface);
+            position: sticky; top: 64px; height: calc(100vh - 64px); 
+            overflow-y: auto;
+        }
+        .widget { margin-bottom: 60px; width: 100%; }
+        .widget-title { font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 25px; text-transform: uppercase; border-left: 4px solid var(--text); padding-left: 12px; }
+
+        /* 作者简介样式：锁定正常排版，防止单字符垂直显示 */
+        .bio-text {
+            font-size: 0.9rem; color: var(--text-muted); 
+            margin-top: 15px; line-height: 1.6;
+            word-break: normal !important; 
+            white-space: normal !important; 
+            display: block !important; width: 100% !important;
+            text-align: center;
+        }
+
+        /* 悬浮按钮修复：高对比度黑白方块 */
+        .float-bar { position: fixed; bottom: 30px; right: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 1000; }
+        .float-btn { 
+            width: 52px; height: 52px; 
+            background: var(--text) !important; /* 深色模式下它是白色 */
+            color: var(--bg) !important;       /* 强制图标显示为黑色 */
+            border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; font-size: 1.3rem; border-radius: 0; 
+            box-shadow: 6px 6px 0px var(--border);
+            transition: 0.1s;
+        }
+        .float-btn i, .float-btn svg { color: var(--bg) !important; pointer-events: none; }
+        .float-btn:active { transform: translate(2px, 2px); box-shadow: none; }
+
+        .copy-btn { position: absolute; top: 0; right: 0; background: var(--border); color: var(--text); border: none; padding: 8px 15px; font-size: 0.65rem; cursor: pointer; font-family: 'Fira Code', monospace; font-weight: 700; text-transform: uppercase; }
+
+        /* 系统日志组件 */
+        .sys-log { 
+            background: #000; border: 1px solid #333; padding: 20px; 
+            font-family: 'Fira Code', monospace; font-size: 0.75rem; color: #00ff00; line-height: 1.6;
+        }
+
+        /* 移动端强力适配逻辑：1024px 以下强制单栏并撑满 */
+        @media (max-width: 1024px) {
+            .main-wrapper { flex-direction: column !important; }
+            article.content { padding: 40px 25px; border-right: none !important; width: 100% !important; }
+            aside { 
+                width: 100% !important; flex-shrink: 0;
+                border-left: none !important; border-top: 2px solid var(--border); 
+                position: static !important; height: auto !important; 
+                padding: 40px 25px !important;
+            }
+            .post-header { padding: 100px 20px 40px; }
+            /* 代码块移动端全宽显示 */
+            pre { margin: 2rem -25px; border-left: none; border-right: none; padding: 45px 25px 25px !important; }
+        }
+
+        footer { padding: 80px 20px; text-align: center; border-top: 2px solid var(--border); font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted); background: var(--surface); }
+    </style>
+</head>
+<body>
+    <div id="progress" aria-hidden="true"></div>
+    <nav aria-label="Global Navigation">
+        <a href="/" class="logo mono">CNFTE://ROOT</a>
+        <div class="mono" style="font-size: 0.75rem; cursor: pointer; border: 1px solid var(--border); padding: 6px 12px;" onclick="toggleTheme()">[ENV_MODE: <span id="mode-text">DARK</span>]</div>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-path">/ROOT/NODES/POSTS/2026/01/24</div>
+        <h1>Internet Science Popularization Series - What are HTTP and HTTPS?</h1>
+        <div class="mono" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 15px;">
+            STAMP: 2026-01-24 // REF_ID: 6d646bf5 // AUTH: VERIFIED
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <main>
+            <article class="content" id="article-main">
+                <p>Hello everyone! Today we're going to talk about two terms we often encounter when browsing the internet: HTTP and HTTPS. They sound a bit technical, but they're actually like sending regular mail and registered mail in our daily lives – one is ordinary, the other is secure. Don't worry, today we'll explain them in the simplest terms!</p>
+<h3 id="1-what-is-a-transmission-protocol-the-postman-of-the-internet">1. What is a Transmission Protocol? – The "Postman" of the Internet</h3>
+<p>Imagine you want to send a letter to a friend far away. This letter needs to go through the post office, postal workers, and various means of transportation before finally reaching your friend. During this process, there's a set of rules, such as how to address the envelope, how to stamp it, and how the postal worker delivers it. These rules are called "protocols."</p>
+<p>On the internet, our computers and servers also need to "communicate," that is, transmit information. For example, when you open a webpage, your computer needs to "fetch" the webpage content from the server. This "rule" for transmitting information is called a <strong>transmission protocol</strong>.</p>
+<p>HTTP and HTTPS are two different transmission protocols. They are like the "postmen" of the internet, responsible for safely and accurately delivering information from one place to another.</p>
+<h3 id="2-the-uses-of-http-connections-unhindered-ordinary-mail">2. The Uses of HTTP Connections – Unhindered "Ordinary Mail"</h3>
+<p><strong>HTTP</strong> (HyperText Transfer Protocol) is also known as the "Hypertext Transfer Protocol." It's like the "ordinary mail" we send every day.</p>
+<p><strong>Uses:</strong></p>
+<ul>
+<li><strong>Browsing webpages:</strong> When you type a website address into your browser and press Enter, your computer sends a request to the server via the HTTP protocol. After receiving the request, the server "sends" the webpage content (text, images, videos, etc.) back via the HTTP protocol, and then your browser can display the webpage!</li>
+<li><strong>Downloading files:</strong>  Many times, when we download software, pictures, or music, it's also done through the HTTP protocol.</li>
+</ul>
+<p><strong>Advantages and Characteristics:</strong></p>
+<ul>
+<li><strong>Simple and fast:</strong> The HTTP protocol is relatively simple and transmits data quickly because it doesn't require additional encryption and decryption.</li>
+<li><strong>Widely used:</strong> Almost all websites support HTTP; it's the most basic protocol for internet access.</li>
+</ul>
+<h3 id="3-characteristics-of-http-traffic-transparent-mail">3. Characteristics of HTTP Traffic – "Transparent" Mail</h3>
+<p>Since it's ordinary mail, its content is <strong>open and transparent</strong>. <strong>Features:</strong></p>
+<ul>
+<li><strong>Plaintext Transmission:</strong> When you enter your username and password or submit form information in your browser, this data is transmitted over the network in plaintext. This is like writing your bank card password on a postcard and mailing it – anyone who intercepts the letter can see its contents.</li>
+<li><strong>Vulnerable to Eavesdropping:</strong> If someone "listens in" on the network (for example, in a public Wi-Fi environment), they can easily see all the information you transmit, including your username, password, browsing history, etc.</li>
+<li><strong>Vulnerable to Tampering:</strong> Similarly, malicious actors in the middle can modify the information you send or receive, such as changing text on a webpage or secretly adding something to a file you download.</li>
+</ul>
+<p>Therefore, although HTTP is convenient, it is not very secure when dealing with sensitive information.</p>
+<h3 id="4-http-vs-https-the-battle-of-ordinary-mail-and-encrypted-registered-mail">4. HTTP vs. HTTPS – The Battle of "Ordinary Mail" and "Encrypted Registered Mail"</h3>
+<p>Now let's compare HTTP and HTTPS.</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>HTTP</th>
+<th>HTTPS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Full Name</strong></td>
+<td>HyperText Transfer Protocol</td>
+<td>HyperText Transfer Protocol Secure</td>
+</tr>
+<tr>
+<td><strong>Security</strong></td>
+<td>Insecure, plaintext transmission</td>
+<td>Secure, encrypted transmission</td>
+</tr>
+<tr>
+<td><strong>Encryption</strong></td>
+<td>None</td>
+<td>Yes (via SSL/TLS protocol)</td>
+</tr>
+<tr>
+<td><strong>Port</strong></td>
+<td>Default port 80</td>
+<td>Default port 443</td>
+</tr>
+<tr>
+<td><strong>URL Prefix</strong></td>
+<td><code>http://</code></td>
+<td><code>https://</code></td>
+</tr>
+<tr>
+<td><strong>Browser Display</strong></td>
+<td>Usually no prefix displayed, or displays "Not secure"</td>
+<td>Displays a "lock" icon, or displays "Secure"</td>
+</tr>
+<tr>
+<td><strong>Speed</strong></td>
+<td>Relatively faster</td>
+<td>Relatively slower (due to encryption and decryption process)</td>
+</tr>
+<tr>
+<td><strong>Uses</strong></td>
+<td>Browsing ordinary web pages, non-sensitive information</td>
+<td>Online banking, shopping, login, and other sensitive information transmission</td>
+</tr>
+</tbody>
+</table>
+<p>Simply put, HTTPS adds a layer of "encryption protection" on top of HTTP, like upgrading ordinary mail to "encrypted registered mail."</p>
+<h3 id="5-characteristics-of-https-traffic-the-encrypted-registered-mail">5. Characteristics of HTTPS Traffic – The "Encrypted" Registered Mail</h3>
+<p>HTTPS is secure because it uses the <strong>SSL/TLS protocol</strong> (Secure Sockets Layer/Transport Layer Security protocol) to encrypt data. <strong>Features:</strong></p>
+<ul>
+<li><strong>Encrypted Transmission:</strong> All information you enter in your browser is encrypted into a string of gibberish before being sent to the server. Only the server possesses the key to "decrypt" this gibberish back into the original information. The same applies in reverse; information sent back from the server is also encrypted.</li>
+<li><strong>Authentication:</strong> HTTPS also verifies the server's identity, ensuring you are accessing the genuine website, not a fake one. This is like registered mail requiring a recipient's signature for confirmation, preventing you from being scammed.</li>
+<li><strong>Data Integrity:</strong> HTTPS also guarantees that data is not tampered with during transmission. If someone attempts to modify the data, the recipient will detect it and refuse to accept it.</li>
+</ul>
+<p><strong>Advantages and Characteristics:</strong></p>
+<ul>
+<li><strong>High Security:</strong> Effectively prevents data from being eavesdropped on, tampered with, and forged, protecting users' privacy and financial security.</li>
+<li><strong>High Trust:</strong> Browsers will label HTTPS websites as "secure" (e.g., displaying a lock icon), giving users more peace of mind.</li>
+<li><strong>Search Engine Optimization:</strong> Search engines (such as Baidu and Google) favor HTTPS websites and give them higher rankings.</li>
+</ul>
+<h3 id="6-the-use-of-https-connections-the-guardian-angel-of-secure-online-browsing">6. The Use of HTTPS Connections – The "Guardian Angel" of Secure Online Browsing</h3>
+<p>HTTPS connections are mainly used in scenarios that require protecting user privacy and data security:</p>
+<ul>
+<li><strong>Online Banking and Payments:</strong> Protects your bank account, password, and transaction information.</li>
+<li><strong>Online Shopping:</strong> Protects your credit card information, shipping address, etc.</li>
+<li><strong>Social Media and Email Login:</strong> Protects your account password and personal information.</li>
+<li><strong>Any website that requires users to enter sensitive information:</strong> Such as registering an account, filling out personal information, etc.</li>
+</ul>
+<h3 id="7-summary-choose-security-starting-with-s-aspect-http-https">7. Summary – Choose Security, Starting with "S"! | Aspect | HTTP | HTTPS |</h3>
+<p>|---|---|---|
+| <strong>Security</strong> | Insecure, data transmitted in plain text | Secure, data transmitted with encryption |
+| <strong>Usage</strong> | General web browsing | Transmission of sensitive information (banking, shopping, login, etc.) |
+| <strong>Browser Display</strong> | May display "Not Secure" | Displays a "lock" icon, indicating security |
+| <strong>Recommendation</strong> | Avoid entering sensitive information on HTTP websites | Prioritize using HTTPS websites for sensitive operations |</p>
+<p>In short, HTTP is like having a casual conversation on the street, where everyone can hear the content; while HTTPS is like having a conversation in a private room, where only the participants know the content.</p>
+<p>In today's information-rich era, protecting personal information is crucial. So, next time you're browsing the internet, if you see <code>https://</code> at the beginning of the website address and a small lock icon, it means you're using a more secure connection and can proceed with greater peace of mind! Remember, an extra "S" means extra security!</p>
+            </article>
+
+            <!-- 极客版权区域 -->
+            <section style="padding: 0 60px 60px; font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted);" aria-label="Integrity Card">
+                <div style="border: 1px solid var(--border); padding: 35px; background: var(--surface);">
+                    <div># SOURCE_NODE: <span id="page-url" style="word-break: break-all; color: var(--text);"></span></div>
+                    <div># LICENSE: CC-BY-NC-SA-4.0</div>
+                    <div># INTEGRITY_STATUS: VALIDATED_ENCRYPTED</div>
+                    <div style="margin-top: 20px; color: var(--text);">// EOF_SIGNAL_RECEIVED</div>
+                </div>
+            </section>
+        </main>
+
+        <aside>
+            <section class="widget" aria-label="User Identifier">
+                <h3 class="widget-title">IDENT_AUTH</h3>
+                <div style="border: 1px solid var(--border); padding: 35px 20px; text-align: center; background: var(--bg);">
+                    <img src="https://edgeoneimg.cdn.sn/i/696b4d5b58c71_1768639835.webp" style="width: 72px; height: 72px; filter: grayscale(1); border: 1px solid var(--border); padding: 4px; margin-bottom: 20px;" alt="Avatar">
+                    <div class="mono" style="font-weight: 900; font-size: 1.2rem; color: var(--text);">Cnfte</div>
+                    <!-- 核心修复：作者简介 -->
+                    <div class="bio-text mono">"滚滚长江东逝水，浪花淘尽英雄。"</div>
+                </div>
+            </section>
+
+            <section class="widget" aria-label="System Metrics">
+                <h3 class="widget-title">SYSTEM_LOG</h3>
+                <div class="sys-log">
+                    <div>[OK] NODE_STATE: STABLE</div>
+                    <div>[OK] UPTIME: 17M_READ</div>
+                    <div>[OK] CLOCK: <span id="live-clock">00:00:00</span></div>
+                    <div style="color: #333">-----------------------</div>
+                    <div>$ tail -f blog.log</div>
+                    <div>> Reading node...</div>
+                    <div style="color: #00ff00;">> Internet Sci...</div>
+                </div>
+            </section>
+
+            
+            <section class="widget" aria-label="Table of Contents">
+                <h3 class="widget-title">STRUCTURE_TOC</h3>
+                <div class="toc-box" id="toc-container">
+                    <div class="toc">
+<ul>
+<li><a href="#1-what-is-a-transmission-protocol-the-postman-of-the-internet">1. What is a Transmission Protocol? – The "Postman" of the Internet</a></li>
+<li><a href="#2-the-uses-of-http-connections-unhindered-ordinary-mail">2. The Uses of HTTP Connections – Unhindered "Ordinary Mail"</a></li>
+<li><a href="#3-characteristics-of-http-traffic-transparent-mail">3. Characteristics of HTTP Traffic – "Transparent" Mail</a></li>
+<li><a href="#4-http-vs-https-the-battle-of-ordinary-mail-and-encrypted-registered-mail">4. HTTP vs. HTTPS – The Battle of "Ordinary Mail" and "Encrypted Registered Mail"</a></li>
+<li><a href="#5-characteristics-of-https-traffic-the-encrypted-registered-mail">5. Characteristics of HTTPS Traffic – The "Encrypted" Registered Mail</a></li>
+<li><a href="#6-the-use-of-https-connections-the-guardian-angel-of-secure-online-browsing">6. The Use of HTTPS Connections – The "Guardian Angel" of Secure Online Browsing</a></li>
+<li><a href="#7-summary-choose-security-starting-with-s-aspect-http-https">7. Summary – Choose Security, Starting with "S"! | Aspect | HTTP | HTTPS |</a></li>
+</ul>
+</div>
+
+                </div>
+            </section>
+            
+        </aside>
+    </div>
+
+    <div class="float-bar">
+        <button class="float-btn" onclick="copyLink()" aria-label="Share"><i class="fa-solid fa-share-nodes"></i></button>
+        <button class="float-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Back to Top"><i class="fa-solid fa-chevron-up"></i></button>
+    </div>
+
+    <footer>
+        <p class="mono">TERMINAL_BLOG_ENGINE v3.0.5 // © 2026 Cnfte</p>
+        <p class="mono" style="font-size: 0.75rem; margin-top: 15px; opacity: 0.5;">Copyright © 2026 Cnfte 阿巴阿巴阿巴阿巴阿巴阿巴</p>
+    </footer>
+
+    <script>
+        // 1. 初始化 URL
+        document.getElementById('page-url').innerText = window.location.href;
+
+        // 2. 系统时钟
+        setInterval(() => {
+            document.getElementById('live-clock').innerText = new Date().toTimeString().split(' ')[0];
+        }, 1000);
+
+        // 3. 滚动进度监听与 TOC 高亮
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            document.getElementById("progress").style.width = (winScroll / height * 100) + "%";
+            
+            const sections = document.querySelectorAll('.content h2, .content h3');
+            const tocLinks = document.querySelectorAll('.toc-box a');
+            let activeId = '';
+            sections.forEach(s => {
+                if (s.getBoundingClientRect().top < 100) activeId = s.getAttribute('id');
+            });
+            tocLinks.forEach(l => {
+                l.classList.toggle('active', l.getAttribute('href') === '#' + activeId);
+            });
+        });
+
+        // 4. 代码块复制增强
+        document.querySelectorAll('pre').forEach(block => {
+            const btn = document.createElement('button');
+            btn.className = 'copy-btn mono';
+            btn.innerText = 'COPY';
+            btn.onclick = () => {
+                navigator.clipboard.writeText(block.querySelector('code').innerText).then(() => {
+                    btn.innerText = 'DONE'; setTimeout(() => btn.innerText = 'COPY', 2000);
+                });
+            };
+            block.appendChild(btn);
+        });
+
+        // 5. 主题控制
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const target = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', target);
+            document.getElementById('mode-text').innerText = target.toUpperCase();
+            localStorage.setItem('geek-theme', target);
+        }
+        
+        const savedTheme = localStorage.getItem('geek-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.getElementById('mode-text').innerText = savedTheme.toUpperCase();
+
+        function copyLink() { navigator.clipboard.writeText(window.location.href); alert("LINK_COPIED_TO_CLIPBOARD"); }
+    </script>
+</body>
+</html>

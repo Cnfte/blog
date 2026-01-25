@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- SEO & Metadata -->
+    <title>December 22, 2025: The Kuaishou live streaming platform is involved in a pornography scandal; a dark moment for the Chinese internet. - Cnfteの博客</title>
+    <meta name="description" content="I. Background of the Incident On the evening of December 22, 2025, several leading Chinese social media and content platforms experienced abnormal situatio...">
+    <link rel="icon" href="https://www.img520.com/AVcrrd.jpg">
+    
+    <!-- 极客字体引用：强制同步加载确保移动端第一时间渲染 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #0a0a0a;
+            --text: #ffffff;
+            --text-muted: #a0a0a0;
+            --border: #222222;
+            --code-bg: #050505;
+            --accent: #ffffff;
+            --selection: #333333;
+        }
+
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --surface: #fafafa;
+            --text: #1d1d1f;
+            --text-muted: #505050;
+            --border: #e0e0e0;
+            --code-bg: #f5f5f5;
+            --selection: #eeeeee;
+        }
+
+        /* 基础复位 & 消除移动端点击蓝色背景 */
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent !important; 
+        }
+        
+        /* 强力锁定链接颜色，防止变紫/变蓝 */
+        a, a:visited, a:active {
+            color: inherit !important;
+            text-decoration: none !important;
+            outline: none !important;
+        }
+
+        body { 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            background: var(--bg); color: var(--text); 
+            line-height: 1.8; overflow-x: hidden; width: 100%;
+            transition: background 0.3s;
+        }
+
+        .mono { font-family: 'Fira Code', monospace !important; }
+        ::selection { background: var(--selection); }
+
+        /* 顶部进度条 */
+        #progress { position: fixed; top: 0; left: 0; width: 0%; height: 2px; background: var(--text); z-index: 2001; }
+
+        /* 极简顶部导航栏 */
+        nav { 
+            position: sticky; top: 0; z-index: 1000; background: var(--bg); 
+            border-bottom: 2px solid var(--border); padding: 0 5%; height: 64px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { font-weight: 900; font-size: 1.1rem; letter-spacing: -1px; }
+
+        /* 文章头部：彻底解决标题被导航栏遮挡问题 */
+        .post-header { 
+            padding: 140px 20px 60px; /* 增加顶部 Padding 确保空间充足 */
+            text-align: left; 
+            border-bottom: 1px solid var(--border); 
+            max-width: 1400px; margin: 0 auto; 
+            background: var(--surface);
+        }
+        .post-path { font-family: 'Fira Code', monospace; color: var(--text-muted); font-size: 0.75rem; margin-bottom: 20px; text-transform: uppercase; }
+        .post-header h1 { 
+            font-size: clamp(2rem, 5vw, 3.5rem); 
+            font-weight: 900; 
+            letter-spacing: -2px; 
+            line-height: 1.2; 
+            margin-bottom: 30px;
+            display: block; 
+        }
+
+        /* 响应式主架构 */
+        .main-wrapper { 
+            max-width: 1400px; margin: 0 auto; 
+            display: flex; flex-direction: row; 
+            align-items: stretch;
+        }
+
+        main { flex: 1; min-width: 0; } /* 解决 Flex 容器内溢出的核心 */
+
+        article.content { 
+            padding: 60px; border-right: 1px solid var(--border);
+            font-size: 1.125rem;
+        }
+
+        /* 正文样式 */
+        .content h2 { font-size: 1.8rem; margin: 2.5em 0 1.2em; font-weight: 900; border-bottom: 4px solid var(--text); padding-bottom: 10px; display: inline-block; }
+        .content h3 { font-size: 1.4rem; margin: 2em 0 1em; font-weight: 700; color: var(--text); border-left: 4px dashed var(--border); padding-left: 15px; }
+        .content p { margin-bottom: 2.2rem; text-align: justify; }
+        .content a { color: var(--text); text-decoration: underline !important; font-weight: 700; text-underline-offset: 4px; }
+        .content img { max-width: 100%; border: 1px solid var(--border); margin: 30px 0; display: block; height: auto; padding: 5px; }
+
+        /* --- 代码块彻底锁死修复方案 --- */
+        pre { 
+            background: var(--code-bg) !important; 
+            padding: 40px 20px 20px !important; 
+            border: 1px solid var(--border) !important;
+            margin: 2.5rem 0; position: relative; 
+            display: block !important; 
+            width: 100% !important; 
+            max-width: 100% !important; 
+            overflow-x: auto !important; 
+            white-space: pre !important; 
+            word-wrap: normal !important;
+            box-sizing: border-box !important;
+            border-radius: 0;
+        }
+        pre code { font-family: 'Fira Code', monospace !important; font-size: 0.95rem !important; display: block; min-width: fit-content; line-height: 1.6; }
+
+        /* 侧边栏加固：解决垂直堆叠 Bug */
+        aside { 
+            width: 360px; flex-shrink: 0; min-width: 320px;
+            padding: 60px 40px; background: var(--surface);
+            position: sticky; top: 64px; height: calc(100vh - 64px); 
+            overflow-y: auto;
+        }
+        .widget { margin-bottom: 60px; width: 100%; }
+        .widget-title { font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 25px; text-transform: uppercase; border-left: 4px solid var(--text); padding-left: 12px; }
+
+        /* 作者简介样式：锁定正常排版，防止单字符垂直显示 */
+        .bio-text {
+            font-size: 0.9rem; color: var(--text-muted); 
+            margin-top: 15px; line-height: 1.6;
+            word-break: normal !important; 
+            white-space: normal !important; 
+            display: block !important; width: 100% !important;
+            text-align: center;
+        }
+
+        /* 悬浮按钮修复：高对比度黑白方块 */
+        .float-bar { position: fixed; bottom: 30px; right: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 1000; }
+        .float-btn { 
+            width: 52px; height: 52px; 
+            background: var(--text) !important; /* 深色模式下它是白色 */
+            color: var(--bg) !important;       /* 强制图标显示为黑色 */
+            border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; font-size: 1.3rem; border-radius: 0; 
+            box-shadow: 6px 6px 0px var(--border);
+            transition: 0.1s;
+        }
+        .float-btn i, .float-btn svg { color: var(--bg) !important; pointer-events: none; }
+        .float-btn:active { transform: translate(2px, 2px); box-shadow: none; }
+
+        .copy-btn { position: absolute; top: 0; right: 0; background: var(--border); color: var(--text); border: none; padding: 8px 15px; font-size: 0.65rem; cursor: pointer; font-family: 'Fira Code', monospace; font-weight: 700; text-transform: uppercase; }
+
+        /* 系统日志组件 */
+        .sys-log { 
+            background: #000; border: 1px solid #333; padding: 20px; 
+            font-family: 'Fira Code', monospace; font-size: 0.75rem; color: #00ff00; line-height: 1.6;
+        }
+
+        /* 移动端强力适配逻辑：1024px 以下强制单栏并撑满 */
+        @media (max-width: 1024px) {
+            .main-wrapper { flex-direction: column !important; }
+            article.content { padding: 40px 25px; border-right: none !important; width: 100% !important; }
+            aside { 
+                width: 100% !important; flex-shrink: 0;
+                border-left: none !important; border-top: 2px solid var(--border); 
+                position: static !important; height: auto !important; 
+                padding: 40px 25px !important;
+            }
+            .post-header { padding: 100px 20px 40px; }
+            /* 代码块移动端全宽显示 */
+            pre { margin: 2rem -25px; border-left: none; border-right: none; padding: 45px 25px 25px !important; }
+        }
+
+        footer { padding: 80px 20px; text-align: center; border-top: 2px solid var(--border); font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted); background: var(--surface); }
+    </style>
+</head>
+<body>
+    <div id="progress" aria-hidden="true"></div>
+    <nav aria-label="Global Navigation">
+        <a href="/" class="logo mono">CNFTE://ROOT</a>
+        <div class="mono" style="font-size: 0.75rem; cursor: pointer; border: 1px solid var(--border); padding: 6px 12px;" onclick="toggleTheme()">[ENV_MODE: <span id="mode-text">DARK</span>]</div>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-path">/ROOT/NODES/POSTS/2026/01/24</div>
+        <h1>December 22, 2025: The Kuaishou live streaming platform is involved in a pornography scandal; a dark moment for the Chinese internet.</h1>
+        <div class="mono" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 15px;">
+            STAMP: 2026-01-24 // REF_ID: 9f726ccc // AUTH: VERIFIED
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <main>
+            <article class="content" id="article-main">
+                <h2 id="i-background-of-the-incident">I. Background of the Incident</h2>
+<p>On the evening of December 22, 2025, several leading Chinese social media and content platforms experienced abnormal situations almost simultaneously. <strong>Kuaishou's live streaming system was the most severely affected</strong>, quickly attracting widespread attention across the internet. At the same time, platforms such as Douyin, Xiaohongshu, and Bilibili (B站) also received numerous user reports of slow access, abnormal functions, or unstable servers. The simultaneous occurrence of abnormalities across multiple platforms on the same night led to the widespread belief that this was not a simple technical malfunction, but rather a <strong>large-scale, organized cyberattack</strong>.</p>
+<h2 id="ii-course-of-the-incident">II. Course of the Incident</h2>
+<p>According to user feedback and subsequent platform announcements, around 10 PM on December 22nd, a large number of Kuaishou live streams were suddenly "taken over" by illegal content, with a rapid influx of sexually explicit, vulgar, and otherwise inappropriate images. While some live streams saw a rapid increase in viewership, the reporting function failed, and content review was significantly delayed. The platform's existing risk control and manual review systems failed under the high-volume attack.</p>
+<p>As the abnormal situation continued to spread, Kuaishou was forced to take extreme measures, <strong>temporarily shutting down some live streaming functions</strong> to prevent the further spread of illegal content. Live streaming functions were gradually restored until the early morning of December 23rd. During this time, Kuaishou officially confirmed that the incident was due to "external malicious attacks" and stated that they had reported the incident to the police and were cooperating with relevant departments in the investigation.</p>
+<p>During the same period, although platforms like Douyin and Xiaohongshu did not experience content control issues on a similar scale, users widely reported lagging, abnormal recommendations, and comment section loading failures; while Bilibili was confirmed by numerous users to have experienced server crashes or widespread access failures that night, further reinforcing the belief that multiple platforms were simultaneously under attack.</p>
+<h2 id="iii-analysis-of-attack-characteristics-and-methods">III. Analysis of Attack Characteristics and Methods</h2>
+<p>Based on all available information, this incident exhibited clear characteristics of <strong>automation, scale, and coordination</strong>. The attackers are suspected of using bulk-registered or stolen accounts to simultaneously broadcast and stream illegal content through automated programs, quickly overwhelming the platforms' content security thresholds. This type of attack did not rely on a single vulnerability, but rather overwhelmed the review, risk control, reporting, and manual intervention systems through a "traffic flood" approach. Unlike traditional DDoS attacks, this incident was more of a "content layer attack," utilizing the processing limits of the compliance mechanisms themselves to cause system failure.  Its social impact and public opinion repercussions far exceeded those of a simple service disruption.</p>
+<h2 id="iv-impact-and-consequences">IV. Impact and Consequences</h2>
+<p>From a social perspective, a large number of ordinary users were exposed to severely illegal content without warning, causing significant negative impacts and triggering strong public questioning of child protection and platform responsibility. The incident quickly trended on multiple platforms, becoming one of the most controversial cybersecurity incidents of the year.</p>
+<p>From an industry perspective, this incident exposed systemic weaknesses in live streaming and content platforms in <strong>extreme attack scenarios</strong>: including insufficient identification of abnormal patterns by review models, lack of scalable capacity in reporting systems, and manual review response speeds failing to keep pace with the attack. The capital market also reacted quickly, with significant fluctuations in the stock prices of related companies, reflecting investors' concerns about platform governance capabilities.</p>
+<h2 id="v-significance-and-reflection">V. Significance and Reflection</h2>
+<p>The attack on December 22, 2025, marks a shift in the security threats faced by domestic internet platforms, from the "infrastructure layer" to the "content and governance layer." Attackers are no longer simply aiming to "paralyze the system," but rather to amplify the impact of platform failures by creating public opinion shocks and social risks.</p>
+<p>This incident serves as a strong warning to the entire industry: future platform security is no longer just a technical issue, but a <strong>comprehensive interplay of technology, management, compliance, and social responsibility</strong>. How to build a content security system with extreme resilience while ensuring user experience will become a long-term challenge that all large platforms must address.</p>
+<h2 id="vi-conclusion">VI. Conclusion</h2>
+<p>Overall, the large-scale attack on Chinese social media platforms on December 22nd was a landmark cybersecurity event. It not only caused short-term service and public opinion disruptions but also revealed, at a deeper level, the vulnerability of current internet platforms in the face of new attack patterns. It is foreseeable that this incident will drive stricter regulatory requirements, higher standards of technological investment, and a redefinition of the "platform security boundaries" for the entire industry.</p>
+            </article>
+
+            <!-- 极客版权区域 -->
+            <section style="padding: 0 60px 60px; font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted);" aria-label="Integrity Card">
+                <div style="border: 1px solid var(--border); padding: 35px; background: var(--surface);">
+                    <div># SOURCE_NODE: <span id="page-url" style="word-break: break-all; color: var(--text);"></span></div>
+                    <div># LICENSE: CC-BY-NC-SA-4.0</div>
+                    <div># INTEGRITY_STATUS: VALIDATED_ENCRYPTED</div>
+                    <div style="margin-top: 20px; color: var(--text);">// EOF_SIGNAL_RECEIVED</div>
+                </div>
+            </section>
+        </main>
+
+        <aside>
+            <section class="widget" aria-label="User Identifier">
+                <h3 class="widget-title">IDENT_AUTH</h3>
+                <div style="border: 1px solid var(--border); padding: 35px 20px; text-align: center; background: var(--bg);">
+                    <img src="https://edgeoneimg.cdn.sn/i/696b4d5b58c71_1768639835.webp" style="width: 72px; height: 72px; filter: grayscale(1); border: 1px solid var(--border); padding: 4px; margin-bottom: 20px;" alt="Avatar">
+                    <div class="mono" style="font-weight: 900; font-size: 1.2rem; color: var(--text);">Cnfte</div>
+                    <!-- 核心修复：作者简介 -->
+                    <div class="bio-text mono">"滚滚长江东逝水，浪花淘尽英雄。"</div>
+                </div>
+            </section>
+
+            <section class="widget" aria-label="System Metrics">
+                <h3 class="widget-title">SYSTEM_LOG</h3>
+                <div class="sys-log">
+                    <div>[OK] NODE_STATE: STABLE</div>
+                    <div>[OK] UPTIME: 12M_READ</div>
+                    <div>[OK] CLOCK: <span id="live-clock">00:00:00</span></div>
+                    <div style="color: #333">-----------------------</div>
+                    <div>$ tail -f blog.log</div>
+                    <div>> Reading node...</div>
+                    <div style="color: #00ff00;">> December 22,...</div>
+                </div>
+            </section>
+
+            
+            <section class="widget" aria-label="Table of Contents">
+                <h3 class="widget-title">STRUCTURE_TOC</h3>
+                <div class="toc-box" id="toc-container">
+                    <div class="toc">
+<ul>
+<li><a href="#i-background-of-the-incident">I. Background of the Incident</a></li>
+<li><a href="#ii-course-of-the-incident">II. Course of the Incident</a></li>
+<li><a href="#iii-analysis-of-attack-characteristics-and-methods">III. Analysis of Attack Characteristics and Methods</a></li>
+<li><a href="#iv-impact-and-consequences">IV. Impact and Consequences</a></li>
+<li><a href="#v-significance-and-reflection">V. Significance and Reflection</a></li>
+<li><a href="#vi-conclusion">VI. Conclusion</a></li>
+</ul>
+</div>
+
+                </div>
+            </section>
+            
+        </aside>
+    </div>
+
+    <div class="float-bar">
+        <button class="float-btn" onclick="copyLink()" aria-label="Share"><i class="fa-solid fa-share-nodes"></i></button>
+        <button class="float-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Back to Top"><i class="fa-solid fa-chevron-up"></i></button>
+    </div>
+
+    <footer>
+        <p class="mono">TERMINAL_BLOG_ENGINE v3.0.5 // © 2026 Cnfte</p>
+        <p class="mono" style="font-size: 0.75rem; margin-top: 15px; opacity: 0.5;">Copyright © 2026 Cnfte 阿巴阿巴阿巴阿巴阿巴阿巴</p>
+    </footer>
+
+    <script>
+        // 1. 初始化 URL
+        document.getElementById('page-url').innerText = window.location.href;
+
+        // 2. 系统时钟
+        setInterval(() => {
+            document.getElementById('live-clock').innerText = new Date().toTimeString().split(' ')[0];
+        }, 1000);
+
+        // 3. 滚动进度监听与 TOC 高亮
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            document.getElementById("progress").style.width = (winScroll / height * 100) + "%";
+            
+            const sections = document.querySelectorAll('.content h2, .content h3');
+            const tocLinks = document.querySelectorAll('.toc-box a');
+            let activeId = '';
+            sections.forEach(s => {
+                if (s.getBoundingClientRect().top < 100) activeId = s.getAttribute('id');
+            });
+            tocLinks.forEach(l => {
+                l.classList.toggle('active', l.getAttribute('href') === '#' + activeId);
+            });
+        });
+
+        // 4. 代码块复制增强
+        document.querySelectorAll('pre').forEach(block => {
+            const btn = document.createElement('button');
+            btn.className = 'copy-btn mono';
+            btn.innerText = 'COPY';
+            btn.onclick = () => {
+                navigator.clipboard.writeText(block.querySelector('code').innerText).then(() => {
+                    btn.innerText = 'DONE'; setTimeout(() => btn.innerText = 'COPY', 2000);
+                });
+            };
+            block.appendChild(btn);
+        });
+
+        // 5. 主题控制
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const target = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', target);
+            document.getElementById('mode-text').innerText = target.toUpperCase();
+            localStorage.setItem('geek-theme', target);
+        }
+        
+        const savedTheme = localStorage.getItem('geek-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.getElementById('mode-text').innerText = savedTheme.toUpperCase();
+
+        function copyLink() { navigator.clipboard.writeText(window.location.href); alert("LINK_COPIED_TO_CLIPBOARD"); }
+    </script>
+</body>
+</html>

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- SEO & Metadata -->
+    <title>互联网科普系列-什么是IPv4_v6 - Cnfteの博客</title>
+    <meta name="description" content="1. 什么是 IPv4 / IPv6？ 想象一下，互联网就像一个巨大的城市，而每一台连接到互联网的设备（电脑、手机、服务器等）都像是这个城市里的一个房子。为了让这些房子能够互相找到并通信，它们都需要一个地址。 IPv4 (Internet Protocol version 4)：这是互联网早期使用的地址系统。...">
+    <link rel="icon" href="https://www.img520.com/AVcrrd.jpg">
+    
+    <!-- 极客字体引用：强制同步加载确保移动端第一时间渲染 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #0a0a0a;
+            --text: #ffffff;
+            --text-muted: #a0a0a0;
+            --border: #222222;
+            --code-bg: #050505;
+            --accent: #ffffff;
+            --selection: #333333;
+        }
+
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --surface: #fafafa;
+            --text: #1d1d1f;
+            --text-muted: #505050;
+            --border: #e0e0e0;
+            --code-bg: #f5f5f5;
+            --selection: #eeeeee;
+        }
+
+        /* 基础复位 & 消除移动端点击蓝色背景 */
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent !important; 
+        }
+        
+        /* 强力锁定链接颜色，防止变紫/变蓝 */
+        a, a:visited, a:active {
+            color: inherit !important;
+            text-decoration: none !important;
+            outline: none !important;
+        }
+
+        body { 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            background: var(--bg); color: var(--text); 
+            line-height: 1.8; overflow-x: hidden; width: 100%;
+            transition: background 0.3s;
+        }
+
+        .mono { font-family: 'Fira Code', monospace !important; }
+        ::selection { background: var(--selection); }
+
+        /* 顶部进度条 */
+        #progress { position: fixed; top: 0; left: 0; width: 0%; height: 2px; background: var(--text); z-index: 2001; }
+
+        /* 极简顶部导航栏 */
+        nav { 
+            position: sticky; top: 0; z-index: 1000; background: var(--bg); 
+            border-bottom: 2px solid var(--border); padding: 0 5%; height: 64px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { font-weight: 900; font-size: 1.1rem; letter-spacing: -1px; }
+
+        /* 文章头部：彻底解决标题被导航栏遮挡问题 */
+        .post-header { 
+            padding: 140px 20px 60px; /* 增加顶部 Padding 确保空间充足 */
+            text-align: left; 
+            border-bottom: 1px solid var(--border); 
+            max-width: 1400px; margin: 0 auto; 
+            background: var(--surface);
+        }
+        .post-path { font-family: 'Fira Code', monospace; color: var(--text-muted); font-size: 0.75rem; margin-bottom: 20px; text-transform: uppercase; }
+        .post-header h1 { 
+            font-size: clamp(2rem, 5vw, 3.5rem); 
+            font-weight: 900; 
+            letter-spacing: -2px; 
+            line-height: 1.2; 
+            margin-bottom: 30px;
+            display: block; 
+        }
+
+        /* 响应式主架构 */
+        .main-wrapper { 
+            max-width: 1400px; margin: 0 auto; 
+            display: flex; flex-direction: row; 
+            align-items: stretch;
+        }
+
+        main { flex: 1; min-width: 0; } /* 解决 Flex 容器内溢出的核心 */
+
+        article.content { 
+            padding: 60px; border-right: 1px solid var(--border);
+            font-size: 1.125rem;
+        }
+
+        /* 正文样式 */
+        .content h2 { font-size: 1.8rem; margin: 2.5em 0 1.2em; font-weight: 900; border-bottom: 4px solid var(--text); padding-bottom: 10px; display: inline-block; }
+        .content h3 { font-size: 1.4rem; margin: 2em 0 1em; font-weight: 700; color: var(--text); border-left: 4px dashed var(--border); padding-left: 15px; }
+        .content p { margin-bottom: 2.2rem; text-align: justify; }
+        .content a { color: var(--text); text-decoration: underline !important; font-weight: 700; text-underline-offset: 4px; }
+        .content img { max-width: 100%; border: 1px solid var(--border); margin: 30px 0; display: block; height: auto; padding: 5px; }
+
+        /* --- 代码块彻底锁死修复方案 --- */
+        pre { 
+            background: var(--code-bg) !important; 
+            padding: 40px 20px 20px !important; 
+            border: 1px solid var(--border) !important;
+            margin: 2.5rem 0; position: relative; 
+            display: block !important; 
+            width: 100% !important; 
+            max-width: 100% !important; 
+            overflow-x: auto !important; 
+            white-space: pre !important; 
+            word-wrap: normal !important;
+            box-sizing: border-box !important;
+            border-radius: 0;
+        }
+        pre code { font-family: 'Fira Code', monospace !important; font-size: 0.95rem !important; display: block; min-width: fit-content; line-height: 1.6; }
+
+        /* 侧边栏加固：解决垂直堆叠 Bug */
+        aside { 
+            width: 360px; flex-shrink: 0; min-width: 320px;
+            padding: 60px 40px; background: var(--surface);
+            position: sticky; top: 64px; height: calc(100vh - 64px); 
+            overflow-y: auto;
+        }
+        .widget { margin-bottom: 60px; width: 100%; }
+        .widget-title { font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 25px; text-transform: uppercase; border-left: 4px solid var(--text); padding-left: 12px; }
+
+        /* 作者简介样式：锁定正常排版，防止单字符垂直显示 */
+        .bio-text {
+            font-size: 0.9rem; color: var(--text-muted); 
+            margin-top: 15px; line-height: 1.6;
+            word-break: normal !important; 
+            white-space: normal !important; 
+            display: block !important; width: 100% !important;
+            text-align: center;
+        }
+
+        /* 悬浮按钮修复：高对比度黑白方块 */
+        .float-bar { position: fixed; bottom: 30px; right: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 1000; }
+        .float-btn { 
+            width: 52px; height: 52px; 
+            background: var(--text) !important; /* 深色模式下它是白色 */
+            color: var(--bg) !important;       /* 强制图标显示为黑色 */
+            border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; font-size: 1.3rem; border-radius: 0; 
+            box-shadow: 6px 6px 0px var(--border);
+            transition: 0.1s;
+        }
+        .float-btn i, .float-btn svg { color: var(--bg) !important; pointer-events: none; }
+        .float-btn:active { transform: translate(2px, 2px); box-shadow: none; }
+
+        .copy-btn { position: absolute; top: 0; right: 0; background: var(--border); color: var(--text); border: none; padding: 8px 15px; font-size: 0.65rem; cursor: pointer; font-family: 'Fira Code', monospace; font-weight: 700; text-transform: uppercase; }
+
+        /* 系统日志组件 */
+        .sys-log { 
+            background: #000; border: 1px solid #333; padding: 20px; 
+            font-family: 'Fira Code', monospace; font-size: 0.75rem; color: #00ff00; line-height: 1.6;
+        }
+
+        /* 移动端强力适配逻辑：1024px 以下强制单栏并撑满 */
+        @media (max-width: 1024px) {
+            .main-wrapper { flex-direction: column !important; }
+            article.content { padding: 40px 25px; border-right: none !important; width: 100% !important; }
+            aside { 
+                width: 100% !important; flex-shrink: 0;
+                border-left: none !important; border-top: 2px solid var(--border); 
+                position: static !important; height: auto !important; 
+                padding: 40px 25px !important;
+            }
+            .post-header { padding: 100px 20px 40px; }
+            /* 代码块移动端全宽显示 */
+            pre { margin: 2rem -25px; border-left: none; border-right: none; padding: 45px 25px 25px !important; }
+        }
+
+        footer { padding: 80px 20px; text-align: center; border-top: 2px solid var(--border); font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted); background: var(--surface); }
+    </style>
+</head>
+<body>
+    <div id="progress" aria-hidden="true"></div>
+    <nav aria-label="Global Navigation">
+        <a href="/" class="logo mono">CNFTE://ROOT</a>
+        <div class="mono" style="font-size: 0.75rem; cursor: pointer; border: 1px solid var(--border); padding: 6px 12px;" onclick="toggleTheme()">[ENV_MODE: <span id="mode-text">DARK</span>]</div>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-path">/ROOT/NODES/POSTS/2026/01/17</div>
+        <h1>互联网科普系列-什么是IPv4_v6</h1>
+        <div class="mono" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 15px;">
+            STAMP: 2026-01-17 // REF_ID: 45bd62f3 // AUTH: VERIFIED
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <main>
+            <article class="content" id="article-main">
+                <h3 id="1-ipv4-ipv6">1. 什么是 IPv4 / IPv6？</h3>
+<p>想象一下，互联网就像一个巨大的城市，而每一台连接到互联网的设备（电脑、手机、服务器等）都像是这个城市里的一个房子。为了让这些房子能够互相找到并通信，它们都需要一个地址。</p>
+<ul>
+<li><strong>IPv4 (Internet Protocol version 4)</strong>：这是互联网早期使用的地址系统。你可以把它想象成一个<strong>四段数字</strong>的地址，每段数字由0到255组成，中间用点隔开。</li>
+<li><strong>例子：</strong> <code>192.168.1.1</code> 或者 <code>8.8.8.8</code> (这是Google的DNS服务器地址)</li>
+<li><strong>特点：</strong> 就像早期的电话号码，虽然够用了一段时间，但随着城市（互联网）越来越大，房子（设备）越来越多，这个地址系统就显得不够用了。</li>
+<li><strong>IPv6 (Internet Protocol version 6)</strong>：这是为了解决IPv4地址不足而设计的新一代地址系统。你可以把它想象成一个<strong>更长、更复杂的地址</strong>，由数字和字母组成，中间用冒号隔开。</li>
+<li><strong>例子：</strong> <code>2001:0db8:85a3:0000:0000:8a2e:0370:7334</code> (这是一个示例地址)</li>
+<li><strong>特点：</strong> 地址数量极其庞大，可以为地球上几乎每一个原子都分配一个地址，彻底解决了地址枯竭的问题。</li>
+</ul>
+<hr />
+<h3 id="2">2. 它们间的差异</h3>
+<p>最核心的差异就是<strong>地址数量</strong>和<strong>地址格式</strong>：</p>
+<ul>
+<li><strong>地址数量：</strong></li>
+<li><strong>IPv4：</strong> 大约有43亿个地址。听起来很多，但在全球设备爆炸式增长的今天，已经远远不够用了。</li>
+<li><strong>IPv6：</strong> 地址数量是天文数字，大约是2的128次方个，比IPv4多到无法想象。你可以理解为，IPv4地址就像地球上的沙子数量，而IPv6地址就像宇宙中的所有沙子加起来还要多得多。</li>
+<li><strong>地址格式：</strong></li>
+<li><strong>IPv4：</strong> 四段十进制数字，用点分隔（如 <code>192.168.1.1</code>）。</li>
+<li><strong>IPv6：</strong> 八段十六进制数字，用冒号分隔（如 <code>2001:db8::1</code>，这里省略了一些零）。</li>
+<li><strong>其他差异（更技术性，但简单说）：</strong></li>
+<li><strong>安全性：</strong> IPv6在设计时就考虑了安全性，内置了IPsec协议，可以提供更好的加密和认证。</li>
+<li><strong>效率：</strong> IPv6的报头（数据包的头部信息）更简洁，处理起来可能更有效率。</li>
+<li><strong>配置：</strong> IPv6支持更方便的自动配置，设备连接网络时可以更容易地获取地址。</li>
+</ul>
+<hr />
+<h3 id="3-ipv4">3. IPv4 诞生的意义</h3>
+<p>在互联网的早期，大家并没有预料到它会发展得如此迅猛。IPv4的诞生，就像是给刚刚起步的互联网提供了一套<strong>基础的通信规则和地址系统</strong>。</p>
+<ul>
+<li><strong>意义：</strong></li>
+<li><strong>让设备能够互相通信：</strong> 就像给每个房子一个门牌号，让邮递员（数据包）知道该送到哪里去。</li>
+<li><strong>构建了早期的互联网：</strong> 使得计算机之间能够进行数据交换，为后来的信息革命奠定了基础。</li>
+<li><strong>推动了信息时代的到来：</strong> 没有IPv4，就没有我们今天看到的互联网。</li>
+</ul>
+<hr />
+<h3 id="4-ipv6">4. IPv6 诞生的意义</h3>
+<p>随着互联网的普及，尤其是智能手机、物联网设备的出现，IPv4的地址很快就不够用了。IPv6的诞生，是为了<strong>解决地址枯竭的危机，并为互联网的未来发展提供无限可能</strong>。</p>
+<ul>
+<li><strong>意义：</strong></li>
+<li><strong>解决地址枯竭问题：</strong> 确保未来更多的设备（手机、智能家居、汽车、传感器等）都能连接到互联网，不会因为没地址而掉队。</li>
+<li><strong>支持万物互联 (IoT)：</strong> 为海量的物联网设备提供充足的地址，让智能家居、智慧城市等成为可能。</li>
+<li><strong>提升网络效率和安全性：</strong> 在设计上做了优化，让网络运行更顺畅，安全性也更高。</li>
+<li><strong>为互联网的持续发展铺平道路：</strong> 确保互联网能够继续扩展和创新。</li>
+</ul>
+<hr />
+<h3 id="5">5. 它们间为何互不兼容</h3>
+<p>想象一下，你有一套英文字母的地址系统，而你的朋友有一套俄文字母的地址系统。你们的地址格式完全不同，所以你无法直接给朋友的俄文地址写信，朋友也无法直接给你写信。</p>
+<ul>
+<li><strong>根本原因：</strong> IPv4和IPv6在<strong>数据包的格式、寻址方式、路由协议</strong>等方面都有根本性的不同。它们是两套独立设计的通信协议。</li>
+<li><strong>数据包结构不同：</strong> 就像信封的尺寸和填写信息的方式不一样。</li>
+<li><strong>寻址方式不同：</strong> 地址的长度和表示方法完全不同。</li>
+<li><strong>路由规则不同：</strong> 网络设备（路由器）识别和转发数据包的规则也不同。</li>
+</ul>
+<p>因此，一台只认识IPv4地址的设备，无法直接理解IPv6地址的数据包，反之亦然。这就好比一个只懂中文的人，无法直接阅读法文书籍。</p>
+<hr />
+<h3 id="6">6. 公网的概念</h3>
+<p>在互联网这个大城市里，我们每个人都住在自己的房子里。</p>
+<ul>
+<li><strong>公网 (Public Network) / 公网地址 (Public IP Address)：</strong></li>
+<li><strong>概念：</strong> 公网地址就像是你在城市里<strong>对外公开的、独一无二的门牌号</strong>。有了这个地址，全世界任何地方的人都可以直接找到你，和你通信。</li>
+<li><strong>作用：</strong> 你的电脑、手机、服务器等设备需要一个公网地址，才能直接连接到互联网，被别人访问到，或者访问互联网上的其他服务。</li>
+<li><strong>例子：</strong> 你在家里上网，你的路由器可能有一个公网IP地址，这个地址是你的ISP（网络服务提供商）分配给你的，它让你家的设备能够“走出去”与互联网上的其他设备交流。</li>
+<li><strong>私网 (Private Network) / 私网地址 (Private IP Address)：</strong></li>
+<li><strong>概念：</strong> 私网地址就像是你家里的<strong>房间号或者小区内的楼栋号</strong>。这些地址只在你自己的家里（局域网）内有效，外面的人不知道，也无法直接通过这个地址找到你。</li>
+<li><strong>作用：</strong> 在一个家庭或公司内部，大家使用私网地址互相通信，比如你家里的电脑和打印机互相访问。这些地址是重复使用的，比如你家里的<code>192.168.1.100</code>和你邻居家里的<code>192.168.1.100</code>是两个不同的地址，因为它们在不同的“家里”。</li>
+<li><strong>例子：</strong> <code>192.168.x.x</code>、<code>10.x.x.x</code>、<code>172.16.x.x</code> 到 <code>172.31.x.x</code> 这些地址段通常被用作私网地址。</li>
+</ul>
+<p><strong>为什么需要私网地址？</strong> 因为公网地址太宝贵了（尤其是IPv4），如果每台设备都分配一个公网地址，早就用完了。通过NAT（网络地址转换）技术，一个公网地址可以供很多私网地址的设备共享上网。</p>
+<hr />
+<h3 id="7-ipv4">7. 怎么获得一个公网 IPv4 地址？</h3>
+<p>通常情况下，你个人无法直接“购买”或“申请”一个公网IPv4地址。</p>
+<ul>
+<li><strong>主要途径：</strong></li>
+<li><strong>通过你的ISP（网络服务提供商）：</strong> 当你办理宽带业务时，ISP会分配给你一个公网IP地址（通常是动态的，可能会变动，或者你也可以付费申请一个固定的静态IP）。你的路由器会使用这个地址连接到互联网。</li>
+<li><strong>企业用户：</strong> 大型企业或组织可以直接向区域互联网注册机构（RIR，如亚太地区的APNIC）申请IP地址块，但申请门槛和费用都比较高。</li>
+<li><strong>购买/租赁：</strong> 在一些IP地址交易市场，你可以购买或租赁闲置的公网IPv4地址，但这通常成本很高，且有严格的监管。</li>
+<li><strong>小白理解：</strong> 就像你想要一个对外公开的门牌号，你需要向当地的邮政部门（ISP）申请，他们给你分配一个。</li>
+</ul>
+<hr />
+<h3 id="8-ipv6">8. 怎么获得一个公网 IPv6 地址？</h3>
+<p>获得公网IPv6地址相对来说更容易，因为地址数量非常多。</p>
+<ul>
+<li><strong>主要途径：</strong></li>
+<li><strong>通过你的ISP（网络服务提供商）：</strong> 现在越来越多的ISP已经开始提供IPv6服务。当你连接到支持IPv6的ISP网络时，你的设备（通常是路由器）会自动从ISP那里获得一个公网IPv6地址。</li>
+<li><strong>自动配置：</strong> IPv6支持无状态地址自动配置（SLAAC），即使没有DHCP服务器，设备也能根据网络信息自动生成一个公网IPv6地址。</li>
+<li><strong>企业用户：</strong> 同样可以向RIR申请IPv6地址块。</li>
+<li><strong>小白理解：</strong> 就像现在城市里房子太多了，政府（ISP）会很慷慨地给你一个新地址，而且这个地址系统非常庞大，几乎每个人都能轻松获得一个。很多时候，你只要连接到支持IPv6的网络，它就会自动给你一个。</li>
+</ul>
+<hr />
+<h3 id="9-ipv4">9. IPv4 的用途</h3>
+<p>在它有限的生命周期里，IPv4支撑了互联网的早期发展和普及。</p>
+<ul>
+<li><strong>主要用途：</strong></li>
+<li><strong>连接设备到互联网：</strong> 让电脑、服务器、早期手机等能够访问网页、发送邮件、进行在线交流。</li>
+<li><strong>构建早期互联网服务：</strong> 支撑了电子邮件、FTP、早期网站等服务的运行。</li>
+<li><strong>局域网通信：</strong> 在家庭和企业内部，私网IPv4地址用于设备间的通信。</li>
+<li><strong>小白理解：</strong> 就像早期的电话系统，让人们可以互相打电话，传递信息。虽然号码有限，但在那个时代已经足够强大了。</li>
+</ul>
+<hr />
+<h3 id="10-ipv6">10. IPv6 的用途</h3>
+<p>IPv6是互联网的未来，它的用途更加广泛和深远。</p>
+<ul>
+<li><strong>主要用途：</strong></li>
+<li><strong>支持海量设备连接：</strong> 为智能手机、平板电脑、智能电视、智能家居设备、可穿戴设备、汽车、工业传感器等<strong>所有物联网设备</strong>提供充足的地址，实现真正的“万物互联”。</li>
+<li><strong>提升网络性能和效率：</strong> 更优化的报头设计，可能带来更快的传输速度和更低的延迟。</li>
+<li><strong>增强网络安全性：</strong> 内置的IPsec协议可以提供更好的端到端安全保障。</li>
+<li><strong>简化网络配置：</strong> 自动配置功能让网络管理更便捷。</li>
+<li><strong>支持新的网络应用：</strong> 为未来可能出现的各种创新应用和服务提供基础地址支持。</li>
+<li><strong>小白理解：</strong> 就像一个全新的、无限大的城市，里面有无数的街道和门牌号，你可以把任何东西（任何设备）都放进去，让它们都能自由地互相联系，并且通信更顺畅、更安全。比如，你家里的冰箱、空调、灯泡，甚至你的鞋子，都可以有一个自己的地址，并且能联网互相沟通，听你的指令。</li>
+</ul>
+            </article>
+
+            <!-- 极客版权区域 -->
+            <section style="padding: 0 60px 60px; font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted);" aria-label="Integrity Card">
+                <div style="border: 1px solid var(--border); padding: 35px; background: var(--surface);">
+                    <div># SOURCE_NODE: <span id="page-url" style="word-break: break-all; color: var(--text);"></span></div>
+                    <div># LICENSE: CC-BY-NC-SA-4.0</div>
+                    <div># INTEGRITY_STATUS: VALIDATED_ENCRYPTED</div>
+                    <div style="margin-top: 20px; color: var(--text);">// EOF_SIGNAL_RECEIVED</div>
+                </div>
+            </section>
+        </main>
+
+        <aside>
+            <section class="widget" aria-label="User Identifier">
+                <h3 class="widget-title">IDENT_AUTH</h3>
+                <div style="border: 1px solid var(--border); padding: 35px 20px; text-align: center; background: var(--bg);">
+                    <img src="https://edgeoneimg.cdn.sn/i/696b4d5b58c71_1768639835.webp" style="width: 72px; height: 72px; filter: grayscale(1); border: 1px solid var(--border); padding: 4px; margin-bottom: 20px;" alt="Avatar">
+                    <div class="mono" style="font-weight: 900; font-size: 1.2rem; color: var(--text);">Cnfte</div>
+                    <!-- 核心修复：作者简介 -->
+                    <div class="bio-text mono">"滚滚长江东逝水，浪花淘尽英雄。"</div>
+                </div>
+            </section>
+
+            <section class="widget" aria-label="System Metrics">
+                <h3 class="widget-title">SYSTEM_LOG</h3>
+                <div class="sys-log">
+                    <div>[OK] NODE_STATE: STABLE</div>
+                    <div>[OK] UPTIME: 10M_READ</div>
+                    <div>[OK] CLOCK: <span id="live-clock">00:00:00</span></div>
+                    <div style="color: #333">-----------------------</div>
+                    <div>$ tail -f blog.log</div>
+                    <div>> Reading node...</div>
+                    <div style="color: #00ff00;">> 互联网科普系列-什么是I...</div>
+                </div>
+            </section>
+
+            
+            <section class="widget" aria-label="Table of Contents">
+                <h3 class="widget-title">STRUCTURE_TOC</h3>
+                <div class="toc-box" id="toc-container">
+                    <div class="toc">
+<ul>
+<li><a href="#1-ipv4-ipv6">1. 什么是 IPv4 / IPv6？</a></li>
+<li><a href="#2">2. 它们间的差异</a></li>
+<li><a href="#3-ipv4">3. IPv4 诞生的意义</a></li>
+<li><a href="#4-ipv6">4. IPv6 诞生的意义</a></li>
+<li><a href="#5">5. 它们间为何互不兼容</a></li>
+<li><a href="#6">6. 公网的概念</a></li>
+<li><a href="#7-ipv4">7. 怎么获得一个公网 IPv4 地址？</a></li>
+<li><a href="#8-ipv6">8. 怎么获得一个公网 IPv6 地址？</a></li>
+<li><a href="#9-ipv4">9. IPv4 的用途</a></li>
+<li><a href="#10-ipv6">10. IPv6 的用途</a></li>
+</ul>
+</div>
+
+                </div>
+            </section>
+            
+        </aside>
+    </div>
+
+    <div class="float-bar">
+        <button class="float-btn" onclick="copyLink()" aria-label="Share"><i class="fa-solid fa-share-nodes"></i></button>
+        <button class="float-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Back to Top"><i class="fa-solid fa-chevron-up"></i></button>
+    </div>
+
+    <footer>
+        <p class="mono">TERMINAL_BLOG_ENGINE v3.0.5 // © 2026 Cnfte</p>
+        <p class="mono" style="font-size: 0.75rem; margin-top: 15px; opacity: 0.5;">Copyright © 2026 Cnfte 阿巴阿巴阿巴阿巴阿巴阿巴</p>
+    </footer>
+
+    <script>
+        // 1. 初始化 URL
+        document.getElementById('page-url').innerText = window.location.href;
+
+        // 2. 系统时钟
+        setInterval(() => {
+            document.getElementById('live-clock').innerText = new Date().toTimeString().split(' ')[0];
+        }, 1000);
+
+        // 3. 滚动进度监听与 TOC 高亮
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            document.getElementById("progress").style.width = (winScroll / height * 100) + "%";
+            
+            const sections = document.querySelectorAll('.content h2, .content h3');
+            const tocLinks = document.querySelectorAll('.toc-box a');
+            let activeId = '';
+            sections.forEach(s => {
+                if (s.getBoundingClientRect().top < 100) activeId = s.getAttribute('id');
+            });
+            tocLinks.forEach(l => {
+                l.classList.toggle('active', l.getAttribute('href') === '#' + activeId);
+            });
+        });
+
+        // 4. 代码块复制增强
+        document.querySelectorAll('pre').forEach(block => {
+            const btn = document.createElement('button');
+            btn.className = 'copy-btn mono';
+            btn.innerText = 'COPY';
+            btn.onclick = () => {
+                navigator.clipboard.writeText(block.querySelector('code').innerText).then(() => {
+                    btn.innerText = 'DONE'; setTimeout(() => btn.innerText = 'COPY', 2000);
+                });
+            };
+            block.appendChild(btn);
+        });
+
+        // 5. 主题控制
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const target = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', target);
+            document.getElementById('mode-text').innerText = target.toUpperCase();
+            localStorage.setItem('geek-theme', target);
+        }
+        
+        const savedTheme = localStorage.getItem('geek-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.getElementById('mode-text').innerText = savedTheme.toUpperCase();
+
+        function copyLink() { navigator.clipboard.writeText(window.location.href); alert("LINK_COPIED_TO_CLIPBOARD"); }
+    </script>
+</body>
+</html>

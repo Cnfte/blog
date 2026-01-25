@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO 核心优化：采用 AI 推荐的高质量元数据 -->
+    <title>Cnfte Space：极简个人技术博客，分享GitHub资源与网络协议科普</title>
+    <meta name="description" content="Cnfte Space，探索技术与美学的极简个人空间。专注分享GitHub优质开发者资源、网络协议深度科普及AI接口应用教程，记录技术成长与灵感。">
+    <meta name="keywords" content="Cnfte, Cnfte Space, 个人博客, 技术博客, GitHub资源, 网络协议科普, Gemini API反代, 开发者资源">
+    
+    <!-- 性能优化：强制预连接资源 -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- 字体与图标：同步加载确保移动端渲染不回退 -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #050505;
+            --text: #ffffff;
+            --text-muted: #888888;
+            --border: #222222;
+            --accent: #ffffff;
+            --selection: #333333;
+            --trans: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --surface: #fafafa;
+            --text: #1d1d1f;
+            --text-muted: #505050; /* 提升对比度通过无障碍测试 */
+            --border: #e0e0e0;
+            --selection: #eeeeee;
+        }
+
+        /* 基础重置 & 消除移动端点击蓝色阴影 */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent !important; }
+        
+        /* 强力锁定链接颜色，防止变紫 */
+        a, a:visited, a:active { color: inherit !important; text-decoration: none !important; }
+
+        body { 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            background: var(--bg); color: var(--text); 
+            line-height: 1.6; transition: background 0.3s; 
+            overflow-x: hidden; width: 100%;
+        }
+
+        .mono { font-family: 'Fira Code', monospace !important; }
+        ::selection { background: var(--selection); }
+
+        /* 极简顶部导航 */
+        nav { 
+            position: sticky; top: 0; z-index: 1000; background: var(--bg); 
+            border-bottom: 2px solid var(--border); padding: 0 5%; height: 64px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { font-weight: 900; font-size: 1.2rem; letter-spacing: -1px; }
+        .nav-links a { margin-left: 25px; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .nav-links a:hover { color: var(--text-muted) !important; }
+
+        /* 终端风格 Hero 区域 */
+        .hero { 
+            padding: 120px 20px; text-align: center; border-bottom: 1px solid var(--border);
+            background: var(--surface); position: relative;
+        }
+        .hero h1 { font-size: clamp(2.2rem, 8vw, 4.5rem); font-weight: 900; margin-bottom: 15px; letter-spacing: -3px; line-height: 1; }
+        .hero p { font-family: 'Fira Code', monospace; color: var(--text-muted); font-size: 1rem; opacity: 0.9; }
+        .hero p::after { content: "_"; animation: blink 1s infinite; color: var(--text); }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* 响应式核心主容器 */
+        .main-grid { 
+            max-width: 1400px; margin: 0 auto; 
+            display: flex; flex-direction: row; 
+        }
+
+        /* 文章列表布局 */
+        .post-container { flex: 1; border-right: 1px solid var(--border); min-width: 0; }
+        
+        .post-card { 
+            padding: 60px; border-bottom: 1px solid var(--border); 
+            transition: var(--trans); display: block; position: relative;
+        }
+        .post-card:hover { background: var(--surface); }
+        
+        /* UID 文章路径显示 */
+        .post-meta { font-family: 'Fira Code', monospace; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 18px; display: flex; gap: 20px; }
+        .post-title { font-size: 2.2rem; font-weight: 800; margin-bottom: 15px; line-height: 1.2; letter-spacing: -1px; }
+        .post-summary { color: var(--text-muted); font-size: 1.05rem; max-width: 850px; line-height: 1.7; text-align: justify; }
+
+        /* 文章封面图展示 */
+        .post-img-box { 
+            width: 100%; height: 200px; background: var(--border); 
+            margin-bottom: 25px; overflow: hidden; display: flex; 
+            align-items: center; justify-content: center;
+        }
+        .post-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); transition: 0.5s; }
+        .post-card:hover .post-img { filter: grayscale(0); transform: scale(1.05); }
+
+        /* 侧边栏加固 */
+        aside { 
+            width: 360px; padding: 60px 40px; background: var(--surface); 
+            position: sticky; top: 64px; height: calc(100vh - 64px); overflow-y: auto;
+        }
+        .widget { margin-bottom: 60px; }
+        .widget-title { 
+            font-family: 'Fira Code', monospace; font-size: 0.75rem; font-weight: 700; 
+            text-transform: uppercase; color: var(--text); margin-bottom: 25px; 
+            display: flex; align-items: center; border-left: 4px solid var(--text); padding-left: 12px;
+        }
+
+        /* 极客组件：系统状态面板 */
+        .status-panel { 
+            background: #000; border: 1px solid #333; 
+            padding: 20px; font-family: 'Fira Code', monospace; 
+            font-size: 0.75rem; line-height: 2; color: #00ff00; 
+        }
+
+        .stat-item { 
+            display: flex; justify-content: space-between; font-family: 'Fira Code', monospace;
+            font-size: 0.9rem; padding: 12px 0; border-bottom: 1px dashed var(--border);
+        }
+
+        /* 响应式：强制移动端单栏适配 */
+        @media (max-width: 1024px) {
+            .main-grid { flex-direction: column; }
+            .post-container { border-right: none; }
+            aside { 
+                width: 100%; border-left: none; border-top: 2px solid var(--border); 
+                position: static; height: auto; padding: 40px 25px;
+            }
+            .post-card { padding: 45px 25px; }
+            .post-title { font-size: 1.8rem; }
+            .hero { padding: 80px 20px; }
+            .post-img-box { height: 160px; }
+        }
+
+        footer { 
+            text-align: center; padding: 80px 20px; border-top: 2px solid var(--border);
+            font-family: 'Fira Code', monospace; font-size: 0.8rem; color: var(--text-muted); background: var(--surface);
+        }
+
+        /* 环境模式切换按钮 */
+        .env-toggle { cursor: pointer; border: 1px solid var(--border); padding: 6px 12px; font-size: 0.75rem; font-weight: 700; }
+        .env-toggle:hover { background: var(--text); color: var(--bg); }
+    </style>
+</head>
+<body>
+    <nav aria-label="Main Navigation">
+        <a href="/" class="logo mono">CNFTE://ROOT</a>
+        <div class="nav-links mono">
+            <a href="/about.html">关于</a><a href="/公益服务项.html">公益服务项</a>
+            <span class="env-toggle mono" onclick="toggleTheme()" aria-label="Switch Mode">MODE: <span id="mode-text">DARK</span></span>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h1 class="mono">CNFTE</h1>
+        <p class="mono">莫愁前路无知己，天下谁人不识君？</p>
+    </header>
+
+    <div class="main-grid">
+        <main class="post-container">
+            <section aria-label="Node Archive Feed">
+                
+                <!-- 链接指向 /archive/UID/ -->
+                <a href="/archive/6c9d0edf/" class="post-card" aria-label="Read Post: 社区自建cloudflare saas优选ip、优选域名汇总">
+                    <div class="post-meta">
+                        <span>[2026-01-25]</span>
+                        <span>REF_ID:6c9d0edf</span>
+                        <span class="mono">READ:3M</span>
+                    </div>
+                    
+                    
+
+                    <h2 class="post-title">社区自建cloudflare saas优选ip、优选域名汇总</h2>
+                    <p class="post-summary">1.前言 众所周知cloudflare提供免费的无限流量防御cdn,但是因为分配的节点太烂而被诟病，或许你早已听闻saas优选的大名，却在激活后怎么选择优选犯了难，不用怕今天11个优选cname端上给您让你的网站健步如飞 CLOUDFLARE SAAS是什么？cloudflare saas是一个为绑定了外币储...</p>
+                </a>
+                
+                <!-- 链接指向 /archive/UID/ -->
+                <a href="/archive/84e423df/" class="post-card" aria-label="Read Post: 互联网科普系列-什么是协议？怎么搭建一个带有加密协议的节点？">
+                    <div class="post-meta">
+                        <span>[2026-01-24]</span>
+                        <span>REF_ID:84e423df</span>
+                        <span class="mono">READ:7M</span>
+                    </div>
+                    
+                    
+
+                    <h2 class="post-title">互联网科普系列-什么是协议？怎么搭建一个带有加密协议的节点？</h2>
+                    <p class="post-summary">我们需要先理清一个概念：现在我们常用的工具（如 Shadowsocks, V2Ray, Singbox）在技术分类上更多被称为“代理（Proxy）”而非传统意义上的“VPN”，但为了方便理解，下文统称为翻墙协议。 一、 常见的翻墙协议及其工作原理 传统的VPN协议（如 L2TP、PPTP、OpenVPN）特征...</p>
+                </a>
+                
+                <!-- 链接指向 /archive/UID/ -->
+                <a href="/archive/2aa91c54/" class="post-card" aria-label="Read Post: 互联网科普系列-什么是DNS">
+                    <div class="post-meta">
+                        <span>[2026-01-18]</span>
+                        <span>REF_ID:2aa91c54</span>
+                        <span class="mono">READ:7M</span>
+                    </div>
+                    
+                    
+
+                    <h2 class="post-title">互联网科普系列-什么是DNS</h2>
+                    <p class="post-summary">DNS是什么？ 想象一下，互联网就像一个巨大的城市，里面住着无数的网站、服务器，它们都有自己的“门牌号”，这个门牌号就是一串数字，比如 192.168.1.1 这样的，我们称之为 IP地址。 但是，我们人类记不住这么多数字门牌号，我们更习惯记名字，比如 www.baidu.com、www.google.com...</p>
+                </a>
+                
+                <!-- 链接指向 /archive/UID/ -->
+                <a href="/archive/fba65aa5/" class="post-card" aria-label="Read Post: 12_22快手直播涉黄事件;中国互联网的至暗时刻">
+                    <div class="post-meta">
+                        <span>[2026-01-17]</span>
+                        <span>REF_ID:fba65aa5</span>
+                        <span class="mono">READ:4M</span>
+                    </div>
+                    
+                    
+
+                    <h2 class="post-title">12_22快手直播涉黄事件;中国互联网的至暗时刻</h2>
+                    <p class="post-summary">一、事件背景 2025年12月22日晚，中国多家头部社交与内容平台几乎在同一时间段内出现异常状况。其中，快手直播系统受到的冲击最为严重，并迅速引发全网关注。与此同时，抖音、小红书、哔哩哔哩（B站）等平台也被大量用户反馈出现访问缓慢、功能异常或服务器不稳定等问题。多平台在同一夜间集中出现异常，使外界普遍认为这并...</p>
+                </a>
+                
+                <!-- 链接指向 /archive/UID/ -->
+                <a href="/archive/3be4d136/" class="post-card" aria-label="Read Post: Gemini 反代脚本：无需Cloudflare_Deno，用Nginx轻松搭建稳定代理">
+                    <div class="post-meta">
+                        <span>[2026-01-17]</span>
+                        <span>REF_ID:3be4d136</span>
+                        <span class="mono">READ:4M</span>
+                    </div>
+                    
+                    
+
+                    <h2 class="post-title">Gemini 反代脚本：无需Cloudflare_Deno，用Nginx轻松搭建稳定代理</h2>
+                    <p class="post-summary">前言：绕过GFW，畅享Gemini API 对于国内用户而言，访问Gemini API一直面临着GFW的阻碍。过去常用的翻墙方式（如搭建梯子）不仅操作繁琐，还伴随着安全隐患。而曾经备受推崇的Cloudflare Pages/Workers和Deno，也因政策调整或滥用问题，不再是可靠的解决方案。Cloudfl...</p>
+                </a>
+                
+                <!-- 链接指向 /archive/UID/ -->
+                <a href="/archive/d4bf0256/" class="post-card" aria-label="Read Post: JMcomic版本下载站已正式开通">
+                    <div class="post-meta">
+                        <span>[2026-01-17]</span>
+                        <span>REF_ID:d4bf0256</span>
+                        <span class="mono">READ:1M</span>
+                    </div>
+                    
+                    
+
+                    <h2 class="post-title">JMcomic版本下载站已正式开通</h2>
+                    <p class="post-summary">使用了精品土豆保证了基础下载速度 收录版本： JMComic2：1.6.51.8.0 JMComic3：2.0.1最新 下载站自行搭建供公众下载，请勿过度占用公共资源 我是下载站链接点我 开始下载速度较慢须耐心等待 峰值下载速度达36.8Mbps/4.6MB/s(到后面非常稳定)...</p>
+                </a>
+                
+                <!-- 链接指向 /archive/UID/ -->
+                <a href="/archive/516e0e28/" class="post-card" aria-label="Read Post: 互联网科普系列-什么是HTTP_HTTPS">
+                    <div class="post-meta">
+                        <span>[2026-01-17]</span>
+                        <span>REF_ID:516e0e28</span>
+                        <span class="mono">READ:7M</span>
+                    </div>
+                    
+                    
+
+                    <h2 class="post-title">互联网科普系列-什么是HTTP_HTTPS</h2>
+                    <p class="post-summary">大家好！今天我们要聊聊咱们上网时经常会遇到的两个词：HTTP和HTTPS。听起来有点技术范儿，但其实它们就像我们生活中寄信和寄挂号信一样，一个普通，一个安全。别担心，今天我们就用最白话的方式，把它们讲清楚！ 1. 什么是传输协议？—— 网络世界的“邮递员” 想象一下，你想给远方的朋友寄一封信。这封信需要经过邮...</p>
+                </a>
+                
+                <!-- 链接指向 /archive/UID/ -->
+                <a href="/archive/b9379a2f/" class="post-card" aria-label="Read Post: 互联网科普系列-什么是ICP备案_怎么拥有一个备案域名与替代方案">
+                    <div class="post-meta">
+                        <span>[2026-01-17]</span>
+                        <span>REF_ID:b9379a2f</span>
+                        <span class="mono">READ:8M</span>
+                    </div>
+                    
+                    
+
+                    <h2 class="post-title">互联网科普系列-什么是ICP备案_怎么拥有一个备案域名与替代方案</h2>
+                    <p class="post-summary">一、什么是中华人民共和国域名备案？ 简单来说，中华人民共和国域名备案（简称“域名备案”或“ICP备案”）是指在中国大陆地区使用域名注册的网站，需要向国家相关部门（主要是工业和信息化部，简称工信部）提交相关信息进行登记和审核的过程。 核心目的： 确保在中国大陆地区提供互联网信息服务（也就是我们常说的“网站”）的...</p>
+                </a>
+                
+                <!-- 链接指向 /archive/UID/ -->
+                <a href="/archive/45bd62f3/" class="post-card" aria-label="Read Post: 互联网科普系列-什么是IPv4_v6">
+                    <div class="post-meta">
+                        <span>[2026-01-17]</span>
+                        <span>REF_ID:45bd62f3</span>
+                        <span class="mono">READ:10M</span>
+                    </div>
+                    
+                    
+
+                    <h2 class="post-title">互联网科普系列-什么是IPv4_v6</h2>
+                    <p class="post-summary">1. 什么是 IPv4 / IPv6？ 想象一下，互联网就像一个巨大的城市，而每一台连接到互联网的设备（电脑、手机、服务器等）都像是这个城市里的一个房子。为了让这些房子能够互相找到并通信，它们都需要一个地址。 IPv4 (Internet Protocol version 4)：这是互联网早期使用的地址系统。...</p>
+                </a>
+                
+                <!-- 链接指向 /archive/UID/ -->
+                <a href="/archive/48566cd1/" class="post-card" aria-label="Read Post: 互联网科普系列-什么是中国国家长城防火墙">
+                    <div class="post-meta">
+                        <span>[2026-01-17]</span>
+                        <span>REF_ID:48566cd1</span>
+                        <span class="mono">READ:7M</span>
+                    </div>
+                    
+                    
+
+                    <h2 class="post-title">互联网科普系列-什么是中国国家长城防火墙</h2>
+                    <p class="post-summary">什么是中国国家长城防火墙？ 简单来说，中国国家长城防火墙是中国政府用来控制和过滤互联网信息的一套系统和一系列政策的统称。它就像一道“数字长城”，用来“保护”中国境内的互联网用户，但同时也在很大程度上限制了他们访问境外信息和与境外进行自由交流。 它有什么用？ 长城防火墙的主要作用可以归纳为以下几点： 1. 信息...</p>
+                </a>
+                
+                <!-- 链接指向 /archive/UID/ -->
+                <a href="/archive/2605c485/" class="post-card" aria-label="Read Post: 互联网科普系列-什么是传输协议">
+                    <div class="post-meta">
+                        <span>[2026-01-17]</span>
+                        <span>REF_ID:2605c485</span>
+                        <span class="mono">READ:6M</span>
+                    </div>
+                    
+                    
+
+                    <h2 class="post-title">互联网科普系列-什么是传输协议</h2>
+                    <p class="post-summary">想象一下，我们生活在一个大城市里，每天都要通过各种各样的交通工具（汽车、火车、飞机）把货物（信息）从一个地方送到另一个地方。而传输协议，就像是这些交通工具在城市里运行必须遵守的交通规则。没有这些规则，交通会乱成一锅粥，货物也可能送不到或者送错了地方。 1. 什么是传输协议？ 简单来说，传输协议就是一套约定好的...</p>
+                </a>
+                
+                <!-- 链接指向 /archive/UID/ -->
+                <a href="/archive/6282d920/" class="post-card" aria-label="Read Post: 互联网科普系列-什么是域名_怎么获得一个域名并解析">
+                    <div class="post-meta">
+                        <span>[2026-01-17]</span>
+                        <span>REF_ID:6282d920</span>
+                        <span class="mono">READ:9M</span>
+                    </div>
+                    
+                    
+
+                    <h2 class="post-title">互联网科普系列-什么是域名_怎么获得一个域名并解析</h2>
+                    <p class="post-summary">什么是域名？ 想象一下，互联网就像一个巨大的城市，里面住着无数的网站、服务器（就是存放网站内容的地方）。每个服务器都有一个独一无二的“门牌号”，这个门牌号就是一串数字，叫做 IP地址。 比如，你家地址是“XX省XX市XX区XX街道XX号”，IP地址就是“192.168.1.1”或者“203.0.113.45”...</p>
+                </a>
+                
+                <!-- 链接指向 /archive/UID/ -->
+                <a href="/archive/720a5a44/" class="post-card" aria-label="Read Post: 互联网科普系列-什么是服务器_怎么获得一个服务器">
+                    <div class="post-meta">
+                        <span>[2026-01-17]</span>
+                        <span>REF_ID:720a5a44</span>
+                        <span class="mono">READ:12M</span>
+                    </div>
+                    
+                    
+
+                    <h2 class="post-title">互联网科普系列-什么是服务器_怎么获得一个服务器</h2>
+                    <p class="post-summary">什么是服务器？ 想象一下，你平时上网看视频、玩游戏、聊天，这些信息和内容都藏在哪里呢？它们不是凭空出现的，而是存储在一些特别厉害的电脑里，这些电脑就是服务器。 你可以把服务器理解成一个\\“超级大管家”或者“信息仓库”\\。它不像我们平时用的电脑那样，主要用来玩游戏、看电影、写文档。服务器的主要工作是： 存储...</p>
+                </a>
+                
+                <!-- 链接指向 /archive/UID/ -->
+                <a href="/archive/4bad7919/" class="post-card" aria-label="Read Post: 对应近期Cloudflare对反代工具大规模封号事件的警告">
+                    <div class="post-meta">
+                        <span>[2026-01-17]</span>
+                        <span>REF_ID:4bad7919</span>
+                        <span class="mono">READ:3M</span>
+                    </div>
+                    
+                    
+
+                    <h2 class="post-title">对应近期Cloudflare对反代工具大规模封号事件的警告</h2>
+                    <p class="post-summary">近期，Cloudflare大批封号事件在互联网领域掀起了轩然大波，众多用户的账号被强制暂停，涉及商用账号和个人免费账号。此次事件绝非个例，而是一场范围广泛、影响深远的风暴，给所有依赖Cloudflare服务的用户敲响了警钟。 从目前掌握的信息来看，此次大规模封禁高度疑似与Workers/Pages的反代滥用相...</p>
+                </a>
+                
+            </section>
+        </main>
+
+        <aside>
+            <section class="widget" aria-label="Identifier Card">
+                <h3 class="widget-title">IDENT_AUTH</h3>
+                <div style="text-align: center; border: 1px solid var(--border); padding: 30px 20px; background: var(--bg);">
+                    <img src="https://edgeoneimg.cdn.sn/i/696b4d5b58c71_1768639835.webp" style="width: 72px; height: 72px; filter: grayscale(1); border: 1px solid var(--border); padding: 4px; margin-bottom: 20px;" alt="Author Avatar">
+                    <h4 class="mono" style="font-weight: 900; font-size: 1.2rem;">Cnfte</h4>
+                    <div class="mono" style="font-size: 0.8rem; color: var(--text-muted); margin-top: 12px; line-height: 1.6;">"滚滚长江东逝水，浪花淘尽英雄。"</div>
+                </div>
+            </section>
+
+            <section class="widget" aria-label="System Dashboard">
+                <h3 class="widget-title">SYSTEM_STATUS</h3>
+                <div class="status-panel">
+                    <div>[OK] NODE_ID: CNFTE_STABLE_V3</div>
+                    <div>[OK] UP_DAYS: <span id="days">0</span>_DAYS</div>
+                    <div>[OK] TIMESTAMP: <span id="live-clock">00:00:00</span></div>
+                    <div>[OK] INDEXED: 14_OBJECTS</div>
+                </div>
+            </section>
+
+            <section class="widget" aria-label="Notices">
+                <h3 class="widget-title">SYS_NOTICES</h3>
+                <div class="mono" style="font-size: 0.85rem; color: var(--text-muted); border: 1px dashed var(--border); padding: 20px; line-height: 1.8; background: var(--bg);">
+                    欢迎来到我的博客
+                </div>
+            </section>
+        </aside>
+    </div>
+
+    <footer>
+        <p class="mono">TERMINAL_BLOG_ENGINE v3.0.0 // UID_ENABLED</p>
+        <p class="mono" style="margin-top: 15px; opacity: 0.7;">© 2026 Cnfte // Copyright © 2026 Cnfte 阿巴阿巴阿巴阿巴阿巴阿巴</p>
+    </footer>
+
+    <script>
+        // 1. 系统时钟逻辑
+        function startClock() {
+            const clock = document.getElementById('live-clock');
+            setInterval(() => {
+                clock.innerText = new Date().toTimeString().split(' ')[0];
+            }, 1000);
+        }
+        startClock();
+
+        // 2. 主题持久化与切换
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const target = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', target);
+            document.getElementById('mode-text').innerText = target.toUpperCase();
+            localStorage.setItem('geek-theme', target);
+        }
+
+        window.onload = () => {
+            // 计算运行天数
+            const start = new Date("2025-05-01");
+            const now = new Date();
+            const diff = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+            document.getElementById('days').innerHTML = diff > 0 ? diff : 0;
+            
+            // 初始化主题环境
+            const saved = localStorage.getItem('geek-theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', saved);
+            document.getElementById('mode-text').innerText = saved.toUpperCase();
+        };
+    </script>
+</body>
+</html>

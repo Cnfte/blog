@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- SEO & Metadata -->
+    <title>互联网科普系列-什么是HTTP_HTTPS - Cnfteの博客</title>
+    <meta name="description" content="大家好！今天我们要聊聊咱们上网时经常会遇到的两个词：HTTP和HTTPS。听起来有点技术范儿，但其实它们就像我们生活中寄信和寄挂号信一样，一个普通，一个安全。别担心，今天我们就用最白话的方式，把它们讲清楚！ 1. 什么是传输协议？—— 网络世界的“邮递员” 想象一下，你想给远方的朋友寄一封信。这封信需要经过邮...">
+    <link rel="icon" href="https://www.img520.com/AVcrrd.jpg">
+    
+    <!-- 极客字体引用：强制同步加载确保移动端第一时间渲染 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #0a0a0a;
+            --text: #ffffff;
+            --text-muted: #a0a0a0;
+            --border: #222222;
+            --code-bg: #050505;
+            --accent: #ffffff;
+            --selection: #333333;
+        }
+
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --surface: #fafafa;
+            --text: #1d1d1f;
+            --text-muted: #505050;
+            --border: #e0e0e0;
+            --code-bg: #f5f5f5;
+            --selection: #eeeeee;
+        }
+
+        /* 基础复位 & 消除移动端点击蓝色背景 */
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent !important; 
+        }
+        
+        /* 强力锁定链接颜色，防止变紫/变蓝 */
+        a, a:visited, a:active {
+            color: inherit !important;
+            text-decoration: none !important;
+            outline: none !important;
+        }
+
+        body { 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            background: var(--bg); color: var(--text); 
+            line-height: 1.8; overflow-x: hidden; width: 100%;
+            transition: background 0.3s;
+        }
+
+        .mono { font-family: 'Fira Code', monospace !important; }
+        ::selection { background: var(--selection); }
+
+        /* 顶部进度条 */
+        #progress { position: fixed; top: 0; left: 0; width: 0%; height: 2px; background: var(--text); z-index: 2001; }
+
+        /* 极简顶部导航栏 */
+        nav { 
+            position: sticky; top: 0; z-index: 1000; background: var(--bg); 
+            border-bottom: 2px solid var(--border); padding: 0 5%; height: 64px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { font-weight: 900; font-size: 1.1rem; letter-spacing: -1px; }
+
+        /* 文章头部：彻底解决标题被导航栏遮挡问题 */
+        .post-header { 
+            padding: 140px 20px 60px; /* 增加顶部 Padding 确保空间充足 */
+            text-align: left; 
+            border-bottom: 1px solid var(--border); 
+            max-width: 1400px; margin: 0 auto; 
+            background: var(--surface);
+        }
+        .post-path { font-family: 'Fira Code', monospace; color: var(--text-muted); font-size: 0.75rem; margin-bottom: 20px; text-transform: uppercase; }
+        .post-header h1 { 
+            font-size: clamp(2rem, 5vw, 3.5rem); 
+            font-weight: 900; 
+            letter-spacing: -2px; 
+            line-height: 1.2; 
+            margin-bottom: 30px;
+            display: block; 
+        }
+
+        /* 响应式主架构 */
+        .main-wrapper { 
+            max-width: 1400px; margin: 0 auto; 
+            display: flex; flex-direction: row; 
+            align-items: stretch;
+        }
+
+        main { flex: 1; min-width: 0; } /* 解决 Flex 容器内溢出的核心 */
+
+        article.content { 
+            padding: 60px; border-right: 1px solid var(--border);
+            font-size: 1.125rem;
+        }
+
+        /* 正文样式 */
+        .content h2 { font-size: 1.8rem; margin: 2.5em 0 1.2em; font-weight: 900; border-bottom: 4px solid var(--text); padding-bottom: 10px; display: inline-block; }
+        .content h3 { font-size: 1.4rem; margin: 2em 0 1em; font-weight: 700; color: var(--text); border-left: 4px dashed var(--border); padding-left: 15px; }
+        .content p { margin-bottom: 2.2rem; text-align: justify; }
+        .content a { color: var(--text); text-decoration: underline !important; font-weight: 700; text-underline-offset: 4px; }
+        .content img { max-width: 100%; border: 1px solid var(--border); margin: 30px 0; display: block; height: auto; padding: 5px; }
+
+        /* --- 代码块彻底锁死修复方案 --- */
+        pre { 
+            background: var(--code-bg) !important; 
+            padding: 40px 20px 20px !important; 
+            border: 1px solid var(--border) !important;
+            margin: 2.5rem 0; position: relative; 
+            display: block !important; 
+            width: 100% !important; 
+            max-width: 100% !important; 
+            overflow-x: auto !important; 
+            white-space: pre !important; 
+            word-wrap: normal !important;
+            box-sizing: border-box !important;
+            border-radius: 0;
+        }
+        pre code { font-family: 'Fira Code', monospace !important; font-size: 0.95rem !important; display: block; min-width: fit-content; line-height: 1.6; }
+
+        /* 侧边栏加固：解决垂直堆叠 Bug */
+        aside { 
+            width: 360px; flex-shrink: 0; min-width: 320px;
+            padding: 60px 40px; background: var(--surface);
+            position: sticky; top: 64px; height: calc(100vh - 64px); 
+            overflow-y: auto;
+        }
+        .widget { margin-bottom: 60px; width: 100%; }
+        .widget-title { font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 25px; text-transform: uppercase; border-left: 4px solid var(--text); padding-left: 12px; }
+
+        /* 作者简介样式：锁定正常排版，防止单字符垂直显示 */
+        .bio-text {
+            font-size: 0.9rem; color: var(--text-muted); 
+            margin-top: 15px; line-height: 1.6;
+            word-break: normal !important; 
+            white-space: normal !important; 
+            display: block !important; width: 100% !important;
+            text-align: center;
+        }
+
+        /* 悬浮按钮修复：高对比度黑白方块 */
+        .float-bar { position: fixed; bottom: 30px; right: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 1000; }
+        .float-btn { 
+            width: 52px; height: 52px; 
+            background: var(--text) !important; /* 深色模式下它是白色 */
+            color: var(--bg) !important;       /* 强制图标显示为黑色 */
+            border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; font-size: 1.3rem; border-radius: 0; 
+            box-shadow: 6px 6px 0px var(--border);
+            transition: 0.1s;
+        }
+        .float-btn i, .float-btn svg { color: var(--bg) !important; pointer-events: none; }
+        .float-btn:active { transform: translate(2px, 2px); box-shadow: none; }
+
+        .copy-btn { position: absolute; top: 0; right: 0; background: var(--border); color: var(--text); border: none; padding: 8px 15px; font-size: 0.65rem; cursor: pointer; font-family: 'Fira Code', monospace; font-weight: 700; text-transform: uppercase; }
+
+        /* 系统日志组件 */
+        .sys-log { 
+            background: #000; border: 1px solid #333; padding: 20px; 
+            font-family: 'Fira Code', monospace; font-size: 0.75rem; color: #00ff00; line-height: 1.6;
+        }
+
+        /* 移动端强力适配逻辑：1024px 以下强制单栏并撑满 */
+        @media (max-width: 1024px) {
+            .main-wrapper { flex-direction: column !important; }
+            article.content { padding: 40px 25px; border-right: none !important; width: 100% !important; }
+            aside { 
+                width: 100% !important; flex-shrink: 0;
+                border-left: none !important; border-top: 2px solid var(--border); 
+                position: static !important; height: auto !important; 
+                padding: 40px 25px !important;
+            }
+            .post-header { padding: 100px 20px 40px; }
+            /* 代码块移动端全宽显示 */
+            pre { margin: 2rem -25px; border-left: none; border-right: none; padding: 45px 25px 25px !important; }
+        }
+
+        footer { padding: 80px 20px; text-align: center; border-top: 2px solid var(--border); font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted); background: var(--surface); }
+    </style>
+</head>
+<body>
+    <div id="progress" aria-hidden="true"></div>
+    <nav aria-label="Global Navigation">
+        <a href="/" class="logo mono">CNFTE://ROOT</a>
+        <div class="mono" style="font-size: 0.75rem; cursor: pointer; border: 1px solid var(--border); padding: 6px 12px;" onclick="toggleTheme()">[ENV_MODE: <span id="mode-text">DARK</span>]</div>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-path">/ROOT/NODES/POSTS/2026/01/17</div>
+        <h1>互联网科普系列-什么是HTTP_HTTPS</h1>
+        <div class="mono" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 15px;">
+            STAMP: 2026-01-17 // REF_ID: 516e0e28 // AUTH: VERIFIED
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <main>
+            <article class="content" id="article-main">
+                <p>大家好！今天我们要聊聊咱们上网时经常会遇到的两个词：HTTP和HTTPS。听起来有点技术范儿，但其实它们就像我们生活中寄信和寄挂号信一样，一个普通，一个安全。别担心，今天我们就用最白话的方式，把它们讲清楚！</p>
+<h3 id="1">1. 什么是传输协议？—— 网络世界的“邮递员”</h3>
+<p>想象一下，你想给远方的朋友寄一封信。这封信需要经过邮局、邮递员、各种交通工具，才能最终送到朋友手里。在这个过程中，有一套规则，比如信封怎么写、邮戳怎么盖、邮递员怎么投递，这些规则就是“协议”。</p>
+<p>在互联网上，我们电脑和服务器之间也要“通信”，也就是传递信息，比如你打开一个网页，电脑就要去服务器那里把网页内容“拿”过来。这个传递信息的“规则”就叫做<strong>传输协议</strong>。</p>
+<p>HTTP和HTTPS，就是两种不同的传输协议，它们就像是网络世界的“邮递员”，负责把信息从一个地方安全、准确地送到另一个地方。</p>
+<h3 id="2-http">2. HTTP连接的用处—— 畅通无阻的“普通信件”</h3>
+<p><strong>HTTP</strong>（HyperText Transfer Protocol），中文叫做“超文本传输协议”。它就像我们平时寄的“普通信件”。</p>
+<p><strong>用处：</strong></p>
+<ul>
+<li><strong>浏览网页：</strong> 当你在浏览器里输入网址，按下回车键，你的电脑就会通过HTTP协议向服务器发送一个请求，服务器收到请求后，就把网页的内容（文字、图片、视频等）通过HTTP协议“寄”回来，然后你的浏览器就能把网页显示出来啦！</li>
+<li><strong>下载文件：</strong> 很多时候，我们下载软件、图片、音乐，也是通过HTTP协议来完成的。</li>
+</ul>
+<p><strong>优点与特点：</strong></p>
+<ul>
+<li><strong>简单快捷：</strong> HTTP协议的设计比较简单，传输速度相对较快，因为它不需要做额外的加密和解密工作。</li>
+<li><strong>普及广泛：</strong> 几乎所有的网站都支持HTTP，是我们上网最基础的协议。</li>
+</ul>
+<h3 id="3-http">3. HTTP流量的特征—— “透明”的信件</h3>
+<p>既然是普通信件，那它的内容就是<strong>公开透明</strong>的。</p>
+<p><strong>特征：</strong></p>
+<ul>
+<li><strong>明文传输：</strong> 你在浏览器里输入账号密码、提交表单信息，这些数据都是以明文的形式在网络上传输的。这就好比你把银行卡密码写在明信片上寄出去一样，任何人只要截获了这封信，都能看到里面的内容。</li>
+<li><strong>容易被窃听：</strong> 如果有人在网络中间“偷听”（比如在公共Wi-Fi环境下），他们就能轻易地看到你传输的所有信息，包括你的用户名、密码、浏览记录等等。</li>
+<li><strong>容易被篡改：</strong> 同样，中间的“坏人”也可以修改你发送或接收的信息，比如把网页上的某个文字改掉，或者在你下载的文件里偷偷加点“料”。</li>
+</ul>
+<p>所以，虽然HTTP很方便，但在涉及敏感信息的时候，它就显得不太安全了。</p>
+<h3 id="4-httphttps">4. HTTP与HTTPS—— “普通信件”与“加密挂号信”的较量</h3>
+<p>现在我们来对比一下HTTP和HTTPS。</p>
+<table>
+<thead>
+<tr>
+<th>特征</th>
+<th>HTTP</th>
+<th>HTTPS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>全称</strong></td>
+<td>HyperText Transfer Protocol</td>
+<td>HyperText Transfer Protocol Secure</td>
+</tr>
+<tr>
+<td><strong>安全性</strong></td>
+<td>不安全，明文传输</td>
+<td>安全，加密传输</td>
+</tr>
+<tr>
+<td><strong>加密</strong></td>
+<td>无</td>
+<td>有（通过SSL/TLS协议）</td>
+</tr>
+<tr>
+<td><strong>端口</strong></td>
+<td>默认80端口</td>
+<td>默认443端口</td>
+</tr>
+<tr>
+<td><strong>网址前缀</strong></td>
+<td><code>http://</code></td>
+<td><code>https://</code></td>
+</tr>
+<tr>
+<td><strong>浏览器显示</strong></td>
+<td>通常不显示前缀，或显示“不安全”</td>
+<td>显示“锁”图标，或显示“安全”字样</td>
+</tr>
+<tr>
+<td><strong>速度</strong></td>
+<td>相对较快</td>
+<td>相对较慢（因为有加密解密过程）</td>
+</tr>
+<tr>
+<td><strong>用途</strong></td>
+<td>浏览普通网页，非敏感信息</td>
+<td>网上银行、购物、登录等敏感信息传输</td>
+</tr>
+</tbody>
+</table>
+<p>简单来说，HTTPS就是在HTTP的基础上，增加了一层“加密保护”，就像把普通信件升级成了“加密挂号信”。</p>
+<h3 id="5-https">5. HTTPS流量的特征—— “加密”的挂号信</h3>
+<p>HTTPS之所以安全，是因为它使用了<strong>SSL/TLS协议</strong>（安全套接层/传输层安全协议）来对数据进行加密。</p>
+<p><strong>特征：</strong></p>
+<ul>
+<li><strong>加密传输：</strong> 你在浏览器里输入的所有信息，在发送到服务器之前，都会被加密成一串乱码。只有服务器端拥有密钥，才能把这些乱码“解密”成原始信息。反之亦然，服务器发回来的信息也会被加密。</li>
+<li><strong>身份验证：</strong> HTTPS还能验证服务器的身份，确保你访问的是真正的网站，而不是一个冒牌货。这就好比挂号信需要收件人签字确认一样，能防止你被骗。</li>
+<li><strong>数据完整性：</strong> HTTPS还能保证数据在传输过程中不被篡改。如果有人试图修改数据，接收方就能发现，并拒绝接收。</li>
+</ul>
+<p><strong>优点与特点：</strong></p>
+<ul>
+<li><strong>高度安全：</strong> 能够有效防止数据被窃听、篡改和伪造，保护用户的隐私和财产安全。</li>
+<li><strong>信任度高：</strong> 浏览器会给HTTPS网站打上“安全”的标签（比如显示锁图标），让用户更放心。</li>
+<li><strong>搜索引擎优化：</strong> 搜索引擎（如百度、谷歌）更青睐HTTPS网站，会给予更高的排名。</li>
+</ul>
+<h3 id="6-https">6. HTTPS连接的用处—— 安全上网的“守护神”</h3>
+<p>HTTPS连接主要用于那些需要保护用户隐私和数据安全的场景：</p>
+<ul>
+<li><strong>网上银行和支付：</strong> 保护你的银行账号、密码、交易信息。</li>
+<li><strong>在线购物：</strong> 保护你的信用卡信息、收货地址等。</li>
+<li><strong>社交媒体和邮箱登录：</strong> 保护你的账号密码和个人信息。</li>
+<li><strong>任何需要用户输入敏感信息的网站：</strong> 比如注册账号、填写个人资料等。</li>
+</ul>
+<h3 id="7-s">7. 总结—— 选择安全，从“S”开始！</h3>
+<table>
+<thead>
+<tr>
+<th>方面</th>
+<th>HTTP</th>
+<th>HTTPS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>安全性</strong></td>
+<td>不安全，明文传输</td>
+<td>安全，加密传输</td>
+</tr>
+<tr>
+<td><strong>用途</strong></td>
+<td>普通网页浏览</td>
+<td>敏感信息传输（银行、购物、登录等）</td>
+</tr>
+<tr>
+<td><strong>浏览器表现</strong></td>
+<td>可能显示“不安全”</td>
+<td>显示“锁”图标，表示安全</td>
+</tr>
+<tr>
+<td><strong>建议</strong></td>
+<td>尽量避免在HTTP网站输入敏感信息</td>
+<td>优先选择HTTPS网站进行敏感操作</td>
+</tr>
+</tbody>
+</table>
+<p>总而言之，HTTP就像是我们在街上随便聊天，内容大家都能听到；而HTTPS则是在一个私密的房间里进行对话，只有参与者才能知道内容。</p>
+<p>在如今这个信息爆炸的时代，保护个人信息安全至关重要。所以，下次你在上网时，看到网址前面是<code>https://</code>并且有小锁图标，就说明你正在使用一个更安全的连接，可以更放心地进行操作啦！记住，多一个“S”，多一份安心！</p>
+            </article>
+
+            <!-- 极客版权区域 -->
+            <section style="padding: 0 60px 60px; font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted);" aria-label="Integrity Card">
+                <div style="border: 1px solid var(--border); padding: 35px; background: var(--surface);">
+                    <div># SOURCE_NODE: <span id="page-url" style="word-break: break-all; color: var(--text);"></span></div>
+                    <div># LICENSE: CC-BY-NC-SA-4.0</div>
+                    <div># INTEGRITY_STATUS: VALIDATED_ENCRYPTED</div>
+                    <div style="margin-top: 20px; color: var(--text);">// EOF_SIGNAL_RECEIVED</div>
+                </div>
+            </section>
+        </main>
+
+        <aside>
+            <section class="widget" aria-label="User Identifier">
+                <h3 class="widget-title">IDENT_AUTH</h3>
+                <div style="border: 1px solid var(--border); padding: 35px 20px; text-align: center; background: var(--bg);">
+                    <img src="https://edgeoneimg.cdn.sn/i/696b4d5b58c71_1768639835.webp" style="width: 72px; height: 72px; filter: grayscale(1); border: 1px solid var(--border); padding: 4px; margin-bottom: 20px;" alt="Avatar">
+                    <div class="mono" style="font-weight: 900; font-size: 1.2rem; color: var(--text);">Cnfte</div>
+                    <!-- 核心修复：作者简介 -->
+                    <div class="bio-text mono">"滚滚长江东逝水，浪花淘尽英雄。"</div>
+                </div>
+            </section>
+
+            <section class="widget" aria-label="System Metrics">
+                <h3 class="widget-title">SYSTEM_LOG</h3>
+                <div class="sys-log">
+                    <div>[OK] NODE_STATE: STABLE</div>
+                    <div>[OK] UPTIME: 7M_READ</div>
+                    <div>[OK] CLOCK: <span id="live-clock">00:00:00</span></div>
+                    <div style="color: #333">-----------------------</div>
+                    <div>$ tail -f blog.log</div>
+                    <div>> Reading node...</div>
+                    <div style="color: #00ff00;">> 互联网科普系列-什么是H...</div>
+                </div>
+            </section>
+
+            
+            <section class="widget" aria-label="Table of Contents">
+                <h3 class="widget-title">STRUCTURE_TOC</h3>
+                <div class="toc-box" id="toc-container">
+                    <div class="toc">
+<ul>
+<li><a href="#1">1. 什么是传输协议？—— 网络世界的“邮递员”</a></li>
+<li><a href="#2-http">2. HTTP连接的用处—— 畅通无阻的“普通信件”</a></li>
+<li><a href="#3-http">3. HTTP流量的特征—— “透明”的信件</a></li>
+<li><a href="#4-httphttps">4. HTTP与HTTPS—— “普通信件”与“加密挂号信”的较量</a></li>
+<li><a href="#5-https">5. HTTPS流量的特征—— “加密”的挂号信</a></li>
+<li><a href="#6-https">6. HTTPS连接的用处—— 安全上网的“守护神”</a></li>
+<li><a href="#7-s">7. 总结—— 选择安全，从“S”开始！</a></li>
+</ul>
+</div>
+
+                </div>
+            </section>
+            
+        </aside>
+    </div>
+
+    <div class="float-bar">
+        <button class="float-btn" onclick="copyLink()" aria-label="Share"><i class="fa-solid fa-share-nodes"></i></button>
+        <button class="float-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Back to Top"><i class="fa-solid fa-chevron-up"></i></button>
+    </div>
+
+    <footer>
+        <p class="mono">TERMINAL_BLOG_ENGINE v3.0.5 // © 2026 Cnfte</p>
+        <p class="mono" style="font-size: 0.75rem; margin-top: 15px; opacity: 0.5;">Copyright © 2026 Cnfte 阿巴阿巴阿巴阿巴阿巴阿巴</p>
+    </footer>
+
+    <script>
+        // 1. 初始化 URL
+        document.getElementById('page-url').innerText = window.location.href;
+
+        // 2. 系统时钟
+        setInterval(() => {
+            document.getElementById('live-clock').innerText = new Date().toTimeString().split(' ')[0];
+        }, 1000);
+
+        // 3. 滚动进度监听与 TOC 高亮
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            document.getElementById("progress").style.width = (winScroll / height * 100) + "%";
+            
+            const sections = document.querySelectorAll('.content h2, .content h3');
+            const tocLinks = document.querySelectorAll('.toc-box a');
+            let activeId = '';
+            sections.forEach(s => {
+                if (s.getBoundingClientRect().top < 100) activeId = s.getAttribute('id');
+            });
+            tocLinks.forEach(l => {
+                l.classList.toggle('active', l.getAttribute('href') === '#' + activeId);
+            });
+        });
+
+        // 4. 代码块复制增强
+        document.querySelectorAll('pre').forEach(block => {
+            const btn = document.createElement('button');
+            btn.className = 'copy-btn mono';
+            btn.innerText = 'COPY';
+            btn.onclick = () => {
+                navigator.clipboard.writeText(block.querySelector('code').innerText).then(() => {
+                    btn.innerText = 'DONE'; setTimeout(() => btn.innerText = 'COPY', 2000);
+                });
+            };
+            block.appendChild(btn);
+        });
+
+        // 5. 主题控制
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const target = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', target);
+            document.getElementById('mode-text').innerText = target.toUpperCase();
+            localStorage.setItem('geek-theme', target);
+        }
+        
+        const savedTheme = localStorage.getItem('geek-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.getElementById('mode-text').innerText = savedTheme.toUpperCase();
+
+        function copyLink() { navigator.clipboard.writeText(window.location.href); alert("LINK_COPIED_TO_CLIPBOARD"); }
+    </script>
+</body>
+</html>
