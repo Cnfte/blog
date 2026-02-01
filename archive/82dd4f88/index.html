@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- SEO & Metadata -->
+    <title>互联网科普系列-什么是DNS - Cnfteの博客</title>
+    <meta name="description" content="DNS是什么？ 想象一下，互联网就像一个巨大的城市，里面住着无数的网站、服务器，它们都有自己的“门牌号”，这个门牌号就是一串数字，比如 192.168.1.1 这样的，我们称之为 IP地址。 但是，我们人类记不住这么多数字门牌号，我们更习惯记名字，比如 www.baidu.com、www.google.com...">
+    <link rel="icon" href="/favicon.ico">
+    
+    <!-- 极客字体引用：强制同步加载确保移动端第一时间渲染 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #0a0a0a;
+            --text: #ffffff;
+            --text-muted: #a0a0a0;
+            --border: #222222;
+            --code-bg: #050505;
+            --accent: #ffffff;
+            --selection: #333333;
+        }
+
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --surface: #fafafa;
+            --text: #1d1d1f;
+            --text-muted: #505050;
+            --border: #e0e0e0;
+            --code-bg: #f5f5f5;
+            --selection: #eeeeee;
+        }
+
+        /* 1. 基础复位 & 消除移动端点击蓝色背景 & 强力锁定颜色 */
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent !important; 
+        }
+        
+        a, a:visited, a:active {
+            color: inherit !important;
+            text-decoration: none !important;
+            outline: none !important;
+        }
+
+        body { 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            background: var(--bg); color: var(--text); 
+            line-height: 1.8; overflow-x: hidden; width: 100%;
+            transition: background 0.3s;
+        }
+
+        .mono { font-family: 'Fira Code', monospace !important; }
+        ::selection { background: var(--selection); }
+
+        /* 顶部进度条 */
+        #progress { position: fixed; top: 0; left: 0; width: 0%; height: 2px; background: var(--text); z-index: 2001; }
+
+        /* 2. 导航栏加固 */
+        nav { 
+            position: sticky; top: 0; z-index: 1000; background: var(--bg); 
+            border-bottom: 2px solid var(--border); padding: 0 5%; height: 64px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { font-weight: 900; font-size: 1.1rem; letter-spacing: -1px; }
+        .nav-links { display: flex; align-items: center; gap: 20px; }
+        .nav-links a { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .lang-switch { border: 1px solid var(--border); padding: 4px 10px; }
+
+        /* 3. 文章头部：彻底解决标题被遮挡问题 */
+        .post-header { 
+            padding: 140px 20px 60px; 
+            text-align: left; 
+            border-bottom: 1px solid var(--border); 
+            max-width: 1400px; margin: 0 auto; 
+            background: var(--surface);
+        }
+        .post-path { font-family: 'Fira Code', monospace; color: var(--text-muted); font-size: 0.75rem; margin-bottom: 20px; text-transform: uppercase; }
+        .post-header h1 { 
+            font-size: clamp(2rem, 5vw, 3.5rem); 
+            font-weight: 900; 
+            letter-spacing: -2px; 
+            line-height: 1.2; 
+            margin-bottom: 30px;
+            display: block; 
+        }
+
+        /* 4. 响应式布局架构 (1024px 强制单栏) */
+        .main-wrapper { 
+            max-width: 1400px; margin: 0 auto; 
+            display: flex; flex-direction: row; 
+            align-items: stretch;
+        }
+
+        main { flex: 1; min-width: 0; } /* 解决 Flex 容器内代码溢出的核心 */
+
+        article.content { 
+            padding: 60px; border-right: 1px solid var(--border);
+            font-size: 1.125rem;
+        }
+
+        /* 正文样式 */
+        .content h2 { font-size: 1.8rem; margin: 2.5em 0 1.2em; font-weight: 900; border-bottom: 4px solid var(--text); padding-bottom: 10px; display: inline-block; }
+        .content h3 { font-size: 1.4rem; margin: 2em 0 1em; font-weight: 700; color: var(--text); border-left: 4px dashed var(--border); padding-left: 15px; }
+        .content p { margin-bottom: 2.2rem; text-align: justify; }
+        .content a { color: var(--text); text-decoration: underline !important; font-weight: 700; text-underline-offset: 4px; }
+        .content img { max-width: 100%; border: 1px solid var(--border); margin: 30px 0; display: block; height: auto; padding: 5px; }
+
+        /* 5. 代码块彻底锁死修复方案 (防溢出) */
+        pre { 
+            background: var(--code-bg) !important; 
+            padding: 40px 20px 20px !important; 
+            border: 1px solid var(--border) !important;
+            margin: 2.5rem 0; position: relative; 
+            display: block !important; width: 100% !important; 
+            max-width: 100% !important; overflow-x: auto !important; 
+            white-space: pre !important; word-wrap: normal !important;
+            box-sizing: border-box !important;
+            border-radius: 0;
+        }
+        pre code { font-family: 'Fira Code', monospace !important; font-size: 0.95rem !important; display: block; min-width: fit-content; line-height: 1.6; }
+
+        /* 6. 侧边栏加固：解决垂直文字 Bug */
+        aside { 
+            /* --- 彻底美化侧边栏滚动条，干掉大白条 --- */
+
+/* 1. 针对 Chrome, Edge, Safari (WebKit) */
+aside::-webkit-scrollbar {
+    width: 4px;             /* 极细的宽度 */
+    background: transparent;
+}
+
+aside::-webkit-scrollbar-thumb {
+    background: #333;       /* 滚动条滑块颜色：深灰色 */
+    border-radius: 0px;     /* 极客风格用直角 */
+}
+
+aside::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted); /* 悬停时稍微亮一点 */
+}
+
+aside::-webkit-scrollbar-track {
+    background: var(--bg);  /* 滚动条轨道颜色：同背景色 */
+}
+
+/* 2. 针对 Firefox */
+aside {
+    scrollbar-width: thin;          /* 细滚动条 */
+    scrollbar-color: #333 transparent; /* 滑块颜色 轨道颜色 */
+}
+
+/* 3. 如果你希望彻底看不见滚动条，但依然保留滚动功能（更高级感） */
+/* 只需要把上面的 aside::-webkit-scrollbar-thumb 的颜色设为与背景一致，或如下： */
+aside {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;     /* Firefox */
+}
+aside::-webkit-scrollbar {
+    display: none;             /* Chrome, Safari, Opera */
+}
+            width: 360px; flex-shrink: 0; min-width: 320px;
+            padding: 60px 40px; background: var(--surface);
+            position: sticky; top: 64px; height: calc(100vh - 64px); 
+            overflow-y: auto;
+        }
+        .widget { margin-bottom: 60px; width: 100%; }
+        .widget-title { font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 25px; text-transform: uppercase; border-left: 4px solid var(--text); padding-left: 12px; }
+
+        /* 作者简介：强制正常排版 */
+        .bio-text {
+            font-size: 0.9rem; color: var(--text-muted); 
+            margin-top: 15px; line-height: 1.6;
+            word-break: normal !important; 
+            white-space: normal !important; 
+            display: block !important; width: 100% !important;
+            text-align: center;
+        }
+
+        /* 极客下载卡片样式 */
+        .geek-download-card {
+            display: flex; align-items: center; padding: 20px; margin: 30px 0;
+            background: var(--surface); border: 1px solid var(--border);
+            transition: 0.2s; cursor: pointer;
+        }
+        .geek-download-card:hover { border-color: var(--text); background: var(--selection); }
+        .geek-download-card .file-icon { font-size: 2rem; margin-right: 25px; color: var(--text); }
+        .geek-download-card .file-info { flex: 1; }
+        .geek-download-card .file-name { font-family: 'Fira Code', monospace; font-size: 1rem; font-weight: 700; display: block; }
+        .geek-download-card .file-meta { font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-top: 5px; }
+        .geek-download-card .download-label { font-family: 'Fira Code', monospace; font-size: 0.7rem; padding: 5px 12px; border: 1px solid var(--border); color: var(--text-muted); }
+
+        /* 7. 悬浮按钮：高对比度黑白 */
+        .float-bar { position: fixed; bottom: 30px; right: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 1000; }
+        .float-btn { 
+            width: 52px; height: 52px; 
+            background: var(--text) !important; /* 强制可见背景 */
+            color: var(--bg) !important;       /* 强制可见图标 */
+            border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; font-size: 1.3rem; border-radius: 0; 
+            box-shadow: 6px 6px 0px var(--border);
+            transition: 0.1s;
+        }
+        .float-btn i, .float-btn svg { color: var(--bg) !important; pointer-events: none; }
+        .float-btn:active { transform: translate(2px, 2px); box-shadow: none; }
+
+        .copy-btn { position: absolute; top: 0; right: 0; background: var(--border); color: var(--text); border: none; padding: 8px 15px; font-size: 0.65rem; cursor: pointer; font-family: 'Fira Code', monospace; font-weight: 700; text-transform: uppercase; }
+
+        /* 8. 移动端强力适配逻辑 */
+        @media (max-width: 1024px) {
+            .main-wrapper { flex-direction: column !important; }
+            article.content { padding: 40px 25px; border-right: none !important; width: 100% !important; }
+            aside { 
+                width: 100% !important; border-left: none !important; border-top: 2px solid var(--border); 
+                position: static !important; height: auto !important; padding: 40px 25px !important; flex: none;
+            }
+            .post-header { padding: 100px 20px 40px; }
+            /* 代码块移动端全宽 */
+            pre { margin: 2rem -25px; border-left: none; border-right: none; padding: 45px 25px 25px !important; }
+        }
+
+        footer { padding: 80px 20px; text-align: center; border-top: 1px solid var(--border); font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted); background: var(--surface); }
+    </style>
+</head>
+<body>
+    <div id="progress"></div>
+    <nav>
+        <a href="/" class="logo mono">CNFTE://ROOT</a>
+        <div class="nav-links mono">
+            <a href="/about.html">关于</a><a href="/公益服务项.html">公益服务项</a><a href="/友链.html">友链</a><a href="/隐私政策.html">隐私政策</a>
+            <a href="/en/" class="lang-switch">EN</a>
+            <span style="cursor: pointer;" onclick="toggleTheme()">[MODE]</span>
+        </div>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-path">/ROOT/NODES/POSTS/2026/01/18</div>
+        <h1>互联网科普系列-什么是DNS</h1>
+        <div class="mono" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 15px;">
+            STAMP: 2026-01-18 // REF_ID: 82dd4f88 // AUTH: VERIFIED
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <main>
+            <article class="content" id="article-main">
+                <h3 id="dns">DNS是什么？</h3>
+<p>想象一下，互联网就像一个巨大的城市，里面住着无数的网站、服务器，它们都有自己的“门牌号”，这个门牌号就是一串数字，比如 <code>192.168.1.1</code> 这样的，我们称之为 <strong>IP地址</strong>。</p>
+<p>但是，我们人类记不住这么多数字门牌号，我们更习惯记名字，比如 <code>www.baidu.com</code>、<code>www.google.com</code>。</p>
+<p><strong>DNS（Domain Name System）</strong> 就像是这个城市里的一个<strong>电话簿</strong>或者<strong>地址簿</strong>。它的主要工作就是把我们熟悉的网站名字（域名）翻译成它们对应的数字门牌号（IP地址）。</p>
+<p>所以，简单来说，<strong>DNS就是互联网上的一个翻译官，专门负责把网站名字翻译成IP地址。</strong></p>
+<hr />
+<h3 id="dns_1">DNS有什么用？</h3>
+<p>有了DNS这个翻译官，我们才能方便地访问互联网上的各种服务。</p>
+<ol>
+<li><strong>方便记忆和访问：</strong> 如果没有DNS，我们每次想访问百度，就得记住百度服务器的IP地址，那得多麻烦！有了DNS，我们只需要输入 <code>www.baidu.com</code>，DNS就会帮我们找到它。</li>
+<li><strong>网站迁移和IP地址变化：</strong> 网站的服务器可能会搬家（IP地址更换），或者升级换代。如果每次都得更新我们记的IP地址，那简直是灾难。但有了DNS，只需要更新一下DNS记录里的IP地址，我们用户就什么都不知道，依然可以正常访问。DNS就像一个中间人，隐藏了背后的复杂变化。</li>
+<li><strong>负载均衡：</strong> 一个大型网站可能有好几台服务器提供服务，以分担压力。DNS可以根据情况，把访问请求导向不同的服务器，这样就不会有某一台服务器太忙而导致网站卡顿。</li>
+</ol>
+<hr />
+<h3 id="dns_2">DNS在互联网是什么地位？</h3>
+<p>DNS在互联网的地位非常重要，可以说是<strong>互联网的基石之一</strong>。</p>
+<p>你可以把它想象成<strong>互联网的导航系统</strong>。没有导航，你可能根本找不到你想去的地方。DNS就是那个指路的，它告诉你的电脑，你想访问的网站“家”在哪里（IP地址）。</p>
+<p>如果DNS出了问题，整个互联网的访问都会受到严重影响，就像导航失灵一样，大家就找不到路了。</p>
+<hr />
+<h3 id="dns_3">DNS在平常的用处</h3>
+<p>其实，你每天都在不知不觉地使用DNS：</p>
+<ul>
+<li><strong>浏览网页：</strong> 当你在浏览器输入网址，或者点击一个链接时，你的电脑就会通过DNS查询这个网址对应的IP地址，然后才能连接到网站服务器。</li>
+<li><strong>使用APP：</strong> 很多手机APP也需要连接到互联网上的服务器，比如微信、微博、抖音等，它们在后台也会用到DNS来找到服务器。</li>
+<li><strong>收发邮件：</strong> 发送和接收邮件也需要DNS来找到邮件服务器的地址。</li>
+<li><strong>在线游戏：</strong> 玩网络游戏时，DNS帮助你的游戏客户端找到游戏服务器。</li>
+</ul>
+<p><strong>总之，只要你的设备需要连接到互联网上的某个服务，DNS就在默默地为你工作。</strong></p>
+<hr />
+<h3 id="dnsdns">DNS污染的危害和DNS污染复现具体流程</h3>
+<h4 id="dns_4">DNS污染的危害</h4>
+<p>DNS污染就像是那个“地址簿”被人动了手脚，把原本正确的地址写成了错误的地址。</p>
+<p><strong>危害主要体现在：</strong></p>
+<ol>
+<li><strong>无法访问正常网站：</strong> 比如，你输入 <code>www.baidu.com</code>，DNS却把你导向了一个假的、不相关的服务器，你就打不开百度了。</li>
+<li><strong>被导向钓鱼网站或恶意网站：</strong> 更糟糕的是，骗子可能会把某个银行网站的域名，污染成指向一个假的钓鱼网站。你以为你在访问银行，实际上你输入的所有账号密码都会被骗子窃取。</li>
+<li><strong>网络安全风险：</strong> 病毒、木马等恶意软件也可能利用DNS污染，将用户导向下载恶意程序的网站。</li>
+<li><strong>影响正常业务：</strong> 对于企业来说，DNS污染可能导致客户无法访问其官网或服务，造成经济损失和声誉损害。</li>
+</ol>
+<h4 id="dns_5">DNS污染复现具体流程（小白版）</h4>
+<p>骗子想要污染你的DNS，通常会利用一些技术手段，让你的电脑或者你家路由器使用的DNS服务器，返回错误的IP地址。</p>
+<p><strong>一个常见的场景是这样的：</strong></p>
+<ol>
+<li><strong>骗子控制了一个DNS服务器：</strong> 骗子可能通过一些手段，控制了一个或者多个DNS服务器。</li>
+<li><strong>修改DNS记录：</strong> 骗子在这个被控制的DNS服务器上，把某个常用网站（比如银行官网 <code>www.bank.com</code>）的域名，指向了一个假的IP地址。这个假的IP地址指向的是骗子自己搭建的钓鱼网站。</li>
+<li><strong>诱导你的设备使用这个被污染的DNS：</strong></li>
+<li><strong>方式一（路由器）：</strong> 如果你家路由器设置的DNS服务器是这个被污染的服务器，那么你家里所有连接到这个路由器的设备，在查询 <code>www.bank.com</code> 的时候，都会得到错误的IP地址。</li>
+<li><strong>方式二（本地hosts文件）：</strong> 有些病毒或恶意软件会直接修改你电脑本地的 <code>hosts</code> 文件。这个文件就像你电脑里的一个“小地址簿”，优先级比外面的DNS服务器还高。如果里面写着 <code>www.bank.com</code> 对应一个错误的IP地址，那么电脑就会优先使用这个错误的地址。</li>
+<li><strong>方式三（DNS劫持）：</strong> 在某些网络环境下（比如不安全的公共Wi-Fi），骗子可能通过技术手段“劫持”你发出的DNS查询请求，在你不知情的情况下，把你的请求导向被污染的DNS服务器。</li>
+<li><strong>访问网站，被导向错误地址：</strong> 当你输入 <code>www.bank.com</code> 时，你的电脑就会根据被污染的DNS信息，连接到骗子搭建的那个假网站。</li>
+<li><strong>骗取信息：</strong> 这个假网站看起来和真的一模一样，当你输入账号、密码、银行卡信息时，这些信息就会被骗子轻松获取。</li>
+</ol>
+<p><strong>简单来说，DNS污染就是有人偷偷修改了互联网的“地址簿”，把你本来要去的“好地方”变成了“坏地方”，让你上当受骗。</strong></p>
+<hr />
+<h3 id="dns_6">常见的DNS解析地址</h3>
+<p>这些是提供DNS解析服务的服务器地址，你可以把它们理解为不同的“地址簿管理员”。不同的服务商提供的解析速度、稳定性和安全性可能有所不同。</p>
+<ul>
+<li><strong>百度DNS:</strong></li>
+<li>首选DNS服务器：<code>180.76.76.76</code></li>
+<li>备用DNS服务器：<code>~.~.~.~</code></li>
+<li><strong>阿里云DNS:</strong></li>
+<li>首选DNS服务器：<code>223.5.5.5</code></li>
+<li>备用DNS服务器：<code>223.6.6.6</code></li>
+<li><strong>腾讯云DNS:</strong></li>
+<li>首选DNS服务器：<code>119.29.29.29</code></li>
+<li>备用DNS服务器：<code>119.28.28.28</code></li>
+<li><strong>电信DNS:</strong></li>
+<li>首选DNS服务器：<code>114.114.114.114</code></li>
+<li>备用DNS服务器：<code>114.114.115.115</code></li>
+<li><strong>谷歌DNS (Google Public DNS):</strong></li>
+<li>首选DNS服务器：<code>8.8.8.8</code></li>
+<li>备用DNS服务器：<code>8.8.4.4</code></li>
+<li><strong>Cloudflare DNS:</strong></li>
+<li>首选DNS服务器：<code>1.1.1.1</code></li>
+<li>备用DNS服务器：<code>1.0.0.1</code></li>
+</ul>
+<p><strong>你可以根据自己的网络情况和喜好，在电脑或路由器的网络设置中手动更换DNS服务器地址，有时可以提高访问速度或解决一些网络问题。</strong></p>
+            </article>
+
+            <!-- 极客版权区域 -->
+            <section style="padding: 0 60px 60px; font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted);">
+                <div style="border: 1px solid var(--border); padding: 35px; background: var(--surface);">
+                    <div># SOURCE_NODE: <span id="page-url" style="word-break: break-all; color: var(--text);"></span></div>
+                    <div># LICENSE: CC-BY-NC-SA-4.0</div>
+                    <div># INTEGRITY: VALIDATED_ENCRYPTED</div>
+                    <div style="margin-top: 20px; color: var(--text);">// EOF_SIGNAL_RECEIVED</div>
+                </div>
+            </section>
+        </main>
+
+        <aside>
+            <section class="widget">
+                <h3 class="widget-title">IDENT_AUTH</h3>
+                <div style="border: 1px solid var(--border); padding: 35px 20px; text-align: center; background: var(--bg);">
+                    <img src="https://edgeoneimg.cdn.sn/i/696b4d5b58c71_1768639835.webp" style="width: 72px; height: 72px; filter: grayscale(1); border: 1px solid var(--border); padding: 4px; margin-bottom: 20px;" alt="Avatar">
+                    <div class="mono" style="font-weight: 900; font-size: 1.2rem; color: var(--text);">Cnfte</div>
+                    <div class="bio-text mono">"滚滚长江东逝水，浪花淘尽英雄。"</div>
+                </div>
+            </section>
+
+            <section class="widget">
+                <h3 class="widget-title">SYSTEM_LOG</h3>
+                <div style="background: #000; border: 1px solid #333; padding: 20px; font-family: 'Fira Code', monospace; font-size: 0.75rem; color: #00ff00; line-height: 1.6;">
+                    <div>[OK] NODE_STATE: STABLE</div>
+                    <div>[OK] UPTIME: 7M_READ</div>
+                    <div>[OK] CLOCK: <span id="live-clock">00:00:00</span></div>
+                    <div style="color: #333">-----------------------</div>
+                    <div>$ tail -f blog.log</div>
+                    <div>> Reading node...</div>
+                    <div style="color: #00ff00;">> 互联网科普系列-什么是D...</div>
+                </div>
+            </section>
+
+            
+            <section class="widget">
+                <h3 class="widget-title">STRUCTURE_TOC</h3>
+                <div class="toc-box" id="toc-container">
+                    <div class="toc">
+<ul>
+<li><a href="#dns">DNS是什么？</a></li>
+<li><a href="#dns_1">DNS有什么用？</a></li>
+<li><a href="#dns_2">DNS在互联网是什么地位？</a></li>
+<li><a href="#dns_3">DNS在平常的用处</a></li>
+<li><a href="#dnsdns">DNS污染的危害和DNS污染复现具体流程</a><ul>
+<li><a href="#dns_4">DNS污染的危害</a></li>
+<li><a href="#dns_5">DNS污染复现具体流程（小白版）</a></li>
+</ul>
+</li>
+<li><a href="#dns_6">常见的DNS解析地址</a></li>
+</ul>
+</div>
+
+                </div>
+            </section>
+            
+        </aside>
+    </div>
+
+    <div class="float-bar">
+        <button class="float-btn" onclick="copyLink()" aria-label="Share"><i class="fa-solid fa-share-nodes"></i></button>
+        <button class="float-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Back to Top"><i class="fa-solid fa-chevron-up"></i></button>
+    </div>
+
+    <footer>
+        <p class="mono">TERMINAL_BLOG_ENGINE v3.2.5 // © 2026 Cnfte</p>
+        <p class="mono" style="font-size: 0.75rem; margin-top: 15px; opacity: 0.5;"><a src="https://www.itdog.cn/ping/cnfte.top">本站已启用CLOUDFLARE CDN防护</a></p>
+    </footer>
+
+    <script>
+        // 1. 初始化 URL 显示和下载卡片
+        document.getElementById('page-url').innerText = window.location.href;
+
+        function renderDownloadCards() {
+            const links = document.querySelectorAll('#article-main a');
+            links.forEach(link => {
+                const text = link.innerText;
+                if (text.startsWith('DOWNLOAD:')) {
+                    const fileName = text.replace('DOWNLOAD:', '');
+                    const fileExt = fileName.split('.').pop().toUpperCase();
+                    let icon = 'fa-file-code';
+                    if (['EXE', 'MSI', 'APK', 'BAT'].includes(fileExt)) icon = 'fa-terminal';
+                    else if (['ZIP', 'RAR', '7Z', 'TAR'].includes(fileExt)) icon = 'fa-file-archive';
+                    else if (!['SH','PY','JS','CPP','C','GO'].includes(fileExt)) icon = 'fa-file-lines';
+
+                    const card = document.createElement('div');
+                    card.className = 'geek-download-card';
+                    card.onclick = () => window.location.href = link.href;
+                    card.innerHTML = `
+                        <div class="file-icon"><i class="fa-solid ${icon}"></i></div>
+                        <div class="file-info">
+                            <span class="file-name">${fileName}</span>
+                            <span class="file-meta">TYPE: ${fileExt} // ACCESS: PUBLIC</span>
+                        </div>
+                        <div class="download-label mono">GET_DATA</div>
+                    `;
+                    link.parentNode.replaceChild(card, link);
+                }
+            });
+        }
+        renderDownloadCards();
+
+        // 2. 系统时钟
+        setInterval(() => {
+            document.getElementById('live-clock').innerText = new Date().toTimeString().split(' ')[0];
+        }, 1000);
+
+        // 3. 滚动进度监听与 TOC 高亮
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            document.getElementById("progress").style.width = (winScroll / height * 100) + "%";
+            
+            const sections = document.querySelectorAll('.content h2, .content h3');
+            const tocLinks = document.querySelectorAll('.toc-box a');
+            let activeId = '';
+            sections.forEach(s => {
+                if (s.getBoundingClientRect().top < 100) activeId = s.getAttribute('id');
+            });
+            tocLinks.forEach(l => {
+                l.classList.toggle('active', l.getAttribute('href') === '#' + activeId);
+            });
+        });
+
+        // 4. 代码块复制增强
+        document.querySelectorAll('pre').forEach(block => {
+            const btn = document.createElement('button');
+            btn.className = 'copy-btn mono';
+            btn.innerText = 'COPY';
+            btn.onclick = () => {
+                navigator.clipboard.writeText(block.querySelector('code').innerText).then(() => {
+                    btn.innerText = 'DONE'; setTimeout(() => btn.innerText = 'COPY', 2000);
+                });
+            };
+            block.appendChild(btn);
+        });
+
+        // 5. 主题控制
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const target = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', target);
+            document.getElementById('mode-text').innerText = target.toUpperCase();
+            localStorage.setItem('geek-theme', target);
+        }
+        
+        const savedTheme = localStorage.getItem('geek-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        if(document.getElementById('mode-text')) document.getElementById('mode-text').innerText = savedTheme.toUpperCase();
+
+        function copyLink() { navigator.clipboard.writeText(window.location.href); alert("LINK_COPIED_TO_CLIPBOARD"); }
+    </script>
+</body>
+</html>

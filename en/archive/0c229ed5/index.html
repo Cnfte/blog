@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- SEO & Metadata -->
+    <title>Internet Science Popularization Series - What is a protocol? How to set up a node with an encryption protocol? - Cnfteの博客</title>
+    <meta name="description" content="We need to clarify a concept first: the tools we commonly use now (such as Shadowsocks, V2Ray, Singbox) are technically classified more as "proxies" rather...">
+    <link rel="icon" href="/favicon.ico">
+    
+    <!-- 极客字体引用：强制同步加载确保移动端第一时间渲染 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #0a0a0a;
+            --text: #ffffff;
+            --text-muted: #a0a0a0;
+            --border: #222222;
+            --code-bg: #050505;
+            --accent: #ffffff;
+            --selection: #333333;
+        }
+
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --surface: #fafafa;
+            --text: #1d1d1f;
+            --text-muted: #505050;
+            --border: #e0e0e0;
+            --code-bg: #f5f5f5;
+            --selection: #eeeeee;
+        }
+
+        /* 1. 基础复位 & 消除移动端点击蓝色背景 & 强力锁定颜色 */
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent !important; 
+        }
+        
+        a, a:visited, a:active {
+            color: inherit !important;
+            text-decoration: none !important;
+            outline: none !important;
+        }
+
+        body { 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            background: var(--bg); color: var(--text); 
+            line-height: 1.8; overflow-x: hidden; width: 100%;
+            transition: background 0.3s;
+        }
+
+        .mono { font-family: 'Fira Code', monospace !important; }
+        ::selection { background: var(--selection); }
+
+        /* 顶部进度条 */
+        #progress { position: fixed; top: 0; left: 0; width: 0%; height: 2px; background: var(--text); z-index: 2001; }
+
+        /* 2. 导航栏加固 */
+        nav { 
+            position: sticky; top: 0; z-index: 1000; background: var(--bg); 
+            border-bottom: 2px solid var(--border); padding: 0 5%; height: 64px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { font-weight: 900; font-size: 1.1rem; letter-spacing: -1px; }
+        .nav-links { display: flex; align-items: center; gap: 20px; }
+        .nav-links a { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .lang-switch { border: 1px solid var(--border); padding: 4px 10px; }
+
+        /* 3. 文章头部：彻底解决标题被遮挡问题 */
+        .post-header { 
+            padding: 140px 20px 60px; 
+            text-align: left; 
+            border-bottom: 1px solid var(--border); 
+            max-width: 1400px; margin: 0 auto; 
+            background: var(--surface);
+        }
+        .post-path { font-family: 'Fira Code', monospace; color: var(--text-muted); font-size: 0.75rem; margin-bottom: 20px; text-transform: uppercase; }
+        .post-header h1 { 
+            font-size: clamp(2rem, 5vw, 3.5rem); 
+            font-weight: 900; 
+            letter-spacing: -2px; 
+            line-height: 1.2; 
+            margin-bottom: 30px;
+            display: block; 
+        }
+
+        /* 4. 响应式布局架构 (1024px 强制单栏) */
+        .main-wrapper { 
+            max-width: 1400px; margin: 0 auto; 
+            display: flex; flex-direction: row; 
+            align-items: stretch;
+        }
+
+        main { flex: 1; min-width: 0; } /* 解决 Flex 容器内代码溢出的核心 */
+
+        article.content { 
+            padding: 60px; border-right: 1px solid var(--border);
+            font-size: 1.125rem;
+        }
+
+        /* 正文样式 */
+        .content h2 { font-size: 1.8rem; margin: 2.5em 0 1.2em; font-weight: 900; border-bottom: 4px solid var(--text); padding-bottom: 10px; display: inline-block; }
+        .content h3 { font-size: 1.4rem; margin: 2em 0 1em; font-weight: 700; color: var(--text); border-left: 4px dashed var(--border); padding-left: 15px; }
+        .content p { margin-bottom: 2.2rem; text-align: justify; }
+        .content a { color: var(--text); text-decoration: underline !important; font-weight: 700; text-underline-offset: 4px; }
+        .content img { max-width: 100%; border: 1px solid var(--border); margin: 30px 0; display: block; height: auto; padding: 5px; }
+
+        /* 5. 代码块彻底锁死修复方案 (防溢出) */
+        pre { 
+            background: var(--code-bg) !important; 
+            padding: 40px 20px 20px !important; 
+            border: 1px solid var(--border) !important;
+            margin: 2.5rem 0; position: relative; 
+            display: block !important; width: 100% !important; 
+            max-width: 100% !important; overflow-x: auto !important; 
+            white-space: pre !important; word-wrap: normal !important;
+            box-sizing: border-box !important;
+            border-radius: 0;
+        }
+        pre code { font-family: 'Fira Code', monospace !important; font-size: 0.95rem !important; display: block; min-width: fit-content; line-height: 1.6; }
+
+        /* 6. 侧边栏加固：解决垂直文字 Bug */
+        aside { 
+            /* --- 彻底美化侧边栏滚动条，干掉大白条 --- */
+
+/* 1. 针对 Chrome, Edge, Safari (WebKit) */
+aside::-webkit-scrollbar {
+    width: 4px;             /* 极细的宽度 */
+    background: transparent;
+}
+
+aside::-webkit-scrollbar-thumb {
+    background: #333;       /* 滚动条滑块颜色：深灰色 */
+    border-radius: 0px;     /* 极客风格用直角 */
+}
+
+aside::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted); /* 悬停时稍微亮一点 */
+}
+
+aside::-webkit-scrollbar-track {
+    background: var(--bg);  /* 滚动条轨道颜色：同背景色 */
+}
+
+/* 2. 针对 Firefox */
+aside {
+    scrollbar-width: thin;          /* 细滚动条 */
+    scrollbar-color: #333 transparent; /* 滑块颜色 轨道颜色 */
+}
+
+/* 3. 如果你希望彻底看不见滚动条，但依然保留滚动功能（更高级感） */
+/* 只需要把上面的 aside::-webkit-scrollbar-thumb 的颜色设为与背景一致，或如下： */
+aside {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;     /* Firefox */
+}
+aside::-webkit-scrollbar {
+    display: none;             /* Chrome, Safari, Opera */
+}
+            width: 360px; flex-shrink: 0; min-width: 320px;
+            padding: 60px 40px; background: var(--surface);
+            position: sticky; top: 64px; height: calc(100vh - 64px); 
+            overflow-y: auto;
+        }
+        .widget { margin-bottom: 60px; width: 100%; }
+        .widget-title { font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 25px; text-transform: uppercase; border-left: 4px solid var(--text); padding-left: 12px; }
+
+        /* 作者简介：强制正常排版 */
+        .bio-text {
+            font-size: 0.9rem; color: var(--text-muted); 
+            margin-top: 15px; line-height: 1.6;
+            word-break: normal !important; 
+            white-space: normal !important; 
+            display: block !important; width: 100% !important;
+            text-align: center;
+        }
+
+        /* 极客下载卡片样式 */
+        .geek-download-card {
+            display: flex; align-items: center; padding: 20px; margin: 30px 0;
+            background: var(--surface); border: 1px solid var(--border);
+            transition: 0.2s; cursor: pointer;
+        }
+        .geek-download-card:hover { border-color: var(--text); background: var(--selection); }
+        .geek-download-card .file-icon { font-size: 2rem; margin-right: 25px; color: var(--text); }
+        .geek-download-card .file-info { flex: 1; }
+        .geek-download-card .file-name { font-family: 'Fira Code', monospace; font-size: 1rem; font-weight: 700; display: block; }
+        .geek-download-card .file-meta { font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-top: 5px; }
+        .geek-download-card .download-label { font-family: 'Fira Code', monospace; font-size: 0.7rem; padding: 5px 12px; border: 1px solid var(--border); color: var(--text-muted); }
+
+        /* 7. 悬浮按钮：高对比度黑白 */
+        .float-bar { position: fixed; bottom: 30px; right: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 1000; }
+        .float-btn { 
+            width: 52px; height: 52px; 
+            background: var(--text) !important; /* 强制可见背景 */
+            color: var(--bg) !important;       /* 强制可见图标 */
+            border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; font-size: 1.3rem; border-radius: 0; 
+            box-shadow: 6px 6px 0px var(--border);
+            transition: 0.1s;
+        }
+        .float-btn i, .float-btn svg { color: var(--bg) !important; pointer-events: none; }
+        .float-btn:active { transform: translate(2px, 2px); box-shadow: none; }
+
+        .copy-btn { position: absolute; top: 0; right: 0; background: var(--border); color: var(--text); border: none; padding: 8px 15px; font-size: 0.65rem; cursor: pointer; font-family: 'Fira Code', monospace; font-weight: 700; text-transform: uppercase; }
+
+        /* 8. 移动端强力适配逻辑 */
+        @media (max-width: 1024px) {
+            .main-wrapper { flex-direction: column !important; }
+            article.content { padding: 40px 25px; border-right: none !important; width: 100% !important; }
+            aside { 
+                width: 100% !important; border-left: none !important; border-top: 2px solid var(--border); 
+                position: static !important; height: auto !important; padding: 40px 25px !important; flex: none;
+            }
+            .post-header { padding: 100px 20px 40px; }
+            /* 代码块移动端全宽 */
+            pre { margin: 2rem -25px; border-left: none; border-right: none; padding: 45px 25px 25px !important; }
+        }
+
+        footer { padding: 80px 20px; text-align: center; border-top: 1px solid var(--border); font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted); background: var(--surface); }
+    </style>
+</head>
+<body>
+    <div id="progress"></div>
+    <nav>
+        <a href="/" class="logo mono">CNFTE://ROOT</a>
+        <div class="nav-links mono">
+            <a href="/en/Link Exchange.html">Link Exchange</a><a href="/en/Privacy Policy.html">Privacy Policy</a><a href="/en/about.html">about</a><a href="/en/公益服务项.html">service</a>
+            <a href="/" class="lang-switch">ZH</a>
+            <span style="cursor: pointer;" onclick="toggleTheme()">[MODE]</span>
+        </div>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-path">/ROOT/NODES/POSTS/2026/01/24</div>
+        <h1>Internet Science Popularization Series - What is a protocol? How to set up a node with an encryption protocol?</h1>
+        <div class="mono" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 15px;">
+            STAMP: 2026-01-24 // REF_ID: 0c229ed5 // AUTH: VERIFIED
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <main>
+            <article class="content" id="article-main">
+                <p>We need to clarify a concept first: the tools we commonly use now (such as Shadowsocks, V2Ray, Sing-box) are technically classified more as <strong>"proxies"</strong> rather than traditional <strong>"VPNs,"</strong> but for ease of understanding, they will be collectively referred to as circumvention protocols below.</p>
+<hr />
+<h3 id="i-common-circumvention-protocols-and-their-working-principles">I. Common Circumvention Protocols and Their Working Principles</h3>
+<p>Traditional VPN protocols (such as L2TP, PPTP, OpenVPN) have very distinct characteristics and are easily identified and blocked by firewalls (GFW). Therefore, current circumvention protocols mainly focus on <strong>"obfuscation."</strong></p>
+<ol>
+<li><strong>Shadowsocks (SS/SS-Rust):</strong></li>
+<li><strong>Principle:</strong> The most classic protocol. It uses symmetric encryption on the traffic, making the data packets look like meaningless gibberish. </li>
+<li>
+<p><strong>Current Status:</strong> Native SS is easily detected by "active probing" (the GFW simulates a client sending packets to the server to see if the response matches SS characteristics), so it is now often used with AEAD encryption or as a basic tunnel.</p>
+</li>
+<li>
+<p><strong>VMess / VLESS (V2Ray/Xray):</strong></p>
+</li>
+<li><strong>Principle:</strong> A protocol developed by the V2Ray platform. <strong>VLESS</strong> is currently the most mainstream protocol; it does not encrypt itself and must be used with <strong>TLS</strong> (the same encryption layer as banking websites). </li>
+<li>
+<p><strong>Features:</strong> Extremely flexible, can be disguised as normal web traffic.</p>
+</li>
+<li>
+<p><strong>Trojan:</strong></p>
+</li>
+<li>
+<p><strong>Principle:</strong> Mimics the most common HTTPS protocol. It disguises the proxy traffic as ordinary website visits. If someone tries to probe it, it will display a real webpage.</p>
+</li>
+<li>
+<p><strong>Hysteria2 / Tuic (based on UDP):</strong></p>
+</li>
+<li><strong>Principle:</strong> Traditional protocols are mostly based on TCP. These protocols are based on <strong>QUIC (UDP)</strong>. </li>
+<li>
+<p><strong>Features:</strong> Aggressive and fast. In poor network environments (high packet loss), the speed far exceeds other protocols, but it is easily throttled by internet service providers (ISPs).</p>
+</li>
+<li>
+<p><strong>Reality (Currently the most recommended):</strong></p>
+</li>
+<li><strong>Principle:</strong> This is a new technology developed by the Xray team. It directly borrows the TLS fingerprints and certificates of real, well-known websites like <code>www.microsoft.com</code>, making the GFW believe you are actually visiting Microsoft. This is currently the <strong>most covert</strong> technology.</li>
+</ol>
+<hr />
+<h3 id="ii-how-do-they-bypass-the-great-firewall-gfw">II. How do they bypass the Great Firewall (GFW)?</h3>
+<p>The GFW primarily intercepts traffic through the following methods, and the protocols specifically address these:</p>
+<ol>
+<li><strong>Blocking IP/Ports:</strong> If the GFW detects abnormal traffic from a certain IP address that matches proxy characteristics, it directly blocks it. </li>
+<li><strong>Bypass:</strong> Use a CDN (such as Cloudflare) or dynamic IP addresses, or use strong obfuscation to make the traffic appear like normal internet traffic.</li>
+<li><strong>Deep Packet Inspection (DPI):</strong> The GFW analyzes the content of data packets, searching for characteristic patterns. </li>
+<li><strong>Bypass:</strong> Strong encryption (obfuscation) or complete disguise (transforming into standard HTTPS or using certificates from well-known websites).</li>
+<li><strong>Active Probing:</strong> The GFW sends specific signals like a police officer checking for suspicious activity. </li>
+<li><strong>Bypass:</strong> Reality technology can achieve "no entry without invitation." If it's not your client connecting, the server will behave exactly like the legitimate website being impersonated.</li>
+</ol>
+<hr />
+<h3 id="iii-what-can-you-do-after-bypassing-the-gfw">III. What can you do after bypassing the GFW?</h3>
+<ol>
+<li><strong>Academic Research:</strong> Access Google Scholar, GitHub, IEEE, etc.</li>
+<li><strong>Streaming Media:</strong> Watch YouTube, Netflix, Disney+, Twitch.</li>
+<li><strong>Social Networks:</strong> Use Telegram, X (Twitter), Instagram, Facebook.</li>
+<li><strong>Generative AI:</strong> Interact with ChatGPT, Claude, Gemini.</li>
+<li><strong>Developer Needs:</strong> Download development packages, access Docker Hub, etc.</li>
+</ol>
+<hr />
+<h3 id="iv-important-notes-must-read">IV. Important Notes (Must Read)</h3>
+<ol>
+<li><strong>Compliance:</strong> In mainland China, establishing and using illegal channels for international internet access without the approval of the telecommunications authorities is a violation of regulations. Please only use this technology for academic research and personal learning.</li>
+<li><strong>Privacy:</strong> Avoid using "free VPNs." Many free tools record your access logs and even sell your personal information.</li>
+<li><strong>Payment Security:</strong> When purchasing overseas VPS, try to choose reputable vendors that support Alipay or cryptocurrency.</li>
+<li><strong>Do Not Cross the Red Line:</strong> After bypassing the GFW, do not post politically sensitive remarks or participate in illegal activities on the internet. ---</li>
+</ol>
+<h3 id="v-setup-tutorial-using-yongges-sing-box-script-as-an-example">V. Setup Tutorial (Using Yongge's Sing-box Script as an Example)</h3>
+<p>Sing-box is considered the next-generation all-in-one network tool (a strong competitor to V2Ray/Xray). Yongge's script is known for its simplicity and comprehensive features.</p>
+<h4 id="1-preparation">1. Preparation</h4>
+<ul>
+<li><strong>An overseas VPS:</strong> Recommended providers: BandwagonHost, Aiyun, or mainstream providers like Oracle, BandwagonHost, RackNerd, etc.  The recommended operating system is <strong>Ubuntu 20.04+</strong> or <strong>Debian 11+</strong>.</li>
+<li><strong>An SSH connection tool:</strong> For Windows, <code>FinalShell</code> or <code>Termius</code> are recommended; Mac users can use the terminal directly.</li>
+</ul>
+<h4 id="2-connecting-to-the-vps">2. Connecting to the VPS</h4>
+<p>Open your SSH tool and enter your server IP address, username (root), and password to connect.</p>
+<h4 id="3-executing-yongges-sing-box-script">3. Executing Yongge's Sing-box Script</h4>
+<p>Enter the following command in the terminal (copy and paste directly):</p>
+<div class="codehilite"><pre><span></span><code>bash<span class="w"> </span>&lt;<span class="o">(</span>wget<span class="w"> </span>-qO-<span class="w"> </span>https://raw.githubusercontent.com/yonggekkk/sing-box-yg/main/sb.sh<span class="o">)</span>
+</code></pre></div>
+
+<p><em>(Note: If you receive a "wget ​​not found" error, first run <code>apt install wget -y</code>)</em></p>
+<h4 id="4-script-operation-process">4. Script Operation Process</h4>
+<p>After running the script, a Chinese menu will appear:
+1.  <strong>Install the core:</strong> Select <code>1</code> to install the Sing-box main program.
+2.  <strong>Select the protocol:</strong>
+*   If you are a beginner and don't have a domain name, <strong>VLESS-Reality is strongly recommended</strong>. 
+*   Follow the prompts; you can press Enter for the default port (usually 443). 
+*   For the SNI target website, you can choose <code>www.microsoft.com</code> or <code>www.lovelive-anime.jp</code>.
+3.  <strong>Generate configuration:</strong> After installation, the script will directly display a <strong>QR code</strong> and a <strong>URL sharing link</strong> starting with <code>vless://</code>.</p>
+<h4 id="5-connecting-and-using">5. Connecting and Using</h4>
+<ul>
+<li><strong>Computer (Windows/macOS):</strong> Download <code>v2rayN</code> (Windows) or <code>v2rayU</code> / <code>v2ray-core</code>. *   Directly copy the <code>vless://</code> link provided by the script and click "Import from clipboard" in the software. </li>
+<li>Select the server and set it to "Automatically configure system proxy".</li>
+<li><strong>Mobile Devices:</strong></li>
+<li>Android: Use <code>v2rayNG</code> or <code>Nekobox</code>. </li>
+<li>iOS: Use <code>Shadowrocket</code> (requires an overseas Apple ID for purchase) or <code>Stash</code>. </li>
+<li>Simply scan the QR code to use.</li>
+</ul>
+<h4 id="6-verification">6. Verification</h4>
+<p>Open your browser and visit <code>www.youtube.com</code>. If it opens, you have successfully connected.</p>
+<hr />
+<h3 id="summary">Summary</h3>
+<p>Currently, the most stable combination for bypassing censorship is: <strong>Mainstream overseas VPS + Sing-box/Xray + Reality protocol</strong>.
+This method maximizes the simulation of normal traffic, reducing the risk of connection interruptions or IP blocking. Always remember that technology should serve the purpose of acquiring knowledge and improving productivity.</p>
+            </article>
+
+            <!-- 极客版权区域 -->
+            <section style="padding: 0 60px 60px; font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted);">
+                <div style="border: 1px solid var(--border); padding: 35px; background: var(--surface);">
+                    <div># SOURCE_NODE: <span id="page-url" style="word-break: break-all; color: var(--text);"></span></div>
+                    <div># LICENSE: CC-BY-NC-SA-4.0</div>
+                    <div># INTEGRITY: VALIDATED_ENCRYPTED</div>
+                    <div style="margin-top: 20px; color: var(--text);">// EOF_SIGNAL_RECEIVED</div>
+                </div>
+            </section>
+        </main>
+
+        <aside>
+            <section class="widget">
+                <h3 class="widget-title">IDENT_AUTH</h3>
+                <div style="border: 1px solid var(--border); padding: 35px 20px; text-align: center; background: var(--bg);">
+                    <img src="https://edgeoneimg.cdn.sn/i/696b4d5b58c71_1768639835.webp" style="width: 72px; height: 72px; filter: grayscale(1); border: 1px solid var(--border); padding: 4px; margin-bottom: 20px;" alt="Avatar">
+                    <div class="mono" style="font-weight: 900; font-size: 1.2rem; color: var(--text);">Cnfte</div>
+                    <div class="bio-text mono">"滚滚长江东逝水，浪花淘尽英雄。"</div>
+                </div>
+            </section>
+
+            <section class="widget">
+                <h3 class="widget-title">SYSTEM_LOG</h3>
+                <div style="background: #000; border: 1px solid #333; padding: 20px; font-family: 'Fira Code', monospace; font-size: 0.75rem; color: #00ff00; line-height: 1.6;">
+                    <div>[OK] NODE_STATE: STABLE</div>
+                    <div>[OK] UPTIME: 16M_READ</div>
+                    <div>[OK] CLOCK: <span id="live-clock">00:00:00</span></div>
+                    <div style="color: #333">-----------------------</div>
+                    <div>$ tail -f blog.log</div>
+                    <div>> Reading node...</div>
+                    <div style="color: #00ff00;">> Internet Sci...</div>
+                </div>
+            </section>
+
+            
+            <section class="widget">
+                <h3 class="widget-title">STRUCTURE_TOC</h3>
+                <div class="toc-box" id="toc-container">
+                    <div class="toc">
+<ul>
+<li><a href="#i-common-circumvention-protocols-and-their-working-principles">I. Common Circumvention Protocols and Their Working Principles</a></li>
+<li><a href="#ii-how-do-they-bypass-the-great-firewall-gfw">II. How do they bypass the Great Firewall (GFW)?</a></li>
+<li><a href="#iii-what-can-you-do-after-bypassing-the-gfw">III. What can you do after bypassing the GFW?</a></li>
+<li><a href="#iv-important-notes-must-read">IV. Important Notes (Must Read)</a></li>
+<li><a href="#v-setup-tutorial-using-yongges-sing-box-script-as-an-example">V. Setup Tutorial (Using Yongge's Sing-box Script as an Example)</a><ul>
+<li><a href="#1-preparation">1. Preparation</a></li>
+<li><a href="#2-connecting-to-the-vps">2. Connecting to the VPS</a></li>
+<li><a href="#3-executing-yongges-sing-box-script">3. Executing Yongge's Sing-box Script</a></li>
+<li><a href="#4-script-operation-process">4. Script Operation Process</a></li>
+<li><a href="#5-connecting-and-using">5. Connecting and Using</a></li>
+<li><a href="#6-verification">6. Verification</a></li>
+</ul>
+</li>
+<li><a href="#summary">Summary</a></li>
+</ul>
+</div>
+
+                </div>
+            </section>
+            
+        </aside>
+    </div>
+
+    <div class="float-bar">
+        <button class="float-btn" onclick="copyLink()" aria-label="Share"><i class="fa-solid fa-share-nodes"></i></button>
+        <button class="float-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Back to Top"><i class="fa-solid fa-chevron-up"></i></button>
+    </div>
+
+    <footer>
+        <p class="mono">TERMINAL_BLOG_ENGINE v3.2.5 // © 2026 Cnfte</p>
+        <p class="mono" style="font-size: 0.75rem; margin-top: 15px; opacity: 0.5;"><a src="https://www.itdog.cn/ping/cnfte.top">本站已启用CLOUDFLARE CDN防护</a></p>
+    </footer>
+
+    <script>
+        // 1. 初始化 URL 显示和下载卡片
+        document.getElementById('page-url').innerText = window.location.href;
+
+        function renderDownloadCards() {
+            const links = document.querySelectorAll('#article-main a');
+            links.forEach(link => {
+                const text = link.innerText;
+                if (text.startsWith('DOWNLOAD:')) {
+                    const fileName = text.replace('DOWNLOAD:', '');
+                    const fileExt = fileName.split('.').pop().toUpperCase();
+                    let icon = 'fa-file-code';
+                    if (['EXE', 'MSI', 'APK', 'BAT'].includes(fileExt)) icon = 'fa-terminal';
+                    else if (['ZIP', 'RAR', '7Z', 'TAR'].includes(fileExt)) icon = 'fa-file-archive';
+                    else if (!['SH','PY','JS','CPP','C','GO'].includes(fileExt)) icon = 'fa-file-lines';
+
+                    const card = document.createElement('div');
+                    card.className = 'geek-download-card';
+                    card.onclick = () => window.location.href = link.href;
+                    card.innerHTML = `
+                        <div class="file-icon"><i class="fa-solid ${icon}"></i></div>
+                        <div class="file-info">
+                            <span class="file-name">${fileName}</span>
+                            <span class="file-meta">TYPE: ${fileExt} // ACCESS: PUBLIC</span>
+                        </div>
+                        <div class="download-label mono">GET_DATA</div>
+                    `;
+                    link.parentNode.replaceChild(card, link);
+                }
+            });
+        }
+        renderDownloadCards();
+
+        // 2. 系统时钟
+        setInterval(() => {
+            document.getElementById('live-clock').innerText = new Date().toTimeString().split(' ')[0];
+        }, 1000);
+
+        // 3. 滚动进度监听与 TOC 高亮
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            document.getElementById("progress").style.width = (winScroll / height * 100) + "%";
+            
+            const sections = document.querySelectorAll('.content h2, .content h3');
+            const tocLinks = document.querySelectorAll('.toc-box a');
+            let activeId = '';
+            sections.forEach(s => {
+                if (s.getBoundingClientRect().top < 100) activeId = s.getAttribute('id');
+            });
+            tocLinks.forEach(l => {
+                l.classList.toggle('active', l.getAttribute('href') === '#' + activeId);
+            });
+        });
+
+        // 4. 代码块复制增强
+        document.querySelectorAll('pre').forEach(block => {
+            const btn = document.createElement('button');
+            btn.className = 'copy-btn mono';
+            btn.innerText = 'COPY';
+            btn.onclick = () => {
+                navigator.clipboard.writeText(block.querySelector('code').innerText).then(() => {
+                    btn.innerText = 'DONE'; setTimeout(() => btn.innerText = 'COPY', 2000);
+                });
+            };
+            block.appendChild(btn);
+        });
+
+        // 5. 主题控制
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const target = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', target);
+            document.getElementById('mode-text').innerText = target.toUpperCase();
+            localStorage.setItem('geek-theme', target);
+        }
+        
+        const savedTheme = localStorage.getItem('geek-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        if(document.getElementById('mode-text')) document.getElementById('mode-text').innerText = savedTheme.toUpperCase();
+
+        function copyLink() { navigator.clipboard.writeText(window.location.href); alert("LINK_COPIED_TO_CLIPBOARD"); }
+    </script>
+</body>
+</html>

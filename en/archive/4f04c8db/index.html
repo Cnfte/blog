@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- SEO & Metadata -->
+    <title>Internet Science Popularization Series - What are IPv4 and IPv6? - Cnfteの博客</title>
+    <meta name="description" content="1. What are IPv4 / IPv6? Imagine the internet as a giant city, and every device connected to the internet (computers, mobile phones, servers, etc.) is like...">
+    <link rel="icon" href="/favicon.ico">
+    
+    <!-- 极客字体引用：强制同步加载确保移动端第一时间渲染 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #0a0a0a;
+            --text: #ffffff;
+            --text-muted: #a0a0a0;
+            --border: #222222;
+            --code-bg: #050505;
+            --accent: #ffffff;
+            --selection: #333333;
+        }
+
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --surface: #fafafa;
+            --text: #1d1d1f;
+            --text-muted: #505050;
+            --border: #e0e0e0;
+            --code-bg: #f5f5f5;
+            --selection: #eeeeee;
+        }
+
+        /* 1. 基础复位 & 消除移动端点击蓝色背景 & 强力锁定颜色 */
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent !important; 
+        }
+        
+        a, a:visited, a:active {
+            color: inherit !important;
+            text-decoration: none !important;
+            outline: none !important;
+        }
+
+        body { 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            background: var(--bg); color: var(--text); 
+            line-height: 1.8; overflow-x: hidden; width: 100%;
+            transition: background 0.3s;
+        }
+
+        .mono { font-family: 'Fira Code', monospace !important; }
+        ::selection { background: var(--selection); }
+
+        /* 顶部进度条 */
+        #progress { position: fixed; top: 0; left: 0; width: 0%; height: 2px; background: var(--text); z-index: 2001; }
+
+        /* 2. 导航栏加固 */
+        nav { 
+            position: sticky; top: 0; z-index: 1000; background: var(--bg); 
+            border-bottom: 2px solid var(--border); padding: 0 5%; height: 64px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { font-weight: 900; font-size: 1.1rem; letter-spacing: -1px; }
+        .nav-links { display: flex; align-items: center; gap: 20px; }
+        .nav-links a { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .lang-switch { border: 1px solid var(--border); padding: 4px 10px; }
+
+        /* 3. 文章头部：彻底解决标题被遮挡问题 */
+        .post-header { 
+            padding: 140px 20px 60px; 
+            text-align: left; 
+            border-bottom: 1px solid var(--border); 
+            max-width: 1400px; margin: 0 auto; 
+            background: var(--surface);
+        }
+        .post-path { font-family: 'Fira Code', monospace; color: var(--text-muted); font-size: 0.75rem; margin-bottom: 20px; text-transform: uppercase; }
+        .post-header h1 { 
+            font-size: clamp(2rem, 5vw, 3.5rem); 
+            font-weight: 900; 
+            letter-spacing: -2px; 
+            line-height: 1.2; 
+            margin-bottom: 30px;
+            display: block; 
+        }
+
+        /* 4. 响应式布局架构 (1024px 强制单栏) */
+        .main-wrapper { 
+            max-width: 1400px; margin: 0 auto; 
+            display: flex; flex-direction: row; 
+            align-items: stretch;
+        }
+
+        main { flex: 1; min-width: 0; } /* 解决 Flex 容器内代码溢出的核心 */
+
+        article.content { 
+            padding: 60px; border-right: 1px solid var(--border);
+            font-size: 1.125rem;
+        }
+
+        /* 正文样式 */
+        .content h2 { font-size: 1.8rem; margin: 2.5em 0 1.2em; font-weight: 900; border-bottom: 4px solid var(--text); padding-bottom: 10px; display: inline-block; }
+        .content h3 { font-size: 1.4rem; margin: 2em 0 1em; font-weight: 700; color: var(--text); border-left: 4px dashed var(--border); padding-left: 15px; }
+        .content p { margin-bottom: 2.2rem; text-align: justify; }
+        .content a { color: var(--text); text-decoration: underline !important; font-weight: 700; text-underline-offset: 4px; }
+        .content img { max-width: 100%; border: 1px solid var(--border); margin: 30px 0; display: block; height: auto; padding: 5px; }
+
+        /* 5. 代码块彻底锁死修复方案 (防溢出) */
+        pre { 
+            background: var(--code-bg) !important; 
+            padding: 40px 20px 20px !important; 
+            border: 1px solid var(--border) !important;
+            margin: 2.5rem 0; position: relative; 
+            display: block !important; width: 100% !important; 
+            max-width: 100% !important; overflow-x: auto !important; 
+            white-space: pre !important; word-wrap: normal !important;
+            box-sizing: border-box !important;
+            border-radius: 0;
+        }
+        pre code { font-family: 'Fira Code', monospace !important; font-size: 0.95rem !important; display: block; min-width: fit-content; line-height: 1.6; }
+
+        /* 6. 侧边栏加固：解决垂直文字 Bug */
+        aside { 
+            /* --- 彻底美化侧边栏滚动条，干掉大白条 --- */
+
+/* 1. 针对 Chrome, Edge, Safari (WebKit) */
+aside::-webkit-scrollbar {
+    width: 4px;             /* 极细的宽度 */
+    background: transparent;
+}
+
+aside::-webkit-scrollbar-thumb {
+    background: #333;       /* 滚动条滑块颜色：深灰色 */
+    border-radius: 0px;     /* 极客风格用直角 */
+}
+
+aside::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted); /* 悬停时稍微亮一点 */
+}
+
+aside::-webkit-scrollbar-track {
+    background: var(--bg);  /* 滚动条轨道颜色：同背景色 */
+}
+
+/* 2. 针对 Firefox */
+aside {
+    scrollbar-width: thin;          /* 细滚动条 */
+    scrollbar-color: #333 transparent; /* 滑块颜色 轨道颜色 */
+}
+
+/* 3. 如果你希望彻底看不见滚动条，但依然保留滚动功能（更高级感） */
+/* 只需要把上面的 aside::-webkit-scrollbar-thumb 的颜色设为与背景一致，或如下： */
+aside {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;     /* Firefox */
+}
+aside::-webkit-scrollbar {
+    display: none;             /* Chrome, Safari, Opera */
+}
+            width: 360px; flex-shrink: 0; min-width: 320px;
+            padding: 60px 40px; background: var(--surface);
+            position: sticky; top: 64px; height: calc(100vh - 64px); 
+            overflow-y: auto;
+        }
+        .widget { margin-bottom: 60px; width: 100%; }
+        .widget-title { font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 25px; text-transform: uppercase; border-left: 4px solid var(--text); padding-left: 12px; }
+
+        /* 作者简介：强制正常排版 */
+        .bio-text {
+            font-size: 0.9rem; color: var(--text-muted); 
+            margin-top: 15px; line-height: 1.6;
+            word-break: normal !important; 
+            white-space: normal !important; 
+            display: block !important; width: 100% !important;
+            text-align: center;
+        }
+
+        /* 极客下载卡片样式 */
+        .geek-download-card {
+            display: flex; align-items: center; padding: 20px; margin: 30px 0;
+            background: var(--surface); border: 1px solid var(--border);
+            transition: 0.2s; cursor: pointer;
+        }
+        .geek-download-card:hover { border-color: var(--text); background: var(--selection); }
+        .geek-download-card .file-icon { font-size: 2rem; margin-right: 25px; color: var(--text); }
+        .geek-download-card .file-info { flex: 1; }
+        .geek-download-card .file-name { font-family: 'Fira Code', monospace; font-size: 1rem; font-weight: 700; display: block; }
+        .geek-download-card .file-meta { font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-top: 5px; }
+        .geek-download-card .download-label { font-family: 'Fira Code', monospace; font-size: 0.7rem; padding: 5px 12px; border: 1px solid var(--border); color: var(--text-muted); }
+
+        /* 7. 悬浮按钮：高对比度黑白 */
+        .float-bar { position: fixed; bottom: 30px; right: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 1000; }
+        .float-btn { 
+            width: 52px; height: 52px; 
+            background: var(--text) !important; /* 强制可见背景 */
+            color: var(--bg) !important;       /* 强制可见图标 */
+            border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; font-size: 1.3rem; border-radius: 0; 
+            box-shadow: 6px 6px 0px var(--border);
+            transition: 0.1s;
+        }
+        .float-btn i, .float-btn svg { color: var(--bg) !important; pointer-events: none; }
+        .float-btn:active { transform: translate(2px, 2px); box-shadow: none; }
+
+        .copy-btn { position: absolute; top: 0; right: 0; background: var(--border); color: var(--text); border: none; padding: 8px 15px; font-size: 0.65rem; cursor: pointer; font-family: 'Fira Code', monospace; font-weight: 700; text-transform: uppercase; }
+
+        /* 8. 移动端强力适配逻辑 */
+        @media (max-width: 1024px) {
+            .main-wrapper { flex-direction: column !important; }
+            article.content { padding: 40px 25px; border-right: none !important; width: 100% !important; }
+            aside { 
+                width: 100% !important; border-left: none !important; border-top: 2px solid var(--border); 
+                position: static !important; height: auto !important; padding: 40px 25px !important; flex: none;
+            }
+            .post-header { padding: 100px 20px 40px; }
+            /* 代码块移动端全宽 */
+            pre { margin: 2rem -25px; border-left: none; border-right: none; padding: 45px 25px 25px !important; }
+        }
+
+        footer { padding: 80px 20px; text-align: center; border-top: 1px solid var(--border); font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted); background: var(--surface); }
+    </style>
+</head>
+<body>
+    <div id="progress"></div>
+    <nav>
+        <a href="/" class="logo mono">CNFTE://ROOT</a>
+        <div class="nav-links mono">
+            <a href="/en/Link Exchange.html">Link Exchange</a><a href="/en/Privacy Policy.html">Privacy Policy</a><a href="/en/about.html">about</a><a href="/en/公益服务项.html">service</a>
+            <a href="/" class="lang-switch">ZH</a>
+            <span style="cursor: pointer;" onclick="toggleTheme()">[MODE]</span>
+        </div>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-path">/ROOT/NODES/POSTS/2026/01/24</div>
+        <h1>Internet Science Popularization Series - What are IPv4 and IPv6?</h1>
+        <div class="mono" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 15px;">
+            STAMP: 2026-01-24 // REF_ID: 4f04c8db // AUTH: VERIFIED
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <main>
+            <article class="content" id="article-main">
+                <h3 id="1-what-are-ipv4-ipv6">1. What are IPv4 / IPv6?</h3>
+<p>Imagine the internet as a giant city, and every device connected to the internet (computers, mobile phones, servers, etc.) is like a house in that city. For these houses to find and communicate with each other, they all need an address.</p>
+<ul>
+<li><strong>IPv4 (Internet Protocol version 4):</strong> This is the address system used in the early days of the internet. You can think of it as a <strong>four-part numerical address</strong>, with each part consisting of numbers from 0 to 255, separated by dots. </li>
+<li><strong>Examples:</strong> <code>192.168.1.1</code> or <code>8.8.8.8</code> (This is Google's DNS server address)</li>
+<li><strong>Characteristics:</strong> Like early telephone numbers, it was sufficient for a while, but as the city (internet) grew larger and the number of houses (devices) increased, this address system became insufficient.</li>
+<li><strong>IPv6 (Internet Protocol version 6):</strong> This is a new generation address system designed to solve the IPv4 address shortage. You can think of it as a <strong>longer, more complex address</strong>, composed of numbers and letters, separated by colons. </li>
+<li><strong>Example:</strong> <code>2001:0db8:85a3:0000:0000:8a2e:0370:7334</code> (This is an example address)</li>
+<li><strong>Characteristics:</strong> The number of addresses is incredibly vast, enough to assign an address to almost every atom on Earth, completely solving the problem of address exhaustion.</li>
+</ul>
+<hr />
+<h3 id="2-the-differences-between-them">2. The Differences Between Them</h3>
+<p>The most fundamental differences are the <strong>number of addresses</strong> and the <strong>address format</strong>:</p>
+<ul>
+<li><strong>Number of Addresses:</strong></li>
+<li><strong>IPv4:</strong> Approximately 4.3 billion addresses. This sounds like a lot, but with the explosive growth of devices worldwide today, it's far from enough. </li>
+<li><strong>IPv6:</strong> The number of addresses is astronomical, approximately 2 to the power of 128, far more than IPv4. You can think of it this way: IPv4 addresses are like the number of grains of sand on Earth, while IPv6 addresses are like the number of grains of sand in the entire universe, and then some. * <strong>Address Format:</strong></li>
+<li><strong>IPv4:</strong> Four decimal numbers separated by dots (e.g., <code>192.168.1.1</code>). </li>
+<li><strong>IPv6:</strong> Eight hexadecimal numbers separated by colons (e.g., <code>2001:db8::1</code>, where some zeros are omitted).</li>
+<li><strong>Other Differences (more technical, but simply put):</strong></li>
+<li><strong>Security:</strong> IPv6 was designed with security in mind, incorporating the IPsec protocol to provide better encryption and authentication. </li>
+<li><strong>Efficiency:</strong> IPv6's header (the header information of the data packet) is more concise, potentially leading to more efficient processing. </li>
+<li><strong>Configuration:</strong> IPv6 supports more convenient automatic configuration, making it easier for devices to obtain addresses when connecting to the network.</li>
+</ul>
+<hr />
+<h3 id="3-the-significance-of-ipv4s-birth">3. The Significance of IPv4's Birth</h3>
+<p>In the early days of the internet, no one anticipated its rapid growth. The birth of IPv4 was like providing the nascent internet with a <strong>basic set of communication rules and an addressing system</strong>.</p>
+<ul>
+<li><strong>Significance:</strong></li>
+<li><strong>Enabling devices to communicate with each other:</strong> Like giving each house a house number, allowing the postman (data packets) to know where to deliver. </li>
+<li><strong>Building the early internet:</strong> Enabling data exchange between computers, laying the foundation for the later information revolution. </li>
+<li><strong>Driving the arrival of the information age:</strong> Without IPv4, we wouldn't have the internet we see today.</li>
+</ul>
+<hr />
+<h3 id="4-the-significance-of-ipv6s-birth">4. The Significance of IPv6's Birth</h3>
+<p>With the popularization of the internet, especially the emergence of smartphones and IoT devices, IPv4 addresses quickly became insufficient. The birth of IPv6 was to <strong>solve the address exhaustion crisis and provide unlimited possibilities for the future development of the internet</strong>.</p>
+<ul>
+<li><strong>Significance:</strong></li>
+<li><strong>Solving the address exhaustion problem:</strong> Ensuring that more devices in the future (mobile phones, smart homes, cars, sensors, etc.) can connect to the internet without being left behind due to a lack of addresses. </li>
+<li><strong>Supporting the Internet of Things (IoT):</strong> Providing sufficient addresses for a massive number of IoT devices, making smart homes and smart cities possible. </li>
+<li><strong>Improving network efficiency and security:</strong> Optimized in design to make the network run more smoothly and with higher security. + <strong>Paving the way for the continued development of the internet:</strong> Ensuring that the internet can continue to expand and innovate.</li>
+</ul>
+<hr />
+<h3 id="5-why-they-are-incompatible">5. Why They Are Incompatible</h3>
+<p>Imagine you have an address system using the English alphabet, while your friend has an address system using the Russian alphabet. Your address formats are completely different, so you cannot directly send a letter to your friend's Russian address, and your friend cannot directly send a letter to you.</p>
+<ul>
+<li><strong>Fundamental reason:</strong> IPv4 and IPv6 have fundamental differences in <strong>data packet format, addressing methods, and routing protocols</strong>. They are two independently designed communication protocols. </li>
+<li><strong>Different data packet structures:</strong> Like different envelope sizes and ways of filling in information. </li>
+<li><strong>Different addressing methods:</strong> The length and representation of addresses are completely different. </li>
+<li><strong>Different routing rules:</strong> The rules by which network devices (routers) identify and forward data packets are also different.</li>
+</ul>
+<p>Therefore, a device that only recognizes IPv4 addresses cannot directly understand data packets with IPv6 addresses, and vice versa. This is like a person who only understands Chinese being unable to directly read a French book.</p>
+<hr />
+<h3 id="6-the-concept-of-public-networks">6. The Concept of Public Networks</h3>
+<p>In the large city of the internet, each of us lives in our own house.</p>
+<ul>
+<li><strong>Public Network / Public IP Address:</strong></li>
+<li><strong>Concept:</strong> A public IP address is like your <strong>public, unique house number</strong> in the city. With this address, people from anywhere in the world can directly find you and communicate with you. </li>
+<li><strong>Function:</strong> Your computer, mobile phone, server, etc., need a public IP address to directly connect to the internet, be accessed by others, or access other services on the internet. </li>
+<li><strong>Example:</strong> When you surf the internet at home, your router may have a public IP address. This address is assigned to you by your ISP (Internet Service Provider), allowing your home devices to "go out" and communicate with other devices on the internet.</li>
+<li><strong>Private Network / Private IP Address:</strong></li>
+<li><strong>Concept:</strong> A private IP address is like your <strong>room number or building number within your residential area</strong>. These addresses are only valid within your own home (local area network), and people outside don't know them and cannot directly find you using this address. + <strong>Function:</strong> Within a family or company network, devices use private IP addresses to communicate with each other, such as your computer and printer at home accessing each other. These addresses are reusable; for example, <code>192.168.1.100</code> in your home and <code>192.168.1.100</code> in your neighbor's home are two different addresses because they are in different "homes." </li>
+<li><strong>Examples:</strong> Address ranges such as <code>192.168.x.x</code>, <code>10.x.x.x</code>, and <code>172.16.x.x</code> to <code>172.31.x.x</code> are commonly used as private IP addresses.</li>
+</ul>
+<p><strong>Why are private IP addresses needed?</strong> Because public IP addresses are too valuable (especially IPv4), and if every device were assigned a public IP address, they would have been used up long ago. Through NAT (Network Address Translation) technology, one public IP address can be shared by many devices with private IP addresses to access the internet.</p>
+<hr />
+<h3 id="7-how-to-obtain-a-public-ipv4-address">7. How to obtain a public IPv4 address?</h3>
+<p>Generally, you cannot directly "buy" or "apply for" a public IPv4 address as an individual.</p>
+<ul>
+<li><strong>Main methods:</strong></li>
+<li><strong>Through your ISP (Internet Service Provider):</strong> When you subscribe to broadband service, your ISP will assign you a public IP address (usually dynamic, which may change, or you can pay for a fixed static IP address). Your router will use this address to connect to the internet. </li>
+<li><strong>Enterprise users:</strong> Large enterprises or organizations can directly apply for IP address blocks from regional internet registries (RIRs, such as APNIC in the Asia-Pacific region), but the application requirements and costs are relatively high. </li>
+<li><strong>Purchase/Lease:</strong> In some IP address trading markets, you can buy or lease unused public IPv4 addresses, but this is usually very expensive and subject to strict regulations.</li>
+<li><strong>Simplified explanation:</strong> It's like wanting a publicly visible house number; you need to apply to the local postal service (ISP), and they will assign one to you.</li>
+</ul>
+<hr />
+<h3 id="8-how-to-obtain-a-public-ipv6-address">8. How to obtain a public IPv6 address?</h3>
+<p>Obtaining a public IPv6 address is relatively easier because there are a vast number of addresses available. * <strong>Main Methods:</strong>
+1. <strong>Through your ISP (Internet Service Provider):</strong> More and more ISPs are now offering IPv6 services. When you connect to an IPv6-enabled ISP network, your device (usually a router) will automatically obtain a public IPv6 address from the ISP. 
+2. <strong>Automatic Configuration:</strong> IPv6 supports stateless address auto-configuration (SLAAC), allowing devices to automatically generate a public IPv6 address based on network information, even without a DHCP server. 
+3. <strong>Enterprise Users:</strong>  Enterprises can also apply for IPv6 address blocks from RIRs (Regional Internet Registries).
+* <strong>Simplified Explanation:</strong> It's like there are so many houses in the city now that the government (ISP) is generously giving everyone a new address, and this address system is so vast that almost everyone can easily get one. Often, you just need to connect to an IPv6-enabled network, and it will automatically assign you one.</p>
+<hr />
+<h3 id="9-uses-of-ipv4">9. Uses of IPv4</h3>
+<p>During its limited lifespan, IPv4 supported the early development and popularization of the internet.</p>
+<ul>
+<li><strong>Main Uses:</strong></li>
+<li><strong>Connecting devices to the internet:</strong> Enabling computers, servers, and early mobile phones to access web pages, send emails, and communicate online. </li>
+<li><strong>Building early internet services:</strong> Supporting the operation of services such as email, FTP, and early websites. </li>
+<li><strong>Local area network communication:</strong> Private IPv4 addresses are used for communication between devices within homes and businesses.</li>
+<li><strong>Simplified Explanation:</strong> Like the early telephone system, allowing people to call each other and exchange information. Although the number of addresses was limited, it was powerful enough for that era.</li>
+</ul>
+<hr />
+<h3 id="10-uses-of-ipv6">10. Uses of IPv6</h3>
+<p>IPv6 is the future of the internet, and its uses are more extensive and far-reaching.</p>
+<ul>
+<li><strong>Main Uses:</strong></li>
+<li><strong>Supporting a massive number of connected devices:</strong> Providing sufficient addresses for <strong>all Internet of Things (IoT) devices</strong>, including smartphones, tablets, smart TVs, smart home devices, wearable devices, cars, industrial sensors, etc., enabling true "Internet of Everything." </li>
+<li><strong>Improving network performance and efficiency:</strong> A more optimized header design may lead to faster transmission speeds and lower latency. </li>
+<li><strong>Enhancing network security:</strong> The built-in IPsec protocol can provide better end-to-end security. </li>
+<li><strong>Simplifying network configuration:</strong> Automatic configuration features make network management more convenient. + <strong>Supports new network applications:</strong> Provides foundational address support for various innovative applications and services that may emerge in the future.</li>
+<li><strong>Simplified explanation:</strong> It's like a brand new, infinitely large city with countless streets and house numbers. You can put anything (any device) into it, allowing them to freely connect with each other, and communicate more smoothly and securely. For example, your refrigerator, air conditioner, light bulbs, or even your shoes, could each have their own address and be able to connect to the internet and communicate with each other, following your commands.</li>
+</ul>
+            </article>
+
+            <!-- 极客版权区域 -->
+            <section style="padding: 0 60px 60px; font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted);">
+                <div style="border: 1px solid var(--border); padding: 35px; background: var(--surface);">
+                    <div># SOURCE_NODE: <span id="page-url" style="word-break: break-all; color: var(--text);"></span></div>
+                    <div># LICENSE: CC-BY-NC-SA-4.0</div>
+                    <div># INTEGRITY: VALIDATED_ENCRYPTED</div>
+                    <div style="margin-top: 20px; color: var(--text);">// EOF_SIGNAL_RECEIVED</div>
+                </div>
+            </section>
+        </main>
+
+        <aside>
+            <section class="widget">
+                <h3 class="widget-title">IDENT_AUTH</h3>
+                <div style="border: 1px solid var(--border); padding: 35px 20px; text-align: center; background: var(--bg);">
+                    <img src="https://edgeoneimg.cdn.sn/i/696b4d5b58c71_1768639835.webp" style="width: 72px; height: 72px; filter: grayscale(1); border: 1px solid var(--border); padding: 4px; margin-bottom: 20px;" alt="Avatar">
+                    <div class="mono" style="font-weight: 900; font-size: 1.2rem; color: var(--text);">Cnfte</div>
+                    <div class="bio-text mono">"滚滚长江东逝水，浪花淘尽英雄。"</div>
+                </div>
+            </section>
+
+            <section class="widget">
+                <h3 class="widget-title">SYSTEM_LOG</h3>
+                <div style="background: #000; border: 1px solid #333; padding: 20px; font-family: 'Fira Code', monospace; font-size: 0.75rem; color: #00ff00; line-height: 1.6;">
+                    <div>[OK] NODE_STATE: STABLE</div>
+                    <div>[OK] UPTIME: 26M_READ</div>
+                    <div>[OK] CLOCK: <span id="live-clock">00:00:00</span></div>
+                    <div style="color: #333">-----------------------</div>
+                    <div>$ tail -f blog.log</div>
+                    <div>> Reading node...</div>
+                    <div style="color: #00ff00;">> Internet Sci...</div>
+                </div>
+            </section>
+
+            
+            <section class="widget">
+                <h3 class="widget-title">STRUCTURE_TOC</h3>
+                <div class="toc-box" id="toc-container">
+                    <div class="toc">
+<ul>
+<li><a href="#1-what-are-ipv4-ipv6">1. What are IPv4 / IPv6?</a></li>
+<li><a href="#2-the-differences-between-them">2. The Differences Between Them</a></li>
+<li><a href="#3-the-significance-of-ipv4s-birth">3. The Significance of IPv4's Birth</a></li>
+<li><a href="#4-the-significance-of-ipv6s-birth">4. The Significance of IPv6's Birth</a></li>
+<li><a href="#5-why-they-are-incompatible">5. Why They Are Incompatible</a></li>
+<li><a href="#6-the-concept-of-public-networks">6. The Concept of Public Networks</a></li>
+<li><a href="#7-how-to-obtain-a-public-ipv4-address">7. How to obtain a public IPv4 address?</a></li>
+<li><a href="#8-how-to-obtain-a-public-ipv6-address">8. How to obtain a public IPv6 address?</a></li>
+<li><a href="#9-uses-of-ipv4">9. Uses of IPv4</a></li>
+<li><a href="#10-uses-of-ipv6">10. Uses of IPv6</a></li>
+</ul>
+</div>
+
+                </div>
+            </section>
+            
+        </aside>
+    </div>
+
+    <div class="float-bar">
+        <button class="float-btn" onclick="copyLink()" aria-label="Share"><i class="fa-solid fa-share-nodes"></i></button>
+        <button class="float-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Back to Top"><i class="fa-solid fa-chevron-up"></i></button>
+    </div>
+
+    <footer>
+        <p class="mono">TERMINAL_BLOG_ENGINE v3.2.5 // © 2026 Cnfte</p>
+        <p class="mono" style="font-size: 0.75rem; margin-top: 15px; opacity: 0.5;"><a src="https://www.itdog.cn/ping/cnfte.top">本站已启用CLOUDFLARE CDN防护</a></p>
+    </footer>
+
+    <script>
+        // 1. 初始化 URL 显示和下载卡片
+        document.getElementById('page-url').innerText = window.location.href;
+
+        function renderDownloadCards() {
+            const links = document.querySelectorAll('#article-main a');
+            links.forEach(link => {
+                const text = link.innerText;
+                if (text.startsWith('DOWNLOAD:')) {
+                    const fileName = text.replace('DOWNLOAD:', '');
+                    const fileExt = fileName.split('.').pop().toUpperCase();
+                    let icon = 'fa-file-code';
+                    if (['EXE', 'MSI', 'APK', 'BAT'].includes(fileExt)) icon = 'fa-terminal';
+                    else if (['ZIP', 'RAR', '7Z', 'TAR'].includes(fileExt)) icon = 'fa-file-archive';
+                    else if (!['SH','PY','JS','CPP','C','GO'].includes(fileExt)) icon = 'fa-file-lines';
+
+                    const card = document.createElement('div');
+                    card.className = 'geek-download-card';
+                    card.onclick = () => window.location.href = link.href;
+                    card.innerHTML = `
+                        <div class="file-icon"><i class="fa-solid ${icon}"></i></div>
+                        <div class="file-info">
+                            <span class="file-name">${fileName}</span>
+                            <span class="file-meta">TYPE: ${fileExt} // ACCESS: PUBLIC</span>
+                        </div>
+                        <div class="download-label mono">GET_DATA</div>
+                    `;
+                    link.parentNode.replaceChild(card, link);
+                }
+            });
+        }
+        renderDownloadCards();
+
+        // 2. 系统时钟
+        setInterval(() => {
+            document.getElementById('live-clock').innerText = new Date().toTimeString().split(' ')[0];
+        }, 1000);
+
+        // 3. 滚动进度监听与 TOC 高亮
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            document.getElementById("progress").style.width = (winScroll / height * 100) + "%";
+            
+            const sections = document.querySelectorAll('.content h2, .content h3');
+            const tocLinks = document.querySelectorAll('.toc-box a');
+            let activeId = '';
+            sections.forEach(s => {
+                if (s.getBoundingClientRect().top < 100) activeId = s.getAttribute('id');
+            });
+            tocLinks.forEach(l => {
+                l.classList.toggle('active', l.getAttribute('href') === '#' + activeId);
+            });
+        });
+
+        // 4. 代码块复制增强
+        document.querySelectorAll('pre').forEach(block => {
+            const btn = document.createElement('button');
+            btn.className = 'copy-btn mono';
+            btn.innerText = 'COPY';
+            btn.onclick = () => {
+                navigator.clipboard.writeText(block.querySelector('code').innerText).then(() => {
+                    btn.innerText = 'DONE'; setTimeout(() => btn.innerText = 'COPY', 2000);
+                });
+            };
+            block.appendChild(btn);
+        });
+
+        // 5. 主题控制
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const target = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', target);
+            document.getElementById('mode-text').innerText = target.toUpperCase();
+            localStorage.setItem('geek-theme', target);
+        }
+        
+        const savedTheme = localStorage.getItem('geek-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        if(document.getElementById('mode-text')) document.getElementById('mode-text').innerText = savedTheme.toUpperCase();
+
+        function copyLink() { navigator.clipboard.writeText(window.location.href); alert("LINK_COPIED_TO_CLIPBOARD"); }
+    </script>
+</body>
+</html>

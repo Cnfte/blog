@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- SEO & Metadata -->
+    <title>互联网科普系列-什么是域名_怎么获得一个域名并解析 - Cnfteの博客</title>
+    <meta name="description" content="什么是域名？ 想象一下，互联网就像一个巨大的城市，里面住着无数的网站、服务器（就是存放网站内容的地方）。每个服务器都有一个独一无二的“门牌号”，这个门牌号就是一串数字，叫做 IP地址。 比如，你家地址是“XX省XX市XX区XX街道XX号”，IP地址就是“192.168.1.1”或者“203.0.113.45”...">
+    <link rel="icon" href="/favicon.ico">
+    
+    <!-- 极客字体引用：强制同步加载确保移动端第一时间渲染 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #0a0a0a;
+            --text: #ffffff;
+            --text-muted: #a0a0a0;
+            --border: #222222;
+            --code-bg: #050505;
+            --accent: #ffffff;
+            --selection: #333333;
+        }
+
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --surface: #fafafa;
+            --text: #1d1d1f;
+            --text-muted: #505050;
+            --border: #e0e0e0;
+            --code-bg: #f5f5f5;
+            --selection: #eeeeee;
+        }
+
+        /* 1. 基础复位 & 消除移动端点击蓝色背景 & 强力锁定颜色 */
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent !important; 
+        }
+        
+        a, a:visited, a:active {
+            color: inherit !important;
+            text-decoration: none !important;
+            outline: none !important;
+        }
+
+        body { 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            background: var(--bg); color: var(--text); 
+            line-height: 1.8; overflow-x: hidden; width: 100%;
+            transition: background 0.3s;
+        }
+
+        .mono { font-family: 'Fira Code', monospace !important; }
+        ::selection { background: var(--selection); }
+
+        /* 顶部进度条 */
+        #progress { position: fixed; top: 0; left: 0; width: 0%; height: 2px; background: var(--text); z-index: 2001; }
+
+        /* 2. 导航栏加固 */
+        nav { 
+            position: sticky; top: 0; z-index: 1000; background: var(--bg); 
+            border-bottom: 2px solid var(--border); padding: 0 5%; height: 64px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { font-weight: 900; font-size: 1.1rem; letter-spacing: -1px; }
+        .nav-links { display: flex; align-items: center; gap: 20px; }
+        .nav-links a { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .lang-switch { border: 1px solid var(--border); padding: 4px 10px; }
+
+        /* 3. 文章头部：彻底解决标题被遮挡问题 */
+        .post-header { 
+            padding: 140px 20px 60px; 
+            text-align: left; 
+            border-bottom: 1px solid var(--border); 
+            max-width: 1400px; margin: 0 auto; 
+            background: var(--surface);
+        }
+        .post-path { font-family: 'Fira Code', monospace; color: var(--text-muted); font-size: 0.75rem; margin-bottom: 20px; text-transform: uppercase; }
+        .post-header h1 { 
+            font-size: clamp(2rem, 5vw, 3.5rem); 
+            font-weight: 900; 
+            letter-spacing: -2px; 
+            line-height: 1.2; 
+            margin-bottom: 30px;
+            display: block; 
+        }
+
+        /* 4. 响应式布局架构 (1024px 强制单栏) */
+        .main-wrapper { 
+            max-width: 1400px; margin: 0 auto; 
+            display: flex; flex-direction: row; 
+            align-items: stretch;
+        }
+
+        main { flex: 1; min-width: 0; } /* 解决 Flex 容器内代码溢出的核心 */
+
+        article.content { 
+            padding: 60px; border-right: 1px solid var(--border);
+            font-size: 1.125rem;
+        }
+
+        /* 正文样式 */
+        .content h2 { font-size: 1.8rem; margin: 2.5em 0 1.2em; font-weight: 900; border-bottom: 4px solid var(--text); padding-bottom: 10px; display: inline-block; }
+        .content h3 { font-size: 1.4rem; margin: 2em 0 1em; font-weight: 700; color: var(--text); border-left: 4px dashed var(--border); padding-left: 15px; }
+        .content p { margin-bottom: 2.2rem; text-align: justify; }
+        .content a { color: var(--text); text-decoration: underline !important; font-weight: 700; text-underline-offset: 4px; }
+        .content img { max-width: 100%; border: 1px solid var(--border); margin: 30px 0; display: block; height: auto; padding: 5px; }
+
+        /* 5. 代码块彻底锁死修复方案 (防溢出) */
+        pre { 
+            background: var(--code-bg) !important; 
+            padding: 40px 20px 20px !important; 
+            border: 1px solid var(--border) !important;
+            margin: 2.5rem 0; position: relative; 
+            display: block !important; width: 100% !important; 
+            max-width: 100% !important; overflow-x: auto !important; 
+            white-space: pre !important; word-wrap: normal !important;
+            box-sizing: border-box !important;
+            border-radius: 0;
+        }
+        pre code { font-family: 'Fira Code', monospace !important; font-size: 0.95rem !important; display: block; min-width: fit-content; line-height: 1.6; }
+
+        /* 6. 侧边栏加固：解决垂直文字 Bug */
+        aside { 
+            /* --- 彻底美化侧边栏滚动条，干掉大白条 --- */
+
+/* 1. 针对 Chrome, Edge, Safari (WebKit) */
+aside::-webkit-scrollbar {
+    width: 4px;             /* 极细的宽度 */
+    background: transparent;
+}
+
+aside::-webkit-scrollbar-thumb {
+    background: #333;       /* 滚动条滑块颜色：深灰色 */
+    border-radius: 0px;     /* 极客风格用直角 */
+}
+
+aside::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted); /* 悬停时稍微亮一点 */
+}
+
+aside::-webkit-scrollbar-track {
+    background: var(--bg);  /* 滚动条轨道颜色：同背景色 */
+}
+
+/* 2. 针对 Firefox */
+aside {
+    scrollbar-width: thin;          /* 细滚动条 */
+    scrollbar-color: #333 transparent; /* 滑块颜色 轨道颜色 */
+}
+
+/* 3. 如果你希望彻底看不见滚动条，但依然保留滚动功能（更高级感） */
+/* 只需要把上面的 aside::-webkit-scrollbar-thumb 的颜色设为与背景一致，或如下： */
+aside {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;     /* Firefox */
+}
+aside::-webkit-scrollbar {
+    display: none;             /* Chrome, Safari, Opera */
+}
+            width: 360px; flex-shrink: 0; min-width: 320px;
+            padding: 60px 40px; background: var(--surface);
+            position: sticky; top: 64px; height: calc(100vh - 64px); 
+            overflow-y: auto;
+        }
+        .widget { margin-bottom: 60px; width: 100%; }
+        .widget-title { font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 25px; text-transform: uppercase; border-left: 4px solid var(--text); padding-left: 12px; }
+
+        /* 作者简介：强制正常排版 */
+        .bio-text {
+            font-size: 0.9rem; color: var(--text-muted); 
+            margin-top: 15px; line-height: 1.6;
+            word-break: normal !important; 
+            white-space: normal !important; 
+            display: block !important; width: 100% !important;
+            text-align: center;
+        }
+
+        /* 极客下载卡片样式 */
+        .geek-download-card {
+            display: flex; align-items: center; padding: 20px; margin: 30px 0;
+            background: var(--surface); border: 1px solid var(--border);
+            transition: 0.2s; cursor: pointer;
+        }
+        .geek-download-card:hover { border-color: var(--text); background: var(--selection); }
+        .geek-download-card .file-icon { font-size: 2rem; margin-right: 25px; color: var(--text); }
+        .geek-download-card .file-info { flex: 1; }
+        .geek-download-card .file-name { font-family: 'Fira Code', monospace; font-size: 1rem; font-weight: 700; display: block; }
+        .geek-download-card .file-meta { font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-top: 5px; }
+        .geek-download-card .download-label { font-family: 'Fira Code', monospace; font-size: 0.7rem; padding: 5px 12px; border: 1px solid var(--border); color: var(--text-muted); }
+
+        /* 7. 悬浮按钮：高对比度黑白 */
+        .float-bar { position: fixed; bottom: 30px; right: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 1000; }
+        .float-btn { 
+            width: 52px; height: 52px; 
+            background: var(--text) !important; /* 强制可见背景 */
+            color: var(--bg) !important;       /* 强制可见图标 */
+            border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; font-size: 1.3rem; border-radius: 0; 
+            box-shadow: 6px 6px 0px var(--border);
+            transition: 0.1s;
+        }
+        .float-btn i, .float-btn svg { color: var(--bg) !important; pointer-events: none; }
+        .float-btn:active { transform: translate(2px, 2px); box-shadow: none; }
+
+        .copy-btn { position: absolute; top: 0; right: 0; background: var(--border); color: var(--text); border: none; padding: 8px 15px; font-size: 0.65rem; cursor: pointer; font-family: 'Fira Code', monospace; font-weight: 700; text-transform: uppercase; }
+
+        /* 8. 移动端强力适配逻辑 */
+        @media (max-width: 1024px) {
+            .main-wrapper { flex-direction: column !important; }
+            article.content { padding: 40px 25px; border-right: none !important; width: 100% !important; }
+            aside { 
+                width: 100% !important; border-left: none !important; border-top: 2px solid var(--border); 
+                position: static !important; height: auto !important; padding: 40px 25px !important; flex: none;
+            }
+            .post-header { padding: 100px 20px 40px; }
+            /* 代码块移动端全宽 */
+            pre { margin: 2rem -25px; border-left: none; border-right: none; padding: 45px 25px 25px !important; }
+        }
+
+        footer { padding: 80px 20px; text-align: center; border-top: 1px solid var(--border); font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted); background: var(--surface); }
+    </style>
+</head>
+<body>
+    <div id="progress"></div>
+    <nav>
+        <a href="/" class="logo mono">CNFTE://ROOT</a>
+        <div class="nav-links mono">
+            <a href="/about.html">关于</a><a href="/公益服务项.html">公益服务项</a><a href="/友链.html">友链</a><a href="/隐私政策.html">隐私政策</a>
+            <a href="/en/" class="lang-switch">EN</a>
+            <span style="cursor: pointer;" onclick="toggleTheme()">[MODE]</span>
+        </div>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-path">/ROOT/NODES/POSTS/2026/01/17</div>
+        <h1>互联网科普系列-什么是域名_怎么获得一个域名并解析</h1>
+        <div class="mono" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 15px;">
+            STAMP: 2026-01-17 // REF_ID: 1f923484 // AUTH: VERIFIED
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <main>
+            <article class="content" id="article-main">
+                <h3 id="_1">什么是域名？</h3>
+<p>想象一下，互联网就像一个巨大的城市，里面住着无数的网站、服务器（就是存放网站内容的地方）。每个服务器都有一个独一无二的“门牌号”，这个门牌号就是一串数字，叫做 <strong>IP地址</strong>。</p>
+<p>比如，你家地址是“XX省XX市XX区XX街道XX号”，IP地址就是“192.168.1.1”或者“203.0.113.45”这样的数字串。</p>
+<p>但是，你觉得记住一长串数字方便，还是记住一个名字方便呢？肯定是一个名字吧！比如你想去淘宝，你会记住“taobao.com”，而不是一串数字。</p>
+<p><strong>域名，就是给互联网上的服务器（或者说网站）起的名字。</strong> 它就像是给你的网站一个好记的、有特色的名字，方便大家来访问。</p>
+<p><strong>简单来说：域名就是网站的名字，用来代替一串难记的IP地址。</strong></p>
+<hr />
+<h3 id="_2">域名有什么用？</h3>
+<p>域名最主要的作用就是：</p>
+<ol>
+<li>
+<p><strong>方便记忆和访问：</strong></p>
+</li>
+<li>
+<p>就像你记住朋友的名字比记住他家的门牌号容易得多一样，域名让用户能够轻松地记住并访问你的网站。</p>
+</li>
+<li>没有域名，你就只能通过IP地址访问网站，这对于普通用户来说太不友好了。</li>
+<li>
+<p><strong>建立品牌形象：</strong></p>
+</li>
+<li>
+<p>一个好的域名就像一个响亮的名字，能够帮助你建立品牌形象。</p>
+</li>
+<li>比如“baidu.com”就是百度公司的品牌代表，“tencent.com”就是腾讯的代表。</li>
+<li>一个专业、易记的域名能给用户留下好印象。</li>
+<li>
+<p><strong>电子邮件地址：</strong></p>
+</li>
+<li>
+<p>域名也可以用来创建专业的电子邮件地址，比如 <code>[email protected]</code>。</p>
+</li>
+<li>这比使用免费邮箱（如 <code>@gmail.com</code> 或 <code>@qq.com</code>）显得更专业和可信。</li>
+<li>
+<p><strong>网站的唯一标识：</strong></p>
+</li>
+<li>
+<p>在互联网上，域名是唯一的。一旦你注册了一个域名，别人就不能再注册完全相同的域名了。</p>
+</li>
+<li>这保证了你的网站在互联网上的独特性。</li>
+</ol>
+<hr />
+<h3 id="cn">怎么获得一个域名 (以阿里云平台注册.cn域名为例)</h3>
+<p>获得域名就像给你的网站“上户口”，你需要去一个专门的机构（域名注册商）那里登记。阿里云就是一个很大的域名注册商。</p>
+<p>咱们以在阿里云注册一个<code>.cn</code>域名为例，步骤很简单：</p>
+<ol>
+<li>
+<p><strong>打开阿里云官网：</strong></p>
+</li>
+<li>
+<p>在浏览器里输入 <code>www.aliyun.com</code>，进入阿里云的官方网站。</p>
+</li>
+<li>
+<p><strong>搜索你想注册的域名：</strong></p>
+</li>
+<li>
+<p>在阿里云网站的首页或者产品页面，找到“域名”相关的入口。</p>
+</li>
+<li>你会看到一个搜索框，输入你想要注册的域名，比如你想注册“我的网站.cn”，就输入 <code>mywebsite.cn</code>。</li>
+<li>点击搜索。</li>
+<li>
+<p><strong>查看是否可用并加入购物车：</strong></p>
+</li>
+<li>
+<p>阿里云会告诉你这个域名是否已经被别人注册了。</p>
+</li>
+<li>如果没被注册，它会显示“可注册”，你可以点击“加入购物车”。</li>
+<li>如果已经被注册了，它会显示“已注册”，你就需要换一个名字试试。</li>
+<li>
+<p><strong>去结算并填写信息：</strong></p>
+</li>
+<li>
+<p>进入购物车，确认你要注册的域名，然后点击“去结算”。</p>
+</li>
+<li>这时候，你需要填写一些注册信息，主要是你的个人信息（姓名、身份证号、联系方式等）或者公司信息。</li>
+<li><strong>注意：</strong> 注册<code>.cn</code>域名通常需要进行实名认证，你需要上传身份证照片或者提供公司营业执照等信息，这是中国大陆地区对域名的管理规定。</li>
+<li>
+<p><strong>支付费用：</strong></p>
+</li>
+<li>
+<p>填写完信息后，选择支付方式，完成支付。域名的价格根据后缀（如<code>.com</code>, <code>.cn</code>, <code>.net</code>等）和注册商不同而有所差异。</p>
+</li>
+<li>
+<p><strong>完成注册：</strong></p>
+</li>
+<li>
+<p>支付成功后，阿里云会帮你完成域名的注册。通常需要几分钟到几个小时不等。</p>
+</li>
+<li>注册成功后，这个域名就属于你了，你可以通过阿里云的管理后台来管理它。</li>
+</ol>
+<p><strong>简单来说：就像你去给孩子起名字，先看看这个名字有没有被别人用了，没用就去相关部门登记，然后交点钱，名字就归你了。</strong></p>
+<hr />
+<h3 id="_3">什么是域名解析？</h3>
+<p>域名解析，就像是给你的域名（名字）和它的IP地址（门牌号）建立一个“联系”。</p>
+<p>想象一下，你有一个朋友叫“小明”，他住在“XX小区XX栋XX单元XX号”。你只知道“小明”这个名字，但不知道他家具体在哪。域名解析的作用就是，当你告诉邮递员“小明”这个名字时，邮递员就知道要去“XX小区XX栋XX单元XX号”才能找到他。</p>
+<p>在互联网上，当你在浏览器输入一个域名（比如 <code>www.example.com</code>）时，你的电脑不知道这个域名对应的IP地址是多少。这时候就需要域名解析服务来告诉你的电脑：<code>www.example.com</code> 这个名字对应的IP地址是 <code>192.168.1.100</code>。</p>
+<p><strong>简单来说：域名解析就是告诉电脑，你输入的这个域名（名字）到底对应着哪个IP地址（门牌号）。</strong></p>
+<hr />
+<h3 id="aaaaacname">怎么解析域名 (以常见的A、AAAA、CNAME记录为例)</h3>
+<p>域名解析是通过在域名注册商的管理后台（比如阿里云的域名管理页面）设置 <strong>DNS记录</strong> 来实现的。DNS记录就像是给域名写下的“地址簿条目”。</p>
+<p>最常见的几种记录类型有：</p>
+<h4 id="1-a-address-record">1. A记录 (Address Record)</h4>
+<ul>
+<li><strong>作用：</strong> 将一个域名（或子域名）指向一个 <strong>IPv4地址</strong>。</li>
+<li><strong>白话解释：</strong> 这是最常用的记录。就像你告诉邮递员：“‘小明’住在‘192.168.1.100’这个地址。”</li>
+<li><strong>举例：</strong></li>
+<li>你想让 <code>www.example.com</code> 指向你的服务器IP地址 <code>1.2.3.4</code>。</li>
+<li>在阿里云的DNS管理页面，你会添加一条记录：<ul>
+<li><strong>类型：</strong> A</li>
+<li><strong>主机记录（或叫子域名）：</strong> <code>www</code> (如果你想解析的是 <code>example.com</code> 本身，这里就填 <code>@</code> 或者留空)</li>
+<li><strong>记录值（IP地址）：</strong> <code>1.2.3.4</code></li>
+<li><strong>TTL（生存时间）：</strong> 一般用默认值即可，表示这条记录多久更新一次。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-aaaa-ipv6-address-record">2. AAAA记录 (IPv6 Address Record)</h4>
+<ul>
+<li><strong>作用：</strong> 将一个域名（或子域名）指向一个 <strong>IPv6地址</strong>。</li>
+<li><strong>白话解释：</strong> 和A记录类似，只是IPv6地址比IPv4地址长很多，是新一代的IP地址。就像你告诉邮递员：“‘小明’住在‘2001:0db8:85a3:0000:0000:8a2e:0370:7334’这个地址。”</li>
+<li><strong>举例：</strong></li>
+<li>你想让 <code>www.example.com</code> 指向你的服务器IPv6地址 <code>2001:db8::1</code>。</li>
+<li>在阿里云的DNS管理页面，你会添加一条记录：<ul>
+<li><strong>类型：</strong> AAAA</li>
+<li><strong>主机记录：</strong> <code>www</code></li>
+<li><strong>记录值（IPv6地址）：</strong> <code>2001:db8::1</code></li>
+<li><strong>TTL：</strong> 默认值</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-cname-canonical-name-record">3. CNAME记录 (Canonical Name Record)</h4>
+<ul>
+<li><strong>作用：</strong> 将一个域名（或子域名）指向 <strong>另一个域名</strong>。</li>
+<li><strong>白话解释：</strong> 这就像你告诉邮递员：“‘小明’的家，其实就是‘老王’的家。” 也就是说，你给这个域名起了一个“别名”。</li>
+<li><strong>举例：</strong></li>
+<li>你有一个服务，比如CDN（内容分发网络），它提供了一个固定的域名给你，比如 <code>mycdn.aliyuncs.com</code>。</li>
+<li>你想让你的域名 <code>blog.example.com</code> 直接指向这个CDN服务。</li>
+<li>在阿里云的DNS管理页面，你会添加一条记录：<ul>
+<li><strong>类型：</strong> CNAME</li>
+<li><strong>主机记录：</strong> <code>blog</code></li>
+<li><strong>记录值（指向的域名）：</strong> <code>mycdn.aliyuncs.com</code></li>
+<li><strong>TTL：</strong> 默认值</li>
+</ul>
+</li>
+</ul>
+<p><strong>重要提示：</strong></p>
+<ul>
+<li><strong>生效时间：</strong> 修改DNS记录后，通常需要几分钟到几十分钟（有时甚至更长，最多24小时）才能在全球范围内生效，这个过程叫做“DNS传播”。</li>
+<li><strong>主机记录：</strong></li>
+<li><code>@</code> 或留空：表示解析的是域名本身，比如 <code>example.com</code>。</li>
+<li><code>www</code>：表示解析的是 <code>www.example.com</code>。</li>
+<li><code>blog</code>：表示解析的是 <code>blog.example.com</code>。</li>
+<li><code>mail</code>：表示解析的是 <code>mail.example.com</code>。</li>
+</ul>
+<p><strong>总结一下解析过程：</strong></p>
+<ol>
+<li>你注册了一个域名 <code>example.com</code>。</li>
+<li>你购买了一台服务器，服务器有一个IP地址 <code>1.2.3.4</code>。</li>
+<li>你在阿里云的域名管理后台，为 <code>example.com</code> 添加了一条 <strong>A记录</strong>，主机记录是 <code>@</code>，记录值是 <code>1.2.3.4</code>。</li>
+<li>当别人在浏览器输入 <code>example.com</code> 时，电脑会去DNS服务器查询 <code>example.com</code> 的IP地址，DNS服务器告诉你它是 <code>1.2.3.4</code>。</li>
+<li>电脑知道了IP地址，就能连接到你的服务器，显示你的网站内容了。</li>
+</ol>
+            </article>
+
+            <!-- 极客版权区域 -->
+            <section style="padding: 0 60px 60px; font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted);">
+                <div style="border: 1px solid var(--border); padding: 35px; background: var(--surface);">
+                    <div># SOURCE_NODE: <span id="page-url" style="word-break: break-all; color: var(--text);"></span></div>
+                    <div># LICENSE: CC-BY-NC-SA-4.0</div>
+                    <div># INTEGRITY: VALIDATED_ENCRYPTED</div>
+                    <div style="margin-top: 20px; color: var(--text);">// EOF_SIGNAL_RECEIVED</div>
+                </div>
+            </section>
+        </main>
+
+        <aside>
+            <section class="widget">
+                <h3 class="widget-title">IDENT_AUTH</h3>
+                <div style="border: 1px solid var(--border); padding: 35px 20px; text-align: center; background: var(--bg);">
+                    <img src="https://edgeoneimg.cdn.sn/i/696b4d5b58c71_1768639835.webp" style="width: 72px; height: 72px; filter: grayscale(1); border: 1px solid var(--border); padding: 4px; margin-bottom: 20px;" alt="Avatar">
+                    <div class="mono" style="font-weight: 900; font-size: 1.2rem; color: var(--text);">Cnfte</div>
+                    <div class="bio-text mono">"滚滚长江东逝水，浪花淘尽英雄。"</div>
+                </div>
+            </section>
+
+            <section class="widget">
+                <h3 class="widget-title">SYSTEM_LOG</h3>
+                <div style="background: #000; border: 1px solid #333; padding: 20px; font-family: 'Fira Code', monospace; font-size: 0.75rem; color: #00ff00; line-height: 1.6;">
+                    <div>[OK] NODE_STATE: STABLE</div>
+                    <div>[OK] UPTIME: 9M_READ</div>
+                    <div>[OK] CLOCK: <span id="live-clock">00:00:00</span></div>
+                    <div style="color: #333">-----------------------</div>
+                    <div>$ tail -f blog.log</div>
+                    <div>> Reading node...</div>
+                    <div style="color: #00ff00;">> 互联网科普系列-什么是域...</div>
+                </div>
+            </section>
+
+            
+            <section class="widget">
+                <h3 class="widget-title">STRUCTURE_TOC</h3>
+                <div class="toc-box" id="toc-container">
+                    <div class="toc">
+<ul>
+<li><a href="#_1">什么是域名？</a></li>
+<li><a href="#_2">域名有什么用？</a></li>
+<li><a href="#cn">怎么获得一个域名 (以阿里云平台注册.cn域名为例)</a></li>
+<li><a href="#_3">什么是域名解析？</a></li>
+<li><a href="#aaaaacname">怎么解析域名 (以常见的A、AAAA、CNAME记录为例)</a><ul>
+<li><a href="#1-a-address-record">1. A记录 (Address Record)</a></li>
+<li><a href="#2-aaaa-ipv6-address-record">2. AAAA记录 (IPv6 Address Record)</a></li>
+<li><a href="#3-cname-canonical-name-record">3. CNAME记录 (Canonical Name Record)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+                </div>
+            </section>
+            
+        </aside>
+    </div>
+
+    <div class="float-bar">
+        <button class="float-btn" onclick="copyLink()" aria-label="Share"><i class="fa-solid fa-share-nodes"></i></button>
+        <button class="float-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Back to Top"><i class="fa-solid fa-chevron-up"></i></button>
+    </div>
+
+    <footer>
+        <p class="mono">TERMINAL_BLOG_ENGINE v3.2.5 // © 2026 Cnfte</p>
+        <p class="mono" style="font-size: 0.75rem; margin-top: 15px; opacity: 0.5;"><a src="https://www.itdog.cn/ping/cnfte.top">本站已启用CLOUDFLARE CDN防护</a></p>
+    </footer>
+
+    <script>
+        // 1. 初始化 URL 显示和下载卡片
+        document.getElementById('page-url').innerText = window.location.href;
+
+        function renderDownloadCards() {
+            const links = document.querySelectorAll('#article-main a');
+            links.forEach(link => {
+                const text = link.innerText;
+                if (text.startsWith('DOWNLOAD:')) {
+                    const fileName = text.replace('DOWNLOAD:', '');
+                    const fileExt = fileName.split('.').pop().toUpperCase();
+                    let icon = 'fa-file-code';
+                    if (['EXE', 'MSI', 'APK', 'BAT'].includes(fileExt)) icon = 'fa-terminal';
+                    else if (['ZIP', 'RAR', '7Z', 'TAR'].includes(fileExt)) icon = 'fa-file-archive';
+                    else if (!['SH','PY','JS','CPP','C','GO'].includes(fileExt)) icon = 'fa-file-lines';
+
+                    const card = document.createElement('div');
+                    card.className = 'geek-download-card';
+                    card.onclick = () => window.location.href = link.href;
+                    card.innerHTML = `
+                        <div class="file-icon"><i class="fa-solid ${icon}"></i></div>
+                        <div class="file-info">
+                            <span class="file-name">${fileName}</span>
+                            <span class="file-meta">TYPE: ${fileExt} // ACCESS: PUBLIC</span>
+                        </div>
+                        <div class="download-label mono">GET_DATA</div>
+                    `;
+                    link.parentNode.replaceChild(card, link);
+                }
+            });
+        }
+        renderDownloadCards();
+
+        // 2. 系统时钟
+        setInterval(() => {
+            document.getElementById('live-clock').innerText = new Date().toTimeString().split(' ')[0];
+        }, 1000);
+
+        // 3. 滚动进度监听与 TOC 高亮
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            document.getElementById("progress").style.width = (winScroll / height * 100) + "%";
+            
+            const sections = document.querySelectorAll('.content h2, .content h3');
+            const tocLinks = document.querySelectorAll('.toc-box a');
+            let activeId = '';
+            sections.forEach(s => {
+                if (s.getBoundingClientRect().top < 100) activeId = s.getAttribute('id');
+            });
+            tocLinks.forEach(l => {
+                l.classList.toggle('active', l.getAttribute('href') === '#' + activeId);
+            });
+        });
+
+        // 4. 代码块复制增强
+        document.querySelectorAll('pre').forEach(block => {
+            const btn = document.createElement('button');
+            btn.className = 'copy-btn mono';
+            btn.innerText = 'COPY';
+            btn.onclick = () => {
+                navigator.clipboard.writeText(block.querySelector('code').innerText).then(() => {
+                    btn.innerText = 'DONE'; setTimeout(() => btn.innerText = 'COPY', 2000);
+                });
+            };
+            block.appendChild(btn);
+        });
+
+        // 5. 主题控制
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const target = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', target);
+            document.getElementById('mode-text').innerText = target.toUpperCase();
+            localStorage.setItem('geek-theme', target);
+        }
+        
+        const savedTheme = localStorage.getItem('geek-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        if(document.getElementById('mode-text')) document.getElementById('mode-text').innerText = savedTheme.toUpperCase();
+
+        function copyLink() { navigator.clipboard.writeText(window.location.href); alert("LINK_COPIED_TO_CLIPBOARD"); }
+    </script>
+</body>
+</html>

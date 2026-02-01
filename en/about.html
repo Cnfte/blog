@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- SEO & Metadata -->
+    <title>about - Cnfteの博客</title>
+    <meta name="description" content="I'm CNFTE, a developer and writer passionate about technology exploration and knowledge sharing (GitHub account: cnfte). On my blog (cnfte.top), I'm dedica...">
+    <link rel="icon" href="/favicon.ico">
+    
+    <!-- 极客字体引用：强制同步加载确保移动端第一时间渲染 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #0a0a0a;
+            --text: #ffffff;
+            --text-muted: #a0a0a0;
+            --border: #222222;
+            --code-bg: #050505;
+            --accent: #ffffff;
+            --selection: #333333;
+        }
+
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --surface: #fafafa;
+            --text: #1d1d1f;
+            --text-muted: #505050;
+            --border: #e0e0e0;
+            --code-bg: #f5f5f5;
+            --selection: #eeeeee;
+        }
+
+        /* 1. 基础复位 & 消除移动端点击蓝色背景 & 强力锁定颜色 */
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent !important; 
+        }
+        
+        a, a:visited, a:active {
+            color: inherit !important;
+            text-decoration: none !important;
+            outline: none !important;
+        }
+
+        body { 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            background: var(--bg); color: var(--text); 
+            line-height: 1.8; overflow-x: hidden; width: 100%;
+            transition: background 0.3s;
+        }
+
+        .mono { font-family: 'Fira Code', monospace !important; }
+        ::selection { background: var(--selection); }
+
+        /* 顶部进度条 */
+        #progress { position: fixed; top: 0; left: 0; width: 0%; height: 2px; background: var(--text); z-index: 2001; }
+
+        /* 2. 导航栏加固 */
+        nav { 
+            position: sticky; top: 0; z-index: 1000; background: var(--bg); 
+            border-bottom: 2px solid var(--border); padding: 0 5%; height: 64px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { font-weight: 900; font-size: 1.1rem; letter-spacing: -1px; }
+        .nav-links { display: flex; align-items: center; gap: 20px; }
+        .nav-links a { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .lang-switch { border: 1px solid var(--border); padding: 4px 10px; }
+
+        /* 3. 文章头部：彻底解决标题被遮挡问题 */
+        .post-header { 
+            padding: 140px 20px 60px; 
+            text-align: left; 
+            border-bottom: 1px solid var(--border); 
+            max-width: 1400px; margin: 0 auto; 
+            background: var(--surface);
+        }
+        .post-path { font-family: 'Fira Code', monospace; color: var(--text-muted); font-size: 0.75rem; margin-bottom: 20px; text-transform: uppercase; }
+        .post-header h1 { 
+            font-size: clamp(2rem, 5vw, 3.5rem); 
+            font-weight: 900; 
+            letter-spacing: -2px; 
+            line-height: 1.2; 
+            margin-bottom: 30px;
+            display: block; 
+        }
+
+        /* 4. 响应式布局架构 (1024px 强制单栏) */
+        .main-wrapper { 
+            max-width: 1400px; margin: 0 auto; 
+            display: flex; flex-direction: row; 
+            align-items: stretch;
+        }
+
+        main { flex: 1; min-width: 0; } /* 解决 Flex 容器内代码溢出的核心 */
+
+        article.content { 
+            padding: 60px; border-right: 1px solid var(--border);
+            font-size: 1.125rem;
+        }
+
+        /* 正文样式 */
+        .content h2 { font-size: 1.8rem; margin: 2.5em 0 1.2em; font-weight: 900; border-bottom: 4px solid var(--text); padding-bottom: 10px; display: inline-block; }
+        .content h3 { font-size: 1.4rem; margin: 2em 0 1em; font-weight: 700; color: var(--text); border-left: 4px dashed var(--border); padding-left: 15px; }
+        .content p { margin-bottom: 2.2rem; text-align: justify; }
+        .content a { color: var(--text); text-decoration: underline !important; font-weight: 700; text-underline-offset: 4px; }
+        .content img { max-width: 100%; border: 1px solid var(--border); margin: 30px 0; display: block; height: auto; padding: 5px; }
+
+        /* 5. 代码块彻底锁死修复方案 (防溢出) */
+        pre { 
+            background: var(--code-bg) !important; 
+            padding: 40px 20px 20px !important; 
+            border: 1px solid var(--border) !important;
+            margin: 2.5rem 0; position: relative; 
+            display: block !important; width: 100% !important; 
+            max-width: 100% !important; overflow-x: auto !important; 
+            white-space: pre !important; word-wrap: normal !important;
+            box-sizing: border-box !important;
+            border-radius: 0;
+        }
+        pre code { font-family: 'Fira Code', monospace !important; font-size: 0.95rem !important; display: block; min-width: fit-content; line-height: 1.6; }
+
+        /* 6. 侧边栏加固：解决垂直文字 Bug */
+        aside { 
+            /* --- 彻底美化侧边栏滚动条，干掉大白条 --- */
+
+/* 1. 针对 Chrome, Edge, Safari (WebKit) */
+aside::-webkit-scrollbar {
+    width: 4px;             /* 极细的宽度 */
+    background: transparent;
+}
+
+aside::-webkit-scrollbar-thumb {
+    background: #333;       /* 滚动条滑块颜色：深灰色 */
+    border-radius: 0px;     /* 极客风格用直角 */
+}
+
+aside::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted); /* 悬停时稍微亮一点 */
+}
+
+aside::-webkit-scrollbar-track {
+    background: var(--bg);  /* 滚动条轨道颜色：同背景色 */
+}
+
+/* 2. 针对 Firefox */
+aside {
+    scrollbar-width: thin;          /* 细滚动条 */
+    scrollbar-color: #333 transparent; /* 滑块颜色 轨道颜色 */
+}
+
+/* 3. 如果你希望彻底看不见滚动条，但依然保留滚动功能（更高级感） */
+/* 只需要把上面的 aside::-webkit-scrollbar-thumb 的颜色设为与背景一致，或如下： */
+aside {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;     /* Firefox */
+}
+aside::-webkit-scrollbar {
+    display: none;             /* Chrome, Safari, Opera */
+}
+            width: 360px; flex-shrink: 0; min-width: 320px;
+            padding: 60px 40px; background: var(--surface);
+            position: sticky; top: 64px; height: calc(100vh - 64px); 
+            overflow-y: auto;
+        }
+        .widget { margin-bottom: 60px; width: 100%; }
+        .widget-title { font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 25px; text-transform: uppercase; border-left: 4px solid var(--text); padding-left: 12px; }
+
+        /* 作者简介：强制正常排版 */
+        .bio-text {
+            font-size: 0.9rem; color: var(--text-muted); 
+            margin-top: 15px; line-height: 1.6;
+            word-break: normal !important; 
+            white-space: normal !important; 
+            display: block !important; width: 100% !important;
+            text-align: center;
+        }
+
+        /* 极客下载卡片样式 */
+        .geek-download-card {
+            display: flex; align-items: center; padding: 20px; margin: 30px 0;
+            background: var(--surface); border: 1px solid var(--border);
+            transition: 0.2s; cursor: pointer;
+        }
+        .geek-download-card:hover { border-color: var(--text); background: var(--selection); }
+        .geek-download-card .file-icon { font-size: 2rem; margin-right: 25px; color: var(--text); }
+        .geek-download-card .file-info { flex: 1; }
+        .geek-download-card .file-name { font-family: 'Fira Code', monospace; font-size: 1rem; font-weight: 700; display: block; }
+        .geek-download-card .file-meta { font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-top: 5px; }
+        .geek-download-card .download-label { font-family: 'Fira Code', monospace; font-size: 0.7rem; padding: 5px 12px; border: 1px solid var(--border); color: var(--text-muted); }
+
+        /* 7. 悬浮按钮：高对比度黑白 */
+        .float-bar { position: fixed; bottom: 30px; right: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 1000; }
+        .float-btn { 
+            width: 52px; height: 52px; 
+            background: var(--text) !important; /* 强制可见背景 */
+            color: var(--bg) !important;       /* 强制可见图标 */
+            border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; font-size: 1.3rem; border-radius: 0; 
+            box-shadow: 6px 6px 0px var(--border);
+            transition: 0.1s;
+        }
+        .float-btn i, .float-btn svg { color: var(--bg) !important; pointer-events: none; }
+        .float-btn:active { transform: translate(2px, 2px); box-shadow: none; }
+
+        .copy-btn { position: absolute; top: 0; right: 0; background: var(--border); color: var(--text); border: none; padding: 8px 15px; font-size: 0.65rem; cursor: pointer; font-family: 'Fira Code', monospace; font-weight: 700; text-transform: uppercase; }
+
+        /* 8. 移动端强力适配逻辑 */
+        @media (max-width: 1024px) {
+            .main-wrapper { flex-direction: column !important; }
+            article.content { padding: 40px 25px; border-right: none !important; width: 100% !important; }
+            aside { 
+                width: 100% !important; border-left: none !important; border-top: 2px solid var(--border); 
+                position: static !important; height: auto !important; padding: 40px 25px !important; flex: none;
+            }
+            .post-header { padding: 100px 20px 40px; }
+            /* 代码块移动端全宽 */
+            pre { margin: 2rem -25px; border-left: none; border-right: none; padding: 45px 25px 25px !important; }
+        }
+
+        footer { padding: 80px 20px; text-align: center; border-top: 1px solid var(--border); font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted); background: var(--surface); }
+    </style>
+</head>
+<body>
+    <div id="progress"></div>
+    <nav>
+        <a href="/" class="logo mono">CNFTE://ROOT</a>
+        <div class="nav-links mono">
+            <a href="/en/Link Exchange.html">Link Exchange</a><a href="/en/Privacy Policy.html">Privacy Policy</a><a href="/en/about.html">about</a><a href="/en/公益服务项.html">service</a>
+            <a href="/" class="lang-switch">ZH</a>
+            <span style="cursor: pointer;" onclick="toggleTheme()">[MODE]</span>
+        </div>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-path">/ROOT/NODES/POSTS/2026/01/24</div>
+        <h1>about</h1>
+        <div class="mono" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 15px;">
+            STAMP: 2026-01-24 // REF_ID:  // AUTH: VERIFIED
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <main>
+            <article class="content" id="article-main">
+                <p>I'm CNFTE, a developer and writer passionate about technology exploration and knowledge sharing (GitHub account: cnfte).
+On my blog (cnfte.top), I'm dedicated to publishing easy-to-understand articles on internet technology, covering core technologies such as network protocols, server principles, DNS, and HTTP/HTTPS. I also write practical tutorials and tool usage guides based on my experience.</p>
+<p>I maintain several open-source projects on GitHub, such as an automated proxy and reverse proxy script (geminiproxy), and a reverse proxy script adapted for PHP virtual hosting (geminiproxy for php). These projects aim to provide developers and technology enthusiasts with efficient and reusable tools and learning resources.</p>
+<p>Whether writing code or blog posts, I hope to help more people understand complex technical concepts and solve practical problems through clear thinking and practical content. In this process, I continuously improve my technical depth and communication skills. Interested friends are welcome to follow my open-source projects and blog content!</p>
+            </article>
+
+            <!-- 极客版权区域 -->
+            <section style="padding: 0 60px 60px; font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted);">
+                <div style="border: 1px solid var(--border); padding: 35px; background: var(--surface);">
+                    <div># SOURCE_NODE: <span id="page-url" style="word-break: break-all; color: var(--text);"></span></div>
+                    <div># LICENSE: CC-BY-NC-SA-4.0</div>
+                    <div># INTEGRITY: VALIDATED_ENCRYPTED</div>
+                    <div style="margin-top: 20px; color: var(--text);">// EOF_SIGNAL_RECEIVED</div>
+                </div>
+            </section>
+        </main>
+
+        <aside>
+            <section class="widget">
+                <h3 class="widget-title">IDENT_AUTH</h3>
+                <div style="border: 1px solid var(--border); padding: 35px 20px; text-align: center; background: var(--bg);">
+                    <img src="https://edgeoneimg.cdn.sn/i/696b4d5b58c71_1768639835.webp" style="width: 72px; height: 72px; filter: grayscale(1); border: 1px solid var(--border); padding: 4px; margin-bottom: 20px;" alt="Avatar">
+                    <div class="mono" style="font-weight: 900; font-size: 1.2rem; color: var(--text);">Cnfte</div>
+                    <div class="bio-text mono">"滚滚长江东逝水，浪花淘尽英雄。"</div>
+                </div>
+            </section>
+
+            <section class="widget">
+                <h3 class="widget-title">SYSTEM_LOG</h3>
+                <div style="background: #000; border: 1px solid #333; padding: 20px; font-family: 'Fira Code', monospace; font-size: 0.75rem; color: #00ff00; line-height: 1.6;">
+                    <div>[OK] NODE_STATE: STABLE</div>
+                    <div>[OK] UPTIME: M_READ</div>
+                    <div>[OK] CLOCK: <span id="live-clock">00:00:00</span></div>
+                    <div style="color: #333">-----------------------</div>
+                    <div>$ tail -f blog.log</div>
+                    <div>> Reading node...</div>
+                    <div style="color: #00ff00;">> about...</div>
+                </div>
+            </section>
+
+            
+            <section class="widget">
+                <h3 class="widget-title">STRUCTURE_TOC</h3>
+                <div class="toc-box" id="toc-container">
+                    <div class="toc">
+<ul></ul>
+</div>
+
+                </div>
+            </section>
+            
+        </aside>
+    </div>
+
+    <div class="float-bar">
+        <button class="float-btn" onclick="copyLink()" aria-label="Share"><i class="fa-solid fa-share-nodes"></i></button>
+        <button class="float-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Back to Top"><i class="fa-solid fa-chevron-up"></i></button>
+    </div>
+
+    <footer>
+        <p class="mono">TERMINAL_BLOG_ENGINE v3.2.5 // © 2026 Cnfte</p>
+        <p class="mono" style="font-size: 0.75rem; margin-top: 15px; opacity: 0.5;"><a src="https://www.itdog.cn/ping/cnfte.top">本站已启用CLOUDFLARE CDN防护</a></p>
+    </footer>
+
+    <script>
+        // 1. 初始化 URL 显示和下载卡片
+        document.getElementById('page-url').innerText = window.location.href;
+
+        function renderDownloadCards() {
+            const links = document.querySelectorAll('#article-main a');
+            links.forEach(link => {
+                const text = link.innerText;
+                if (text.startsWith('DOWNLOAD:')) {
+                    const fileName = text.replace('DOWNLOAD:', '');
+                    const fileExt = fileName.split('.').pop().toUpperCase();
+                    let icon = 'fa-file-code';
+                    if (['EXE', 'MSI', 'APK', 'BAT'].includes(fileExt)) icon = 'fa-terminal';
+                    else if (['ZIP', 'RAR', '7Z', 'TAR'].includes(fileExt)) icon = 'fa-file-archive';
+                    else if (!['SH','PY','JS','CPP','C','GO'].includes(fileExt)) icon = 'fa-file-lines';
+
+                    const card = document.createElement('div');
+                    card.className = 'geek-download-card';
+                    card.onclick = () => window.location.href = link.href;
+                    card.innerHTML = `
+                        <div class="file-icon"><i class="fa-solid ${icon}"></i></div>
+                        <div class="file-info">
+                            <span class="file-name">${fileName}</span>
+                            <span class="file-meta">TYPE: ${fileExt} // ACCESS: PUBLIC</span>
+                        </div>
+                        <div class="download-label mono">GET_DATA</div>
+                    `;
+                    link.parentNode.replaceChild(card, link);
+                }
+            });
+        }
+        renderDownloadCards();
+
+        // 2. 系统时钟
+        setInterval(() => {
+            document.getElementById('live-clock').innerText = new Date().toTimeString().split(' ')[0];
+        }, 1000);
+
+        // 3. 滚动进度监听与 TOC 高亮
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            document.getElementById("progress").style.width = (winScroll / height * 100) + "%";
+            
+            const sections = document.querySelectorAll('.content h2, .content h3');
+            const tocLinks = document.querySelectorAll('.toc-box a');
+            let activeId = '';
+            sections.forEach(s => {
+                if (s.getBoundingClientRect().top < 100) activeId = s.getAttribute('id');
+            });
+            tocLinks.forEach(l => {
+                l.classList.toggle('active', l.getAttribute('href') === '#' + activeId);
+            });
+        });
+
+        // 4. 代码块复制增强
+        document.querySelectorAll('pre').forEach(block => {
+            const btn = document.createElement('button');
+            btn.className = 'copy-btn mono';
+            btn.innerText = 'COPY';
+            btn.onclick = () => {
+                navigator.clipboard.writeText(block.querySelector('code').innerText).then(() => {
+                    btn.innerText = 'DONE'; setTimeout(() => btn.innerText = 'COPY', 2000);
+                });
+            };
+            block.appendChild(btn);
+        });
+
+        // 5. 主题控制
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const target = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', target);
+            document.getElementById('mode-text').innerText = target.toUpperCase();
+            localStorage.setItem('geek-theme', target);
+        }
+        
+        const savedTheme = localStorage.getItem('geek-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        if(document.getElementById('mode-text')) document.getElementById('mode-text').innerText = savedTheme.toUpperCase();
+
+        function copyLink() { navigator.clipboard.writeText(window.location.href); alert("LINK_COPIED_TO_CLIPBOARD"); }
+    </script>
+</body>
+</html>

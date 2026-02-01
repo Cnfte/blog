@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- SEO & Metadata -->
+    <title>Internet Science Popularization Series - What is a server? How to get a server? - Cnfteの博客</title>
+    <meta name="description" content="What is a Server? Imagine you're browsing the internet, watching videos, playing games, or chatting online. Where is all this information and content store...">
+    <link rel="icon" href="/favicon.ico">
+    
+    <!-- 极客字体引用：强制同步加载确保移动端第一时间渲染 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #0a0a0a;
+            --text: #ffffff;
+            --text-muted: #a0a0a0;
+            --border: #222222;
+            --code-bg: #050505;
+            --accent: #ffffff;
+            --selection: #333333;
+        }
+
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --surface: #fafafa;
+            --text: #1d1d1f;
+            --text-muted: #505050;
+            --border: #e0e0e0;
+            --code-bg: #f5f5f5;
+            --selection: #eeeeee;
+        }
+
+        /* 1. 基础复位 & 消除移动端点击蓝色背景 & 强力锁定颜色 */
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent !important; 
+        }
+        
+        a, a:visited, a:active {
+            color: inherit !important;
+            text-decoration: none !important;
+            outline: none !important;
+        }
+
+        body { 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            background: var(--bg); color: var(--text); 
+            line-height: 1.8; overflow-x: hidden; width: 100%;
+            transition: background 0.3s;
+        }
+
+        .mono { font-family: 'Fira Code', monospace !important; }
+        ::selection { background: var(--selection); }
+
+        /* 顶部进度条 */
+        #progress { position: fixed; top: 0; left: 0; width: 0%; height: 2px; background: var(--text); z-index: 2001; }
+
+        /* 2. 导航栏加固 */
+        nav { 
+            position: sticky; top: 0; z-index: 1000; background: var(--bg); 
+            border-bottom: 2px solid var(--border); padding: 0 5%; height: 64px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { font-weight: 900; font-size: 1.1rem; letter-spacing: -1px; }
+        .nav-links { display: flex; align-items: center; gap: 20px; }
+        .nav-links a { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .lang-switch { border: 1px solid var(--border); padding: 4px 10px; }
+
+        /* 3. 文章头部：彻底解决标题被遮挡问题 */
+        .post-header { 
+            padding: 140px 20px 60px; 
+            text-align: left; 
+            border-bottom: 1px solid var(--border); 
+            max-width: 1400px; margin: 0 auto; 
+            background: var(--surface);
+        }
+        .post-path { font-family: 'Fira Code', monospace; color: var(--text-muted); font-size: 0.75rem; margin-bottom: 20px; text-transform: uppercase; }
+        .post-header h1 { 
+            font-size: clamp(2rem, 5vw, 3.5rem); 
+            font-weight: 900; 
+            letter-spacing: -2px; 
+            line-height: 1.2; 
+            margin-bottom: 30px;
+            display: block; 
+        }
+
+        /* 4. 响应式布局架构 (1024px 强制单栏) */
+        .main-wrapper { 
+            max-width: 1400px; margin: 0 auto; 
+            display: flex; flex-direction: row; 
+            align-items: stretch;
+        }
+
+        main { flex: 1; min-width: 0; } /* 解决 Flex 容器内代码溢出的核心 */
+
+        article.content { 
+            padding: 60px; border-right: 1px solid var(--border);
+            font-size: 1.125rem;
+        }
+
+        /* 正文样式 */
+        .content h2 { font-size: 1.8rem; margin: 2.5em 0 1.2em; font-weight: 900; border-bottom: 4px solid var(--text); padding-bottom: 10px; display: inline-block; }
+        .content h3 { font-size: 1.4rem; margin: 2em 0 1em; font-weight: 700; color: var(--text); border-left: 4px dashed var(--border); padding-left: 15px; }
+        .content p { margin-bottom: 2.2rem; text-align: justify; }
+        .content a { color: var(--text); text-decoration: underline !important; font-weight: 700; text-underline-offset: 4px; }
+        .content img { max-width: 100%; border: 1px solid var(--border); margin: 30px 0; display: block; height: auto; padding: 5px; }
+
+        /* 5. 代码块彻底锁死修复方案 (防溢出) */
+        pre { 
+            background: var(--code-bg) !important; 
+            padding: 40px 20px 20px !important; 
+            border: 1px solid var(--border) !important;
+            margin: 2.5rem 0; position: relative; 
+            display: block !important; width: 100% !important; 
+            max-width: 100% !important; overflow-x: auto !important; 
+            white-space: pre !important; word-wrap: normal !important;
+            box-sizing: border-box !important;
+            border-radius: 0;
+        }
+        pre code { font-family: 'Fira Code', monospace !important; font-size: 0.95rem !important; display: block; min-width: fit-content; line-height: 1.6; }
+
+        /* 6. 侧边栏加固：解决垂直文字 Bug */
+        aside { 
+            /* --- 彻底美化侧边栏滚动条，干掉大白条 --- */
+
+/* 1. 针对 Chrome, Edge, Safari (WebKit) */
+aside::-webkit-scrollbar {
+    width: 4px;             /* 极细的宽度 */
+    background: transparent;
+}
+
+aside::-webkit-scrollbar-thumb {
+    background: #333;       /* 滚动条滑块颜色：深灰色 */
+    border-radius: 0px;     /* 极客风格用直角 */
+}
+
+aside::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted); /* 悬停时稍微亮一点 */
+}
+
+aside::-webkit-scrollbar-track {
+    background: var(--bg);  /* 滚动条轨道颜色：同背景色 */
+}
+
+/* 2. 针对 Firefox */
+aside {
+    scrollbar-width: thin;          /* 细滚动条 */
+    scrollbar-color: #333 transparent; /* 滑块颜色 轨道颜色 */
+}
+
+/* 3. 如果你希望彻底看不见滚动条，但依然保留滚动功能（更高级感） */
+/* 只需要把上面的 aside::-webkit-scrollbar-thumb 的颜色设为与背景一致，或如下： */
+aside {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;     /* Firefox */
+}
+aside::-webkit-scrollbar {
+    display: none;             /* Chrome, Safari, Opera */
+}
+            width: 360px; flex-shrink: 0; min-width: 320px;
+            padding: 60px 40px; background: var(--surface);
+            position: sticky; top: 64px; height: calc(100vh - 64px); 
+            overflow-y: auto;
+        }
+        .widget { margin-bottom: 60px; width: 100%; }
+        .widget-title { font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 25px; text-transform: uppercase; border-left: 4px solid var(--text); padding-left: 12px; }
+
+        /* 作者简介：强制正常排版 */
+        .bio-text {
+            font-size: 0.9rem; color: var(--text-muted); 
+            margin-top: 15px; line-height: 1.6;
+            word-break: normal !important; 
+            white-space: normal !important; 
+            display: block !important; width: 100% !important;
+            text-align: center;
+        }
+
+        /* 极客下载卡片样式 */
+        .geek-download-card {
+            display: flex; align-items: center; padding: 20px; margin: 30px 0;
+            background: var(--surface); border: 1px solid var(--border);
+            transition: 0.2s; cursor: pointer;
+        }
+        .geek-download-card:hover { border-color: var(--text); background: var(--selection); }
+        .geek-download-card .file-icon { font-size: 2rem; margin-right: 25px; color: var(--text); }
+        .geek-download-card .file-info { flex: 1; }
+        .geek-download-card .file-name { font-family: 'Fira Code', monospace; font-size: 1rem; font-weight: 700; display: block; }
+        .geek-download-card .file-meta { font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-top: 5px; }
+        .geek-download-card .download-label { font-family: 'Fira Code', monospace; font-size: 0.7rem; padding: 5px 12px; border: 1px solid var(--border); color: var(--text-muted); }
+
+        /* 7. 悬浮按钮：高对比度黑白 */
+        .float-bar { position: fixed; bottom: 30px; right: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 1000; }
+        .float-btn { 
+            width: 52px; height: 52px; 
+            background: var(--text) !important; /* 强制可见背景 */
+            color: var(--bg) !important;       /* 强制可见图标 */
+            border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; font-size: 1.3rem; border-radius: 0; 
+            box-shadow: 6px 6px 0px var(--border);
+            transition: 0.1s;
+        }
+        .float-btn i, .float-btn svg { color: var(--bg) !important; pointer-events: none; }
+        .float-btn:active { transform: translate(2px, 2px); box-shadow: none; }
+
+        .copy-btn { position: absolute; top: 0; right: 0; background: var(--border); color: var(--text); border: none; padding: 8px 15px; font-size: 0.65rem; cursor: pointer; font-family: 'Fira Code', monospace; font-weight: 700; text-transform: uppercase; }
+
+        /* 8. 移动端强力适配逻辑 */
+        @media (max-width: 1024px) {
+            .main-wrapper { flex-direction: column !important; }
+            article.content { padding: 40px 25px; border-right: none !important; width: 100% !important; }
+            aside { 
+                width: 100% !important; border-left: none !important; border-top: 2px solid var(--border); 
+                position: static !important; height: auto !important; padding: 40px 25px !important; flex: none;
+            }
+            .post-header { padding: 100px 20px 40px; }
+            /* 代码块移动端全宽 */
+            pre { margin: 2rem -25px; border-left: none; border-right: none; padding: 45px 25px 25px !important; }
+        }
+
+        footer { padding: 80px 20px; text-align: center; border-top: 1px solid var(--border); font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted); background: var(--surface); }
+    </style>
+</head>
+<body>
+    <div id="progress"></div>
+    <nav>
+        <a href="/" class="logo mono">CNFTE://ROOT</a>
+        <div class="nav-links mono">
+            <a href="/en/Link Exchange.html">Link Exchange</a><a href="/en/Privacy Policy.html">Privacy Policy</a><a href="/en/about.html">about</a><a href="/en/公益服务项.html">service</a>
+            <a href="/" class="lang-switch">ZH</a>
+            <span style="cursor: pointer;" onclick="toggleTheme()">[MODE]</span>
+        </div>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-path">/ROOT/NODES/POSTS/2026/01/24</div>
+        <h1>Internet Science Popularization Series - What is a server? How to get a server?</h1>
+        <div class="mono" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 15px;">
+            STAMP: 2026-01-24 // REF_ID: 547d261e // AUTH: VERIFIED
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <main>
+            <article class="content" id="article-main">
+                <h3 id="what-is-a-server">What is a Server?</h3>
+<p>Imagine you're browsing the internet, watching videos, playing games, or chatting online. Where is all this information and content stored? It doesn't just appear out of thin air; it's stored on some very powerful computers – these computers are called <strong>servers</strong>.</p>
+<p>You can think of a server as a <strong>"super manager"</strong> or an <strong>"information warehouse"</strong>. Unlike the computers we use every day for playing games, watching movies, or writing documents, a server's main job is:</p>
+<ul>
+<li><strong>Storing information:</strong> Like a giant warehouse, it stores website data, video files, game data, and much other information.</li>
+<li><strong>Processing requests:</strong> When you open a website or play an online game, your computer sends a "request" to the server. The server, like a diligent manager, receives the request, immediately finds the information you need in the warehouse, and "sends" it back to you.</li>
+<li><strong>Providing services:</strong> It runs 24/7, constantly ready to respond to requests from users all over the world, providing a variety of services such as web browsing, email, file storage, and online gaming.</li>
+</ul>
+<p>So, simply put, a server is a <strong>powerful, always-on computer specifically designed to provide various network services.</strong></p>
+<hr />
+<h3 id="what-are-the-functions-of-a-server">What are the functions of a server?</h3>
+<p>Servers have a wide range of functions and are practically the foundation of our modern internet life. Here are some of the main functions:</p>
+<ol>
+<li>
+<p><strong>Website Hosting (The Home of Websites):</strong></p>
+</li>
+<li>
+<p>Every website you see, such as Taobao, Baidu, or news websites, has all its content (text, images, videos) stored on a server. When you enter a website address, your computer "retrieves" this content from the server to display it to you. </p>
+</li>
+<li><strong>Simple explanation:</strong> It's like you've opened a small shop and need a storefront (server) to display your goods (website content) so that customers (users) can come in to browse and buy.</li>
+<li>
+<p><strong>Storing and Sharing Files (Cloud Storage, Online Storage):</strong></p>
+</li>
+<li>
+<p>Services like Baidu Cloud, Alibaba Cloud, and Dropbox use servers to store your files, allowing you to access and share them on any device. </p>
+</li>
+<li>
+<p><strong>Simple explanation:</strong> It's like having a huge external hard drive (server) where you can store photos, videos, and files, and then access them anytime, anywhere via the internet, or share them with friends. 3. <strong>Running Applications and Games (Online Games, APP Background Processes):</strong></p>
+</li>
+<li>
+<p>Most online games you play, such as Honor of Kings and PUBG Mobile, require servers to manage and process their game data, player information, and game progress. </p>
+</li>
+<li>Many mobile apps, such as WeChat and TikTok, also rely on servers for background data processing and information push notifications. </li>
+<li><strong>Simplified explanation:</strong>  Imagine playing a large-scale multiplayer online game; all players are in the same virtual world, and this world is maintained by a server, ensuring everyone can play synchronously.</li>
+<li>
+<p><strong>Providing Email Services (Email):</strong></p>
+</li>
+<li>
+<p>The email services you use, such as QQ Mail, Gmail, and NetEase Mail, rely on email servers for sending, receiving, and storing emails. </p>
+</li>
+<li><strong>Simplified explanation:</strong>  It's like a post office (email server) that receives, stores, and delivers your emails.</li>
+<li>
+<p><strong>Database Services (Information Management):</strong></p>
+</li>
+<li>
+<p>Many applications need to store large amounts of structured data, such as user information and order information. This data is stored in database servers for quick retrieval and management. </p>
+</li>
+<li><strong>Simplified explanation:</strong> It's like a super-detailed phone book or ledger (database server) that helps you quickly find someone's contact information or records.</li>
+</ol>
+<p>In short, servers are the <strong>"unsung heroes"</strong> of the internet world. Without them, we wouldn't be able to browse websites smoothly, use apps, play games, or send and receive emails.</p>
+<hr />
+<h3 id="how-to-obtain-a-cloud-server-taking-alibaba-clouds-hangzhou-zhejiang-cloud-server-as-an-example">How to Obtain a Cloud Server (Taking Alibaba Cloud's Hangzhou, Zhejiang Cloud Server as an Example)</h3>
+<p>Now that we know how important servers are, how can we get one? The most convenient and fastest way is to rent a <strong>cloud server</strong>. A cloud server is like "moving" a real server onto the internet; you can use it on demand, making it very flexible.</p>
+<p>Let's take <strong>Alibaba Cloud's cloud server in Hangzhou, Zhejiang</strong> as an example to briefly explain how to obtain one:</p>
+<ol>
+<li>
+<p><strong>Register an Alibaba Cloud Account:</strong></p>
+</li>
+<li>
+<p>First, you need to register an account on the official Alibaba Cloud website ([www.aliyun.com]). This process is similar to registering for a regular website account, requiring information such as your phone number and email address, and possibly real-name verification. 1. <strong>Register an account:</strong></p>
+</li>
+</ol>
+<p>Register an account on Alibaba Cloud (http://www.aliyun.com). This process is similar to registering a regular website account, requiring information such as a mobile phone number and email address, and may also require real-name verification.
+2. <strong>Access the cloud server purchase page:</strong></p>
+<ul>
+<li>
+<p>After logging into your Alibaba Cloud account, find the "Products" or "Computing" category on the website, and then select "ECS (Elastic Compute Service)". 3. <strong>Select Configuration (like choosing computer specifications):</strong></p>
+</li>
+<li>
+<p><strong>Region and Availability Zone:</strong> Here you need to select "Mainland China" -&gt; "East China 2 (Shanghai)" or "South China 1 (Shenzhen)," etc. If you want to choose Hangzhou, Zhejiang, you would typically select "East China 2 (Shanghai)" or "North China 1 (Qingdao)," etc., as Alibaba Cloud's data centers are distributed throughout the country, and the Hangzhou area is usually categorized under the East China region. <strong>(Note: Alibaba Cloud's region selection is based on major regions. Hangzhou belongs to the East China region, so you can choose "East China 2 (Shanghai)" or "East China 1 (Hangzhou)," depending on Alibaba Cloud's regional division strategy at the time, but there will usually be an option close to Hangzhou.)</strong></p>
+</li>
+<li><strong>Instance Type:</strong> This determines the server's performance, such as the number of CPU cores and memory size. It's like choosing i3, i5, or i7 processors, or 8GB or 16GB of RAM when buying a computer. Beginners can start with some entry-level configurations. </li>
+<li><strong>Image (Operating System):</strong> You need to choose which operating system to install on the server. The most common are Windows Server or Linux (such as CentOS, Ubuntu). Linux is more commonly used in website hosting and development, while Windows is more familiar to some users. </li>
+<li><strong>System Disk and Data Disk:</strong> These are the server's hard drives, used to install the operating system and store data. </li>
+<li><strong>Network:</strong> Configure the server's network, including the public IP address (allowing others to access your server) and bandwidth (data transfer speed). </li>
+<li><strong>Security Group:</strong> Set firewall rules to determine which network ports are open and which are closed, to protect server security.</li>
+<li>
+<p><strong>Set Password or Key:</strong></p>
+</li>
+<li>
+<p>For secure server login, you need to set a login password or generate an SSH key pair (commonly used in Linux).</p>
+</li>
+<li>
+<p><strong>Confirm Order and Pay:</strong></p>
+</li>
+<li>
+<p>Check your selected configuration and price, then proceed with payment. Alibaba Cloud usually offers new user discounts, so keep an eye out for those.</p>
+</li>
+<li>
+<p><strong>Creation Successful, Obtain Server Information:</strong></p>
+</li>
+<li>
+<p>After payment is complete, Alibaba Cloud will create a cloud server for you. After a few minutes, you can see your server in the Alibaba Cloud console and obtain its public IP address, login username, and password (or key). 7. <strong>Logging into the Server:</strong></p>
+</li>
+<li>
+<p>Use the remote login tool corresponding to your chosen operating system (such as Windows' built-in "Remote Desktop Connection," or Linux SSH client tools like PuTTY or Xshell). Enter the server's public IP address, username, and password to log in to your cloud server.</p>
+</li>
+</ul>
+<p><strong>Beginner's Summary:</strong> Renting a cloud server is like going to a large "computer rental company," telling them what kind of computer you need (configuration), and in which city (region) you want it located. They will prepare a computer for you, and you pay monthly or annually.</p>
+<hr />
+<h3 id="what-you-need-to-build-your-own-server-simple-process">What You Need to Build Your Own Server (Simple Process)</h3>
+<p>If you don't want to rent a cloud server and instead want to build your own server at home, you'll need more things and some technical knowledge. We'll explain it in the simplest way:</p>
+<ol>
+<li>
+<p><strong>A Computer That Never Sleeps (Hardware):</strong></p>
+</li>
+<li>
+<p><strong>A computer host:</strong> This computer needs to be more stable and perform better than your everyday computer because it needs to run 24/7 without interruption. It can be an old computer, but ideally, it should be stable and have low power consumption. </p>
+</li>
+<li><strong>Stable power supply:</strong> Ensure your computer has a reliable power supply, preferably with a UPS (uninterruptible power supply) to provide power during outages and prevent data loss. </li>
+<li><strong>Network equipment:</strong></li>
+<li><strong>Router:</strong> Your home router is essential; it connects your computer to the internet. </li>
+<li><strong>Stable broadband:</strong> You need fast, unlimited broadband. Furthermore, your broadband needs to support a <strong>public IP address</strong> and allow <strong>port forwarding</strong> (more on this later). Many home broadband connections don't support this by default or require an additional application. </li>
+<li><strong>(Optional) Case and cooling:</strong> If you're using a desktop computer, ensure good cooling, as the server will be running under high load for extended periods.</li>
+<li>
+<p><strong>A Home That's Always Online (Network Environment):</strong></p>
+</li>
+<li>
+<p><strong>Public IP address:</strong> This is the most important! Like your house number, others need this address to find your server. Many home broadband connections have dynamic IPs (which change), so it's best to apply for a <strong>static public IP address</strong>. * <strong>Port Forwarding (Opening a Door):</strong> Your router is like the front door of your house, and your server is like a room inside. For others to access your server, you need to open a "small door" (port forwarding) on ​​your router, allowing specific types of access (such as accessing port 80 or 443 for websites) to go directly to your server room.</p>
+</li>
+<li><strong>Domain Name (Easy-to-Remember Name):</strong> If you want others to access your server using an easy-to-remember name (such as www.yourname.com) instead of a string of numbers (IP address), you need to register a domain name and then point that domain name to your public IP address. To access your server using a domain name (e.g., http://www.yourname.com) instead of a string of numbers (IP address), you need to register a domain name and then point that domain name to your public IP address.</li>
+<li>
+<p><strong>An "obedient" housekeeper (Operating System and Software):</strong></p>
+</li>
+<li>
+<p><strong>Operating System:</strong> You need to install a server operating system on your computer, such as the previously mentioned Linux (CentOS, Ubuntu) or Windows Server. Linux is generally more suitable for servers and is free.</p>
+</li>
+<li><strong>Server Software:</strong> Install the appropriate software depending on what you want your server to do. + <strong>Website Setup:</strong> Requires installing web server software (such as Apache, Nginx), database software (such as MySQL, PostgreSQL), and a programming language environment (such as PHP, Python). </li>
+<li><strong>File Storage:</strong>  You can install FTP server software or Samba server software. </li>
+<li><strong>Other Services:</strong> Such as email server software, game server software, etc.</li>
+<li>
+<p><strong>Security Protection (Against Malicious Actors):</strong></p>
+</li>
+<li>
+<p><strong>Firewall:</strong> Both the server and router need to be configured with firewalls, allowing only necessary ports to be open to the outside world and blocking unnecessary access. </p>
+</li>
+<li><strong>Security Updates:</strong>  Promptly update the operating system and all software patches to prevent hackers from exploiting vulnerabilities. </li>
+<li><strong>Strong Passwords:</strong> Use strong passwords Use complex and difficult-to-guess passwords.</li>
+</ol>
+<p><strong>Beginner's Summary:</strong> Setting up your own server is like opening a "24-hour convenience store" at home. You need:</p>
+<ul>
+<li>A <strong>computer that runs 24/7 and has decent performance</strong> (hardware).</li>
+<li><strong>Broadband that allows people outside to find your home address</strong> (public IP address), and you need to <strong>open a "door" at your entrance (router)</strong> (port forwarding) to allow specific people to enter.</li>
+<li>Install <strong>a working system and tools</strong> on the computer (operating system and software).</li>
+<li>Implement <strong>security measures to prevent theft and damage</strong> (security protection).</li>
+</ul>
+<p>The advantage of setting up your own server is low cost (if you use an old computer), but the disadvantage is the high technical barrier; you need to solve a series of problems such as networking, security, and maintenance yourself, and the stability and speed of home broadband may not be as good as a professional data center.</p>
+            </article>
+
+            <!-- 极客版权区域 -->
+            <section style="padding: 0 60px 60px; font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted);">
+                <div style="border: 1px solid var(--border); padding: 35px; background: var(--surface);">
+                    <div># SOURCE_NODE: <span id="page-url" style="word-break: break-all; color: var(--text);"></span></div>
+                    <div># LICENSE: CC-BY-NC-SA-4.0</div>
+                    <div># INTEGRITY: VALIDATED_ENCRYPTED</div>
+                    <div style="margin-top: 20px; color: var(--text);">// EOF_SIGNAL_RECEIVED</div>
+                </div>
+            </section>
+        </main>
+
+        <aside>
+            <section class="widget">
+                <h3 class="widget-title">IDENT_AUTH</h3>
+                <div style="border: 1px solid var(--border); padding: 35px 20px; text-align: center; background: var(--bg);">
+                    <img src="https://edgeoneimg.cdn.sn/i/696b4d5b58c71_1768639835.webp" style="width: 72px; height: 72px; filter: grayscale(1); border: 1px solid var(--border); padding: 4px; margin-bottom: 20px;" alt="Avatar">
+                    <div class="mono" style="font-weight: 900; font-size: 1.2rem; color: var(--text);">Cnfte</div>
+                    <div class="bio-text mono">"滚滚长江东逝水，浪花淘尽英雄。"</div>
+                </div>
+            </section>
+
+            <section class="widget">
+                <h3 class="widget-title">SYSTEM_LOG</h3>
+                <div style="background: #000; border: 1px solid #333; padding: 20px; font-family: 'Fira Code', monospace; font-size: 0.75rem; color: #00ff00; line-height: 1.6;">
+                    <div>[OK] NODE_STATE: STABLE</div>
+                    <div>[OK] UPTIME: 28M_READ</div>
+                    <div>[OK] CLOCK: <span id="live-clock">00:00:00</span></div>
+                    <div style="color: #333">-----------------------</div>
+                    <div>$ tail -f blog.log</div>
+                    <div>> Reading node...</div>
+                    <div style="color: #00ff00;">> Internet Sci...</div>
+                </div>
+            </section>
+
+            
+            <section class="widget">
+                <h3 class="widget-title">STRUCTURE_TOC</h3>
+                <div class="toc-box" id="toc-container">
+                    <div class="toc">
+<ul>
+<li><a href="#what-is-a-server">What is a Server?</a></li>
+<li><a href="#what-are-the-functions-of-a-server">What are the functions of a server?</a></li>
+<li><a href="#how-to-obtain-a-cloud-server-taking-alibaba-clouds-hangzhou-zhejiang-cloud-server-as-an-example">How to Obtain a Cloud Server (Taking Alibaba Cloud's Hangzhou, Zhejiang Cloud Server as an Example)</a></li>
+<li><a href="#what-you-need-to-build-your-own-server-simple-process">What You Need to Build Your Own Server (Simple Process)</a></li>
+</ul>
+</div>
+
+                </div>
+            </section>
+            
+        </aside>
+    </div>
+
+    <div class="float-bar">
+        <button class="float-btn" onclick="copyLink()" aria-label="Share"><i class="fa-solid fa-share-nodes"></i></button>
+        <button class="float-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Back to Top"><i class="fa-solid fa-chevron-up"></i></button>
+    </div>
+
+    <footer>
+        <p class="mono">TERMINAL_BLOG_ENGINE v3.2.5 // © 2026 Cnfte</p>
+        <p class="mono" style="font-size: 0.75rem; margin-top: 15px; opacity: 0.5;"><a src="https://www.itdog.cn/ping/cnfte.top">本站已启用CLOUDFLARE CDN防护</a></p>
+    </footer>
+
+    <script>
+        // 1. 初始化 URL 显示和下载卡片
+        document.getElementById('page-url').innerText = window.location.href;
+
+        function renderDownloadCards() {
+            const links = document.querySelectorAll('#article-main a');
+            links.forEach(link => {
+                const text = link.innerText;
+                if (text.startsWith('DOWNLOAD:')) {
+                    const fileName = text.replace('DOWNLOAD:', '');
+                    const fileExt = fileName.split('.').pop().toUpperCase();
+                    let icon = 'fa-file-code';
+                    if (['EXE', 'MSI', 'APK', 'BAT'].includes(fileExt)) icon = 'fa-terminal';
+                    else if (['ZIP', 'RAR', '7Z', 'TAR'].includes(fileExt)) icon = 'fa-file-archive';
+                    else if (!['SH','PY','JS','CPP','C','GO'].includes(fileExt)) icon = 'fa-file-lines';
+
+                    const card = document.createElement('div');
+                    card.className = 'geek-download-card';
+                    card.onclick = () => window.location.href = link.href;
+                    card.innerHTML = `
+                        <div class="file-icon"><i class="fa-solid ${icon}"></i></div>
+                        <div class="file-info">
+                            <span class="file-name">${fileName}</span>
+                            <span class="file-meta">TYPE: ${fileExt} // ACCESS: PUBLIC</span>
+                        </div>
+                        <div class="download-label mono">GET_DATA</div>
+                    `;
+                    link.parentNode.replaceChild(card, link);
+                }
+            });
+        }
+        renderDownloadCards();
+
+        // 2. 系统时钟
+        setInterval(() => {
+            document.getElementById('live-clock').innerText = new Date().toTimeString().split(' ')[0];
+        }, 1000);
+
+        // 3. 滚动进度监听与 TOC 高亮
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            document.getElementById("progress").style.width = (winScroll / height * 100) + "%";
+            
+            const sections = document.querySelectorAll('.content h2, .content h3');
+            const tocLinks = document.querySelectorAll('.toc-box a');
+            let activeId = '';
+            sections.forEach(s => {
+                if (s.getBoundingClientRect().top < 100) activeId = s.getAttribute('id');
+            });
+            tocLinks.forEach(l => {
+                l.classList.toggle('active', l.getAttribute('href') === '#' + activeId);
+            });
+        });
+
+        // 4. 代码块复制增强
+        document.querySelectorAll('pre').forEach(block => {
+            const btn = document.createElement('button');
+            btn.className = 'copy-btn mono';
+            btn.innerText = 'COPY';
+            btn.onclick = () => {
+                navigator.clipboard.writeText(block.querySelector('code').innerText).then(() => {
+                    btn.innerText = 'DONE'; setTimeout(() => btn.innerText = 'COPY', 2000);
+                });
+            };
+            block.appendChild(btn);
+        });
+
+        // 5. 主题控制
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const target = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', target);
+            document.getElementById('mode-text').innerText = target.toUpperCase();
+            localStorage.setItem('geek-theme', target);
+        }
+        
+        const savedTheme = localStorage.getItem('geek-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        if(document.getElementById('mode-text')) document.getElementById('mode-text').innerText = savedTheme.toUpperCase();
+
+        function copyLink() { navigator.clipboard.writeText(window.location.href); alert("LINK_COPIED_TO_CLIPBOARD"); }
+    </script>
+</body>
+</html>

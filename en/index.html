@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO 核心优化：采用百度 & Lighthouse 推荐的高质量元数据 -->
+    <title>Cnfte Space：极简个人技术博客，分享GitHub资源与网络协议科普</title>
+    <meta name="description" content="Cnfte Space，探索技术与美学的极简个人空间。专注分享GitHub优质开发者资源、网络协议深度科普及AI接口应用教程，记录技术成长与灵感。">
+    <meta name="keywords" content="Cnfte, Cnfte Space, 个人博客, 技术博客, GitHub资源, 网络协议科普, Gemini API反代, 开发者资源">
+    <link rel="icon" href="/favicon.ico">
+    
+    <!-- 极客字体引用：强制同步加载以解决移动端渲染问题 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #050505;
+            --text: #ffffff;
+            --text-muted: #888888;
+            --border: #222222;
+            --accent: #ffffff;
+            --selection: #333333;
+            --trans: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --surface: #fafafa;
+            --text: #1d1d1f;
+            --text-muted: #505050; /* 加深确保对比度通过测试 */
+            --border: #e0e0e0;
+            --selection: #eeeeee;
+        }
+
+        /* 1. 基础复位 & 消除移动端点击蓝色背景 */
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent !important; 
+        }
+        
+        /* 强力锁定链接颜色，防止变蓝/变紫 */
+        a, a:visited, a:active { color: inherit !important; text-decoration: none !important; }
+
+        body { 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            background: var(--bg); color: var(--text); 
+            line-height: 1.6; transition: background 0.3s; 
+            overflow-x: hidden; width: 100%;
+        }
+
+        .mono { font-family: 'Fira Code', monospace !important; }
+        ::selection { background: var(--selection); }
+
+        /* 2. 极简顶部导航 - 包含语言切换 */
+        nav { 
+            position: sticky; top: 0; z-index: 1000; background: var(--bg); 
+            border-bottom: 2px solid var(--border); padding: 0 5%; height: 64px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { font-weight: 900; font-size: 1.1rem; letter-spacing: -1px; }
+        .nav-links { display: flex; align-items: center; gap: 20px; }
+        .nav-links a { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .lang-switch { border: 1px solid var(--border); padding: 4px 10px; border-radius: 0; transition: var(--trans); }
+        .lang-switch:hover { border-color: var(--text); background: var(--surface); }
+
+        /* 3. 终端风格 Hero */
+        .hero { 
+            padding: 120px 20px; text-align: center; border-bottom: 1px solid var(--border);
+            background: var(--surface); position: relative;
+        }
+        .hero h1 { font-size: clamp(2.2rem, 8vw, 4.2rem); font-weight: 900; margin-bottom: 15px; letter-spacing: -3px; line-height: 1; }
+        .hero p { font-family: 'Fira Code', monospace; color: var(--text-muted); font-size: 1rem; opacity: 0.9; }
+        .hero p::after { content: "_"; animation: blink 1s infinite; color: var(--text); }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* 4. 响应式布局架构 (1024px 断点) */
+        .main-grid { 
+            max-width: 1400px; margin: 0 auto; 
+            display: flex; flex-direction: row; 
+        }
+
+        /* 文章列表 */
+        .post-container { flex: 1; border-right: 1px solid var(--border); min-width: 0; }
+        
+        .post-card { 
+            padding: 60px; border-bottom: 1px solid var(--border); 
+            transition: var(--trans); display: block; position: relative;
+        }
+        .post-card:hover { background: var(--surface); }
+        
+        .post-meta { font-family: 'Fira Code', monospace; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 18px; display: flex; gap: 20px; flex-wrap: wrap; }
+        .post-title { font-size: 2.2rem; font-weight: 800; margin-bottom: 15px; line-height: 1.2; letter-spacing: -1px; }
+        .post-summary { color: var(--text-muted); font-size: 1.05rem; max-width: 850px; line-height: 1.7; text-align: justify; }
+
+        /* 封面图展示 */
+        .post-img-box { 
+            width: 100%; height: 220px; background: var(--border); 
+            margin-bottom: 25px; overflow: hidden; display: flex; 
+            align-items: center; justify-content: center;
+        }
+        .post-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); transition: 0.5s; }
+        .post-card:hover .post-img { filter: grayscale(0); transform: scale(1.05); }
+
+        /* 5. 侧边栏加固 */
+        aside { 
+            /* --- 彻底美化侧边栏滚动条，干掉大白条 --- */
+
+/* 1. 针对 Chrome, Edge, Safari (WebKit) */
+aside::-webkit-scrollbar {
+    width: 4px;             /* 极细的宽度 */
+    background: transparent;
+}
+
+aside::-webkit-scrollbar-thumb {
+    background: #333;       /* 滚动条滑块颜色：深灰色 */
+    border-radius: 0px;     /* 极客风格用直角 */
+}
+
+aside::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted); /* 悬停时稍微亮一点 */
+}
+
+aside::-webkit-scrollbar-track {
+    background: var(--bg);  /* 滚动条轨道颜色：同背景色 */
+}
+
+/* 2. 针对 Firefox */
+aside {
+    scrollbar-width: thin;          /* 细滚动条 */
+    scrollbar-color: #333 transparent; /* 滑块颜色 轨道颜色 */
+}
+
+/* 3. 如果你希望彻底看不见滚动条，但依然保留滚动功能（更高级感） */
+/* 只需要把上面的 aside::-webkit-scrollbar-thumb 的颜色设为与背景一致，或如下： */
+aside {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;     /* Firefox */
+}
+aside::-webkit-scrollbar {
+    display: none;             /* Chrome, Safari, Opera */
+}
+            width: 360px; flex-shrink: 0; min-width: 320px;
+            padding: 60px 40px; background: var(--surface); 
+            position: sticky; top: 64px; height: calc(100vh - 64px); overflow-y: auto;
+        }
+        .widget { margin-bottom: 60px; width: 100%; }
+        .widget-title { 
+            font-family: 'Fira Code', monospace; font-size: 0.75rem; font-weight: 700; 
+            text-transform: uppercase; color: var(--text); margin-bottom: 25px; 
+            display: flex; align-items: center; border-left: 4px solid var(--text); padding-left: 12px;
+        }
+
+        .author-box { text-align: center; border: 1px solid var(--border); padding: 30px 20px; background: var(--bg); }
+        .avatar { width: 80px; height: 80px; filter: grayscale(1); border: 1px solid var(--border); padding: 4px; margin-bottom: 20px; }
+        .bio-text { font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+
+        .status-panel { 
+            background: #000; border: 1px solid #333; 
+            padding: 20px; font-family: 'Fira Code', monospace; 
+            font-size: 0.75rem; line-height: 2; color: #00ff00; 
+        }
+
+        /* 6. 移动端强制适配：1024px 以下切换单栏 */
+        @media (max-width: 1024px) {
+            .main-grid { flex-direction: column !important; }
+            .post-container { border-right: none !important; }
+            aside { 
+                width: 100% !important; border-left: none !important; border-top: 1px solid var(--border); 
+                position: static !important; height: auto !important; padding: 40px 25px !important;
+            }
+            .post-card { padding: 45px 25px; }
+            .post-title { font-size: 1.8rem; }
+            .hero { padding: 80px 20px; }
+            .post-img-box { height: 180px; }
+        }
+
+        footer { 
+            text-align: center; padding: 80px 20px; border-top: 1px solid var(--border);
+            font-family: 'Fira Code', monospace; font-size: 0.8rem; color: var(--text-muted); background: var(--surface);
+        }
+
+        .env-toggle { cursor: pointer; border: 1px solid var(--border); padding: 6px 12px; font-size: 0.75rem; font-weight: 700; }
+        .env-toggle:hover { background: var(--text); color: var(--bg); }
+    </style>
+</head>
+<body>
+    <nav aria-label="Main Navigation">
+        <a href="/" class="logo mono">CNFTE://ROOT</a>
+        <div class="nav-links mono">
+            <a href="/en/Link Exchange.html">Link Exchange</a><a href="/en/Privacy Policy.html">Privacy Policy</a><a href="/en/about.html">about</a><a href="/en/公益服务项.html">service</a>
+            <!-- 语言切换按钮 -->
+            <a href="/" class="lang-switch" title="Switch Language">ZH</a>
+            <span class="env-toggle mono" onclick="toggleTheme()" aria-label="Toggle Dark Mode">MODE: <span id="mode-text">DARK</span></span>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h1 class="mono">CNFTE</h1>
+        <p class="mono">莫愁前路无知己，天下谁人不识君？</p>
+    </header>
+
+    <div class="main-grid">
+        <main class="post-container">
+            <section aria-label="Article Nodes">
+                
+                <!-- 链接指向持久化路径 /archive/UID/ -->
+                <a href="/en/archive/48c818d4/" class="post-card" aria-label="Read Post: A compilation of Cloudflare SaaS optimized IP addresses and domains built by the community.">
+                    <div class="post-meta">
+                        <span>[2026-01-25]</span>
+                        <span>REF_ID:48c818d4</span>
+                        <span class="mono">LEN:5M</span>
+                    </div>
+                    
+                    
+
+                    <h2 class="post-title">A compilation of Cloudflare SaaS optimized IP addresses and domains built by the community.</h2>
+                    <p class="post-summary">1. Introduction As is well known, Cloudflare provides free unlimited traffic and DDoS protection via its CDN, but it has been criticized for its poor node ...</p>
+                </a>
+                
+                <!-- 链接指向持久化路径 /archive/UID/ -->
+                <a href="/en/archive/3fbd1841/" class="post-card" aria-label="Read Post: December 22, 2025: The Kuaishou live streaming platform is involved in a pornography scandal; a dark moment for the Chinese internet.">
+                    <div class="post-meta">
+                        <span>[2026-01-24]</span>
+                        <span>REF_ID:3fbd1841</span>
+                        <span class="mono">LEN:12M</span>
+                    </div>
+                    
+                    
+
+                    <h2 class="post-title">December 22, 2025: The Kuaishou live streaming platform is involved in a pornography scandal; a dark moment for the Chinese internet.</h2>
+                    <p class="post-summary">I. Background of the Incident On the evening of December 22, 2025, several leading Chinese social media and content platforms experienced abnormal situatio...</p>
+                </a>
+                
+                <!-- 链接指向持久化路径 /archive/UID/ -->
+                <a href="/en/archive/79f26ec1/" class="post-card" aria-label="Read Post: Gemini reverse proxy script: No Cloudflare or Deno required, easily set up a stable proxy with Nginx.">
+                    <div class="post-meta">
+                        <span>[2026-01-24]</span>
+                        <span>REF_ID:79f26ec1</span>
+                        <span class="mono">LEN:10M</span>
+                    </div>
+                    
+                    
+
+                    <h2 class="post-title">Gemini reverse proxy script: No Cloudflare or Deno required, easily set up a stable proxy with Nginx.</h2>
+                    <p class="post-summary">Introduction: Bypassing the GFW to Enjoy the Gemini API For users in mainland China, accessing the Gemini API has always been hindered by the Great Firewal...</p>
+                </a>
+                
+                <!-- 链接指向持久化路径 /archive/UID/ -->
+                <a href="/en/archive/274e1022/" class="post-card" aria-label="Read Post: The JMcomic version download site has officially launched.">
+                    <div class="post-meta">
+                        <span>[2026-01-24]</span>
+                        <span>REF_ID:274e1022</span>
+                        <span class="mono">LEN:2M</span>
+                    </div>
+                    
+                    
+
+                    <h2 class="post-title">The JMcomic version download site has officially launched.</h2>
+                    <p class="post-summary">Using premium potatoes (referring to a highquality server/network) ensures a good basic download speed. Supported versions: JMComic2: 1.6.51.8.0 JMComic3: ...</p>
+                </a>
+                
+                <!-- 链接指向持久化路径 /archive/UID/ -->
+                <a href="/en/archive/0e1c5068/" class="post-card" aria-label="Read Post: Internet Science Popularization Series - What is DNS?">
+                    <div class="post-meta">
+                        <span>[2026-01-24]</span>
+                        <span>REF_ID:0e1c5068</span>
+                        <span class="mono">LEN:17M</span>
+                    </div>
+                    
+                    
+
+                    <h2 class="post-title">Internet Science Popularization Series - What is DNS?</h2>
+                    <p class="post-summary">What is DNS? Imagine the internet as a vast city, home to countless websites and servers, each with its own "address," which is a string of numbers like 19...</p>
+                </a>
+                
+                <!-- 链接指向持久化路径 /archive/UID/ -->
+                <a href="/en/archive/21a8968e/" class="post-card" aria-label="Read Post: Internet Science Popularization Series - What are HTTP and HTTPS?">
+                    <div class="post-meta">
+                        <span>[2026-01-24]</span>
+                        <span>REF_ID:21a8968e</span>
+                        <span class="mono">LEN:17M</span>
+                    </div>
+                    
+                    
+
+                    <h2 class="post-title">Internet Science Popularization Series - What are HTTP and HTTPS?</h2>
+                    <p class="post-summary">Hello everyone! Today we're going to talk about two terms we often encounter when browsing the internet: HTTP and HTTPS. They sound a bit technical, but th...</p>
+                </a>
+                
+                <!-- 链接指向持久化路径 /archive/UID/ -->
+                <a href="/en/archive/8f2b41bb/" class="post-card" aria-label="Read Post: Internet Science Popularization Series - What is ICP Registration? How to obtain a registered domain name and alternative solutions.">
+                    <div class="post-meta">
+                        <span>[2026-01-24]</span>
+                        <span>REF_ID:8f2b41bb</span>
+                        <span class="mono">LEN:25M</span>
+                    </div>
+                    
+                    
+
+                    <h2 class="post-title">Internet Science Popularization Series - What is ICP Registration? How to obtain a registered domain name and alternative solutions.</h2>
+                    <p class="post-summary">I. What is China's Domain Name Registration? Simply put, China's domain name registration (also known as "domain registration" or "ICP registration") refer...</p>
+                </a>
+                
+                <!-- 链接指向持久化路径 /archive/UID/ -->
+                <a href="/en/archive/4f04c8db/" class="post-card" aria-label="Read Post: Internet Science Popularization Series - What are IPv4 and IPv6?">
+                    <div class="post-meta">
+                        <span>[2026-01-24]</span>
+                        <span>REF_ID:4f04c8db</span>
+                        <span class="mono">LEN:26M</span>
+                    </div>
+                    
+                    
+
+                    <h2 class="post-title">Internet Science Popularization Series - What are IPv4 and IPv6?</h2>
+                    <p class="post-summary">1. What are IPv4 / IPv6? Imagine the internet as a giant city, and every device connected to the internet (computers, mobile phones, servers, etc.) is like...</p>
+                </a>
+                
+                <!-- 链接指向持久化路径 /archive/UID/ -->
+                <a href="/en/archive/1b771888/" class="post-card" aria-label="Read Post: Internet Science Popularization Series - What is the Great Firewall of China?">
+                    <div class="post-meta">
+                        <span>[2026-01-24]</span>
+                        <span>REF_ID:1b771888</span>
+                        <span class="mono">LEN:20M</span>
+                    </div>
+                    
+                    
+
+                    <h2 class="post-title">Internet Science Popularization Series - What is the Great Firewall of China?</h2>
+                    <p class="post-summary">What is the Great Firewall of China? Simply put, the Great Firewall of China is a system and a series of policies used by the Chinese government to control...</p>
+                </a>
+                
+                <!-- 链接指向持久化路径 /archive/UID/ -->
+                <a href="/en/archive/215540e4/" class="post-card" aria-label="Read Post: Internet Science Popularization Series - What is a Transmission Protocol?">
+                    <div class="post-meta">
+                        <span>[2026-01-24]</span>
+                        <span>REF_ID:215540e4</span>
+                        <span class="mono">LEN:15M</span>
+                    </div>
+                    
+                    
+
+                    <h2 class="post-title">Internet Science Popularization Series - What is a Transmission Protocol?</h2>
+                    <p class="post-summary">Imagine we live in a large city, and every day we need to transport goods (information) from one place to another using various means of transportation (ca...</p>
+                </a>
+                
+                <!-- 链接指向持久化路径 /archive/UID/ -->
+                <a href="/en/archive/0c229ed5/" class="post-card" aria-label="Read Post: Internet Science Popularization Series - What is a protocol? How to set up a node with an encryption protocol?">
+                    <div class="post-meta">
+                        <span>[2026-01-24]</span>
+                        <span>REF_ID:0c229ed5</span>
+                        <span class="mono">LEN:16M</span>
+                    </div>
+                    
+                    
+
+                    <h2 class="post-title">Internet Science Popularization Series - What is a protocol? How to set up a node with an encryption protocol?</h2>
+                    <p class="post-summary">We need to clarify a concept first: the tools we commonly use now (such as Shadowsocks, V2Ray, Singbox) are technically classified more as "proxies" rather...</p>
+                </a>
+                
+                <!-- 链接指向持久化路径 /archive/UID/ -->
+                <a href="/en/archive/41d83da0/" class="post-card" aria-label="Read Post: Internet Science Popularization Series - What is a domain name? How to obtain and configure a domain name?">
+                    <div class="post-meta">
+                        <span>[2026-01-24]</span>
+                        <span>REF_ID:41d83da0</span>
+                        <span class="mono">LEN:21M</span>
+                    </div>
+                    
+                    
+
+                    <h2 class="post-title">Internet Science Popularization Series - What is a domain name? How to obtain and configure a domain name?</h2>
+                    <p class="post-summary">What is a Domain Name? Imagine the internet as a giant city, inhabited by countless websites and servers (where website content is stored). Each server has...</p>
+                </a>
+                
+                <!-- 链接指向持久化路径 /archive/UID/ -->
+                <a href="/en/archive/547d261e/" class="post-card" aria-label="Read Post: Internet Science Popularization Series - What is a server? How to get a server?">
+                    <div class="post-meta">
+                        <span>[2026-01-24]</span>
+                        <span>REF_ID:547d261e</span>
+                        <span class="mono">LEN:28M</span>
+                    </div>
+                    
+                    
+
+                    <h2 class="post-title">Internet Science Popularization Series - What is a server? How to get a server?</h2>
+                    <p class="post-summary">What is a Server? Imagine you're browsing the internet, watching videos, playing games, or chatting online. Where is all this information and content store...</p>
+                </a>
+                
+                <!-- 链接指向持久化路径 /archive/UID/ -->
+                <a href="/en/archive/21576e9a/" class="post-card" aria-label="Read Post: This corresponds to the recent warnings regarding Cloudflare's large-scale account suspensions of reverse proxy tools.">
+                    <div class="post-meta">
+                        <span>[2026-01-24]</span>
+                        <span>REF_ID:21576e9a</span>
+                        <span class="mono">LEN:8M</span>
+                    </div>
+                    
+                    
+
+                    <h2 class="post-title">This corresponds to the recent warnings regarding Cloudflare's large-scale account suspensions of reverse proxy tools.</h2>
+                    <p class="post-summary">Recently, a largescale account suspension incident at Cloudflare has caused a huge stir in the internet community, with numerous user accounts, including b...</p>
+                </a>
+                
+            </section>
+        </main>
+
+        <aside>
+            <section class="widget" aria-label="User Authorization">
+                <h3 class="widget-title">IDENT_AUTH</h3>
+                <div class="author-box">
+                    <img src="https://edgeoneimg.cdn.sn/i/696b4d5b58c71_1768639835.webp" class="avatar" alt="Author Avatar">
+                    <h4 class="mono" style="font-weight: 900; font-size: 1.2rem;">Cnfte</h4>
+                    <div class="bio-text mono" style="margin-top: 15px;">"滚滚长江东逝水，浪花淘尽英雄。"</div>
+                    <div style="display: flex; justify-content: center; gap: 20px; margin-top: 25px; font-size: 1.2rem;">
+                        <a href="https://github.com/Cnfte" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
+                        <a href="mailto:cnfte.2@gmail.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="widget" aria-label="System Metrics">
+                <h3 class="widget-title">SYSTEM_STATUS</h3>
+                <div class="status-panel">
+                    <div>[OK] KERNEL: CNFTE_STABLE_V3.2</div>
+                    <div>[OK] UP_TIME: <span id="days">0</span>_DAYS</div>
+                    <div>[OK] CLOCK_STAMP: <span id="live-clock">00:00:00</span></div>
+                    <div>[OK] OBJECTS: 14_INDEXED</div>
+                </div>
+            </section>
+
+            <section class="widget" aria-label="Broadcasts">
+                <h3 class="widget-title">SYS_NOTICES</h3>
+                <div class="mono" style="font-size: 0.85rem; color: var(--text-muted); border: 1px dashed var(--border); padding: 20px; line-height: 1.8; background: var(--bg);">
+                    欢迎来到我的博客
+                </div>
+            </section>
+        </aside>
+    </div>
+
+    <footer>
+        <p class="mono">TERMINAL_BLOG_ENGINE v3.2.0 // © 2026 Cnfte</p>
+        <p class="mono" style="margin-top: 15px; opacity: 0.6; font-size: 0.75rem;"><a src="https://www.itdog.cn/ping/cnfte.top">本站已启用CLOUDFLARE CDN防护</a></p>
+    </footer>
+
+    <script>
+        // 1. 系统时钟
+        function startClock() {
+            const clock = document.getElementById('live-clock');
+            setInterval(() => {
+                clock.innerText = new Date().toTimeString().split(' ')[0];
+            }, 1000);
+        }
+        startClock();
+
+        // 2. 主题持久化与切换
+        function toggleTheme() {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const target = current === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', target);
+            document.getElementById('mode-text').innerText = target.toUpperCase();
+            localStorage.setItem('geek-theme', target);
+        }
+
+        window.onload = () => {
+            // 计算运行时间
+            const start = new Date("2025-05-01");
+            const now = new Date();
+            const diff = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+            document.getElementById('days').innerHTML = diff > 0 ? diff : 0;
+            
+            // 初始化主题
+            const saved = localStorage.getItem('geek-theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', saved);
+            document.getElementById('mode-text').innerText = saved.toUpperCase();
+        };
+    </script>
+</body>
+</html>

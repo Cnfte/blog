@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- SEO & Metadata -->
+    <title>Internet Science Popularization Series - What is ICP Registration? How to obtain a registered domain name and alternative solutions. - Cnfteの博客</title>
+    <meta name="description" content="I. What is China's Domain Name Registration? Simply put, China's domain name registration (also known as "domain registration" or "ICP registration") refer...">
+    <link rel="icon" href="/favicon.ico">
+    
+    <!-- 极客字体引用：强制同步加载确保移动端第一时间渲染 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #0a0a0a;
+            --text: #ffffff;
+            --text-muted: #a0a0a0;
+            --border: #222222;
+            --code-bg: #050505;
+            --accent: #ffffff;
+            --selection: #333333;
+        }
+
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --surface: #fafafa;
+            --text: #1d1d1f;
+            --text-muted: #505050;
+            --border: #e0e0e0;
+            --code-bg: #f5f5f5;
+            --selection: #eeeeee;
+        }
+
+        /* 1. 基础复位 & 消除移动端点击蓝色背景 & 强力锁定颜色 */
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent !important; 
+        }
+        
+        a, a:visited, a:active {
+            color: inherit !important;
+            text-decoration: none !important;
+            outline: none !important;
+        }
+
+        body { 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            background: var(--bg); color: var(--text); 
+            line-height: 1.8; overflow-x: hidden; width: 100%;
+            transition: background 0.3s;
+        }
+
+        .mono { font-family: 'Fira Code', monospace !important; }
+        ::selection { background: var(--selection); }
+
+        /* 顶部进度条 */
+        #progress { position: fixed; top: 0; left: 0; width: 0%; height: 2px; background: var(--text); z-index: 2001; }
+
+        /* 2. 导航栏加固 */
+        nav { 
+            position: sticky; top: 0; z-index: 1000; background: var(--bg); 
+            border-bottom: 2px solid var(--border); padding: 0 5%; height: 64px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { font-weight: 900; font-size: 1.1rem; letter-spacing: -1px; }
+        .nav-links { display: flex; align-items: center; gap: 20px; }
+        .nav-links a { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .lang-switch { border: 1px solid var(--border); padding: 4px 10px; }
+
+        /* 3. 文章头部：彻底解决标题被遮挡问题 */
+        .post-header { 
+            padding: 140px 20px 60px; 
+            text-align: left; 
+            border-bottom: 1px solid var(--border); 
+            max-width: 1400px; margin: 0 auto; 
+            background: var(--surface);
+        }
+        .post-path { font-family: 'Fira Code', monospace; color: var(--text-muted); font-size: 0.75rem; margin-bottom: 20px; text-transform: uppercase; }
+        .post-header h1 { 
+            font-size: clamp(2rem, 5vw, 3.5rem); 
+            font-weight: 900; 
+            letter-spacing: -2px; 
+            line-height: 1.2; 
+            margin-bottom: 30px;
+            display: block; 
+        }
+
+        /* 4. 响应式布局架构 (1024px 强制单栏) */
+        .main-wrapper { 
+            max-width: 1400px; margin: 0 auto; 
+            display: flex; flex-direction: row; 
+            align-items: stretch;
+        }
+
+        main { flex: 1; min-width: 0; } /* 解决 Flex 容器内代码溢出的核心 */
+
+        article.content { 
+            padding: 60px; border-right: 1px solid var(--border);
+            font-size: 1.125rem;
+        }
+
+        /* 正文样式 */
+        .content h2 { font-size: 1.8rem; margin: 2.5em 0 1.2em; font-weight: 900; border-bottom: 4px solid var(--text); padding-bottom: 10px; display: inline-block; }
+        .content h3 { font-size: 1.4rem; margin: 2em 0 1em; font-weight: 700; color: var(--text); border-left: 4px dashed var(--border); padding-left: 15px; }
+        .content p { margin-bottom: 2.2rem; text-align: justify; }
+        .content a { color: var(--text); text-decoration: underline !important; font-weight: 700; text-underline-offset: 4px; }
+        .content img { max-width: 100%; border: 1px solid var(--border); margin: 30px 0; display: block; height: auto; padding: 5px; }
+
+        /* 5. 代码块彻底锁死修复方案 (防溢出) */
+        pre { 
+            background: var(--code-bg) !important; 
+            padding: 40px 20px 20px !important; 
+            border: 1px solid var(--border) !important;
+            margin: 2.5rem 0; position: relative; 
+            display: block !important; width: 100% !important; 
+            max-width: 100% !important; overflow-x: auto !important; 
+            white-space: pre !important; word-wrap: normal !important;
+            box-sizing: border-box !important;
+            border-radius: 0;
+        }
+        pre code { font-family: 'Fira Code', monospace !important; font-size: 0.95rem !important; display: block; min-width: fit-content; line-height: 1.6; }
+
+        /* 6. 侧边栏加固：解决垂直文字 Bug */
+        aside { 
+            /* --- 彻底美化侧边栏滚动条，干掉大白条 --- */
+
+/* 1. 针对 Chrome, Edge, Safari (WebKit) */
+aside::-webkit-scrollbar {
+    width: 4px;             /* 极细的宽度 */
+    background: transparent;
+}
+
+aside::-webkit-scrollbar-thumb {
+    background: #333;       /* 滚动条滑块颜色：深灰色 */
+    border-radius: 0px;     /* 极客风格用直角 */
+}
+
+aside::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted); /* 悬停时稍微亮一点 */
+}
+
+aside::-webkit-scrollbar-track {
+    background: var(--bg);  /* 滚动条轨道颜色：同背景色 */
+}
+
+/* 2. 针对 Firefox */
+aside {
+    scrollbar-width: thin;          /* 细滚动条 */
+    scrollbar-color: #333 transparent; /* 滑块颜色 轨道颜色 */
+}
+
+/* 3. 如果你希望彻底看不见滚动条，但依然保留滚动功能（更高级感） */
+/* 只需要把上面的 aside::-webkit-scrollbar-thumb 的颜色设为与背景一致，或如下： */
+aside {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;     /* Firefox */
+}
+aside::-webkit-scrollbar {
+    display: none;             /* Chrome, Safari, Opera */
+}
+            width: 360px; flex-shrink: 0; min-width: 320px;
+            padding: 60px 40px; background: var(--surface);
+            position: sticky; top: 64px; height: calc(100vh - 64px); 
+            overflow-y: auto;
+        }
+        .widget { margin-bottom: 60px; width: 100%; }
+        .widget-title { font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 25px; text-transform: uppercase; border-left: 4px solid var(--text); padding-left: 12px; }
+
+        /* 作者简介：强制正常排版 */
+        .bio-text {
+            font-size: 0.9rem; color: var(--text-muted); 
+            margin-top: 15px; line-height: 1.6;
+            word-break: normal !important; 
+            white-space: normal !important; 
+            display: block !important; width: 100% !important;
+            text-align: center;
+        }
+
+        /* 极客下载卡片样式 */
+        .geek-download-card {
+            display: flex; align-items: center; padding: 20px; margin: 30px 0;
+            background: var(--surface); border: 1px solid var(--border);
+            transition: 0.2s; cursor: pointer;
+        }
+        .geek-download-card:hover { border-color: var(--text); background: var(--selection); }
+        .geek-download-card .file-icon { font-size: 2rem; margin-right: 25px; color: var(--text); }
+        .geek-download-card .file-info { flex: 1; }
+        .geek-download-card .file-name { font-family: 'Fira Code', monospace; font-size: 1rem; font-weight: 700; display: block; }
+        .geek-download-card .file-meta { font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-top: 5px; }
+        .geek-download-card .download-label { font-family: 'Fira Code', monospace; font-size: 0.7rem; padding: 5px 12px; border: 1px solid var(--border); color: var(--text-muted); }
+
+        /* 7. 悬浮按钮：高对比度黑白 */
+        .float-bar { position: fixed; bottom: 30px; right: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 1000; }
+        .float-btn { 
+            width: 52px; height: 52px; 
+            background: var(--text) !important; /* 强制可见背景 */
+            color: var(--bg) !important;       /* 强制可见图标 */
+            border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; font-size: 1.3rem; border-radius: 0; 
+            box-shadow: 6px 6px 0px var(--border);
+            transition: 0.1s;
+        }
+        .float-btn i, .float-btn svg { color: var(--bg) !important; pointer-events: none; }
+        .float-btn:active { transform: translate(2px, 2px); box-shadow: none; }
+
+        .copy-btn { position: absolute; top: 0; right: 0; background: var(--border); color: var(--text); border: none; padding: 8px 15px; font-size: 0.65rem; cursor: pointer; font-family: 'Fira Code', monospace; font-weight: 700; text-transform: uppercase; }
+
+        /* 8. 移动端强力适配逻辑 */
+        @media (max-width: 1024px) {
+            .main-wrapper { flex-direction: column !important; }
+            article.content { padding: 40px 25px; border-right: none !important; width: 100% !important; }
+            aside { 
+                width: 100% !important; border-left: none !important; border-top: 2px solid var(--border); 
+                position: static !important; height: auto !important; padding: 40px 25px !important; flex: none;
+            }
+            .post-header { padding: 100px 20px 40px; }
+            /* 代码块移动端全宽 */
+            pre { margin: 2rem -25px; border-left: none; border-right: none; padding: 45px 25px 25px !important; }
+        }
+
+        footer { padding: 80px 20px; text-align: center; border-top: 1px solid var(--border); font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted); background: var(--surface); }
+    </style>
+</head>
+<body>
+    <div id="progress"></div>
+    <nav>
+        <a href="/" class="logo mono">CNFTE://ROOT</a>
+        <div class="nav-links mono">
+            <a href="/en/Link Exchange.html">Link Exchange</a><a href="/en/Privacy Policy.html">Privacy Policy</a><a href="/en/about.html">about</a><a href="/en/公益服务项.html">service</a>
+            <a href="/" class="lang-switch">ZH</a>
+            <span style="cursor: pointer;" onclick="toggleTheme()">[MODE]</span>
+        </div>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-path">/ROOT/NODES/POSTS/2026/01/24</div>
+        <h1>Internet Science Popularization Series - What is ICP Registration? How to obtain a registered domain name and alternative solutions.</h1>
+        <div class="mono" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 15px;">
+            STAMP: 2026-01-24 // REF_ID: 8f2b41bb // AUTH: VERIFIED
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <main>
+            <article class="content" id="article-main">
+                <h2 id="i-what-is-chinas-domain-name-registration">I. What is China's Domain Name Registration?</h2>
+<p>Simply put, China's domain name registration (also known as "domain registration" or "ICP registration") refers to the process by which websites registered with domain names in mainland China must submit relevant information to the relevant national departments (primarily the Ministry of Industry and Information Technology, or MIIT) for registration and review.</p>
+<p><strong>Core purpose:</strong> To ensure the legality and security of internet information services (i.e., websites) provided in mainland China, facilitating national supervision and management.</p>
+<h2 id="ii-what-is-registration">II. What is Registration?</h2>
+<p>Registration, as the name suggests, means registering or recording. In the context of domain name registration, it is an <strong>administrative approval process</strong>.</p>
+<ul>
+<li><strong>Entity Registration:</strong> The object of registration is the "entity" operating the website, which can be an individual or an organization (company, etc.).</li>
+<li><strong>Information Registration:</strong> During the registration process, you need to provide the entity's real identity information, contact information, and relevant website information (such as website name, server IP address, etc.).</li>
+<li><strong>Approval:</strong> After submitting the information, the relevant departments will review the submitted information. Only after approval is your website considered legally "established" in mainland China.</li>
+</ul>
+<h2 id="iii-why-register">III. Why Register?</h2>
+<p>In mainland China, according to relevant laws and regulations such as the "Measures for the Administration of Internet Information Services," any website accessing servers within mainland China and providing information services must undergo ICP registration.</p>
+<p>The main reasons are as follows:</p>
+<ol>
+<li><strong>Legality and Compliance:</strong> This is the most fundamental reason. Unregistered websites are illegal in mainland China and may be shut down.</li>
+<li><strong>National Regulatory Needs:</strong> Registration allows the government to understand which websites are operating in mainland China, facilitating traceability and management in case of illegal or harmful information.</li>
+<li><strong>Protecting User Rights:</strong> Registration information helps users find the responsible entity and protect their rights when problems arise with the website.</li>
+<li><strong>Enhancing Website Credibility:</strong> The registration number is the "identity card" of a website in mainland China, increasing user trust in the website.</li>
+<li><strong>Necessary Condition for Using Mainland China Servers:</strong> If you want to use servers located in mainland China to host your website, registration is a mandatory prerequisite.</li>
+</ol>
+<p><strong>Simple analogy:</strong> Just as you need a property deed to buy a house in mainland China, registration is your "website property deed" for operating a website in mainland China.</p>
+<h2 id="iv-how-to-register-the-website-registration-process-is-usually-assisted-by-your-domain-registrar-or-server-provider-often-the-same-company-here-are-the-general-steps">IV. How to Register? The website registration process is usually assisted by your <strong>domain registrar</strong> or <strong>server provider</strong> (often the same company). Here are the general steps:</h2>
+<ol>
+<li><strong>Choose a service provider:</strong> You need to choose a service provider that is qualified to provide internet access services in mainland China (e.g., Alibaba Cloud, Tencent Cloud, Huawei Cloud, etc.). Usually, the company where you purchased your domain and server will be your registration service provider.</li>
+<li><strong>Prepare documents:</strong></li>
+<li><strong>Individual registration:</strong> Original ID card (front and back photos), photo of you holding your ID card (front view). </li>
+<li><strong>Company registration:</strong> Copy of business license, organization code certificate (if included in the business license), original ID card of the legal representative (front and back photos), original ID card of the contact person (front and back photos), company seal (required in some regions). </li>
+<li><strong>Website information:</strong> Website name, website contact person information (usually the legal representative or contact person), website domain name. </li>
+<li><strong>Server information:</strong> IP address of your mainland China server, access method (e.g., the server package you purchased).</li>
+<li><strong>Fill in registration information:</strong> In the registration system provided by the service provider (usually a web-based system), fill in all the information accurately as required.</li>
+<li><strong>Upload documents:</strong> Upload the prepared ID photos, company certificates, etc., to the registration system.</li>
+<li><strong>Photo verification:</strong> Some regions may require facial recognition or a photo of you holding your ID card for identity verification.</li>
+<li><strong>Submit for review:</strong> After filling in and uploading the information, submit it to the service provider for initial review.</li>
+<li><strong>Service provider initial review:</strong> The service provider will conduct an initial check of your documents to ensure the information is complete and meets the basic requirements.</li>
+<li><strong>MIIT review:</strong> The service provider will submit the approved documents to the Ministry of Industry and Information Technology (MIIT) for final review. This process may take 1-20 business days, depending on the region and review status.</li>
+<li><strong>Obtain registration number:</strong> After approval, you will receive a text message and email from the MIIT informing you of your registration number (usually "京ICP备XXXXXXXX号" or "沪ICP备XXXXXXXX号", etc.). 10. <strong>Displaying the ICP Filing Number:</strong> You need to prominently display your ICP filing number at the bottom of your website (usually in the footer) and link it to the Ministry of Industry and Information Technology's (MIIT) ICP filing management system website (beian.miit.gov.cn).</li>
+</ol>
+<p><strong>Important Note:</strong> The ICP filing information must be true, accurate, and complete. If false information is discovered, the filing will be canceled, and the website will be shut down.</p>
+<h2 id="v-post-icp-filing-considerations">V. Post-ICP Filing Considerations</h2>
+<p>After successful ICP filing, your website can legally go online in mainland China. However, there are still some important considerations:</p>
+<ol>
+<li><strong>Displaying the ICP Filing Number:</strong>  Ensure your ICP filing number is correctly displayed at the bottom of your website (footer) and that it is a clickable link to the MIIT official website. This is a requirement for continued compliance.</li>
+<li><strong>Timely Update of Information Changes:</strong> If your entity information (such as legal representative, contact information, company name, etc.) changes, you must update it in the ICP filing system promptly; otherwise, the filing may become invalid.</li>
+<li><strong>Website Content Compliance:</strong> Ensure your website content does not violate the laws and regulations of mainland China and does not spread illegal or harmful information. Violation may lead to warnings, website shutdown, or even legal liability.</li>
+<li><strong>Server Security:</strong> Protect your server security to prevent attacks or misuse for illegal purposes.</li>
+<li><strong>Renewal and Annual Review (Some Regions):</strong> Some regions or specific types of websites may require ICP filing renewal or annual review. Please pay attention to the requirements of your local regulatory authority.</li>
+<li><strong>Non-Transferability of ICP Filing Information:</strong> ICP filing information is tied to the entity and cannot be arbitrarily transferred to others.</li>
+</ol>
+<h2 id="vi-alternatives-for-minors-under-18-overseas-servers-overseas-dns-hosting">VI. Alternatives for Minors Under 18 (Overseas Servers + Overseas DNS Hosting)</h2>
+<p>For minors under 18 years old, due to legal regulations that they do not possess full civil capacity, they usually cannot independently complete domain name registration. Therefore, if you want to operate a website in mainland China but cannot complete the ICP filing, you can consider the following alternative:</p>
+<p><strong>Core Idea:</strong> Host your website on a server <strong>outside of mainland China</strong> and use a DNS resolution service <strong>outside of mainland China</strong>. This way, your website will not be considered as providing information services within mainland China, thus avoiding the ICP filing requirement. <strong>Specific Steps:</strong></p>
+<ol>
+<li>
+<p><strong>Choose an Overseas Server:</strong></p>
+</li>
+<li>
+<p><strong>Purchase an overseas server:</strong> You can purchase a server from an overseas cloud service provider, such as those located in Hong Kong, Singapore, the United States, Europe, etc.</p>
+</li>
+<li><strong>Reason for choosing:</strong> Servers in these regions are not subject to the regulations of the Ministry of Industry and Information Technology (MIIT) in mainland China. </li>
+<li><strong>Considerations:</strong></li>
+<li><strong>Access speed:</strong> Consider where your target users are located. If your target users are primarily in mainland China, the access speed of overseas servers may be slower than domestic servers, especially during peak network hours. </li>
+<li><strong>Stability and service:</strong> Choose a reputable overseas service provider with stable services. </li>
+<li><strong>Payment methods:</strong> Confirm that the service provider supports your preferred payment methods.</li>
+<li>
+<p><strong>Use Overseas DNS Resolution Hosting:</strong></p>
+</li>
+<li>
+<p><strong>What is DNS resolution:</strong> DNS (Domain Name System) is like the internet's phone book; it translates the domain name you enter (such as <code>www.example.com</code>) into the server's IP address so that the browser can find your website. </p>
+</li>
+<li><strong>Why you need overseas DNS:</strong> When your website is hosted on an overseas server, you need a DNS service that can resolve to your overseas server's IP address. Usually, your server provider will provide DNS resolution services, or you can choose a third-party DNS service provider (such as Cloudflare, DNSPod's overseas resolution service, etc.). </li>
+<li><strong>Steps:</strong></li>
+<li>At your domain registrar, point your domain's DNS servers to your chosen overseas DNS service provider. </li>
+<li>In the overseas DNS service provider's management panel, add an A record or CNAME record to point your domain to your overseas server's IP address.</li>
+</ol>
+<p><strong>Advantages of this alternative solution:</strong></p>
+<ul>
+<li><strong>Avoids filing requirements:</strong> No need to go through the complex domain name registration process.</li>
+<li><strong>High degree of freedom:</strong> Relatively more freedom in content and operation (but still subject to local laws and platform rules).</li>
+</ul>
+<p><strong>Disadvantages of this alternative solution:</strong></p>
+<ul>
+<li><strong>Access speed may be affected:</strong> For users in mainland China, access speed may not be as fast as domestic servers, especially during network transmission.</li>
+<li><strong>May be blocked by the Great Firewall (GFW):</strong> If the website content is deemed to not comply with China's internet regulations, even if the server is overseas, it may be blocked by the Great Firewall of China (GFW), preventing mainland Chinese users from accessing it. * <strong>Payment and management may be slightly complex:</strong> Dealing with overseas service providers may bring some inconvenience due to payment methods, language barriers, and time differences.</li>
+<li><strong>Trust issues:</strong> Some domestic users may have concerns about the trustworthiness of websites that are not registered with the Chinese authorities.</li>
+</ul>
+<p><strong>Summary:</strong></p>
+<p>For users under 18 years old who want to operate a website in mainland China, the safest and most compliant way is to <strong>use overseas servers and overseas DNS hosting</strong>. This allows you to bypass the registration requirements, but you need to be aware of the access speed of overseas servers and the potential risk of being blocked by the Great Firewall.</p>
+            </article>
+
+            <!-- 极客版权区域 -->
+            <section style="padding: 0 60px 60px; font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted);">
+                <div style="border: 1px solid var(--border); padding: 35px; background: var(--surface);">
+                    <div># SOURCE_NODE: <span id="page-url" style="word-break: break-all; color: var(--text);"></span></div>
+                    <div># LICENSE: CC-BY-NC-SA-4.0</div>
+                    <div># INTEGRITY: VALIDATED_ENCRYPTED</div>
+                    <div style="margin-top: 20px; color: var(--text);">// EOF_SIGNAL_RECEIVED</div>
+                </div>
+            </section>
+        </main>
+
+        <aside>
+            <section class="widget">
+                <h3 class="widget-title">IDENT_AUTH</h3>
+                <div style="border: 1px solid var(--border); padding: 35px 20px; text-align: center; background: var(--bg);">
+                    <img src="https://edgeoneimg.cdn.sn/i/696b4d5b58c71_1768639835.webp" style="width: 72px; height: 72px; filter: grayscale(1); border: 1px solid var(--border); padding: 4px; margin-bottom: 20px;" alt="Avatar">
+                    <div class="mono" style="font-weight: 900; font-size: 1.2rem; color: var(--text);">Cnfte</div>
+                    <div class="bio-text mono">"滚滚长江东逝水，浪花淘尽英雄。"</div>
+                </div>
+            </section>
+
+            <section class="widget">
+                <h3 class="widget-title">SYSTEM_LOG</h3>
+                <div style="background: #000; border: 1px solid #333; padding: 20px; font-family: 'Fira Code', monospace; font-size: 0.75rem; color: #00ff00; line-height: 1.6;">
+                    <div>[OK] NODE_STATE: STABLE</div>
+                    <div>[OK] UPTIME: 25M_READ</div>
+                    <div>[OK] CLOCK: <span id="live-clock">00:00:00</span></div>
+                    <div style="color: #333">-----------------------</div>
+                    <div>$ tail -f blog.log</div>
+                    <div>> Reading node...</div>
+                    <div style="color: #00ff00;">> Internet Sci...</div>
+                </div>
+            </section>
+
+            
+            <section class="widget">
+                <h3 class="widget-title">STRUCTURE_TOC</h3>
+                <div class="toc-box" id="toc-container">
+                    <div class="toc">
+<ul>
+<li><a href="#i-what-is-chinas-domain-name-registration">I. What is China's Domain Name Registration?</a></li>
+<li><a href="#ii-what-is-registration">II. What is Registration?</a></li>
+<li><a href="#iii-why-register">III. Why Register?</a></li>
+<li><a href="#iv-how-to-register-the-website-registration-process-is-usually-assisted-by-your-domain-registrar-or-server-provider-often-the-same-company-here-are-the-general-steps">IV. How to Register? The website registration process is usually assisted by your domain registrar or server provider (often the same company). Here are the general steps:</a></li>
+<li><a href="#v-post-icp-filing-considerations">V. Post-ICP Filing Considerations</a></li>
+<li><a href="#vi-alternatives-for-minors-under-18-overseas-servers-overseas-dns-hosting">VI. Alternatives for Minors Under 18 (Overseas Servers + Overseas DNS Hosting)</a></li>
+</ul>
+</div>
+
+                </div>
+            </section>
+            
+        </aside>
+    </div>
+
+    <div class="float-bar">
+        <button class="float-btn" onclick="copyLink()" aria-label="Share"><i class="fa-solid fa-share-nodes"></i></button>
+        <button class="float-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Back to Top"><i class="fa-solid fa-chevron-up"></i></button>
+    </div>
+
+    <footer>
+        <p class="mono">TERMINAL_BLOG_ENGINE v3.2.5 // © 2026 Cnfte</p>
+        <p class="mono" style="font-size: 0.75rem; margin-top: 15px; opacity: 0.5;"><a src="https://www.itdog.cn/ping/cnfte.top">本站已启用CLOUDFLARE CDN防护</a></p>
+    </footer>
+
+    <script>
+        // 1. 初始化 URL 显示和下载卡片
+        document.getElementById('page-url').innerText = window.location.href;
+
+        function renderDownloadCards() {
+            const links = document.querySelectorAll('#article-main a');
+            links.forEach(link => {
+                const text = link.innerText;
+                if (text.startsWith('DOWNLOAD:')) {
+                    const fileName = text.replace('DOWNLOAD:', '');
+                    const fileExt = fileName.split('.').pop().toUpperCase();
+                    let icon = 'fa-file-code';
+                    if (['EXE', 'MSI', 'APK', 'BAT'].includes(fileExt)) icon = 'fa-terminal';
+                    else if (['ZIP', 'RAR', '7Z', 'TAR'].includes(fileExt)) icon = 'fa-file-archive';
+                    else if (!['SH','PY','JS','CPP','C','GO'].includes(fileExt)) icon = 'fa-file-lines';
+
+                    const card = document.createElement('div');
+                    card.className = 'geek-download-card';
+                    card.onclick = () => window.location.href = link.href;
+                    card.innerHTML = `
+                        <div class="file-icon"><i class="fa-solid ${icon}"></i></div>
+                        <div class="file-info">
+                            <span class="file-name">${fileName}</span>
+                            <span class="file-meta">TYPE: ${fileExt} // ACCESS: PUBLIC</span>
+                        </div>
+                        <div class="download-label mono">GET_DATA</div>
+                    `;
+                    link.parentNode.replaceChild(card, link);
+                }
+            });
+        }
+        renderDownloadCards();
+
+        // 2. 系统时钟
+        setInterval(() => {
+            document.getElementById('live-clock').innerText = new Date().toTimeString().split(' ')[0];
+        }, 1000);
+
+        // 3. 滚动进度监听与 TOC 高亮
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            document.getElementById("progress").style.width = (winScroll / height * 100) + "%";
+            
+            const sections = document.querySelectorAll('.content h2, .content h3');
+            const tocLinks = document.querySelectorAll('.toc-box a');
+            let activeId = '';
+            sections.forEach(s => {
+                if (s.getBoundingClientRect().top < 100) activeId = s.getAttribute('id');
+            });
+            tocLinks.forEach(l => {
+                l.classList.toggle('active', l.getAttribute('href') === '#' + activeId);
+            });
+        });
+
+        // 4. 代码块复制增强
+        document.querySelectorAll('pre').forEach(block => {
+            const btn = document.createElement('button');
+            btn.className = 'copy-btn mono';
+            btn.innerText = 'COPY';
+            btn.onclick = () => {
+                navigator.clipboard.writeText(block.querySelector('code').innerText).then(() => {
+                    btn.innerText = 'DONE'; setTimeout(() => btn.innerText = 'COPY', 2000);
+                });
+            };
+            block.appendChild(btn);
+        });
+
+        // 5. 主题控制
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const target = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', target);
+            document.getElementById('mode-text').innerText = target.toUpperCase();
+            localStorage.setItem('geek-theme', target);
+        }
+        
+        const savedTheme = localStorage.getItem('geek-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        if(document.getElementById('mode-text')) document.getElementById('mode-text').innerText = savedTheme.toUpperCase();
+
+        function copyLink() { navigator.clipboard.writeText(window.location.href); alert("LINK_COPIED_TO_CLIPBOARD"); }
+    </script>
+</body>
+</html>

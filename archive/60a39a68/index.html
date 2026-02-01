@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="zh" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- SEO & Metadata -->
+    <title>互联网科普系列-什么是传输协议 - Cnfteの博客</title>
+    <meta name="description" content="想象一下，我们生活在一个大城市里，每天都要通过各种各样的交通工具（汽车、火车、飞机）把货物（信息）从一个地方送到另一个地方。而传输协议，就像是这些交通工具在城市里运行必须遵守的交通规则。没有这些规则，交通会乱成一锅粥，货物也可能送不到或者送错了地方。 1. 什么是传输协议？ 简单来说，传输协议就是一套约定好的...">
+    <link rel="icon" href="/favicon.ico">
+    
+    <!-- 极客字体引用：强制同步加载确保移动端第一时间渲染 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #0a0a0a;
+            --text: #ffffff;
+            --text-muted: #a0a0a0;
+            --border: #222222;
+            --code-bg: #050505;
+            --accent: #ffffff;
+            --selection: #333333;
+        }
+
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --surface: #fafafa;
+            --text: #1d1d1f;
+            --text-muted: #505050;
+            --border: #e0e0e0;
+            --code-bg: #f5f5f5;
+            --selection: #eeeeee;
+        }
+
+        /* 1. 基础复位 & 消除移动端点击蓝色背景 & 强力锁定颜色 */
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent !important; 
+        }
+        
+        a, a:visited, a:active {
+            color: inherit !important;
+            text-decoration: none !important;
+            outline: none !important;
+        }
+
+        body { 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            background: var(--bg); color: var(--text); 
+            line-height: 1.8; overflow-x: hidden; width: 100%;
+            transition: background 0.3s;
+        }
+
+        .mono { font-family: 'Fira Code', monospace !important; }
+        ::selection { background: var(--selection); }
+
+        /* 顶部进度条 */
+        #progress { position: fixed; top: 0; left: 0; width: 0%; height: 2px; background: var(--text); z-index: 2001; }
+
+        /* 2. 导航栏加固 */
+        nav { 
+            position: sticky; top: 0; z-index: 1000; background: var(--bg); 
+            border-bottom: 2px solid var(--border); padding: 0 5%; height: 64px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { font-weight: 900; font-size: 1.1rem; letter-spacing: -1px; }
+        .nav-links { display: flex; align-items: center; gap: 20px; }
+        .nav-links a { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .lang-switch { border: 1px solid var(--border); padding: 4px 10px; }
+
+        /* 3. 文章头部：彻底解决标题被遮挡问题 */
+        .post-header { 
+            padding: 140px 20px 60px; 
+            text-align: left; 
+            border-bottom: 1px solid var(--border); 
+            max-width: 1400px; margin: 0 auto; 
+            background: var(--surface);
+        }
+        .post-path { font-family: 'Fira Code', monospace; color: var(--text-muted); font-size: 0.75rem; margin-bottom: 20px; text-transform: uppercase; }
+        .post-header h1 { 
+            font-size: clamp(2rem, 5vw, 3.5rem); 
+            font-weight: 900; 
+            letter-spacing: -2px; 
+            line-height: 1.2; 
+            margin-bottom: 30px;
+            display: block; 
+        }
+
+        /* 4. 响应式布局架构 (1024px 强制单栏) */
+        .main-wrapper { 
+            max-width: 1400px; margin: 0 auto; 
+            display: flex; flex-direction: row; 
+            align-items: stretch;
+        }
+
+        main { flex: 1; min-width: 0; } /* 解决 Flex 容器内代码溢出的核心 */
+
+        article.content { 
+            padding: 60px; border-right: 1px solid var(--border);
+            font-size: 1.125rem;
+        }
+
+        /* 正文样式 */
+        .content h2 { font-size: 1.8rem; margin: 2.5em 0 1.2em; font-weight: 900; border-bottom: 4px solid var(--text); padding-bottom: 10px; display: inline-block; }
+        .content h3 { font-size: 1.4rem; margin: 2em 0 1em; font-weight: 700; color: var(--text); border-left: 4px dashed var(--border); padding-left: 15px; }
+        .content p { margin-bottom: 2.2rem; text-align: justify; }
+        .content a { color: var(--text); text-decoration: underline !important; font-weight: 700; text-underline-offset: 4px; }
+        .content img { max-width: 100%; border: 1px solid var(--border); margin: 30px 0; display: block; height: auto; padding: 5px; }
+
+        /* 5. 代码块彻底锁死修复方案 (防溢出) */
+        pre { 
+            background: var(--code-bg) !important; 
+            padding: 40px 20px 20px !important; 
+            border: 1px solid var(--border) !important;
+            margin: 2.5rem 0; position: relative; 
+            display: block !important; width: 100% !important; 
+            max-width: 100% !important; overflow-x: auto !important; 
+            white-space: pre !important; word-wrap: normal !important;
+            box-sizing: border-box !important;
+            border-radius: 0;
+        }
+        pre code { font-family: 'Fira Code', monospace !important; font-size: 0.95rem !important; display: block; min-width: fit-content; line-height: 1.6; }
+
+        /* 6. 侧边栏加固：解决垂直文字 Bug */
+        aside { 
+            /* --- 彻底美化侧边栏滚动条，干掉大白条 --- */
+
+/* 1. 针对 Chrome, Edge, Safari (WebKit) */
+aside::-webkit-scrollbar {
+    width: 4px;             /* 极细的宽度 */
+    background: transparent;
+}
+
+aside::-webkit-scrollbar-thumb {
+    background: #333;       /* 滚动条滑块颜色：深灰色 */
+    border-radius: 0px;     /* 极客风格用直角 */
+}
+
+aside::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted); /* 悬停时稍微亮一点 */
+}
+
+aside::-webkit-scrollbar-track {
+    background: var(--bg);  /* 滚动条轨道颜色：同背景色 */
+}
+
+/* 2. 针对 Firefox */
+aside {
+    scrollbar-width: thin;          /* 细滚动条 */
+    scrollbar-color: #333 transparent; /* 滑块颜色 轨道颜色 */
+}
+
+/* 3. 如果你希望彻底看不见滚动条，但依然保留滚动功能（更高级感） */
+/* 只需要把上面的 aside::-webkit-scrollbar-thumb 的颜色设为与背景一致，或如下： */
+aside {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;     /* Firefox */
+}
+aside::-webkit-scrollbar {
+    display: none;             /* Chrome, Safari, Opera */
+}
+            width: 360px; flex-shrink: 0; min-width: 320px;
+            padding: 60px 40px; background: var(--surface);
+            position: sticky; top: 64px; height: calc(100vh - 64px); 
+            overflow-y: auto;
+        }
+        .widget { margin-bottom: 60px; width: 100%; }
+        .widget-title { font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 25px; text-transform: uppercase; border-left: 4px solid var(--text); padding-left: 12px; }
+
+        /* 作者简介：强制正常排版 */
+        .bio-text {
+            font-size: 0.9rem; color: var(--text-muted); 
+            margin-top: 15px; line-height: 1.6;
+            word-break: normal !important; 
+            white-space: normal !important; 
+            display: block !important; width: 100% !important;
+            text-align: center;
+        }
+
+        /* 极客下载卡片样式 */
+        .geek-download-card {
+            display: flex; align-items: center; padding: 20px; margin: 30px 0;
+            background: var(--surface); border: 1px solid var(--border);
+            transition: 0.2s; cursor: pointer;
+        }
+        .geek-download-card:hover { border-color: var(--text); background: var(--selection); }
+        .geek-download-card .file-icon { font-size: 2rem; margin-right: 25px; color: var(--text); }
+        .geek-download-card .file-info { flex: 1; }
+        .geek-download-card .file-name { font-family: 'Fira Code', monospace; font-size: 1rem; font-weight: 700; display: block; }
+        .geek-download-card .file-meta { font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-top: 5px; }
+        .geek-download-card .download-label { font-family: 'Fira Code', monospace; font-size: 0.7rem; padding: 5px 12px; border: 1px solid var(--border); color: var(--text-muted); }
+
+        /* 7. 悬浮按钮：高对比度黑白 */
+        .float-bar { position: fixed; bottom: 30px; right: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 1000; }
+        .float-btn { 
+            width: 52px; height: 52px; 
+            background: var(--text) !important; /* 强制可见背景 */
+            color: var(--bg) !important;       /* 强制可见图标 */
+            border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; font-size: 1.3rem; border-radius: 0; 
+            box-shadow: 6px 6px 0px var(--border);
+            transition: 0.1s;
+        }
+        .float-btn i, .float-btn svg { color: var(--bg) !important; pointer-events: none; }
+        .float-btn:active { transform: translate(2px, 2px); box-shadow: none; }
+
+        .copy-btn { position: absolute; top: 0; right: 0; background: var(--border); color: var(--text); border: none; padding: 8px 15px; font-size: 0.65rem; cursor: pointer; font-family: 'Fira Code', monospace; font-weight: 700; text-transform: uppercase; }
+
+        /* 8. 移动端强力适配逻辑 */
+        @media (max-width: 1024px) {
+            .main-wrapper { flex-direction: column !important; }
+            article.content { padding: 40px 25px; border-right: none !important; width: 100% !important; }
+            aside { 
+                width: 100% !important; border-left: none !important; border-top: 2px solid var(--border); 
+                position: static !important; height: auto !important; padding: 40px 25px !important; flex: none;
+            }
+            .post-header { padding: 100px 20px 40px; }
+            /* 代码块移动端全宽 */
+            pre { margin: 2rem -25px; border-left: none; border-right: none; padding: 45px 25px 25px !important; }
+        }
+
+        footer { padding: 80px 20px; text-align: center; border-top: 1px solid var(--border); font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted); background: var(--surface); }
+    </style>
+</head>
+<body>
+    <div id="progress"></div>
+    <nav>
+        <a href="/" class="logo mono">CNFTE://ROOT</a>
+        <div class="nav-links mono">
+            <a href="/about.html">关于</a><a href="/公益服务项.html">公益服务项</a><a href="/友链.html">友链</a><a href="/隐私政策.html">隐私政策</a>
+            <a href="/en/" class="lang-switch">EN</a>
+            <span style="cursor: pointer;" onclick="toggleTheme()">[MODE]</span>
+        </div>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-path">/ROOT/NODES/POSTS/2026/01/17</div>
+        <h1>互联网科普系列-什么是传输协议</h1>
+        <div class="mono" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 15px;">
+            STAMP: 2026-01-17 // REF_ID: 60a39a68 // AUTH: VERIFIED
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <main>
+            <article class="content" id="article-main">
+                <p>想象一下，我们生活在一个大城市里，每天都要通过各种各样的交通工具（汽车、火车、飞机）把货物（信息）从一个地方送到另一个地方。而<strong>传输协议</strong>，就像是这些交通工具在城市里运行必须遵守的<strong>交通规则</strong>。没有这些规则，交通会乱成一锅粥，货物也可能送不到或者送错了地方。</p>
+<h4 id="1">1. 什么是传输协议？</h4>
+<p>简单来说，传输协议就是一套<strong>约定好的通信规则</strong>，用来指导两台计算机（或者其他网络设备）之间如何<strong>发送和接收数据</strong>。它规定了数据应该怎么打包、怎么发送、怎么确认收到、怎么处理出错的情况等等。</p>
+<p>就像我们打电话，需要先拨号、对方接听、然后用共同的语言交流一样，计算机之间通信也需要一套标准化的流程，这就是传输协议的作用。</p>
+<p>在互联网上，最常见的传输协议主要有两大类：<strong>TCP</strong> 和 <strong>UDP</strong>。它们就像是两种不同类型的交通工具，各有各的特点和适用场景。</p>
+<h4 id="2-tcp">2. TCP连接的用处</h4>
+<p><strong>TCP</strong>（Transmission Control Protocol，传输控制协议）就像是<strong>快递公司的“挂号信”服务</strong>。它非常注重<strong>可靠性</strong>和<strong>顺序性</strong>。</p>
+<p><strong>它的主要用处是：</strong></p>
+<ul>
+<li><strong>保证数据送达：</strong> 你发出去的数据，TCP会确保对方收到了。如果没收到，它会一直重发，直到对方确认。</li>
+<li><strong>保证数据顺序：</strong> 数据在传输过程中可能会被打散成很多小包，TCP会确保这些小包按照发送的顺序重新组装好，不会乱序。</li>
+<li><strong>控制发送速度：</strong> TCP会根据对方接收能力来调整发送速度，避免因为发送太快导致对方“消化不良”而丢包。</li>
+</ul>
+<p><strong>打个比方：</strong> 你给朋友寄一份重要的文件，你肯定希望这份文件能完整、准确地送到，而且是按照页码顺序的。TCP就像是那个负责任的快递员，会给你打包、贴标签、跟踪、确认签收，确保万无一失。</p>
+<h4 id="3-tcp">3. TCP流量的特征</h4>
+<p>既然TCP这么靠谱，它的“交通流量”有什么特点呢？</p>
+<ul>
+<li><strong>连接导向：</strong> 在正式传输数据之前，TCP会先建立一个“连接”。这就像快递公司在发货前，需要先和你确认地址、联系方式一样，有一个“握手”的过程。这个过程叫做<strong>三次握手</strong>。</li>
+<li><strong>可靠传输：</strong> 就像前面说的，丢包了会重发，乱序了会重排。</li>
+<li><strong>流量控制：</strong> TCP会根据接收方的“胃口”来调整发送速度，不会一下子把数据全塞过去。</li>
+<li><strong>拥塞控制：</strong> 如果网络堵车了（就像城市交通拥堵），TCP也会放慢速度，避免加剧拥堵。</li>
+<li><strong>面向字节流：</strong> TCP把数据看成一连串的字节流，而不是一个个独立的数据包。</li>
+</ul>
+<p><strong>总结一下TCP流量的特点就是：</strong> <strong>慢而稳，可靠性高。</strong></p>
+<h4 id="4-tcpudp">4. TCP与UDP</h4>
+<p>现在我们来对比一下TCP和UDP这对“好兄弟”。 特性 TCP (挂号信) UDP (平信/明信片) <strong>可靠性</strong><strong>高</strong> (保证送达、不乱序) <strong>低</strong> (不保证送达、可能乱序) <strong>速度</strong><strong>慢</strong> (因为要确认、重发等) <strong>快</strong> (直接发，不等待确认) <strong>连接方式</strong><strong>面向连接</strong> (先建立连接再通信) <strong>无连接</strong> (直接发，不需要建立连接) <strong>头部开销</strong><strong>大</strong> (包含序号、确认号等信息) <strong>小</strong> (信息简单) <strong>应用场景</strong> 网页浏览(HTTP/HTTPS)、文件传输(FTP)、邮件(SMTP) 视频/音频直播、在线游戏、DNS查询、VoIP电话</p>
+<p><strong>简单来说：</strong></p>
+<ul>
+<li><strong>TCP</strong> 就像是你要寄一份非常重要的合同，你希望它安全、准确地送到，即使慢一点也没关系。</li>
+<li><strong>UDP</strong> 就像是你给朋友发一张明信片，你希望它能尽快送到，即使偶尔丢了一张或者顺序有点乱，影响也不大。</li>
+</ul>
+<h4 id="5-udp">5. UDP流量的特征</h4>
+<p><strong>UDP</strong>（User Datagram Protocol，用户数据报协议）就像是<strong>平信或者明信片</strong>。它追求的是<strong>速度和效率</strong>，但<strong>不保证可靠性</strong>。</p>
+<p><strong>它的主要特点是：</strong></p>
+<ul>
+<li><strong>无连接：</strong> 发送数据前不需要建立连接，直接就把数据包发出去了。</li>
+<li><strong>速度快：</strong> 因为不需要建立连接、不需要确认、不需要重发，所以速度非常快。</li>
+<li><strong>不可靠：</strong> 数据包可能会丢失、重复或者乱序，UDP本身不会去处理这些问题。</li>
+<li><strong>面向报文：</strong> UDP发送的数据是以“报文”为单位的，每个报文都是独立的。</li>
+</ul>
+<p><strong>打个比方：</strong> 你在看直播，如果中间有几秒钟的画面卡顿或者声音断了一下，你可能还能接受，因为你更关心的是整体的流畅性。UDP就像是那个“不管三七二十一，先发出去再说”的信使，效率很高，但丢了就丢了。</p>
+<h4 id="6-udp">6. UDP连接的用处</h4>
+<p>虽然UDP不那么“靠谱”，但它在很多场景下却非常有用：</p>
+<ul>
+<li><strong>实时性要求高的应用：</strong> 比如在线视频、音频直播、网络游戏。这些应用需要快速地传输数据，即使偶尔丢失一些数据，对用户体验的影响也比卡顿要小。</li>
+<li><strong>广播和组播：</strong> UDP可以方便地将数据发送给网络上的多个接收者。</li>
+<li><strong>DNS查询：</strong> 域名解析（把网址翻译成IP地址）通常使用UDP，因为查询请求很小，而且如果一次没收到，客户端可以再发一次。</li>
+</ul>
+<h4 id="7">7. 总结</h4>
+<p>好了，我们来做一个小小的总结：</p>
+<ul>
+<li><strong>传输协议</strong> 是网络通信的“交通规则”。</li>
+<li><strong>TCP</strong> 就像是<strong>可靠的挂号信</strong>，保证数据送达、不乱序，但速度相对慢。适合对数据完整性要求高的场景，如网页浏览、文件下载。</li>
+<li><strong>UDP</strong> 就像是<strong>快速的明信片</strong>，速度快，开销小，但不保证可靠性。适合对实时性要求高的场景，如直播、游戏。</li>
+</ul>
+            </article>
+
+            <!-- 极客版权区域 -->
+            <section style="padding: 0 60px 60px; font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted);">
+                <div style="border: 1px solid var(--border); padding: 35px; background: var(--surface);">
+                    <div># SOURCE_NODE: <span id="page-url" style="word-break: break-all; color: var(--text);"></span></div>
+                    <div># LICENSE: CC-BY-NC-SA-4.0</div>
+                    <div># INTEGRITY: VALIDATED_ENCRYPTED</div>
+                    <div style="margin-top: 20px; color: var(--text);">// EOF_SIGNAL_RECEIVED</div>
+                </div>
+            </section>
+        </main>
+
+        <aside>
+            <section class="widget">
+                <h3 class="widget-title">IDENT_AUTH</h3>
+                <div style="border: 1px solid var(--border); padding: 35px 20px; text-align: center; background: var(--bg);">
+                    <img src="https://edgeoneimg.cdn.sn/i/696b4d5b58c71_1768639835.webp" style="width: 72px; height: 72px; filter: grayscale(1); border: 1px solid var(--border); padding: 4px; margin-bottom: 20px;" alt="Avatar">
+                    <div class="mono" style="font-weight: 900; font-size: 1.2rem; color: var(--text);">Cnfte</div>
+                    <div class="bio-text mono">"滚滚长江东逝水，浪花淘尽英雄。"</div>
+                </div>
+            </section>
+
+            <section class="widget">
+                <h3 class="widget-title">SYSTEM_LOG</h3>
+                <div style="background: #000; border: 1px solid #333; padding: 20px; font-family: 'Fira Code', monospace; font-size: 0.75rem; color: #00ff00; line-height: 1.6;">
+                    <div>[OK] NODE_STATE: STABLE</div>
+                    <div>[OK] UPTIME: 6M_READ</div>
+                    <div>[OK] CLOCK: <span id="live-clock">00:00:00</span></div>
+                    <div style="color: #333">-----------------------</div>
+                    <div>$ tail -f blog.log</div>
+                    <div>> Reading node...</div>
+                    <div style="color: #00ff00;">> 互联网科普系列-什么是传...</div>
+                </div>
+            </section>
+
+            
+            <section class="widget">
+                <h3 class="widget-title">STRUCTURE_TOC</h3>
+                <div class="toc-box" id="toc-container">
+                    <div class="toc">
+<ul>
+<li><a href="#1">1. 什么是传输协议？</a></li>
+<li><a href="#2-tcp">2. TCP连接的用处</a></li>
+<li><a href="#3-tcp">3. TCP流量的特征</a></li>
+<li><a href="#4-tcpudp">4. TCP与UDP</a></li>
+<li><a href="#5-udp">5. UDP流量的特征</a></li>
+<li><a href="#6-udp">6. UDP连接的用处</a></li>
+<li><a href="#7">7. 总结</a></li>
+</ul>
+</div>
+
+                </div>
+            </section>
+            
+        </aside>
+    </div>
+
+    <div class="float-bar">
+        <button class="float-btn" onclick="copyLink()" aria-label="Share"><i class="fa-solid fa-share-nodes"></i></button>
+        <button class="float-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Back to Top"><i class="fa-solid fa-chevron-up"></i></button>
+    </div>
+
+    <footer>
+        <p class="mono">TERMINAL_BLOG_ENGINE v3.2.5 // © 2026 Cnfte</p>
+        <p class="mono" style="font-size: 0.75rem; margin-top: 15px; opacity: 0.5;"><a src="https://www.itdog.cn/ping/cnfte.top">本站已启用CLOUDFLARE CDN防护</a></p>
+    </footer>
+
+    <script>
+        // 1. 初始化 URL 显示和下载卡片
+        document.getElementById('page-url').innerText = window.location.href;
+
+        function renderDownloadCards() {
+            const links = document.querySelectorAll('#article-main a');
+            links.forEach(link => {
+                const text = link.innerText;
+                if (text.startsWith('DOWNLOAD:')) {
+                    const fileName = text.replace('DOWNLOAD:', '');
+                    const fileExt = fileName.split('.').pop().toUpperCase();
+                    let icon = 'fa-file-code';
+                    if (['EXE', 'MSI', 'APK', 'BAT'].includes(fileExt)) icon = 'fa-terminal';
+                    else if (['ZIP', 'RAR', '7Z', 'TAR'].includes(fileExt)) icon = 'fa-file-archive';
+                    else if (!['SH','PY','JS','CPP','C','GO'].includes(fileExt)) icon = 'fa-file-lines';
+
+                    const card = document.createElement('div');
+                    card.className = 'geek-download-card';
+                    card.onclick = () => window.location.href = link.href;
+                    card.innerHTML = `
+                        <div class="file-icon"><i class="fa-solid ${icon}"></i></div>
+                        <div class="file-info">
+                            <span class="file-name">${fileName}</span>
+                            <span class="file-meta">TYPE: ${fileExt} // ACCESS: PUBLIC</span>
+                        </div>
+                        <div class="download-label mono">GET_DATA</div>
+                    `;
+                    link.parentNode.replaceChild(card, link);
+                }
+            });
+        }
+        renderDownloadCards();
+
+        // 2. 系统时钟
+        setInterval(() => {
+            document.getElementById('live-clock').innerText = new Date().toTimeString().split(' ')[0];
+        }, 1000);
+
+        // 3. 滚动进度监听与 TOC 高亮
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            document.getElementById("progress").style.width = (winScroll / height * 100) + "%";
+            
+            const sections = document.querySelectorAll('.content h2, .content h3');
+            const tocLinks = document.querySelectorAll('.toc-box a');
+            let activeId = '';
+            sections.forEach(s => {
+                if (s.getBoundingClientRect().top < 100) activeId = s.getAttribute('id');
+            });
+            tocLinks.forEach(l => {
+                l.classList.toggle('active', l.getAttribute('href') === '#' + activeId);
+            });
+        });
+
+        // 4. 代码块复制增强
+        document.querySelectorAll('pre').forEach(block => {
+            const btn = document.createElement('button');
+            btn.className = 'copy-btn mono';
+            btn.innerText = 'COPY';
+            btn.onclick = () => {
+                navigator.clipboard.writeText(block.querySelector('code').innerText).then(() => {
+                    btn.innerText = 'DONE'; setTimeout(() => btn.innerText = 'COPY', 2000);
+                });
+            };
+            block.appendChild(btn);
+        });
+
+        // 5. 主题控制
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const target = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', target);
+            document.getElementById('mode-text').innerText = target.toUpperCase();
+            localStorage.setItem('geek-theme', target);
+        }
+        
+        const savedTheme = localStorage.getItem('geek-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        if(document.getElementById('mode-text')) document.getElementById('mode-text').innerText = savedTheme.toUpperCase();
+
+        function copyLink() { navigator.clipboard.writeText(window.location.href); alert("LINK_COPIED_TO_CLIPBOARD"); }
+    </script>
+</body>
+</html>

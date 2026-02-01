@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- SEO & Metadata -->
+    <title>Privacy Policy - Cnfteの博客</title>
+    <meta name="description" content="Privacy Policy Effective Date: January 1, 2026 Thank you for visiting Cnfte Space (website address: https://cnfte.top, hereinafter referred to as "this web...">
+    <link rel="icon" href="/favicon.ico">
+    
+    <!-- 极客字体引用：强制同步加载确保移动端第一时间渲染 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #0a0a0a;
+            --text: #ffffff;
+            --text-muted: #a0a0a0;
+            --border: #222222;
+            --code-bg: #050505;
+            --accent: #ffffff;
+            --selection: #333333;
+        }
+
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --surface: #fafafa;
+            --text: #1d1d1f;
+            --text-muted: #505050;
+            --border: #e0e0e0;
+            --code-bg: #f5f5f5;
+            --selection: #eeeeee;
+        }
+
+        /* 1. 基础复位 & 消除移动端点击蓝色背景 & 强力锁定颜色 */
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent !important; 
+        }
+        
+        a, a:visited, a:active {
+            color: inherit !important;
+            text-decoration: none !important;
+            outline: none !important;
+        }
+
+        body { 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            background: var(--bg); color: var(--text); 
+            line-height: 1.8; overflow-x: hidden; width: 100%;
+            transition: background 0.3s;
+        }
+
+        .mono { font-family: 'Fira Code', monospace !important; }
+        ::selection { background: var(--selection); }
+
+        /* 顶部进度条 */
+        #progress { position: fixed; top: 0; left: 0; width: 0%; height: 2px; background: var(--text); z-index: 2001; }
+
+        /* 2. 导航栏加固 */
+        nav { 
+            position: sticky; top: 0; z-index: 1000; background: var(--bg); 
+            border-bottom: 2px solid var(--border); padding: 0 5%; height: 64px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { font-weight: 900; font-size: 1.1rem; letter-spacing: -1px; }
+        .nav-links { display: flex; align-items: center; gap: 20px; }
+        .nav-links a { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .lang-switch { border: 1px solid var(--border); padding: 4px 10px; }
+
+        /* 3. 文章头部：彻底解决标题被遮挡问题 */
+        .post-header { 
+            padding: 140px 20px 60px; 
+            text-align: left; 
+            border-bottom: 1px solid var(--border); 
+            max-width: 1400px; margin: 0 auto; 
+            background: var(--surface);
+        }
+        .post-path { font-family: 'Fira Code', monospace; color: var(--text-muted); font-size: 0.75rem; margin-bottom: 20px; text-transform: uppercase; }
+        .post-header h1 { 
+            font-size: clamp(2rem, 5vw, 3.5rem); 
+            font-weight: 900; 
+            letter-spacing: -2px; 
+            line-height: 1.2; 
+            margin-bottom: 30px;
+            display: block; 
+        }
+
+        /* 4. 响应式布局架构 (1024px 强制单栏) */
+        .main-wrapper { 
+            max-width: 1400px; margin: 0 auto; 
+            display: flex; flex-direction: row; 
+            align-items: stretch;
+        }
+
+        main { flex: 1; min-width: 0; } /* 解决 Flex 容器内代码溢出的核心 */
+
+        article.content { 
+            padding: 60px; border-right: 1px solid var(--border);
+            font-size: 1.125rem;
+        }
+
+        /* 正文样式 */
+        .content h2 { font-size: 1.8rem; margin: 2.5em 0 1.2em; font-weight: 900; border-bottom: 4px solid var(--text); padding-bottom: 10px; display: inline-block; }
+        .content h3 { font-size: 1.4rem; margin: 2em 0 1em; font-weight: 700; color: var(--text); border-left: 4px dashed var(--border); padding-left: 15px; }
+        .content p { margin-bottom: 2.2rem; text-align: justify; }
+        .content a { color: var(--text); text-decoration: underline !important; font-weight: 700; text-underline-offset: 4px; }
+        .content img { max-width: 100%; border: 1px solid var(--border); margin: 30px 0; display: block; height: auto; padding: 5px; }
+
+        /* 5. 代码块彻底锁死修复方案 (防溢出) */
+        pre { 
+            background: var(--code-bg) !important; 
+            padding: 40px 20px 20px !important; 
+            border: 1px solid var(--border) !important;
+            margin: 2.5rem 0; position: relative; 
+            display: block !important; width: 100% !important; 
+            max-width: 100% !important; overflow-x: auto !important; 
+            white-space: pre !important; word-wrap: normal !important;
+            box-sizing: border-box !important;
+            border-radius: 0;
+        }
+        pre code { font-family: 'Fira Code', monospace !important; font-size: 0.95rem !important; display: block; min-width: fit-content; line-height: 1.6; }
+
+        /* 6. 侧边栏加固：解决垂直文字 Bug */
+        aside { 
+            /* --- 彻底美化侧边栏滚动条，干掉大白条 --- */
+
+/* 1. 针对 Chrome, Edge, Safari (WebKit) */
+aside::-webkit-scrollbar {
+    width: 4px;             /* 极细的宽度 */
+    background: transparent;
+}
+
+aside::-webkit-scrollbar-thumb {
+    background: #333;       /* 滚动条滑块颜色：深灰色 */
+    border-radius: 0px;     /* 极客风格用直角 */
+}
+
+aside::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted); /* 悬停时稍微亮一点 */
+}
+
+aside::-webkit-scrollbar-track {
+    background: var(--bg);  /* 滚动条轨道颜色：同背景色 */
+}
+
+/* 2. 针对 Firefox */
+aside {
+    scrollbar-width: thin;          /* 细滚动条 */
+    scrollbar-color: #333 transparent; /* 滑块颜色 轨道颜色 */
+}
+
+/* 3. 如果你希望彻底看不见滚动条，但依然保留滚动功能（更高级感） */
+/* 只需要把上面的 aside::-webkit-scrollbar-thumb 的颜色设为与背景一致，或如下： */
+aside {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;     /* Firefox */
+}
+aside::-webkit-scrollbar {
+    display: none;             /* Chrome, Safari, Opera */
+}
+            width: 360px; flex-shrink: 0; min-width: 320px;
+            padding: 60px 40px; background: var(--surface);
+            position: sticky; top: 64px; height: calc(100vh - 64px); 
+            overflow-y: auto;
+        }
+        .widget { margin-bottom: 60px; width: 100%; }
+        .widget-title { font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 25px; text-transform: uppercase; border-left: 4px solid var(--text); padding-left: 12px; }
+
+        /* 作者简介：强制正常排版 */
+        .bio-text {
+            font-size: 0.9rem; color: var(--text-muted); 
+            margin-top: 15px; line-height: 1.6;
+            word-break: normal !important; 
+            white-space: normal !important; 
+            display: block !important; width: 100% !important;
+            text-align: center;
+        }
+
+        /* 极客下载卡片样式 */
+        .geek-download-card {
+            display: flex; align-items: center; padding: 20px; margin: 30px 0;
+            background: var(--surface); border: 1px solid var(--border);
+            transition: 0.2s; cursor: pointer;
+        }
+        .geek-download-card:hover { border-color: var(--text); background: var(--selection); }
+        .geek-download-card .file-icon { font-size: 2rem; margin-right: 25px; color: var(--text); }
+        .geek-download-card .file-info { flex: 1; }
+        .geek-download-card .file-name { font-family: 'Fira Code', monospace; font-size: 1rem; font-weight: 700; display: block; }
+        .geek-download-card .file-meta { font-family: 'Fira Code', monospace; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-top: 5px; }
+        .geek-download-card .download-label { font-family: 'Fira Code', monospace; font-size: 0.7rem; padding: 5px 12px; border: 1px solid var(--border); color: var(--text-muted); }
+
+        /* 7. 悬浮按钮：高对比度黑白 */
+        .float-bar { position: fixed; bottom: 30px; right: 20px; display: flex; flex-direction: column; gap: 12px; z-index: 1000; }
+        .float-btn { 
+            width: 52px; height: 52px; 
+            background: var(--text) !important; /* 强制可见背景 */
+            color: var(--bg) !important;       /* 强制可见图标 */
+            border: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; font-size: 1.3rem; border-radius: 0; 
+            box-shadow: 6px 6px 0px var(--border);
+            transition: 0.1s;
+        }
+        .float-btn i, .float-btn svg { color: var(--bg) !important; pointer-events: none; }
+        .float-btn:active { transform: translate(2px, 2px); box-shadow: none; }
+
+        .copy-btn { position: absolute; top: 0; right: 0; background: var(--border); color: var(--text); border: none; padding: 8px 15px; font-size: 0.65rem; cursor: pointer; font-family: 'Fira Code', monospace; font-weight: 700; text-transform: uppercase; }
+
+        /* 8. 移动端强力适配逻辑 */
+        @media (max-width: 1024px) {
+            .main-wrapper { flex-direction: column !important; }
+            article.content { padding: 40px 25px; border-right: none !important; width: 100% !important; }
+            aside { 
+                width: 100% !important; border-left: none !important; border-top: 2px solid var(--border); 
+                position: static !important; height: auto !important; padding: 40px 25px !important; flex: none;
+            }
+            .post-header { padding: 100px 20px 40px; }
+            /* 代码块移动端全宽 */
+            pre { margin: 2rem -25px; border-left: none; border-right: none; padding: 45px 25px 25px !important; }
+        }
+
+        footer { padding: 80px 20px; text-align: center; border-top: 1px solid var(--border); font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted); background: var(--surface); }
+    </style>
+</head>
+<body>
+    <div id="progress"></div>
+    <nav>
+        <a href="/" class="logo mono">CNFTE://ROOT</a>
+        <div class="nav-links mono">
+            <a href="/en/Link Exchange.html">Link Exchange</a><a href="/en/Privacy Policy.html">Privacy Policy</a><a href="/en/about.html">about</a><a href="/en/公益服务项.html">service</a>
+            <a href="/" class="lang-switch">ZH</a>
+            <span style="cursor: pointer;" onclick="toggleTheme()">[MODE]</span>
+        </div>
+    </nav>
+
+    <header class="post-header">
+        <div class="post-path">/ROOT/NODES/POSTS/2026/02/01</div>
+        <h1>Privacy Policy</h1>
+        <div class="mono" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 15px;">
+            STAMP: 2026-02-01 // REF_ID: 77a3e876 // AUTH: VERIFIED
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <main>
+            <article class="content" id="article-main">
+                <h1 id="privacy-policy">Privacy Policy</h1>
+<p>Effective Date: January 1, 2026</p>
+<p>Thank you for visiting Cnfte Space (website address: https://cnfte.top, hereinafter referred to as "this website"). We understand the importance of privacy protection to you and are committed to protecting the security and legitimate rights of your personal information. This privacy policy aims to clearly inform you how this website (a static site, using Cloudflare CDN acceleration, without a connected database, and participating in the Google Adsense advertising program) collects, uses, stores, and protects your personal information, as well as your related rights. Please read and understand this policy carefully before using this website's services. Your access, browsing, or use of this website's services constitutes your agreement to the entire content of this privacy policy.</p>
+<h2 id="i-scope-of-application">I. Scope of Application</h2>
+<p>This privacy policy applies to all actions of this website and related third-party service providers (including Cloudflare, Google Adsense, etc.) in collecting, using, storing, and protecting your personal information during your access to this website and use of all services provided by this website (including but not limited to browsing technical blogs, sharing resources, viewing network protocol科普 content, viewing advertisements, etc.).
+This policy does not apply to other third-party websites or services other than the aforementioned third-party service providers. This website may contain links to third-party websites (such as GitHub resource links, etc.). When you visit third-party websites, their privacy policies are independent of this website, and we recommend that you carefully read the third-party's privacy policy.</p>
+<h2 id="ii-types-and-methods-of-information-collection">II. Types and Methods of Information Collection</h2>
+<p>This website is a static site and does not have a connected database, so it does not actively store your personal identification information. The information collected is mainly obtained automatically, as follows:</p>
+<h3 id="i-information-automatically-collected-by-this-website">(I) Information Automatically Collected by This Website</h3>
+<p>When you access and use this website, we may automatically collect the following non-personally identifiable information through server logs and other technologies. This information is not directly associated with your real identity and will not be stored on this website's server (due to the lack of a connected database):
+1. Device information: including the type of device you use, operating system version, browser type, device identifier (such as IMEI, MAC address), etc.;
+2. Access information: including your access time, access duration, accessed page path, content viewed, click records, IP address (which may be anonymized after processing by Cloudflare), network operator, and location;
+3. Technical log information: including server response time, error logs, access request headers, and other technical data. ### (II) Information Collected by Third-Party Services
+1. <strong>Cloudflare CDN Related Collection:</strong> To provide website acceleration and security protection, this website uses Cloudflare CDN services. Cloudflare may collect information related to your visits to this website, including but not limited to IP address, browser type, access time, and page requests, for purposes such as node scheduling, attack protection, and access statistics. Cloudflare's data processing adheres to its own privacy policy (see Cloudflare's official privacy policy page);
+2. <strong>Google Adsense Advertising Related Collection:</strong> This website participates in the Google Adsense advertising program. To display relevant and personalized advertisements to you, Google Adsense may collect information such as your browsing behavior, device information, IP address, and interests. Google Adsense's information collection and use follow Google's privacy policy and advertising service terms (see Google's official privacy policy and Adsense service terms pages). Google may use cookies or similar tracking technologies to collect the above information; please refer to Google's relevant explanations regarding cookies.</p>
+<h3 id="iii-information-you-actively-provide">(III) Information You Actively Provide</h3>
+<p>We may collect information you actively provide only when you voluntarily choose to participate in specific interactive features or services, for example:
+1. If you choose to share your opinions or ask questions through third-party embedded features such as website comments or third-party comment plugins, the relevant information will be collected and processed by the corresponding third-party service provider in accordance with their privacy policy, and this website does not store such information;
+2. If you participate in resource sharing, technical exchange, or other activities organized by this website, we may collect necessary information (such as verification information for resource access) according to the activity requirements. The specific details will be subject to the activity rules, and the relevant information will only be used for activity-related purposes and will be deleted or anonymized after the activity ends. ## III. Purposes of Information Use</p>
+<h3 id="i-use-at-the-website-level">(I) Use at the Website Level</h3>
+<p>The non-personally identifiable information we collect is used only for the following legitimate purposes:
+1. Providing and maintaining website services: Ensuring the normal operation of this website, optimizing website loading speed and access stability in conjunction with Cloudflare CDN to provide you with a smooth browsing experience;
+2. Content optimization: Analyzing user preferences based on access data (such as page views, click popularity, etc.) to optimize website content layout and update frequency, providing you with technical blogs, science popularization content, and resources that better meet your needs;
+3. Security protection: Utilizing Cloudflare's security protection capabilities, analyzing access logs to identify and prevent malicious attacks, network fraud, and other security risks, protecting your and this website's legitimate rights and interests;
+4. Compliance requirements: Complying with relevant laws and regulations and regulatory requirements, and cooperating with legitimate investigations by competent authorities.</p>
+<h3 id="ii-purposes-of-third-party-service-use">(II) Purposes of Third-Party Service Use</h3>
+<ol>
+<li>Cloudflare's use of collected information: Primarily used to provide CDN acceleration, DDoS protection, access routing optimization, and other services.  Specific details are subject to Cloudflare's privacy policy;</li>
+<li>Google Adsense's use of collected information: Primarily used to analyze user interests and preferences, display personalized advertisements, and collect data such as ad impressions and clicks, in order to provide advertising revenue settlement services to this website. Specific details are subject to Google's privacy policy and Adsense terms of service.</li>
+</ol>
+<h2 id="iv-information-storage-and-protection">IV. Information Storage and Protection</h2>
+<h3 id="i-website-storage-and-protection">(I) Website Storage and Protection</h3>
+<p>Because this website is a static site and is not connected to a database, it does not store any user personal information (including information voluntarily provided and automatically collected information). All automatically collected temporary access data is only used for real-time access analysis and security verification and will not be retained.</p>
+<h3 id="ii-third-party-service-storage-and-protection">(II) Third-Party Service Storage and Protection</h3>
+<ol>
+<li>Cloudflare storage and protection: Your relevant access information will be stored by Cloudflare on its secure servers in accordance with its data storage policy. Cloudflare uses industry-standard security technologies (such as data encryption, access control, etc.) to protect information security. The storage period is subject to Cloudflare's privacy policy;</li>
+<li>Google Adsense storage and protection: The information collected by Google Adsense will be stored by Google in accordance with its data storage specifications. Google will take strict security protection measures to ensure information security. The storage period is subject to Google's privacy policy. ### (III) Joint Security Guarantee Responsibility
+We have carefully selected third-party service providers with strong privacy protection qualifications (Cloudflare, Google AdSense), and through service agreements, we explicitly require them to comply with relevant laws and regulations, take necessary security protection measures, and not disclose, tamper with, or misuse the collected information without authorization.
+Despite the measures taken above, the internet environment is inherently uncertain, and we cannot completely guarantee the absolute security of information transmission and storage by third-party service providers. You should take care to properly protect your device information and network access environment to avoid information leakage due to your own improper operation.</li>
+</ol>
+<h2 id="v-information-sharing-and-disclosure">V. Information Sharing and Disclosure</h2>
+<h3 id="i-information-sharing-and-disclosure-by-this-website">(I) Information Sharing and Disclosure by This Website</h3>
+<p>This website does not store any user personal information; therefore, there is no sharing, selling, or renting of user personal information to third parties. Only under the following circumstances may we cooperate with third parties to disclose relevant non-personally identifiable information (such as aggregated access statistics):
+1. With your explicit consent;
+2. Required by laws and regulations or mandated by judicial rulings or administrative orders;
+3. Within a reasonable and necessary scope to protect the legitimate rights and interests of this website, you, or other third parties.</p>
+<h3 id="ii-information-sharing-and-disclosure-by-third-party-services">(II) Information Sharing and Disclosure by Third-Party Services</h3>
+<p>Cloudflare, Google AdSense, and other third-party service providers share and disclose information in accordance with their own privacy policies and relevant laws and regulations. This website does not interfere with their legitimate information processing activities, but will require them not to share user information beyond the scope necessary for the service.</p>
+<h2 id="vi-use-of-cookies-and-similar-tracking-technologies">VI. Use of Cookies and Similar Tracking Technologies</h2>
+<h3 id="i-use-of-cookies-by-this-website">(I) Use of Cookies by This Website</h3>
+<p>This website does not actively set cookies itself, but to optimize website functionality, it may use cookies or similar tracking technologies (such as web beacons, device identifiers, etc.) through third-party services (such as Cloudflare, Google AdSense).</p>
+<h3 id="ii-use-of-cookies-by-third-party-services">(II) Use of Cookies by Third-Party Services</h3>
+<ol>
+<li>Cloudflare may use cookies to store your access preferences, verify access status, etc., to achieve CDN acceleration and security protection functions;</li>
+<li>Google AdSense may use cookies to collect your browsing behavior, interests, etc., to display personalized advertisements.
+You can disable or delete cookies through your browser settings. Please refer to your browser's help documentation for specific instructions. Disabling cookies may affect the website loading speed, advertising display effects, or prevent some third-party service functions from working properly. ## VII. Your Rights
+You have the following rights regarding your personal information, and we will assist you in asserting these rights with relevant third-party service providers (as this website does not store information):</li>
+<li>Right of Access: You have the right to inquire about the personal information collected about you by third parties such as Cloudflare and Google AdSense. You can submit access requests through the official channels of these third parties;</li>
+<li>Right to Rectification: If you find that the personal information collected about you by third parties is incorrect or incomplete, you have the right to request correction or supplementation through the official channels of these third parties;</li>
+<li>Right to Erasure: Subject to applicable laws and regulations and the privacy policies of third parties, you have the right to request the deletion of your personal information through the official channels of these third parties;</li>
+<li>Right to Withdraw Consent: You have the right to withdraw your consent to the collection and use of your personal information by third-party services (e.g., by disabling personalized advertising authorization in your Google account settings), but withdrawing consent may affect the functionality of related services;</li>
+<li>Right to Complaint and Suggestion: If you have any questions, complaints, or suggestions regarding this website's privacy protection or the information processing practices of third-party services, you can contact us through the contact information provided in this policy, and we will do our best to assist you.</li>
+</ol>
+<h2 id="viii-protection-of-minors">VIII. Protection of Minors</h2>
+<p>This website is primarily intended for users with full legal capacity and does not specifically provide services to minors. If a minor uses this website's services without the consent of their guardian, this website and third-party service providers (Cloudflare, Google AdSense) will not actively collect the minor's personal information. If a minor's personal information is accidentally collected, we will, upon notification from the guardian, assist in contacting the relevant third-party service providers to promptly delete the relevant information. Guardians are advised to guide minors in the correct use of the internet and protect their personal information security.</p>
+<h2 id="ix-updates-to-the-privacy-policy">IX. Updates to the Privacy Policy</h2>
+<p>This website may update this privacy policy based on revisions to laws and regulations, adjustments to website services (such as changes to third-party services), or changes in privacy protection needs. The updated privacy policy will be prominently displayed on this website (e.g., on the homepage announcement, a separate privacy policy update page, etc.), and the effective date will be indicated by the modification date.
+You should regularly review the updated content of this privacy policy. If you continue to use this website's services after the privacy policy is updated, it means you agree to the updated privacy policy; if you do not agree, you should immediately stop using this website's services. ## 10. Contact Information
+If you have any questions, complaints, or suggestions regarding this Privacy Policy, or need assistance in exercising your rights, please contact us through the following methods:
+Contact Email: cnfte.2@gmail.com</p>
+<p>We will communicate with you and assist in handling the relevant matters within a reasonable timeframe after receiving your feedback.</p>
+            </article>
+
+            <!-- 极客版权区域 -->
+            <section style="padding: 0 60px 60px; font-family: 'Fira Code', monospace; font-size: 0.85rem; color: var(--text-muted);">
+                <div style="border: 1px solid var(--border); padding: 35px; background: var(--surface);">
+                    <div># SOURCE_NODE: <span id="page-url" style="word-break: break-all; color: var(--text);"></span></div>
+                    <div># LICENSE: CC-BY-NC-SA-4.0</div>
+                    <div># INTEGRITY: VALIDATED_ENCRYPTED</div>
+                    <div style="margin-top: 20px; color: var(--text);">// EOF_SIGNAL_RECEIVED</div>
+                </div>
+            </section>
+        </main>
+
+        <aside>
+            <section class="widget">
+                <h3 class="widget-title">IDENT_AUTH</h3>
+                <div style="border: 1px solid var(--border); padding: 35px 20px; text-align: center; background: var(--bg);">
+                    <img src="https://edgeoneimg.cdn.sn/i/696b4d5b58c71_1768639835.webp" style="width: 72px; height: 72px; filter: grayscale(1); border: 1px solid var(--border); padding: 4px; margin-bottom: 20px;" alt="Avatar">
+                    <div class="mono" style="font-weight: 900; font-size: 1.2rem; color: var(--text);">Cnfte</div>
+                    <div class="bio-text mono">"滚滚长江东逝水，浪花淘尽英雄。"</div>
+                </div>
+            </section>
+
+            <section class="widget">
+                <h3 class="widget-title">SYSTEM_LOG</h3>
+                <div style="background: #000; border: 1px solid #333; padding: 20px; font-family: 'Fira Code', monospace; font-size: 0.75rem; color: #00ff00; line-height: 1.6;">
+                    <div>[OK] NODE_STATE: STABLE</div>
+                    <div>[OK] UPTIME: M_READ</div>
+                    <div>[OK] CLOCK: <span id="live-clock">00:00:00</span></div>
+                    <div style="color: #333">-----------------------</div>
+                    <div>$ tail -f blog.log</div>
+                    <div>> Reading node...</div>
+                    <div style="color: #00ff00;">> Privacy Poli...</div>
+                </div>
+            </section>
+
+            
+            <section class="widget">
+                <h3 class="widget-title">STRUCTURE_TOC</h3>
+                <div class="toc-box" id="toc-container">
+                    <div class="toc">
+<ul>
+<li><a href="#privacy-policy">Privacy Policy</a><ul>
+<li><a href="#i-scope-of-application">I. Scope of Application</a></li>
+<li><a href="#ii-types-and-methods-of-information-collection">II. Types and Methods of Information Collection</a><ul>
+<li><a href="#i-information-automatically-collected-by-this-website">(I) Information Automatically Collected by This Website</a></li>
+<li><a href="#iii-information-you-actively-provide">(III) Information You Actively Provide</a></li>
+<li><a href="#i-use-at-the-website-level">(I) Use at the Website Level</a></li>
+<li><a href="#ii-purposes-of-third-party-service-use">(II) Purposes of Third-Party Service Use</a></li>
+</ul>
+</li>
+<li><a href="#iv-information-storage-and-protection">IV. Information Storage and Protection</a><ul>
+<li><a href="#i-website-storage-and-protection">(I) Website Storage and Protection</a></li>
+<li><a href="#ii-third-party-service-storage-and-protection">(II) Third-Party Service Storage and Protection</a></li>
+</ul>
+</li>
+<li><a href="#v-information-sharing-and-disclosure">V. Information Sharing and Disclosure</a><ul>
+<li><a href="#i-information-sharing-and-disclosure-by-this-website">(I) Information Sharing and Disclosure by This Website</a></li>
+<li><a href="#ii-information-sharing-and-disclosure-by-third-party-services">(II) Information Sharing and Disclosure by Third-Party Services</a></li>
+</ul>
+</li>
+<li><a href="#vi-use-of-cookies-and-similar-tracking-technologies">VI. Use of Cookies and Similar Tracking Technologies</a><ul>
+<li><a href="#i-use-of-cookies-by-this-website">(I) Use of Cookies by This Website</a></li>
+<li><a href="#ii-use-of-cookies-by-third-party-services">(II) Use of Cookies by Third-Party Services</a></li>
+</ul>
+</li>
+<li><a href="#viii-protection-of-minors">VIII. Protection of Minors</a></li>
+<li><a href="#ix-updates-to-the-privacy-policy">IX. Updates to the Privacy Policy</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+                </div>
+            </section>
+            
+        </aside>
+    </div>
+
+    <div class="float-bar">
+        <button class="float-btn" onclick="copyLink()" aria-label="Share"><i class="fa-solid fa-share-nodes"></i></button>
+        <button class="float-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" aria-label="Back to Top"><i class="fa-solid fa-chevron-up"></i></button>
+    </div>
+
+    <footer>
+        <p class="mono">TERMINAL_BLOG_ENGINE v3.2.5 // © 2026 Cnfte</p>
+        <p class="mono" style="font-size: 0.75rem; margin-top: 15px; opacity: 0.5;"><a src="https://www.itdog.cn/ping/cnfte.top">本站已启用CLOUDFLARE CDN防护</a></p>
+    </footer>
+
+    <script>
+        // 1. 初始化 URL 显示和下载卡片
+        document.getElementById('page-url').innerText = window.location.href;
+
+        function renderDownloadCards() {
+            const links = document.querySelectorAll('#article-main a');
+            links.forEach(link => {
+                const text = link.innerText;
+                if (text.startsWith('DOWNLOAD:')) {
+                    const fileName = text.replace('DOWNLOAD:', '');
+                    const fileExt = fileName.split('.').pop().toUpperCase();
+                    let icon = 'fa-file-code';
+                    if (['EXE', 'MSI', 'APK', 'BAT'].includes(fileExt)) icon = 'fa-terminal';
+                    else if (['ZIP', 'RAR', '7Z', 'TAR'].includes(fileExt)) icon = 'fa-file-archive';
+                    else if (!['SH','PY','JS','CPP','C','GO'].includes(fileExt)) icon = 'fa-file-lines';
+
+                    const card = document.createElement('div');
+                    card.className = 'geek-download-card';
+                    card.onclick = () => window.location.href = link.href;
+                    card.innerHTML = `
+                        <div class="file-icon"><i class="fa-solid ${icon}"></i></div>
+                        <div class="file-info">
+                            <span class="file-name">${fileName}</span>
+                            <span class="file-meta">TYPE: ${fileExt} // ACCESS: PUBLIC</span>
+                        </div>
+                        <div class="download-label mono">GET_DATA</div>
+                    `;
+                    link.parentNode.replaceChild(card, link);
+                }
+            });
+        }
+        renderDownloadCards();
+
+        // 2. 系统时钟
+        setInterval(() => {
+            document.getElementById('live-clock').innerText = new Date().toTimeString().split(' ')[0];
+        }, 1000);
+
+        // 3. 滚动进度监听与 TOC 高亮
+        window.addEventListener('scroll', () => {
+            const winScroll = document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            document.getElementById("progress").style.width = (winScroll / height * 100) + "%";
+            
+            const sections = document.querySelectorAll('.content h2, .content h3');
+            const tocLinks = document.querySelectorAll('.toc-box a');
+            let activeId = '';
+            sections.forEach(s => {
+                if (s.getBoundingClientRect().top < 100) activeId = s.getAttribute('id');
+            });
+            tocLinks.forEach(l => {
+                l.classList.toggle('active', l.getAttribute('href') === '#' + activeId);
+            });
+        });
+
+        // 4. 代码块复制增强
+        document.querySelectorAll('pre').forEach(block => {
+            const btn = document.createElement('button');
+            btn.className = 'copy-btn mono';
+            btn.innerText = 'COPY';
+            btn.onclick = () => {
+                navigator.clipboard.writeText(block.querySelector('code').innerText).then(() => {
+                    btn.innerText = 'DONE'; setTimeout(() => btn.innerText = 'COPY', 2000);
+                });
+            };
+            block.appendChild(btn);
+        });
+
+        // 5. 主题控制
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const target = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', target);
+            document.getElementById('mode-text').innerText = target.toUpperCase();
+            localStorage.setItem('geek-theme', target);
+        }
+        
+        const savedTheme = localStorage.getItem('geek-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        if(document.getElementById('mode-text')) document.getElementById('mode-text').innerText = savedTheme.toUpperCase();
+
+        function copyLink() { navigator.clipboard.writeText(window.location.href); alert("LINK_COPIED_TO_CLIPBOARD"); }
+    </script>
+</body>
+</html>
