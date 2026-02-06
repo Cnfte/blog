@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO & Metadata -->
+    <meta name="google-adsense-account" content="ca-pub-4242854888467129">
+    <title>互联网科普系列-什么是协议？怎么搭建一个带有加密协议的节点？ - Cnfteの博客</title>
+    <meta name="description" content="我们需要先理清一个概念：现在我们常用的工具（如 Shadowsocks, V2Ray, Singbox）在技术分类上更多被称为“代理（Proxy）”而非传统意义上的“VPN”，但为了方便理解，下文统称为翻墙协议。 一、 常见的翻墙协议及其工作原理 传统的VPN协议（如 L2TP、PPTP、OpenVPN）特征...">
+    <link rel="icon" href="/favicon.ico">
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #0a0a0a;
+            --text: #ffffff;
+            --text-muted: #a0a0a0;
+            --border: #222222;
+            --code-bg: #050505;
+            --accent: #ffffff;
+            --trans: all 0.2s ease;
+        }
+
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --surface: #fafafa;
+            --text: #1d1d1f;
+            --text-muted: #505050;
+            --border: #e0e0e0;
+            --code-bg: #f5f5f5;
+        }
+
+        /* 基础复位 */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        a { color: inherit !important; text-decoration: none !important; }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--bg); color: var(--text); 
+            line-height: 1.8; overflow-x: hidden; width: 100%;
+            transition: background 0.3s;
+        }
+
+        .mono { font-family: 'Fira Code', monospace !important; }
+        ::selection { background: #333; color: #fff; }
+
+        /* 顶部进度条 */
+        #progress { position: fixed; top: 0; left: 0; width: 0%; height: 2px; background: var(--accent); z-index: 2001; }
+
+        /* --- 导航栏 --- */
+        nav { 
+            position: sticky; top: 0; z-index: 1000; background: var(--bg); border-bottom: 2px solid var(--border); 
+            padding: 10px 5%; min-height: 60px; display: flex; justify-content: space-between; align-items: center; 
+        }
+        .nav-links { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: flex-end; }
+        .nav-links a, .nav-links span { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
+
+        /* 搜索框 */
+        .nav-search-wrapper { position: relative; }
+        #nav-search-input { 
+            background: transparent; border: 1px solid var(--border); color: var(--text); 
+            font-family: 'Fira Code'; font-size: 10px; padding: 4px 10px; width: 100px; outline: none; transition: var(--trans); 
+        }
+        #nav-search-input:focus { width: 150px; border-color: var(--text); }
+        #nav-search-results { 
+            position: absolute; top: 100%; right: 0; width: 280px; background: var(--surface); 
+            border: 1px solid var(--border); max-height: 350px; overflow-y: auto; z-index: 9999; display: none; 
+        }
+
+        /* 文章头部 */
+        .post-header { padding: 60px 20px 30px; border-bottom: 1px solid var(--border); max-width: 1200px; margin: 0 auto; }
+        .post-header h1 { font-size: clamp(1.5rem, 6vw, 2.5rem); font-weight: 900; letter-spacing: -1px; line-height: 1.2; }
+        .meta-bar { font-family: 'Fira Code'; font-size: 0.7rem; color: var(--text-muted); margin-top: 15px; }
+
+        /* 布局架构 */
+        .main-wrapper { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: row; }
+        main { flex: 1; min-width: 0; border-right: 1px solid var(--border); }
+
+        /* --- 文章内广告位 (2x2 扁平化) --- */
+        .spot-c-zone { padding: 20px 60px 0; }
+        .spot-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        .spot-item { 
+            width: 100%; aspect-ratio: 2.4 / 1; border: 1px solid var(--border); 
+            background: var(--surface); overflow: hidden; transition: var(--trans); filter: none !important;
+        }
+        .spot-item img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* 正文内容 */
+        article.content { padding: 40px 60px; font-size: 1.05rem; }
+        .content h2 { font-size: 1.4rem; margin: 2em 0 1em; font-weight: 900; border-bottom: 2px solid var(--text); padding-bottom: 5px; display: inline-block; }
+        .content p { margin-bottom: 1.6rem; text-align: justify; }
+        .content img { max-width: 100%; border: 1px solid var(--border); margin: 20px 0; padding: 5px; background: var(--surface); }
+
+        /* 侧边栏 */
+        aside { 
+            width: 320px; flex-shrink: 0; padding: 40px 25px; background: var(--surface); 
+            position: sticky; top: 60px; height: calc(100vh - 60px); overflow-y: auto; scrollbar-width: none;
+        }
+        aside::-webkit-scrollbar { display: none; }
+        .widget { margin-bottom: 35px; }
+        .widget-title { font-family: 'Fira Code'; font-size: 0.7rem; border-left: 3px solid var(--text); padding-left: 10px; margin-bottom: 15px; text-transform: uppercase; }
+
+        /* 代码块 */
+        pre { background: var(--code-bg) !important; padding: 25px 15px; border: 1px solid var(--border); margin: 1.5rem 0; overflow-x: auto; }
+        pre code { font-family: 'Fira Code', monospace !important; font-size: 0.85rem !important; }
+
+        /* --- 手机端强力适配 --- */
+        @media (max-width: 768px) {
+            nav { flex-direction: column; gap: 12px; padding: 15px; }
+            .nav-links { width: 100%; justify-content: center; gap: 10px; }
+            
+            .main-wrapper { flex-direction: column; }
+            main { border-right: none; }
+            .post-header { padding: 40px 15px 20px; }
+            
+            .spot-c-zone { padding: 15px 15px 0; }
+            .spot-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+            .spot-item { aspect-ratio: 2.2 / 1; }
+
+            article.content { padding: 25px 15px; } /* 窄边距，防止长条化 */
+            aside { width: 100%; height: auto; position: static; border-top: 1px solid var(--border); padding: 30px 15px; }
+        }
+
+        footer { padding: 60px 20px; text-align: center; border-top: 1px solid var(--border); font-family: 'Fira Code'; font-size: 0.75rem; background: var(--surface); }
+    </style>
+</head>
+<body>
+    <div id="progress"></div>
+    <nav>
+        <a href="/" class="logo mono">CNFTE</a>
+        <div class="nav-links mono">
+            <a href="/about.html">关于</a><a href="/公益服务项.html">公益服务项</a><a href="/友链.html">友链</a><a href="/隐私政策.html">隐私政策</a>
+            <div class="nav-search-wrapper">
+                <input type="text" id="nav-search-input" placeholder="SEARCH..." autocomplete="off">
+                <div id="nav-search-results"></div>
+            </div>
+            <span style="cursor: pointer; border: 1px solid var(--border); padding: 2px 8px; font-size: 9px;" onclick="toggleTheme()">MODE</span>
+        </div>
+    </nav>
+
+    <header class="post-header">
+        <h1 class="mono">互联网科普系列-什么是协议？怎么搭建一个带有加密协议的节点？</h1>
+        <div class="meta-bar mono">
+            STAMP: 2026-01-24 // UID: ad7a19c0 // AUTH: VERIFIED
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <main>
+            <!-- 广告区域 -->
+            <section class="spot-c-zone">
+                <div class="spot-grid">
+                    
+                    <a href="https://edgeoneimg.cdn.sn/i/697f27805fd7d_1769940864.webp" class="spot-item" target="_blank" rel="nofollow">
+                        
+                        <img src="https://edgeoneimg.cdn.sn/i/697f261a67d98_1769940506.webp" alt="Ad">
+                        
+                    </a>
+                    
+                    <a href="https://edgeoneimg.cdn.sn/i/697f27805fd7d_1769940864.webp" class="spot-item" target="_blank" rel="nofollow">
+                        
+                        <img src="https://edgeoneimg.cdn.sn/i/697f261a67d98_1769940506.webp" alt="Ad">
+                        
+                    </a>
+                    
+                    <a href="https://edgeoneimg.cdn.sn/i/697f27805fd7d_1769940864.webp" class="spot-item" target="_blank" rel="nofollow">
+                        
+                        <img src="https://edgeoneimg.cdn.sn/i/697f261a67d98_1769940506.webp" alt="Ad">
+                        
+                    </a>
+                    
+                    <a href="https://edgeoneimg.cdn.sn/i/697f27805fd7d_1769940864.webp" class="spot-item" target="_blank" rel="nofollow">
+                        
+                        <img src="https://edgeoneimg.cdn.sn/i/697f261a67d98_1769940506.webp" alt="Ad">
+                        
+                    </a>
+                    
+                </div>
+            </section>
+
+            <article class="content mono">
+                <p>我们需要先理清一个概念：现在我们常用的工具（如 Shadowsocks, V2Ray, Sing-box）在技术分类上更多被称为<strong>“代理（Proxy）”</strong>而非传统意义上的<strong>“VPN”</strong>，但为了方便理解，下文统称为翻墙协议。</p>
+<hr />
+<h3 id="_1">一、 常见的翻墙协议及其工作原理</h3>
+<p>传统的VPN协议（如 L2TP、PPTP、OpenVPN）特征非常明显，极易被防火墙（GFW）识别并封锁。因此，现在的翻墙协议主要研究如何<strong>“伪装”</strong>。</p>
+<ol>
+<li>
+<p><strong>Shadowsocks (SS/SS-Rust):</strong></p>
+<ul>
+<li><strong>原理：</strong> 最经典的协议。它将流量进行对称加密，使数据包看起来像一堆无意义的乱码。</li>
+<li><strong>现状：</strong> 原生SS由于容易被“主动探测”发现（GFW会模拟客户端向服务器发包，看反应是否符合SS特征），现在多配合 AEAD 加密使用，或作为基础隧道。</li>
+</ul>
+</li>
+<li>
+<p><strong>VMess / VLESS (V2Ray/Xray):</strong></p>
+<ul>
+<li><strong>原理：</strong> V2Ray 平台推出的协议。<strong>VLESS</strong> 是目前最主流的协议，它本身不加密，必须配合 <strong>TLS</strong>（和银行网站一样的加密层）使用。</li>
+<li><strong>特点：</strong> 极其灵活，可以伪装成正常的网页流量。</li>
+</ul>
+</li>
+<li>
+<p><strong>Trojan:</strong></p>
+<ul>
+<li><strong>原理：</strong> 模仿最常见的 HTTPS 协议。它把代理流量伪装成普通的网站访问，如果有人尝试探测，它会直接显示一个真正的网页。</li>
+</ul>
+</li>
+<li>
+<p><strong>Hysteria2 / Tuic (基于 UDP):</strong></p>
+<ul>
+<li><strong>原理：</strong> 传统的协议多基于 TCP。这类协议基于 <strong>QUIC (UDP)</strong>。</li>
+<li><strong>特点：</strong> 暴力且快速。在网络环境差（丢包高）的情况下，速度远超其他协议，但容易被运营商（ISP）限速。</li>
+</ul>
+</li>
+<li>
+<p><strong>Reality (目前最推荐):</strong></p>
+<ul>
+<li><strong>原理：</strong> 它是 Xray 团队开发的一种新技术。它直接借用像 <code>www.microsoft.com</code> 这样真实知名网站的 TLS 指纹和证书，让 GFW 认为你真的在访问微软。这是目前<strong>隐蔽性最强</strong>的技术。</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h3 id="gfw">二、 它们是如何绕过长城防火墙（GFW）的？</h3>
+<p>GFW 拦截流量主要通过以下手段，而协议则针对性突破：</p>
+<ol>
+<li><strong>封锁 IP/端口：</strong> GFW 发现某个 IP 流量异常且符合代理特征，就直接拉黑。<ul>
+<li><strong>绕过：</strong> 使用 CDN（如 Cloudflare）或动态 IP，或者通过高度伪装让流量看起来像正常上网。</li>
+</ul>
+</li>
+<li><strong>深度包检测 (DPI)：</strong> GFW 分析数据包里的内容，寻找特征码。<ul>
+<li><strong>绕过：</strong> 强加密（乱码化）或 彻底伪装（变成标准的 HTTPS 或 借用名站证书）。</li>
+</ul>
+</li>
+<li><strong>主动探测：</strong> GFW 像警察查岗一样发送特定信号。<ul>
+<li><strong>绕过：</strong> Reality 技术可以实现“非请勿进”，如果不是你本人的客户端来连接，服务器会表现得和被借用的名站一模一样。</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h3 id="_2">三、 绕过之后可以做什么？</h3>
+<ol>
+<li><strong>学术科研：</strong> 访问 Google Scholar, GitHub, IEEE 等。</li>
+<li><strong>流媒体：</strong> 观看 YouTube, Netflix, Disney+, Twitch。</li>
+<li><strong>社交网络：</strong> 使用 Telegram, X (Twitter), Instagram, Facebook。</li>
+<li><strong>生成式 AI：</strong> 与 ChatGPT, Claude, Gemini 进行交互。</li>
+<li><strong>开发者需求：</strong> 下载开发包、访问 Docker Hub 等。</li>
+</ol>
+<hr />
+<h3 id="_3">四、 注意事项 (必读)</h3>
+<ol>
+<li><strong>合规性：</strong> 在中国境内，未经电信主管部门批准自行建立、使用非法信道进行国际联网是违规行为。请仅将技术用于学术研究和个人学习。</li>
+<li><strong>隐私：</strong> 避免使用“免费 VPN”。很多免费工具会记录你的访问日志，甚至出卖个人信息。</li>
+<li><strong>支付安全：</strong> 购买海外 VPS 时，尽量选择支持支付宝或加密货币的知名商家。</li>
+<li><strong>切勿触摸红线：</strong> 翻墙后请勿在外网发布政治敏感言论或参与违法活动。</li>
+</ol>
+<hr />
+<h3 id="sing-box">五、 搭建教程 (以勇哥 Sing-box 脚本为例)</h3>
+<p>Sing-box 被认为是下一代全能网络工具（被称为 V2Ray/Xray 的强劲对手）。勇哥 (Yonggekan) 的脚本以简单、功能全著称。</p>
+<h4 id="1">1. 准备工作</h4>
+<ul>
+<li><strong>一台海外 VPS：</strong> 推荐商家：搬瓦工 (BandwagonHost)、艾云、或是主流的甲骨文、搬瓦工、RackNerd 等。系统建议选 <strong>Ubuntu 20.04+</strong> 或 <strong>Debian 11+</strong>。</li>
+<li><strong>一个 SSH 连接工具：</strong> Windows 推荐使用 <code>FinalShell</code> 或 <code>Termius</code>；Mac 可直接用终端。</li>
+</ul>
+<h4 id="2-vps">2. 连接 VPS</h4>
+<p>打开 SSH 工具，输入你的服务器 IP、用户名 (root) 和密码进行连接。</p>
+<h4 id="3-sing-box">3. 执行勇哥 Sing-box 脚本</h4>
+<p>在终端输入以下命令（直接复制粘贴）：</p>
+<div class="codehilite"><pre><span></span><code>bash<span class="w"> </span>&lt;<span class="o">(</span>curl<span class="w"> </span>-Ls<span class="w"> </span>https://raw.githubusercontent.com/yonggekkk/sing-box-yg/main/sb.sh<span class="o">)</span>
+</code></pre></div>
+
+<p><em>(注：如果提示 wget 未找到，先执行 <code>apt install wget -y</code>)</em></p>
+<h4 id="4">4. 脚本操作流程</h4>
+<p>脚本运行后会出现中文菜单：
+1.  <strong>安装内核：</strong> 选 <code>1</code> 安装 Sing-box 主程序。
+2.  <strong>选择协议：</strong>
+    *   如果你是新手且没有域名，<strong>强烈建议选择 VLESS-Reality</strong>。
+    *   按照提示，端口可以回车默认（通常是 443）。
+    *   SNI 目标网站可以选 <code>www.microsoft.com</code> 或 <code>www.lovelive-anime.jp</code>。
+3.  <strong>生成配置：</strong> 安装完成后，脚本会直接弹出一个<strong>二维码</strong>和一串以 <code>vless://</code> 开头的 <strong>URL 分享链接</strong>。</p>
+<h4 id="5">5. 连接使用</h4>
+<ul>
+<li><strong>电脑端 (Windows/macOS)：</strong> 下载 <code>v2rayN</code> (Windows) 或 <code>v2rayU</code> / <code>v2ray-core</code>。<ul>
+<li>直接复制脚本给出的 <code>vless://</code> 链接，在软件中点击“从剪贴板导入”。</li>
+<li>勾选该服务器，设置为“自动配置系统代理”。</li>
+</ul>
+</li>
+<li><strong>手机端：</strong> <ul>
+<li>Android 使用 <code>v2rayNG</code> 或 <code>Nekobox</code>。</li>
+<li>iOS 使用 <code>Shadowrocket</code> (小火箭，需外区 ID 购买) 或 <code>Stash</code>。</li>
+<li>直接扫码即可使用。</li>
+</ul>
+</li>
+</ul>
+<h4 id="6">6. 验证</h4>
+<p>打开浏览器，访问 <code>www.youtube.com</code>。如果能打开，说明你已成功。</p>
+<hr />
+<h3 id="_4">总结</h3>
+<p>目前最稳健的翻墙组合是：<strong>国外主流 VPS + Sing-box/Xray + Reality 协议</strong>。
+这种方式能够最大限度地模拟正常流量，降低断流或封 IP 的风险。请始终记住，技术应服务于获取知识和提升生产力。</p>
+            </article>
+
+            <!-- 版权卡片 -->
+            <section style="padding: 0 20px 40px; font-family: 'Fira Code'; font-size: 0.7rem; color: var(--text-muted);">
+                <div style="border: 1px solid var(--border); padding: 20px; background: var(--surface);">
+                    <div># SOURCE: <span id="page-url" style="word-break: break-all; color: var(--text);"></span></div>
+                    <div># LICENSE: CC-BY-NC-SA-4.0</div>
+                    <div style="margin-top: 10px; color: var(--text);">// EOF_SIGNAL</div>
+                </div>
+            </section>
+        </main>
+
+        <aside>
+            <section class="widget">
+                <h3 class="widget-title">IDENT_AUTH</h3>
+                <div style="border: 1px solid var(--border); padding: 20px; text-align: center; background: var(--bg);">
+                    <img src="https://edgeoneimg.cdn.sn/i/696b4d5b58c71_1768639835.webp" style="width: 50px; height: 50px; border: 1px solid var(--border); padding: 3px; margin-bottom: 10px;">
+                    <div class="mono" style="font-weight: 900; font-size: 0.9rem;">Cnfte</div>
+                    <div class="mono" style="font-size: 0.7rem; color: var(--text-muted); margin-top: 5px;">"滚滚长江东逝水，浪花淘尽英雄。"</div>
+                    <div style="display: flex; gap: 8px; justify-content: center; margin-top: 12px;">
+                        <a href="mailto:cnfte.2@gmail.com" style="font-size: 8px; border: 1px solid var(--border); padding: 3px 6px;" class="mono">EMAIL</a>
+                        <a href="https://github.com/cnfte/blog.git" target="_blank" style="font-size: 8px; border: 1px solid var(--border); padding: 3px 6px;" class="mono">GITHUB</a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="widget">
+                <h3 class="widget-title">NOTICE</h3>
+                <div style="background: var(--bg); border: 1px solid var(--border); padding: 15px; font-size: 0.75rem; color: var(--text-muted); line-height: 1.6;" class="mono">
+                    欢迎来到我的博客
+                </div>
+            </section>
+
+            
+            <section class="widget">
+                <h3 class="widget-title">TOC</h3>
+                <div class="mono" style="font-size: 0.7rem; line-height: 1.8;">
+                    <div class="toc">
+<ul>
+<li><a href="#_1">一、 常见的翻墙协议及其工作原理</a></li>
+<li><a href="#gfw">二、 它们是如何绕过长城防火墙（GFW）的？</a></li>
+<li><a href="#_2">三、 绕过之后可以做什么？</a></li>
+<li><a href="#_3">四、 注意事项 (必读)</a></li>
+<li><a href="#sing-box">五、 搭建教程 (以勇哥 Sing-box 脚本为例)</a><ul>
+<li><a href="#1">1. 准备工作</a></li>
+<li><a href="#2-vps">2. 连接 VPS</a></li>
+<li><a href="#3-sing-box">3. 执行勇哥 Sing-box 脚本</a></li>
+<li><a href="#4">4. 脚本操作流程</a></li>
+<li><a href="#5">5. 连接使用</a></li>
+<li><a href="#6">6. 验证</a></li>
+</ul>
+</li>
+<li><a href="#_4">总结</a></li>
+</ul>
+</div>
+
+                </div>
+            </section>
+            
+
+            <section class="widget">
+                <h3 class="widget-title">SYSLOG</h3>
+                <div style="background: #000; border: 1px solid #333; padding: 15px; font-family: 'Fira Code'; font-size: 0.6rem; color: #00ff00; line-height: 1.6;">
+                    <div>[OK] NODE: STABLE</div>
+                    <div>[OK] CLOCK: <span id="live-clock">00:00:00</span></div>
+                </div>
+            </section>
+        </aside>
+    </div>
+
+    <footer>
+        <p class="mono" style="font-size: 0.85rem; margin-bottom: 10px;"><a src="https://www.itdog.cn/ping/cnfte.top">本站已启用CLOUDFLARE CDN防护</a></p>
+        <p class="mono" style="font-size: 0.6rem; color: var(--text-muted);">© 2026 Cnfte // EOF</p>
+    </footer>
+
+    <script>
+        document.getElementById('page-url').innerText = window.location.href;
+        setInterval(() => { document.getElementById('live-clock').innerText = new Date().toTimeString().split(' ')[0]; }, 1000);
+
+        window.onscroll = function() {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            document.getElementById("progress").style.width = (winScroll / height * 100) + "%";
+        };
+
+        function toggleTheme() {
+            const target = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', target);
+            localStorage.setItem('geek-theme', target);
+        }
+
+        let searchData = null;
+        const sInput = document.getElementById('nav-search-input');
+        const sResults = document.getElementById('nav-search-results');
+        sInput.addEventListener('input', async (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            if (!searchData) {
+                const path = document.documentElement.lang === 'en' ? '/en/search.json' : '/search.json';
+                searchData = await (await fetch(path)).json();
+            }
+            sResults.innerHTML = '';
+            if (query.length < 1) { sResults.style.display = 'none'; return; }
+            const filtered = searchData.filter(i => i.title.toLowerCase().includes(query)).slice(0, 5);
+            if (filtered.length > 0) {
+                filtered.forEach(item => {
+                    const a = document.createElement('a'); a.href = item.url; a.style = "display:block;padding:10px;border-bottom:1px solid var(--border);font-size:11px;";
+                    a.innerText = item.title; sResults.appendChild(a);
+                });
+                sResults.style.display = 'block';
+            }
+        });
+        document.addEventListener('click', (e) => { if (!e.target.closest('.nav-search-wrapper')) sResults.style.display = 'none'; });
+
+        document.documentElement.setAttribute('data-theme', localStorage.getItem('geek-theme') || 'dark');
+    </script>
+</body>
+</html>

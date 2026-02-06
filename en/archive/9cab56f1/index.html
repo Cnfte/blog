@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO & Metadata -->
+    <meta name="google-adsense-account" content="ca-pub-4242854888467129">
+    <title>Internet Science Popularization Series - What is a domain name? How to obtain and configure a domain name? - Cnfteの博客</title>
+    <meta name="description" content="What is a Domain Name? Imagine the internet as a giant city, inhabited by countless websites and servers (where website content is stored). Each server has...">
+    <link rel="icon" href="/favicon.ico">
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #0a0a0a;
+            --text: #ffffff;
+            --text-muted: #a0a0a0;
+            --border: #222222;
+            --code-bg: #050505;
+            --accent: #ffffff;
+            --trans: all 0.2s ease;
+        }
+
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --surface: #fafafa;
+            --text: #1d1d1f;
+            --text-muted: #505050;
+            --border: #e0e0e0;
+            --code-bg: #f5f5f5;
+        }
+
+        /* 基础复位 */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        a { color: inherit !important; text-decoration: none !important; }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--bg); color: var(--text); 
+            line-height: 1.8; overflow-x: hidden; width: 100%;
+            transition: background 0.3s;
+        }
+
+        .mono { font-family: 'Fira Code', monospace !important; }
+        ::selection { background: #333; color: #fff; }
+
+        /* 顶部进度条 */
+        #progress { position: fixed; top: 0; left: 0; width: 0%; height: 2px; background: var(--accent); z-index: 2001; }
+
+        /* --- 导航栏 --- */
+        nav { 
+            position: sticky; top: 0; z-index: 1000; background: var(--bg); border-bottom: 2px solid var(--border); 
+            padding: 10px 5%; min-height: 60px; display: flex; justify-content: space-between; align-items: center; 
+        }
+        .nav-links { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: flex-end; }
+        .nav-links a, .nav-links span { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
+
+        /* 搜索框 */
+        .nav-search-wrapper { position: relative; }
+        #nav-search-input { 
+            background: transparent; border: 1px solid var(--border); color: var(--text); 
+            font-family: 'Fira Code'; font-size: 10px; padding: 4px 10px; width: 100px; outline: none; transition: var(--trans); 
+        }
+        #nav-search-input:focus { width: 150px; border-color: var(--text); }
+        #nav-search-results { 
+            position: absolute; top: 100%; right: 0; width: 280px; background: var(--surface); 
+            border: 1px solid var(--border); max-height: 350px; overflow-y: auto; z-index: 9999; display: none; 
+        }
+
+        /* 文章头部 */
+        .post-header { padding: 60px 20px 30px; border-bottom: 1px solid var(--border); max-width: 1200px; margin: 0 auto; }
+        .post-header h1 { font-size: clamp(1.5rem, 6vw, 2.5rem); font-weight: 900; letter-spacing: -1px; line-height: 1.2; }
+        .meta-bar { font-family: 'Fira Code'; font-size: 0.7rem; color: var(--text-muted); margin-top: 15px; }
+
+        /* 布局架构 */
+        .main-wrapper { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: row; }
+        main { flex: 1; min-width: 0; border-right: 1px solid var(--border); }
+
+        /* --- 文章内广告位 (2x2 扁平化) --- */
+        .spot-c-zone { padding: 20px 60px 0; }
+        .spot-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        .spot-item { 
+            width: 100%; aspect-ratio: 2.4 / 1; border: 1px solid var(--border); 
+            background: var(--surface); overflow: hidden; transition: var(--trans); filter: none !important;
+        }
+        .spot-item img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* 正文内容 */
+        article.content { padding: 40px 60px; font-size: 1.05rem; }
+        .content h2 { font-size: 1.4rem; margin: 2em 0 1em; font-weight: 900; border-bottom: 2px solid var(--text); padding-bottom: 5px; display: inline-block; }
+        .content p { margin-bottom: 1.6rem; text-align: justify; }
+        .content img { max-width: 100%; border: 1px solid var(--border); margin: 20px 0; padding: 5px; background: var(--surface); }
+
+        /* 侧边栏 */
+        aside { 
+            width: 320px; flex-shrink: 0; padding: 40px 25px; background: var(--surface); 
+            position: sticky; top: 60px; height: calc(100vh - 60px); overflow-y: auto; scrollbar-width: none;
+        }
+        aside::-webkit-scrollbar { display: none; }
+        .widget { margin-bottom: 35px; }
+        .widget-title { font-family: 'Fira Code'; font-size: 0.7rem; border-left: 3px solid var(--text); padding-left: 10px; margin-bottom: 15px; text-transform: uppercase; }
+
+        /* 代码块 */
+        pre { background: var(--code-bg) !important; padding: 25px 15px; border: 1px solid var(--border); margin: 1.5rem 0; overflow-x: auto; }
+        pre code { font-family: 'Fira Code', monospace !important; font-size: 0.85rem !important; }
+
+        /* --- 手机端强力适配 --- */
+        @media (max-width: 768px) {
+            nav { flex-direction: column; gap: 12px; padding: 15px; }
+            .nav-links { width: 100%; justify-content: center; gap: 10px; }
+            
+            .main-wrapper { flex-direction: column; }
+            main { border-right: none; }
+            .post-header { padding: 40px 15px 20px; }
+            
+            .spot-c-zone { padding: 15px 15px 0; }
+            .spot-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+            .spot-item { aspect-ratio: 2.2 / 1; }
+
+            article.content { padding: 25px 15px; } /* 窄边距，防止长条化 */
+            aside { width: 100%; height: auto; position: static; border-top: 1px solid var(--border); padding: 30px 15px; }
+        }
+
+        footer { padding: 60px 20px; text-align: center; border-top: 1px solid var(--border); font-family: 'Fira Code'; font-size: 0.75rem; background: var(--surface); }
+    </style>
+</head>
+<body>
+    <div id="progress"></div>
+    <nav>
+        <a href="/" class="logo mono">CNFTE</a>
+        <div class="nav-links mono">
+            <a href="/en/Link Exchange.html">Link Exchange</a><a href="/en/Privacy Policy.html">Privacy Policy</a><a href="/en/about.html">about</a><a href="/en/公益服务项.html">service</a>
+            <div class="nav-search-wrapper">
+                <input type="text" id="nav-search-input" placeholder="SEARCH..." autocomplete="off">
+                <div id="nav-search-results"></div>
+            </div>
+            <span style="cursor: pointer; border: 1px solid var(--border); padding: 2px 8px; font-size: 9px;" onclick="toggleTheme()">MODE</span>
+        </div>
+    </nav>
+
+    <header class="post-header">
+        <h1 class="mono">Internet Science Popularization Series - What is a domain name? How to obtain and configure a domain name?</h1>
+        <div class="meta-bar mono">
+            STAMP: 2026-01-24 // UID: 9cab56f1 // AUTH: VERIFIED
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <main>
+            <!-- 广告区域 -->
+            <section class="spot-c-zone">
+                <div class="spot-grid">
+                    
+                    <a href="https://edgeoneimg.cdn.sn/i/697f27805fd7d_1769940864.webp" class="spot-item" target="_blank" rel="nofollow">
+                        
+                        <img src="https://edgeoneimg.cdn.sn/i/697f261a67d98_1769940506.webp" alt="Ad">
+                        
+                    </a>
+                    
+                    <a href="https://edgeoneimg.cdn.sn/i/697f27805fd7d_1769940864.webp" class="spot-item" target="_blank" rel="nofollow">
+                        
+                        <img src="https://edgeoneimg.cdn.sn/i/697f261a67d98_1769940506.webp" alt="Ad">
+                        
+                    </a>
+                    
+                    <a href="https://edgeoneimg.cdn.sn/i/697f27805fd7d_1769940864.webp" class="spot-item" target="_blank" rel="nofollow">
+                        
+                        <img src="https://edgeoneimg.cdn.sn/i/697f261a67d98_1769940506.webp" alt="Ad">
+                        
+                    </a>
+                    
+                    <a href="https://edgeoneimg.cdn.sn/i/697f27805fd7d_1769940864.webp" class="spot-item" target="_blank" rel="nofollow">
+                        
+                        <img src="https://edgeoneimg.cdn.sn/i/697f261a67d98_1769940506.webp" alt="Ad">
+                        
+                    </a>
+                    
+                </div>
+            </section>
+
+            <article class="content mono">
+                <h3 id="what-is-a-domain-name">What is a Domain Name?</h3>
+<p>Imagine the internet as a giant city, inhabited by countless websites and servers (where website content is stored). Each server has a unique "address," which is a string of numbers called an <strong>IP address</strong>.</p>
+<p>For example, your home address might be "XX Province, XX City, XX District, XX Street, XX Number," while an IP address would be a string of numbers like "192.168.1.1" or "203.0.113.45".</p>
+<p>But which is easier to remember: a long string of numbers or a name? Definitely a name! For example, if you want to go to Taobao, you'll remember "taobao.com," not a string of numbers.</p>
+<p><strong>A domain name is the name given to a server (or website) on the internet.</strong> It's like giving your website a memorable and distinctive name, making it easy for people to access.</p>
+<p><strong>Simply put: a domain name is the name of a website, used to replace a difficult-to-remember IP address.</strong></p>
+<hr />
+<h3 id="what-are-the-uses-of-a-domain-name">What are the uses of a Domain Name?</h3>
+<p>The main uses of a domain name are:</p>
+<ol>
+<li>
+<p><strong>Easy to remember and access:</strong></p>
+</li>
+<li>
+<p>Just as it's much easier to remember a friend's name than their house number, a domain name allows users to easily remember and access your website. </p>
+</li>
+<li>Without a domain name, you would only be able to access websites via IP addresses, which is very inconvenient for ordinary users.</li>
+<li>
+<p><strong>Building brand image:</strong></p>
+</li>
+<li>
+<p>A good domain name is like a catchy name that helps you build your brand image. </p>
+</li>
+<li>For example, "baidu.com" represents the Baidu company, and "tencent.com" represents Tencent. </li>
+<li>A professional and easy-to-remember domain name leaves a good impression on users.</li>
+<li>
+<p><strong>Email addresses:</strong></p>
+</li>
+<li>
+<p>Domain names can also be used to create professional email addresses, such as <code>[email protected]</code>. </p>
+</li>
+<li>This appears more professional and trustworthy than using free email services (such as <code>@gmail.com</code> or <code>@qq.com</code>).</li>
+<li>
+<p><strong>Unique identifier for a website:</strong></p>
+</li>
+<li>
+<p>Domain names are unique on the internet. Once you register a domain name, no one else can register the exact same domain name. </p>
+</li>
+<li>This ensures the uniqueness of your website on the internet. ---</li>
+</ol>
+<h3 id="how-to-obtain-a-domain-name-taking-registering-a-cn-domain-on-alibaba-cloud-as-an-example">How to Obtain a Domain Name (Taking Registering a .cn Domain on Alibaba Cloud as an Example)</h3>
+<p>Obtaining a domain name is like "registering" your website; you need to register it with a specialized institution (a domain registrar). Alibaba Cloud is a large domain registrar.</p>
+<p>Let's take registering a <code>.cn</code> domain on Alibaba Cloud as an example. The steps are simple:</p>
+<ol>
+<li>
+<p><strong>Open the Alibaba Cloud official website:</strong></p>
+</li>
+<li>
+<p>Enter <code>www.aliyun.com</code> in your browser to access the official Alibaba Cloud website.</p>
+</li>
+<li>
+<p><strong>Search for the domain you want to register:</strong></p>
+</li>
+<li>
+<p>On the Alibaba Cloud website's homepage or product page, find the "Domain" section. </p>
+</li>
+<li>You will see a search box. Enter the domain name you want to register, for example, if you want to register "mywebsite.cn", enter <code>mywebsite.cn</code>. </li>
+<li>Click search.</li>
+<li>
+<p><strong>Check availability and add to cart:</strong></p>
+</li>
+<li>
+<p>Alibaba Cloud will tell you if the domain name has already been registered by someone else. </p>
+</li>
+<li>If it's not registered, it will show "Available for registration," and you can click "Add to cart." </li>
+<li>If it's already registered, it will show "Registered," and you will need to try a different name.</li>
+<li>
+<p><strong>Proceed to checkout and fill in information:</strong></p>
+</li>
+<li>
+<p>Go to your shopping cart, confirm the domain name you want to register, and then click "Proceed to checkout." </p>
+</li>
+<li>At this point, you need to fill in some registration information, mainly your personal information (name, ID number, contact information, etc.) or company information. </li>
+<li><strong>Note:</strong> Registering a <code>.cn</code> domain usually requires real-name verification. You will need to upload a photo of your ID card or provide your company's business license information. This is a management regulation for domain names in mainland China.</li>
+<li>
+<p><strong>Pay the fee:</strong></p>
+</li>
+<li>
+<p>After filling in the information, select a payment method and complete the payment. Domain prices vary depending on the suffix (such as <code>.com</code>, <code>.cn</code>, <code>.net</code>, etc.) and the registrar.</p>
+</li>
+<li>
+<p><strong>Complete registration:</strong></p>
+</li>
+<li>
+<p>After successful payment, Alibaba Cloud will complete the domain registration for you. This usually takes a few minutes to a few hours. </p>
+</li>
+<li>Once registered, the domain name belongs to you, and you can manage it through the Alibaba Cloud management console.</li>
+</ol>
+<p><strong>In short: It's like naming your child; first, check if the name has already been used by someone else, if not, register it with the relevant department, pay a fee, and the name is yours.</strong></p>
+<hr />
+<h3 id="what-is-domain-name-resolution-domain-name-resolution-is-like-establishing-a-connection-between-your-domain-name-the-name-and-its-ip-address-the-house-number">What is Domain Name Resolution? Domain name resolution is like establishing a "connection" between your domain name (the name) and its IP address (the house number).</h3>
+<p>Imagine you have a friend named "Xiao Ming," who lives at "XX Community, Building XX, Unit XX, Apartment XX." You only know the name "Xiao Ming," but you don't know his exact address. Domain name resolution works like this: when you tell the postman the name "Xiao Ming," the postman knows to go to "XX Community, Building XX, Unit XX, Apartment XX" to find him.</p>
+<p>On the internet, when you type a domain name (such as <code>www.example.com</code>) into your browser, your computer doesn't know the corresponding IP address. This is where the domain name resolution service comes in to tell your computer: the domain name <code>www.example.com</code> corresponds to the IP address <code>192.168.1.100</code>.</p>
+<p><strong>Simply put: Domain name resolution tells the computer which IP address (house number) corresponds to the domain name (name) you entered.</strong></p>
+<hr />
+<h3 id="how-to-resolve-domain-names-taking-common-a-aaaa-and-cname-records-as-examples">How to Resolve Domain Names (Taking common A, AAAA, and CNAME records as examples)</h3>
+<p>Domain name resolution is achieved by setting <strong>DNS records</strong> in the domain registrar's management backend (such as Alibaba Cloud's domain management page). DNS records are like "address book entries" for your domain name.</p>
+<p>The most common record types are:</p>
+<h4 id="1-a-record-address-record">1. A Record (Address Record)</h4>
+<ul>
+<li><strong>Function:</strong> Points a domain name (or subdomain) to an <strong>IPv4 address</strong>.</li>
+<li><strong>Simple explanation:</strong> This is the most commonly used record. It's like telling the postman: "'Xiao Ming' lives at the address '192.168.1.100'."</li>
+<li><strong>Example:</strong></li>
+<li>You want <code>www.example.com</code> to point to your server's IP address <code>1.2.3.4</code>. </li>
+<li>In Alibaba Cloud's DNS management page, you would add a record:</li>
+<li><strong>Type:</strong> A</li>
+<li><strong>Host Record (or Subdomain):</strong> <code>www</code> (If you want to resolve <code>example.com</code> itself, enter <code>@</code> or leave it blank)</li>
+<li><strong>Record Value (IP Address):</strong> <code>1.2.3.4</code></li>
+<li>
+<p><strong>TTL (Time To Live):</strong>  The default value is usually fine; it indicates how often this record is updated. #### 2. AAAA Record (IPv6 Address Record)</p>
+</li>
+<li>
+<p><strong>Function:</strong> Maps a domain name (or subdomain) to an <strong>IPv6 address</strong>.</p>
+</li>
+<li><strong>Simple Explanation:</strong> Similar to A records, but IPv6 addresses are much longer than IPv4 addresses and represent the next generation of IP addresses. It's like telling the postman: "'Xiao Ming' lives at the address '2001:0db8:85a3:0000:0000:8a2e:0370:7334'."</li>
+<li><strong>Example:</strong></li>
+<li>You want <code>www.example.com</code> to point to your server's IPv6 address <code>2001:db8::1</code>. </li>
+<li>On the Alibaba Cloud DNS management page, you would add a record:</li>
+<li><strong>Type:</strong> AAAA</li>
+<li><strong>Host Record:</strong> <code>www</code></li>
+<li><strong>Record Value (IPv6 Address):</strong> <code>2001:db8::1</code></li>
+<li><strong>TTL:</strong> Default value</li>
+</ul>
+<h4 id="3-cname-record-canonical-name-record">3. CNAME Record (Canonical Name Record)</h4>
+<ul>
+<li><strong>Function:</strong> Maps a domain name (or subdomain) to <strong>another domain name</strong>.</li>
+<li><strong>Simple Explanation:</strong> This is like telling the postman: "'Xiao Ming's' house is actually 'Lao Wang's' house."  In other words, you're giving this domain name an "alias".</li>
+<li><strong>Example:</strong></li>
+<li>You have a service, such as a CDN (Content Delivery Network), which provides you with a fixed domain name, such as <code>mycdn.aliyuncs.com</code>. </li>
+<li>You want your domain name <code>blog.example.com</code> to point directly to this CDN service. </li>
+<li>On the Alibaba Cloud DNS management page, you would add a record:</li>
+<li><strong>Type:</strong> CNAME</li>
+<li><strong>Host Record:</strong> <code>blog</code></li>
+<li><strong>Record Value (Target Domain Name):</strong> <code>mycdn.aliyuncs.com</code></li>
+<li><strong>TTL:</strong> Default value</li>
+</ul>
+<p><strong>Important Note:</strong></p>
+<ul>
+<li><strong>Effective Time:</strong> After modifying DNS records, it usually takes a few minutes to tens of minutes (sometimes even longer, up to 24 hours) for the changes to take effect globally. This process is called "DNS propagation". * <strong>Host Record:</strong></li>
+<li><code>@</code> or leave blank: Represents the domain itself, such as <code>example.com</code>. </li>
+<li><code>www</code>: Represents <code>www.example.com</code>. </li>
+<li><code>blog</code>: Represents <code>blog.example.com</code>. </li>
+<li><code>mail</code>: Represents <code>mail.example.com</code>.</li>
+</ul>
+<p><strong>Summary of the resolution process:</strong></p>
+<ol>
+<li>You register a domain name <code>example.com</code>.</li>
+<li>You purchase a server with an IP address <code>1.2.3.4</code>.</li>
+<li>In the Alibaba Cloud domain management console, you add an <strong>A record</strong> for <code>example.com</code>, with the host record being <code>@</code> and the record value being <code>1.2.3.4</code>.</li>
+<li>When someone enters <code>example.com</code> in their browser, their computer queries the DNS server for the IP address of <code>example.com</code>. The DNS server tells them it's <code>1.2.3.4</code>.</li>
+<li>Knowing the IP address, the computer can connect to your server and display your website content.</li>
+</ol>
+            </article>
+
+            <!-- 版权卡片 -->
+            <section style="padding: 0 20px 40px; font-family: 'Fira Code'; font-size: 0.7rem; color: var(--text-muted);">
+                <div style="border: 1px solid var(--border); padding: 20px; background: var(--surface);">
+                    <div># SOURCE: <span id="page-url" style="word-break: break-all; color: var(--text);"></span></div>
+                    <div># LICENSE: CC-BY-NC-SA-4.0</div>
+                    <div style="margin-top: 10px; color: var(--text);">// EOF_SIGNAL</div>
+                </div>
+            </section>
+        </main>
+
+        <aside>
+            <section class="widget">
+                <h3 class="widget-title">IDENT_AUTH</h3>
+                <div style="border: 1px solid var(--border); padding: 20px; text-align: center; background: var(--bg);">
+                    <img src="https://edgeoneimg.cdn.sn/i/696b4d5b58c71_1768639835.webp" style="width: 50px; height: 50px; border: 1px solid var(--border); padding: 3px; margin-bottom: 10px;">
+                    <div class="mono" style="font-weight: 900; font-size: 0.9rem;">Cnfte</div>
+                    <div class="mono" style="font-size: 0.7rem; color: var(--text-muted); margin-top: 5px;">"滚滚长江东逝水，浪花淘尽英雄。"</div>
+                    <div style="display: flex; gap: 8px; justify-content: center; margin-top: 12px;">
+                        <a href="mailto:cnfte.2@gmail.com" style="font-size: 8px; border: 1px solid var(--border); padding: 3px 6px;" class="mono">EMAIL</a>
+                        <a href="https://github.com/cnfte/blog.git" target="_blank" style="font-size: 8px; border: 1px solid var(--border); padding: 3px 6px;" class="mono">GITHUB</a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="widget">
+                <h3 class="widget-title">NOTICE</h3>
+                <div style="background: var(--bg); border: 1px solid var(--border); padding: 15px; font-size: 0.75rem; color: var(--text-muted); line-height: 1.6;" class="mono">
+                    欢迎来到我的博客
+                </div>
+            </section>
+
+            
+            <section class="widget">
+                <h3 class="widget-title">TOC</h3>
+                <div class="mono" style="font-size: 0.7rem; line-height: 1.8;">
+                    <div class="toc">
+<ul>
+<li><a href="#what-is-a-domain-name">What is a Domain Name?</a></li>
+<li><a href="#what-are-the-uses-of-a-domain-name">What are the uses of a Domain Name?</a></li>
+<li><a href="#how-to-obtain-a-domain-name-taking-registering-a-cn-domain-on-alibaba-cloud-as-an-example">How to Obtain a Domain Name (Taking Registering a .cn Domain on Alibaba Cloud as an Example)</a></li>
+<li><a href="#what-is-domain-name-resolution-domain-name-resolution-is-like-establishing-a-connection-between-your-domain-name-the-name-and-its-ip-address-the-house-number">What is Domain Name Resolution? Domain name resolution is like establishing a "connection" between your domain name (the name) and its IP address (the house number).</a></li>
+<li><a href="#how-to-resolve-domain-names-taking-common-a-aaaa-and-cname-records-as-examples">How to Resolve Domain Names (Taking common A, AAAA, and CNAME records as examples)</a><ul>
+<li><a href="#1-a-record-address-record">1. A Record (Address Record)</a></li>
+<li><a href="#3-cname-record-canonical-name-record">3. CNAME Record (Canonical Name Record)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+                </div>
+            </section>
+            
+
+            <section class="widget">
+                <h3 class="widget-title">SYSLOG</h3>
+                <div style="background: #000; border: 1px solid #333; padding: 15px; font-family: 'Fira Code'; font-size: 0.6rem; color: #00ff00; line-height: 1.6;">
+                    <div>[OK] NODE: STABLE</div>
+                    <div>[OK] CLOCK: <span id="live-clock">00:00:00</span></div>
+                </div>
+            </section>
+        </aside>
+    </div>
+
+    <footer>
+        <p class="mono" style="font-size: 0.85rem; margin-bottom: 10px;"><a src="https://www.itdog.cn/ping/cnfte.top">本站已启用CLOUDFLARE CDN防护</a></p>
+        <p class="mono" style="font-size: 0.6rem; color: var(--text-muted);">© 2026 Cnfte // EOF</p>
+    </footer>
+
+    <script>
+        document.getElementById('page-url').innerText = window.location.href;
+        setInterval(() => { document.getElementById('live-clock').innerText = new Date().toTimeString().split(' ')[0]; }, 1000);
+
+        window.onscroll = function() {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            document.getElementById("progress").style.width = (winScroll / height * 100) + "%";
+        };
+
+        function toggleTheme() {
+            const target = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', target);
+            localStorage.setItem('geek-theme', target);
+        }
+
+        let searchData = null;
+        const sInput = document.getElementById('nav-search-input');
+        const sResults = document.getElementById('nav-search-results');
+        sInput.addEventListener('input', async (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            if (!searchData) {
+                const path = document.documentElement.lang === 'en' ? '/en/search.json' : '/search.json';
+                searchData = await (await fetch(path)).json();
+            }
+            sResults.innerHTML = '';
+            if (query.length < 1) { sResults.style.display = 'none'; return; }
+            const filtered = searchData.filter(i => i.title.toLowerCase().includes(query)).slice(0, 5);
+            if (filtered.length > 0) {
+                filtered.forEach(item => {
+                    const a = document.createElement('a'); a.href = item.url; a.style = "display:block;padding:10px;border-bottom:1px solid var(--border);font-size:11px;";
+                    a.innerText = item.title; sResults.appendChild(a);
+                });
+                sResults.style.display = 'block';
+            }
+        });
+        document.addEventListener('click', (e) => { if (!e.target.closest('.nav-search-wrapper')) sResults.style.display = 'none'; });
+
+        document.documentElement.setAttribute('data-theme', localStorage.getItem('geek-theme') || 'dark');
+    </script>
+</body>
+</html>

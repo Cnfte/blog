@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO & Metadata -->
+    <meta name="google-adsense-account" content="ca-pub-4242854888467129">
+    <title>Internet Science Popularization Series - What are IPv4 and IPv6? - Cnfteの博客</title>
+    <meta name="description" content="1. What are IPv4 / IPv6? Imagine the internet as a giant city, and every device connected to the internet (computers, mobile phones, servers, etc.) is like...">
+    <link rel="icon" href="/favicon.ico">
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #0a0a0a;
+            --text: #ffffff;
+            --text-muted: #a0a0a0;
+            --border: #222222;
+            --code-bg: #050505;
+            --accent: #ffffff;
+            --trans: all 0.2s ease;
+        }
+
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --surface: #fafafa;
+            --text: #1d1d1f;
+            --text-muted: #505050;
+            --border: #e0e0e0;
+            --code-bg: #f5f5f5;
+        }
+
+        /* 基础复位 */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        a { color: inherit !important; text-decoration: none !important; }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--bg); color: var(--text); 
+            line-height: 1.8; overflow-x: hidden; width: 100%;
+            transition: background 0.3s;
+        }
+
+        .mono { font-family: 'Fira Code', monospace !important; }
+        ::selection { background: #333; color: #fff; }
+
+        /* 顶部进度条 */
+        #progress { position: fixed; top: 0; left: 0; width: 0%; height: 2px; background: var(--accent); z-index: 2001; }
+
+        /* --- 导航栏 --- */
+        nav { 
+            position: sticky; top: 0; z-index: 1000; background: var(--bg); border-bottom: 2px solid var(--border); 
+            padding: 10px 5%; min-height: 60px; display: flex; justify-content: space-between; align-items: center; 
+        }
+        .nav-links { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: flex-end; }
+        .nav-links a, .nav-links span { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
+
+        /* 搜索框 */
+        .nav-search-wrapper { position: relative; }
+        #nav-search-input { 
+            background: transparent; border: 1px solid var(--border); color: var(--text); 
+            font-family: 'Fira Code'; font-size: 10px; padding: 4px 10px; width: 100px; outline: none; transition: var(--trans); 
+        }
+        #nav-search-input:focus { width: 150px; border-color: var(--text); }
+        #nav-search-results { 
+            position: absolute; top: 100%; right: 0; width: 280px; background: var(--surface); 
+            border: 1px solid var(--border); max-height: 350px; overflow-y: auto; z-index: 9999; display: none; 
+        }
+
+        /* 文章头部 */
+        .post-header { padding: 60px 20px 30px; border-bottom: 1px solid var(--border); max-width: 1200px; margin: 0 auto; }
+        .post-header h1 { font-size: clamp(1.5rem, 6vw, 2.5rem); font-weight: 900; letter-spacing: -1px; line-height: 1.2; }
+        .meta-bar { font-family: 'Fira Code'; font-size: 0.7rem; color: var(--text-muted); margin-top: 15px; }
+
+        /* 布局架构 */
+        .main-wrapper { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: row; }
+        main { flex: 1; min-width: 0; border-right: 1px solid var(--border); }
+
+        /* --- 文章内广告位 (2x2 扁平化) --- */
+        .spot-c-zone { padding: 20px 60px 0; }
+        .spot-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        .spot-item { 
+            width: 100%; aspect-ratio: 2.4 / 1; border: 1px solid var(--border); 
+            background: var(--surface); overflow: hidden; transition: var(--trans); filter: none !important;
+        }
+        .spot-item img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* 正文内容 */
+        article.content { padding: 40px 60px; font-size: 1.05rem; }
+        .content h2 { font-size: 1.4rem; margin: 2em 0 1em; font-weight: 900; border-bottom: 2px solid var(--text); padding-bottom: 5px; display: inline-block; }
+        .content p { margin-bottom: 1.6rem; text-align: justify; }
+        .content img { max-width: 100%; border: 1px solid var(--border); margin: 20px 0; padding: 5px; background: var(--surface); }
+
+        /* 侧边栏 */
+        aside { 
+            width: 320px; flex-shrink: 0; padding: 40px 25px; background: var(--surface); 
+            position: sticky; top: 60px; height: calc(100vh - 60px); overflow-y: auto; scrollbar-width: none;
+        }
+        aside::-webkit-scrollbar { display: none; }
+        .widget { margin-bottom: 35px; }
+        .widget-title { font-family: 'Fira Code'; font-size: 0.7rem; border-left: 3px solid var(--text); padding-left: 10px; margin-bottom: 15px; text-transform: uppercase; }
+
+        /* 代码块 */
+        pre { background: var(--code-bg) !important; padding: 25px 15px; border: 1px solid var(--border); margin: 1.5rem 0; overflow-x: auto; }
+        pre code { font-family: 'Fira Code', monospace !important; font-size: 0.85rem !important; }
+
+        /* --- 手机端强力适配 --- */
+        @media (max-width: 768px) {
+            nav { flex-direction: column; gap: 12px; padding: 15px; }
+            .nav-links { width: 100%; justify-content: center; gap: 10px; }
+            
+            .main-wrapper { flex-direction: column; }
+            main { border-right: none; }
+            .post-header { padding: 40px 15px 20px; }
+            
+            .spot-c-zone { padding: 15px 15px 0; }
+            .spot-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+            .spot-item { aspect-ratio: 2.2 / 1; }
+
+            article.content { padding: 25px 15px; } /* 窄边距，防止长条化 */
+            aside { width: 100%; height: auto; position: static; border-top: 1px solid var(--border); padding: 30px 15px; }
+        }
+
+        footer { padding: 60px 20px; text-align: center; border-top: 1px solid var(--border); font-family: 'Fira Code'; font-size: 0.75rem; background: var(--surface); }
+    </style>
+</head>
+<body>
+    <div id="progress"></div>
+    <nav>
+        <a href="/" class="logo mono">CNFTE</a>
+        <div class="nav-links mono">
+            <a href="/en/Link Exchange.html">Link Exchange</a><a href="/en/Privacy Policy.html">Privacy Policy</a><a href="/en/about.html">about</a><a href="/en/公益服务项.html">service</a>
+            <div class="nav-search-wrapper">
+                <input type="text" id="nav-search-input" placeholder="SEARCH..." autocomplete="off">
+                <div id="nav-search-results"></div>
+            </div>
+            <span style="cursor: pointer; border: 1px solid var(--border); padding: 2px 8px; font-size: 9px;" onclick="toggleTheme()">MODE</span>
+        </div>
+    </nav>
+
+    <header class="post-header">
+        <h1 class="mono">Internet Science Popularization Series - What are IPv4 and IPv6?</h1>
+        <div class="meta-bar mono">
+            STAMP: 2026-01-24 // UID: 62459bf2 // AUTH: VERIFIED
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <main>
+            <!-- 广告区域 -->
+            <section class="spot-c-zone">
+                <div class="spot-grid">
+                    
+                    <a href="https://edgeoneimg.cdn.sn/i/697f27805fd7d_1769940864.webp" class="spot-item" target="_blank" rel="nofollow">
+                        
+                        <img src="https://edgeoneimg.cdn.sn/i/697f261a67d98_1769940506.webp" alt="Ad">
+                        
+                    </a>
+                    
+                    <a href="https://edgeoneimg.cdn.sn/i/697f27805fd7d_1769940864.webp" class="spot-item" target="_blank" rel="nofollow">
+                        
+                        <img src="https://edgeoneimg.cdn.sn/i/697f261a67d98_1769940506.webp" alt="Ad">
+                        
+                    </a>
+                    
+                    <a href="https://edgeoneimg.cdn.sn/i/697f27805fd7d_1769940864.webp" class="spot-item" target="_blank" rel="nofollow">
+                        
+                        <img src="https://edgeoneimg.cdn.sn/i/697f261a67d98_1769940506.webp" alt="Ad">
+                        
+                    </a>
+                    
+                    <a href="https://edgeoneimg.cdn.sn/i/697f27805fd7d_1769940864.webp" class="spot-item" target="_blank" rel="nofollow">
+                        
+                        <img src="https://edgeoneimg.cdn.sn/i/697f261a67d98_1769940506.webp" alt="Ad">
+                        
+                    </a>
+                    
+                </div>
+            </section>
+
+            <article class="content mono">
+                <h3 id="1-what-are-ipv4-ipv6">1. What are IPv4 / IPv6?</h3>
+<p>Imagine the internet as a giant city, and every device connected to the internet (computers, mobile phones, servers, etc.) is like a house in that city. For these houses to find and communicate with each other, they all need an address.</p>
+<ul>
+<li><strong>IPv4 (Internet Protocol version 4):</strong> This is the address system used in the early days of the internet. You can think of it as a <strong>four-part numerical address</strong>, with each part consisting of numbers from 0 to 255, separated by dots. </li>
+<li><strong>Examples:</strong> <code>192.168.1.1</code> or <code>8.8.8.8</code> (This is Google's DNS server address)</li>
+<li><strong>Characteristics:</strong> Like early telephone numbers, it was sufficient for a while, but as the city (internet) grew larger and the number of houses (devices) increased, this address system became insufficient.</li>
+<li><strong>IPv6 (Internet Protocol version 6):</strong> This is a new generation address system designed to solve the IPv4 address shortage. You can think of it as a <strong>longer, more complex address</strong>, composed of numbers and letters, separated by colons. </li>
+<li><strong>Example:</strong> <code>2001:0db8:85a3:0000:0000:8a2e:0370:7334</code> (This is an example address)</li>
+<li><strong>Characteristics:</strong> The number of addresses is incredibly vast, enough to assign an address to almost every atom on Earth, completely solving the problem of address exhaustion.</li>
+</ul>
+<hr />
+<h3 id="2-the-differences-between-them">2. The Differences Between Them</h3>
+<p>The most fundamental differences are the <strong>number of addresses</strong> and the <strong>address format</strong>:</p>
+<ul>
+<li><strong>Number of Addresses:</strong></li>
+<li><strong>IPv4:</strong> Approximately 4.3 billion addresses. This sounds like a lot, but with the explosive growth of devices worldwide today, it's far from enough. </li>
+<li><strong>IPv6:</strong> The number of addresses is astronomical, approximately 2 to the power of 128, far more than IPv4. You can think of it this way: IPv4 addresses are like the number of grains of sand on Earth, while IPv6 addresses are like the number of grains of sand in the entire universe, and then some. * <strong>Address Format:</strong></li>
+<li><strong>IPv4:</strong> Four decimal numbers separated by dots (e.g., <code>192.168.1.1</code>). </li>
+<li><strong>IPv6:</strong> Eight hexadecimal numbers separated by colons (e.g., <code>2001:db8::1</code>, where some zeros are omitted).</li>
+<li><strong>Other Differences (more technical, but simply put):</strong></li>
+<li><strong>Security:</strong> IPv6 was designed with security in mind, incorporating the IPsec protocol to provide better encryption and authentication. </li>
+<li><strong>Efficiency:</strong> IPv6's header (the header information of the data packet) is more concise, potentially leading to more efficient processing. </li>
+<li><strong>Configuration:</strong> IPv6 supports more convenient automatic configuration, making it easier for devices to obtain addresses when connecting to the network.</li>
+</ul>
+<hr />
+<h3 id="3-the-significance-of-ipv4s-birth">3. The Significance of IPv4's Birth</h3>
+<p>In the early days of the internet, no one anticipated its rapid growth. The birth of IPv4 was like providing the nascent internet with a <strong>basic set of communication rules and an addressing system</strong>.</p>
+<ul>
+<li><strong>Significance:</strong></li>
+<li><strong>Enabling devices to communicate with each other:</strong> Like giving each house a house number, allowing the postman (data packets) to know where to deliver. </li>
+<li><strong>Building the early internet:</strong> Enabling data exchange between computers, laying the foundation for the later information revolution. </li>
+<li><strong>Driving the arrival of the information age:</strong> Without IPv4, we wouldn't have the internet we see today.</li>
+</ul>
+<hr />
+<h3 id="4-the-significance-of-ipv6s-birth">4. The Significance of IPv6's Birth</h3>
+<p>With the popularization of the internet, especially the emergence of smartphones and IoT devices, IPv4 addresses quickly became insufficient. The birth of IPv6 was to <strong>solve the address exhaustion crisis and provide unlimited possibilities for the future development of the internet</strong>.</p>
+<ul>
+<li><strong>Significance:</strong></li>
+<li><strong>Solving the address exhaustion problem:</strong> Ensuring that more devices in the future (mobile phones, smart homes, cars, sensors, etc.) can connect to the internet without being left behind due to a lack of addresses. </li>
+<li><strong>Supporting the Internet of Things (IoT):</strong> Providing sufficient addresses for a massive number of IoT devices, making smart homes and smart cities possible. </li>
+<li><strong>Improving network efficiency and security:</strong> Optimized in design to make the network run more smoothly and with higher security. + <strong>Paving the way for the continued development of the internet:</strong> Ensuring that the internet can continue to expand and innovate.</li>
+</ul>
+<hr />
+<h3 id="5-why-they-are-incompatible">5. Why They Are Incompatible</h3>
+<p>Imagine you have an address system using the English alphabet, while your friend has an address system using the Russian alphabet. Your address formats are completely different, so you cannot directly send a letter to your friend's Russian address, and your friend cannot directly send a letter to you.</p>
+<ul>
+<li><strong>Fundamental reason:</strong> IPv4 and IPv6 have fundamental differences in <strong>data packet format, addressing methods, and routing protocols</strong>. They are two independently designed communication protocols. </li>
+<li><strong>Different data packet structures:</strong> Like different envelope sizes and ways of filling in information. </li>
+<li><strong>Different addressing methods:</strong> The length and representation of addresses are completely different. </li>
+<li><strong>Different routing rules:</strong> The rules by which network devices (routers) identify and forward data packets are also different.</li>
+</ul>
+<p>Therefore, a device that only recognizes IPv4 addresses cannot directly understand data packets with IPv6 addresses, and vice versa. This is like a person who only understands Chinese being unable to directly read a French book.</p>
+<hr />
+<h3 id="6-the-concept-of-public-networks">6. The Concept of Public Networks</h3>
+<p>In the large city of the internet, each of us lives in our own house.</p>
+<ul>
+<li><strong>Public Network / Public IP Address:</strong></li>
+<li><strong>Concept:</strong> A public IP address is like your <strong>public, unique house number</strong> in the city. With this address, people from anywhere in the world can directly find you and communicate with you. </li>
+<li><strong>Function:</strong> Your computer, mobile phone, server, etc., need a public IP address to directly connect to the internet, be accessed by others, or access other services on the internet. </li>
+<li><strong>Example:</strong> When you surf the internet at home, your router may have a public IP address. This address is assigned to you by your ISP (Internet Service Provider), allowing your home devices to "go out" and communicate with other devices on the internet.</li>
+<li><strong>Private Network / Private IP Address:</strong></li>
+<li><strong>Concept:</strong> A private IP address is like your <strong>room number or building number within your residential area</strong>. These addresses are only valid within your own home (local area network), and people outside don't know them and cannot directly find you using this address. + <strong>Function:</strong> Within a family or company network, devices use private IP addresses to communicate with each other, such as your computer and printer at home accessing each other. These addresses are reusable; for example, <code>192.168.1.100</code> in your home and <code>192.168.1.100</code> in your neighbor's home are two different addresses because they are in different "homes." </li>
+<li><strong>Examples:</strong> Address ranges such as <code>192.168.x.x</code>, <code>10.x.x.x</code>, and <code>172.16.x.x</code> to <code>172.31.x.x</code> are commonly used as private IP addresses.</li>
+</ul>
+<p><strong>Why are private IP addresses needed?</strong> Because public IP addresses are too valuable (especially IPv4), and if every device were assigned a public IP address, they would have been used up long ago. Through NAT (Network Address Translation) technology, one public IP address can be shared by many devices with private IP addresses to access the internet.</p>
+<hr />
+<h3 id="7-how-to-obtain-a-public-ipv4-address">7. How to obtain a public IPv4 address?</h3>
+<p>Generally, you cannot directly "buy" or "apply for" a public IPv4 address as an individual.</p>
+<ul>
+<li><strong>Main methods:</strong></li>
+<li><strong>Through your ISP (Internet Service Provider):</strong> When you subscribe to broadband service, your ISP will assign you a public IP address (usually dynamic, which may change, or you can pay for a fixed static IP address). Your router will use this address to connect to the internet. </li>
+<li><strong>Enterprise users:</strong> Large enterprises or organizations can directly apply for IP address blocks from regional internet registries (RIRs, such as APNIC in the Asia-Pacific region), but the application requirements and costs are relatively high. </li>
+<li><strong>Purchase/Lease:</strong> In some IP address trading markets, you can buy or lease unused public IPv4 addresses, but this is usually very expensive and subject to strict regulations.</li>
+<li><strong>Simplified explanation:</strong> It's like wanting a publicly visible house number; you need to apply to the local postal service (ISP), and they will assign one to you.</li>
+</ul>
+<hr />
+<h3 id="8-how-to-obtain-a-public-ipv6-address">8. How to obtain a public IPv6 address?</h3>
+<p>Obtaining a public IPv6 address is relatively easier because there are a vast number of addresses available. * <strong>Main Methods:</strong>
+1. <strong>Through your ISP (Internet Service Provider):</strong> More and more ISPs are now offering IPv6 services. When you connect to an IPv6-enabled ISP network, your device (usually a router) will automatically obtain a public IPv6 address from the ISP. 
+2. <strong>Automatic Configuration:</strong> IPv6 supports stateless address auto-configuration (SLAAC), allowing devices to automatically generate a public IPv6 address based on network information, even without a DHCP server. 
+3. <strong>Enterprise Users:</strong>  Enterprises can also apply for IPv6 address blocks from RIRs (Regional Internet Registries).
+* <strong>Simplified Explanation:</strong> It's like there are so many houses in the city now that the government (ISP) is generously giving everyone a new address, and this address system is so vast that almost everyone can easily get one. Often, you just need to connect to an IPv6-enabled network, and it will automatically assign you one.</p>
+<hr />
+<h3 id="9-uses-of-ipv4">9. Uses of IPv4</h3>
+<p>During its limited lifespan, IPv4 supported the early development and popularization of the internet.</p>
+<ul>
+<li><strong>Main Uses:</strong></li>
+<li><strong>Connecting devices to the internet:</strong> Enabling computers, servers, and early mobile phones to access web pages, send emails, and communicate online. </li>
+<li><strong>Building early internet services:</strong> Supporting the operation of services such as email, FTP, and early websites. </li>
+<li><strong>Local area network communication:</strong> Private IPv4 addresses are used for communication between devices within homes and businesses.</li>
+<li><strong>Simplified Explanation:</strong> Like the early telephone system, allowing people to call each other and exchange information. Although the number of addresses was limited, it was powerful enough for that era.</li>
+</ul>
+<hr />
+<h3 id="10-uses-of-ipv6">10. Uses of IPv6</h3>
+<p>IPv6 is the future of the internet, and its uses are more extensive and far-reaching.</p>
+<ul>
+<li><strong>Main Uses:</strong></li>
+<li><strong>Supporting a massive number of connected devices:</strong> Providing sufficient addresses for <strong>all Internet of Things (IoT) devices</strong>, including smartphones, tablets, smart TVs, smart home devices, wearable devices, cars, industrial sensors, etc., enabling true "Internet of Everything." </li>
+<li><strong>Improving network performance and efficiency:</strong> A more optimized header design may lead to faster transmission speeds and lower latency. </li>
+<li><strong>Enhancing network security:</strong> The built-in IPsec protocol can provide better end-to-end security. </li>
+<li><strong>Simplifying network configuration:</strong> Automatic configuration features make network management more convenient. + <strong>Supports new network applications:</strong> Provides foundational address support for various innovative applications and services that may emerge in the future.</li>
+<li><strong>Simplified explanation:</strong> It's like a brand new, infinitely large city with countless streets and house numbers. You can put anything (any device) into it, allowing them to freely connect with each other, and communicate more smoothly and securely. For example, your refrigerator, air conditioner, light bulbs, or even your shoes, could each have their own address and be able to connect to the internet and communicate with each other, following your commands.</li>
+</ul>
+            </article>
+
+            <!-- 版权卡片 -->
+            <section style="padding: 0 20px 40px; font-family: 'Fira Code'; font-size: 0.7rem; color: var(--text-muted);">
+                <div style="border: 1px solid var(--border); padding: 20px; background: var(--surface);">
+                    <div># SOURCE: <span id="page-url" style="word-break: break-all; color: var(--text);"></span></div>
+                    <div># LICENSE: CC-BY-NC-SA-4.0</div>
+                    <div style="margin-top: 10px; color: var(--text);">// EOF_SIGNAL</div>
+                </div>
+            </section>
+        </main>
+
+        <aside>
+            <section class="widget">
+                <h3 class="widget-title">IDENT_AUTH</h3>
+                <div style="border: 1px solid var(--border); padding: 20px; text-align: center; background: var(--bg);">
+                    <img src="https://edgeoneimg.cdn.sn/i/696b4d5b58c71_1768639835.webp" style="width: 50px; height: 50px; border: 1px solid var(--border); padding: 3px; margin-bottom: 10px;">
+                    <div class="mono" style="font-weight: 900; font-size: 0.9rem;">Cnfte</div>
+                    <div class="mono" style="font-size: 0.7rem; color: var(--text-muted); margin-top: 5px;">"滚滚长江东逝水，浪花淘尽英雄。"</div>
+                    <div style="display: flex; gap: 8px; justify-content: center; margin-top: 12px;">
+                        <a href="mailto:cnfte.2@gmail.com" style="font-size: 8px; border: 1px solid var(--border); padding: 3px 6px;" class="mono">EMAIL</a>
+                        <a href="https://github.com/cnfte/blog.git" target="_blank" style="font-size: 8px; border: 1px solid var(--border); padding: 3px 6px;" class="mono">GITHUB</a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="widget">
+                <h3 class="widget-title">NOTICE</h3>
+                <div style="background: var(--bg); border: 1px solid var(--border); padding: 15px; font-size: 0.75rem; color: var(--text-muted); line-height: 1.6;" class="mono">
+                    欢迎来到我的博客
+                </div>
+            </section>
+
+            
+            <section class="widget">
+                <h3 class="widget-title">TOC</h3>
+                <div class="mono" style="font-size: 0.7rem; line-height: 1.8;">
+                    <div class="toc">
+<ul>
+<li><a href="#1-what-are-ipv4-ipv6">1. What are IPv4 / IPv6?</a></li>
+<li><a href="#2-the-differences-between-them">2. The Differences Between Them</a></li>
+<li><a href="#3-the-significance-of-ipv4s-birth">3. The Significance of IPv4's Birth</a></li>
+<li><a href="#4-the-significance-of-ipv6s-birth">4. The Significance of IPv6's Birth</a></li>
+<li><a href="#5-why-they-are-incompatible">5. Why They Are Incompatible</a></li>
+<li><a href="#6-the-concept-of-public-networks">6. The Concept of Public Networks</a></li>
+<li><a href="#7-how-to-obtain-a-public-ipv4-address">7. How to obtain a public IPv4 address?</a></li>
+<li><a href="#8-how-to-obtain-a-public-ipv6-address">8. How to obtain a public IPv6 address?</a></li>
+<li><a href="#9-uses-of-ipv4">9. Uses of IPv4</a></li>
+<li><a href="#10-uses-of-ipv6">10. Uses of IPv6</a></li>
+</ul>
+</div>
+
+                </div>
+            </section>
+            
+
+            <section class="widget">
+                <h3 class="widget-title">SYSLOG</h3>
+                <div style="background: #000; border: 1px solid #333; padding: 15px; font-family: 'Fira Code'; font-size: 0.6rem; color: #00ff00; line-height: 1.6;">
+                    <div>[OK] NODE: STABLE</div>
+                    <div>[OK] CLOCK: <span id="live-clock">00:00:00</span></div>
+                </div>
+            </section>
+        </aside>
+    </div>
+
+    <footer>
+        <p class="mono" style="font-size: 0.85rem; margin-bottom: 10px;"><a src="https://www.itdog.cn/ping/cnfte.top">本站已启用CLOUDFLARE CDN防护</a></p>
+        <p class="mono" style="font-size: 0.6rem; color: var(--text-muted);">© 2026 Cnfte // EOF</p>
+    </footer>
+
+    <script>
+        document.getElementById('page-url').innerText = window.location.href;
+        setInterval(() => { document.getElementById('live-clock').innerText = new Date().toTimeString().split(' ')[0]; }, 1000);
+
+        window.onscroll = function() {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            document.getElementById("progress").style.width = (winScroll / height * 100) + "%";
+        };
+
+        function toggleTheme() {
+            const target = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', target);
+            localStorage.setItem('geek-theme', target);
+        }
+
+        let searchData = null;
+        const sInput = document.getElementById('nav-search-input');
+        const sResults = document.getElementById('nav-search-results');
+        sInput.addEventListener('input', async (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            if (!searchData) {
+                const path = document.documentElement.lang === 'en' ? '/en/search.json' : '/search.json';
+                searchData = await (await fetch(path)).json();
+            }
+            sResults.innerHTML = '';
+            if (query.length < 1) { sResults.style.display = 'none'; return; }
+            const filtered = searchData.filter(i => i.title.toLowerCase().includes(query)).slice(0, 5);
+            if (filtered.length > 0) {
+                filtered.forEach(item => {
+                    const a = document.createElement('a'); a.href = item.url; a.style = "display:block;padding:10px;border-bottom:1px solid var(--border);font-size:11px;";
+                    a.innerText = item.title; sResults.appendChild(a);
+                });
+                sResults.style.display = 'block';
+            }
+        });
+        document.addEventListener('click', (e) => { if (!e.target.closest('.nav-search-wrapper')) sResults.style.display = 'none'; });
+
+        document.documentElement.setAttribute('data-theme', localStorage.getItem('geek-theme') || 'dark');
+    </script>
+</body>
+</html>

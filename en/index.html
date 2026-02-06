@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cnfteの博客</title>
+    <meta name="description" content="Cnfteの博客 - 探索技术与美学的极简个人空间。专注于分享 GitHub 优质开发者资源、网络协议深度科普及 AI 接口应用教程。秉持极致简洁理念，记录技术成长与生活灵感。">
+    <link rel="icon" href="/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root { --bg: #000000; --surface: #050505; --text: #ffffff; --text-muted: #888888; --border: #222222; --trans: all 0.2s ease; }
+        [data-theme="light"] { --bg: #ffffff; --surface: #fafafa; --text: #1d1d1f; --text-muted: #505050; --border: #e0e0e0; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        a { color: inherit !important; text-decoration: none !important; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; transition: background 0.3s; overflow-x: hidden; }
+        .mono { font-family: 'Fira Code', monospace !important; }
+
+        /* --- 导航栏 --- */
+        nav { 
+            position: sticky; top: 0; z-index: 1000; background: var(--bg); border-bottom: 2px solid var(--border); 
+            padding: 10px 5%; min-height: 60px; display: flex; justify-content: space-between; align-items: center; 
+        }
+        .logo { font-weight: 900; font-size: 1.1rem; }
+        .nav-links { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .nav-links a { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
+
+        /* 搜索框 */
+        .nav-search-wrapper { position: relative; }
+        #nav-search-input { 
+            background: transparent; border: 1px solid var(--border); color: var(--text); 
+            font-family: 'Fira Code'; font-size: 10px; padding: 4px 10px; width: 100px; outline: none; transition: var(--trans); 
+        }
+        #nav-search-input:focus { width: 150px; border-color: var(--text); }
+        #nav-search-results { 
+            position: absolute; top: 100%; right: 0; width: 280px; background: var(--surface); 
+            border: 1px solid var(--border); border-top: none; max-height: 300px; overflow-y: auto; z-index: 9999; display: none; 
+        }
+
+        /* --- Hero --- */
+        .hero { padding: 60px 20px; text-align: center; border-bottom: 2px solid var(--border); background: var(--surface); }
+        .hero h1 { font-size: clamp(1.8rem, 8vw, 3.5rem); font-weight: 900; letter-spacing: -1px; }
+        .hero p { color: var(--text-muted); font-size: 0.8rem; margin-top: 10px; }
+
+        /* --- 广告位 2x2 极扁设计 --- */
+        .spot-zone { background: var(--bg); border-bottom: 1px solid var(--border); padding: 15px; }
+        .spot-grid { 
+            max-width: 1200px; margin: 0 auto; display: grid; 
+            grid-template-columns: repeat(4, 1fr); gap: 10px; 
+        }
+        .spot-item { 
+            width: 100%; aspect-ratio: 2.4 / 1; border: 1px solid var(--border); 
+            background: var(--surface); overflow: hidden; transition: var(--trans); filter: none !important;
+        }
+        .spot-item:hover { border-color: var(--text); }
+        .spot-item img { width: 100%; height: 100%; object-fit: cover; }
+        .spot-empty { font-family: 'Fira Code'; font-size: 0.5rem; color: var(--text-muted); height: 100%; display: flex; align-items: center; justify-content: center; }
+
+        /* 布局 */
+        .main-grid { max-width: 1200px; margin: 0 auto; display: flex; }
+        .post-container { flex: 1; border-right: 1px solid var(--border); min-width: 0; }
+        .post-card { padding: 50px; border-bottom: 1px solid var(--border); display: block; transition: var(--trans); }
+        .post-card:hover { background: var(--surface); }
+        .post-title { font-size: 1.8rem; font-weight: 800; line-height: 1.2; margin-bottom: 10px; }
+        .post-summary { color: var(--text-muted); font-size: 0.95rem; text-align: justify; }
+
+        /* 侧边栏 */
+        aside { width: 320px; padding: 40px 20px; position: sticky; top: 60px; height: calc(100vh - 60px); overflow-y: auto; background: var(--surface); }
+        .widget { margin-bottom: 40px; }
+        .widget-title { font-family: 'Fira Code'; font-size: 0.7rem; border-left: 3px solid var(--text); padding-left: 10px; margin-bottom: 15px; text-transform: uppercase; }
+
+        /* --- 手机端强力适配 --- */
+        @media (max-width: 768px) {
+            nav { flex-direction: column; gap: 12px; padding: 15px; text-align: center; }
+            .nav-links { width: 100%; justify-content: center; gap: 8px; }
+            .hero { padding: 30px 15px; }
+            
+            .spot-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; } /* 2x2 排列且紧凑 */
+            .spot-item { aspect-ratio: 2.2 / 1; }
+
+            .main-grid { flex-direction: column; }
+            .post-container { border-right: none; }
+            .post-card { padding: 25px 15px; } /* 极窄边距，防文字变长条 */
+            .post-title { font-size: 1.4rem; }
+            
+            aside { width: 100%; height: auto; position: static; border-top: 1px solid var(--border); padding: 30px 15px; }
+        }
+
+        footer { text-align: center; padding: 40px 20px; border-top: 1px solid var(--border); font-family: 'Fira Code'; font-size: 0.75rem; background: var(--surface); }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/" class="logo mono">CNFTE</a>
+        <div class="nav-links mono">
+            <a href="/en/Link Exchange.html">Link Exchange</a><a href="/en/Privacy Policy.html">Privacy Policy</a><a href="/en/about.html">about</a><a href="/en/公益服务项.html">service</a>
+            <div class="nav-search-wrapper">
+                <input type="text" id="nav-search-input" placeholder="SEARCH..." autocomplete="off">
+                <div id="nav-search-results"></div>
+            </div>
+            <a href="/">ZH</a>
+            <span onclick="toggleTheme()" style="cursor:pointer; border:1px solid var(--border); padding:2px 8px; font-size:10px;">MODE</span>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h1 class="mono">CNFTE</h1>
+        <p class="mono">莫愁前路无知己，天下谁人不识君？</p>
+    </header>
+
+    <div class="spot-zone">
+        <div class="spot-grid">
+            
+            <a href="https://edgeoneimg.cdn.sn/i/697f27805fd7d_1769940864.webp" class="spot-item" target="_blank" rel="nofollow">
+                <img src="https://edgeoneimg.cdn.sn/i/697f261a67d98_1769940506.webp" alt="Ad">
+            </a>
+            
+            <a href="https://edgeoneimg.cdn.sn/i/697f27805fd7d_1769940864.webp" class="spot-item" target="_blank" rel="nofollow">
+                <img src="https://edgeoneimg.cdn.sn/i/697f261a67d98_1769940506.webp" alt="Ad">
+            </a>
+            
+            <a href="https://edgeoneimg.cdn.sn/i/697f27805fd7d_1769940864.webp" class="spot-item" target="_blank" rel="nofollow">
+                <img src="https://edgeoneimg.cdn.sn/i/697f261a67d98_1769940506.webp" alt="Ad">
+            </a>
+            
+            <a href="https://edgeoneimg.cdn.sn/i/697f27805fd7d_1769940864.webp" class="spot-item" target="_blank" rel="nofollow">
+                <img src="https://edgeoneimg.cdn.sn/i/697f261a67d98_1769940506.webp" alt="Ad">
+            </a>
+            
+        </div>
+    </div>
+
+    <div class="main-grid">
+        <main class="post-container">
+            
+            <a href="/en/archive/f08a66a0/" class="post-card">
+                <div class="mono" style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 5px;">[2026-02-03] // UID:f08a66a0</div>
+                <h2 class="post-title">[Tutorial] Zero-Barrier: Building Your Own Gemini AI Assistant with Vercel (Direct Access in China)</h2>
+                <p class="post-summary">Introduction Gemini is the nextgeneration AI large language model launched by Google. It excels in code comprehension and web development, helping even abs...</p>
+            </a>
+            
+            <a href="/en/archive/48c818d4/" class="post-card">
+                <div class="mono" style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 5px;">[2026-01-25] // UID:48c818d4</div>
+                <h2 class="post-title">A compilation of Cloudflare SaaS optimized IP addresses and domains built by the community.</h2>
+                <p class="post-summary">1. Introduction As is well known, Cloudflare provides free unlimited traffic and DDoS protection via its CDN, but it has been criticized for its poor node ...</p>
+            </a>
+            
+            <a href="/en/archive/44981baa/" class="post-card">
+                <div class="mono" style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 5px;">[2026-01-24] // UID:44981baa</div>
+                <h2 class="post-title">December 22, 2025: The Kuaishou live streaming platform is involved in a pornography scandal; a dark moment for the Chinese internet.</h2>
+                <p class="post-summary">I. Background of the Incident On the evening of December 22, 2025, several leading Chinese social media and content platforms experienced abnormal situatio...</p>
+            </a>
+            
+            <a href="/en/archive/54a5ccd8/" class="post-card">
+                <div class="mono" style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 5px;">[2026-01-24] // UID:54a5ccd8</div>
+                <h2 class="post-title">Gemini reverse proxy script: No Cloudflare or Deno required, easily set up a stable proxy with Nginx.</h2>
+                <p class="post-summary">Introduction: Bypassing the GFW to Enjoy the Gemini API For users in mainland China, accessing the Gemini API has always been hindered by the Great Firewal...</p>
+            </a>
+            
+            <a href="/en/archive/36b5c950/" class="post-card">
+                <div class="mono" style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 5px;">[2026-01-24] // UID:36b5c950</div>
+                <h2 class="post-title">The JMcomic version download site has officially launched.</h2>
+                <p class="post-summary">Using premium potatoes (referring to a highquality server/network) ensures a good basic download speed. Supported versions: JMComic2: 1.6.51.8.0 JMComic3: ...</p>
+            </a>
+            
+            <a href="/en/archive/2a482cb3/" class="post-card">
+                <div class="mono" style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 5px;">[2026-01-24] // UID:2a482cb3</div>
+                <h2 class="post-title">Internet Science Popularization Series - What is DNS?</h2>
+                <p class="post-summary">What is DNS? Imagine the internet as a vast city, home to countless websites and servers, each with its own "address," which is a string of numbers like 19...</p>
+            </a>
+            
+            <a href="/en/archive/21658787/" class="post-card">
+                <div class="mono" style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 5px;">[2026-01-24] // UID:21658787</div>
+                <h2 class="post-title">Internet Science Popularization Series - What are HTTP and HTTPS?</h2>
+                <p class="post-summary">Hello everyone! Today we're going to talk about two terms we often encounter when browsing the internet: HTTP and HTTPS. They sound a bit technical, but th...</p>
+            </a>
+            
+            <a href="/en/archive/355d642f/" class="post-card">
+                <div class="mono" style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 5px;">[2026-01-24] // UID:355d642f</div>
+                <h2 class="post-title">Internet Science Popularization Series - What is ICP Registration? How to obtain a registered domain name and alternative solutions.</h2>
+                <p class="post-summary">I. What is China's Domain Name Registration? Simply put, China's domain name registration (also known as "domain registration" or "ICP registration") refer...</p>
+            </a>
+            
+            <a href="/en/archive/62459bf2/" class="post-card">
+                <div class="mono" style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 5px;">[2026-01-24] // UID:62459bf2</div>
+                <h2 class="post-title">Internet Science Popularization Series - What are IPv4 and IPv6?</h2>
+                <p class="post-summary">1. What are IPv4 / IPv6? Imagine the internet as a giant city, and every device connected to the internet (computers, mobile phones, servers, etc.) is like...</p>
+            </a>
+            
+            <a href="/en/archive/4e89c244/" class="post-card">
+                <div class="mono" style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 5px;">[2026-01-24] // UID:4e89c244</div>
+                <h2 class="post-title">Internet Science Popularization Series - What is the Great Firewall of China?</h2>
+                <p class="post-summary">What is the Great Firewall of China? Simply put, the Great Firewall of China is a system and a series of policies used by the Chinese government to control...</p>
+            </a>
+            
+            <a href="/en/archive/dcad04a3/" class="post-card">
+                <div class="mono" style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 5px;">[2026-01-24] // UID:dcad04a3</div>
+                <h2 class="post-title">Internet Science Popularization Series - What is a Transmission Protocol?</h2>
+                <p class="post-summary">Imagine we live in a large city, and every day we need to transport goods (information) from one place to another using various means of transportation (ca...</p>
+            </a>
+            
+            <a href="/en/archive/0bf07423/" class="post-card">
+                <div class="mono" style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 5px;">[2026-01-24] // UID:0bf07423</div>
+                <h2 class="post-title">Internet Science Popularization Series - What is a protocol? How to set up a node with an encryption protocol?</h2>
+                <p class="post-summary">We need to clarify a concept first: the tools we commonly use now (such as Shadowsocks, V2Ray, Singbox) are technically classified more as "proxies" rather...</p>
+            </a>
+            
+            <a href="/en/archive/9cab56f1/" class="post-card">
+                <div class="mono" style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 5px;">[2026-01-24] // UID:9cab56f1</div>
+                <h2 class="post-title">Internet Science Popularization Series - What is a domain name? How to obtain and configure a domain name?</h2>
+                <p class="post-summary">What is a Domain Name? Imagine the internet as a giant city, inhabited by countless websites and servers (where website content is stored). Each server has...</p>
+            </a>
+            
+            <a href="/en/archive/c5c65e1b/" class="post-card">
+                <div class="mono" style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 5px;">[2026-01-24] // UID:c5c65e1b</div>
+                <h2 class="post-title">Internet Science Popularization Series - What is a server? How to get a server?</h2>
+                <p class="post-summary">What is a Server? Imagine you're browsing the internet, watching videos, playing games, or chatting online. Where is all this information and content store...</p>
+            </a>
+            
+            <a href="/en/archive/c82ccc81/" class="post-card">
+                <div class="mono" style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 5px;">[2026-01-24] // UID:c82ccc81</div>
+                <h2 class="post-title">This corresponds to the recent warnings regarding Cloudflare's large-scale account suspensions of reverse proxy tools.</h2>
+                <p class="post-summary">Recently, a largescale account suspension incident at Cloudflare has caused a huge stir in the internet community, with numerous user accounts, including b...</p>
+            </a>
+            
+        </main>
+
+        <aside>
+            <section class="widget">
+                <h3 class="widget-title">IDENT_AUTH</h3>
+                <div style="text-align: center; border: 1px solid var(--border); padding: 25px 15px; background: var(--bg);">
+                    <img src="https://edgeoneimg.cdn.sn/i/696b4d5b58c71_1768639835.webp" style="width: 55px; height: 55px; border: 1px solid var(--border); padding: 3px; margin-bottom: 12px;">
+                    <div class="mono" style="font-weight: 900; font-size: 0.9rem;">Cnfte</div>
+                    <div class="mono" style="font-size: 0.7rem; color: var(--text-muted); margin-top: 5px;">"滚滚长江东逝水，浪花淘尽英雄。"</div>
+                    <div style="display: flex; gap: 8px; justify-content: center; margin-top: 15px;">
+                        <a href="mailto:cnfte.2@gmail.com" style="font-size: 9px; border: 1px solid var(--border); padding: 4px 8px;" class="mono">EMAIL</a>
+                        <a href="https://github.com/cnfte/blog.git" target="_blank" style="font-size: 9px; border: 1px solid var(--border); padding: 4px 8px;" class="mono">GITHUB</a>
+                    </div>
+                </div>
+            </section>
+            <section class="widget">
+                <h3 class="widget-title">NOTICE</h3>
+                <div style="background: var(--bg); border: 1px solid var(--border); padding: 15px; font-size: 0.75rem; color: var(--text-muted); line-height: 1.6;" class="mono">
+                    欢迎来到我的博客
+                </div>
+            </section>
+            <section class="widget">
+                <h3 class="widget-title">SYSLOG</h3>
+                <div style="background:#000; border:1px solid #333; padding:15px; font-family:'Fira Code'; font-size:0.65rem; color:#00ff00;">
+                    <div>[OK] UP_TIME: <span id="days">0</span>_DAYS</div>
+                    <div>[OK] NODES: 15_INDEXED</div>
+                </div>
+            </section>
+        </aside>
+    </div>
+
+    <footer>
+        <p class="mono" style="font-size: 0.8rem; margin-bottom: 8px;"><a src="https://www.itdog.cn/ping/cnfte.top">本站已启用CLOUDFLARE CDN防护</a></p>
+        <p class="mono" style="font-size: 0.6rem; color: var(--text-muted); opacity: 0.6;">© 2026 Cnfte // EOF</p>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const target = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', target);
+            localStorage.setItem('geek-theme', target);
+        }
+        
+        let searchData = null;
+        const sInput = document.getElementById('nav-search-input');
+        const sResults = document.getElementById('nav-search-results');
+        sInput.addEventListener('input', async (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            if (!searchData) {
+                const path = document.documentElement.lang === 'en' ? '/en/search.json' : '/search.json';
+                searchData = await (await fetch(path)).json();
+            }
+            sResults.innerHTML = '';
+            if (query.length < 1) { sResults.style.display = 'none'; return; }
+            const filtered = searchData.filter(i => i.title.toLowerCase().includes(query)).slice(0, 5);
+            if (filtered.length > 0) {
+                filtered.forEach(item => {
+                    const a = document.createElement('a'); a.href = item.url; a.style = "display:block;padding:12px;border-bottom:1px solid var(--border);font-size:11px;";
+                    a.innerHTML = `<span class="mono">${item.title}</span>`; sResults.appendChild(a);
+                });
+                sResults.style.display = 'block';
+            }
+        });
+        document.addEventListener('click', (e) => { if (!e.target.closest('.nav-search-wrapper')) sResults.style.display = 'none'; });
+
+        window.onload = () => {
+            const start = new Date("2025-05-01");
+            document.getElementById('days').innerHTML = Math.floor((new Date() - start) / 86400000);
+            document.documentElement.setAttribute('data-theme', localStorage.getItem('geek-theme') || 'dark');
+        };
+    </script>
+</body>
+</html>

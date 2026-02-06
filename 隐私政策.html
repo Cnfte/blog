@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO & Metadata -->
+    <meta name="google-adsense-account" content="ca-pub-4242854888467129">
+    <title>隐私政策 - Cnfteの博客</title>
+    <meta name="description" content="隐私政策 生效日期：2026年02月01日 感谢您访问 Cnfte Space（网站地址：https://cnfte.top，以下简称“本网站”）。我们深知隐私保护对您的重要性，致力于保障您的个人信息安全与合法权益。本隐私政策旨在明确告知您本网站（静态站点，使用 Cloudflare CDN 加速，未绑定数据...">
+    <link rel="icon" href="/favicon.ico">
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #0a0a0a;
+            --text: #ffffff;
+            --text-muted: #a0a0a0;
+            --border: #222222;
+            --code-bg: #050505;
+            --accent: #ffffff;
+            --trans: all 0.2s ease;
+        }
+
+        [data-theme="light"] {
+            --bg: #ffffff;
+            --surface: #fafafa;
+            --text: #1d1d1f;
+            --text-muted: #505050;
+            --border: #e0e0e0;
+            --code-bg: #f5f5f5;
+        }
+
+        /* 基础复位 */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        a { color: inherit !important; text-decoration: none !important; }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--bg); color: var(--text); 
+            line-height: 1.8; overflow-x: hidden; width: 100%;
+            transition: background 0.3s;
+        }
+
+        .mono { font-family: 'Fira Code', monospace !important; }
+        ::selection { background: #333; color: #fff; }
+
+        /* 顶部进度条 */
+        #progress { position: fixed; top: 0; left: 0; width: 0%; height: 2px; background: var(--accent); z-index: 2001; }
+
+        /* --- 导航栏 --- */
+        nav { 
+            position: sticky; top: 0; z-index: 1000; background: var(--bg); border-bottom: 2px solid var(--border); 
+            padding: 10px 5%; min-height: 60px; display: flex; justify-content: space-between; align-items: center; 
+        }
+        .nav-links { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: flex-end; }
+        .nav-links a, .nav-links span { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
+
+        /* 搜索框 */
+        .nav-search-wrapper { position: relative; }
+        #nav-search-input { 
+            background: transparent; border: 1px solid var(--border); color: var(--text); 
+            font-family: 'Fira Code'; font-size: 10px; padding: 4px 10px; width: 100px; outline: none; transition: var(--trans); 
+        }
+        #nav-search-input:focus { width: 150px; border-color: var(--text); }
+        #nav-search-results { 
+            position: absolute; top: 100%; right: 0; width: 280px; background: var(--surface); 
+            border: 1px solid var(--border); max-height: 350px; overflow-y: auto; z-index: 9999; display: none; 
+        }
+
+        /* 文章头部 */
+        .post-header { padding: 60px 20px 30px; border-bottom: 1px solid var(--border); max-width: 1200px; margin: 0 auto; }
+        .post-header h1 { font-size: clamp(1.5rem, 6vw, 2.5rem); font-weight: 900; letter-spacing: -1px; line-height: 1.2; }
+        .meta-bar { font-family: 'Fira Code'; font-size: 0.7rem; color: var(--text-muted); margin-top: 15px; }
+
+        /* 布局架构 */
+        .main-wrapper { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: row; }
+        main { flex: 1; min-width: 0; border-right: 1px solid var(--border); }
+
+        /* --- 文章内广告位 (2x2 扁平化) --- */
+        .spot-c-zone { padding: 20px 60px 0; }
+        .spot-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        .spot-item { 
+            width: 100%; aspect-ratio: 2.4 / 1; border: 1px solid var(--border); 
+            background: var(--surface); overflow: hidden; transition: var(--trans); filter: none !important;
+        }
+        .spot-item img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* 正文内容 */
+        article.content { padding: 40px 60px; font-size: 1.05rem; }
+        .content h2 { font-size: 1.4rem; margin: 2em 0 1em; font-weight: 900; border-bottom: 2px solid var(--text); padding-bottom: 5px; display: inline-block; }
+        .content p { margin-bottom: 1.6rem; text-align: justify; }
+        .content img { max-width: 100%; border: 1px solid var(--border); margin: 20px 0; padding: 5px; background: var(--surface); }
+
+        /* 侧边栏 */
+        aside { 
+            width: 320px; flex-shrink: 0; padding: 40px 25px; background: var(--surface); 
+            position: sticky; top: 60px; height: calc(100vh - 60px); overflow-y: auto; scrollbar-width: none;
+        }
+        aside::-webkit-scrollbar { display: none; }
+        .widget { margin-bottom: 35px; }
+        .widget-title { font-family: 'Fira Code'; font-size: 0.7rem; border-left: 3px solid var(--text); padding-left: 10px; margin-bottom: 15px; text-transform: uppercase; }
+
+        /* 代码块 */
+        pre { background: var(--code-bg) !important; padding: 25px 15px; border: 1px solid var(--border); margin: 1.5rem 0; overflow-x: auto; }
+        pre code { font-family: 'Fira Code', monospace !important; font-size: 0.85rem !important; }
+
+        /* --- 手机端强力适配 --- */
+        @media (max-width: 768px) {
+            nav { flex-direction: column; gap: 12px; padding: 15px; }
+            .nav-links { width: 100%; justify-content: center; gap: 10px; }
+            
+            .main-wrapper { flex-direction: column; }
+            main { border-right: none; }
+            .post-header { padding: 40px 15px 20px; }
+            
+            .spot-c-zone { padding: 15px 15px 0; }
+            .spot-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+            .spot-item { aspect-ratio: 2.2 / 1; }
+
+            article.content { padding: 25px 15px; } /* 窄边距，防止长条化 */
+            aside { width: 100%; height: auto; position: static; border-top: 1px solid var(--border); padding: 30px 15px; }
+        }
+
+        footer { padding: 60px 20px; text-align: center; border-top: 1px solid var(--border); font-family: 'Fira Code'; font-size: 0.75rem; background: var(--surface); }
+    </style>
+</head>
+<body>
+    <div id="progress"></div>
+    <nav>
+        <a href="/" class="logo mono">CNFTE</a>
+        <div class="nav-links mono">
+            <a href="/about.html">关于</a><a href="/公益服务项.html">公益服务项</a><a href="/友链.html">友链</a><a href="/隐私政策.html">隐私政策</a>
+            <div class="nav-search-wrapper">
+                <input type="text" id="nav-search-input" placeholder="SEARCH..." autocomplete="off">
+                <div id="nav-search-results"></div>
+            </div>
+            <span style="cursor: pointer; border: 1px solid var(--border); padding: 2px 8px; font-size: 9px;" onclick="toggleTheme()">MODE</span>
+        </div>
+    </nav>
+
+    <header class="post-header">
+        <h1 class="mono">隐私政策</h1>
+        <div class="meta-bar mono">
+            STAMP: 2026-02-01 // UID: 54a96a1d // AUTH: VERIFIED
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <main>
+            <!-- 广告区域 -->
+            <section class="spot-c-zone">
+                <div class="spot-grid">
+                    
+                    <a href="https://edgeoneimg.cdn.sn/i/697f27805fd7d_1769940864.webp" class="spot-item" target="_blank" rel="nofollow">
+                        
+                        <img src="https://edgeoneimg.cdn.sn/i/697f261a67d98_1769940506.webp" alt="Ad">
+                        
+                    </a>
+                    
+                    <a href="https://edgeoneimg.cdn.sn/i/697f27805fd7d_1769940864.webp" class="spot-item" target="_blank" rel="nofollow">
+                        
+                        <img src="https://edgeoneimg.cdn.sn/i/697f261a67d98_1769940506.webp" alt="Ad">
+                        
+                    </a>
+                    
+                    <a href="https://edgeoneimg.cdn.sn/i/697f27805fd7d_1769940864.webp" class="spot-item" target="_blank" rel="nofollow">
+                        
+                        <img src="https://edgeoneimg.cdn.sn/i/697f261a67d98_1769940506.webp" alt="Ad">
+                        
+                    </a>
+                    
+                    <a href="https://edgeoneimg.cdn.sn/i/697f27805fd7d_1769940864.webp" class="spot-item" target="_blank" rel="nofollow">
+                        
+                        <img src="https://edgeoneimg.cdn.sn/i/697f261a67d98_1769940506.webp" alt="Ad">
+                        
+                    </a>
+                    
+                </div>
+            </section>
+
+            <article class="content mono">
+                <h1 id="_1">隐私政策</h1>
+<p>生效日期：2026年02月01日</p>
+<p>感谢您访问 Cnfte Space（网站地址：https://cnfte.top，以下简称“本网站”）。我们深知隐私保护对您的重要性，致力于保障您的个人信息安全与合法权益。本隐私政策旨在明确告知您本网站（静态站点，使用 Cloudflare CDN 加速，未绑定数据库，展示非数据收集类广告）如何收集、使用、存储、保护您的个人信息，以及您享有的相关权利。请您在使用本网站服务前仔细阅读并理解本政策，您的访问、浏览或使用本网站服务的行为，即表示您已同意本隐私政策的全部内容。</p>
+<h2 id="_2">一、适用范围</h2>
+<p>本隐私政策适用于您访问本网站、使用本网站提供的所有服务（包括但不限于技术博客浏览、资源分享、网络协议科普内容查阅、广告浏览等）过程中，本网站及相关第三方服务提供商（主要为 Cloudflare）收集、使用、存储和保护您个人信息的所有行为。
+本政策不适用于其他第三方网站或服务，本网站可能包含指向第三方网站的链接（如 GitHub 资源链接等），您访问第三方网站时，其隐私政策与本网站无关，我们建议您仔细阅读第三方的隐私政策。</p>
+<h2 id="_3">二、收集的信息类型及方式</h2>
+<p>本网站为静态站点且未绑定数据库，不主动存储您的个人身份信息，亦不通过展示的广告收集任何用户个人数据，收集的信息仅通过自动方式获取，具体如下：</p>
+<h3 id="_4">（一）本网站自身自动收集的信息</h3>
+<p>当您访问和使用本网站时，我们可能通过服务器日志等技术自动收集以下非个人身份信息，此类信息不直接关联您的真实身份，且不会存储在本网站服务器（因无绑定数据库）：
+1. 设备信息：包括您使用的设备类型、操作系统版本、浏览器类型等基础设备特征；
+2. 访问信息：包括您的访问时间、访问时长、访问的页面路径、浏览的内容、点击记录、IP 地址（经 Cloudflare 处理后可能为匿名化 IP）、网络运营商、所在地区等；
+3. 技术日志信息：包括服务器响应时间、错误日志、访问请求头等技术数据。</p>
+<h3 id="_5">（二）第三方服务收集的信息</h3>
+<p>本网站使用 Cloudflare CDN 服务以实现网站加速、安全防护等功能，Cloudflare 可能会收集您访问本网站时的相关信息，包括但不限于 IP 地址、浏览器类型、访问时间、页面请求等，用于节点调度、攻击防护、访问统计等目的。Cloudflare 的数据处理遵循其自身的隐私政策（详见 Cloudflare 官方隐私政策页面），本网站不干预其合法的信息处理行为，且要求其仅在提供服务必要范围内收集信息。</p>
+<h3 id="_6">（三）广告相关信息说明</h3>
+<p>本网站展示的广告均为<strong>非数据收集类广告</strong>，广告投放过程中不会收集您的任何个人信息（包括但不限于浏览行为、兴趣偏好、设备标识符、位置信息等），广告展示仅基于页面内容匹配或随机展示逻辑，不进行个性化推荐，也不会将任何用户相关信息提供给广告投放方。</p>
+<h3 id="_7">（四）您主动提供的信息</h3>
+<p>仅在您自愿选择参与特定互动功能或服务时，我们可能收集您主动提供的相关信息，例如：
+1. 若您选择通过网站留言、评论等第三方嵌入功能（如第三方评论插件）分享观点或咨询问题，相关信息将由对应的第三方服务提供商按照其隐私政策收集和处理，本网站不存储此类信息；
+2. 若您参与本网站组织的资源分享、技术交流等活动，根据活动要求可能收集您的相关必要信息（如用于资源获取的验证信息等），具体以活动规则为准，且相关信息仅用于活动相关用途，活动结束后将按规定删除或匿名化处理。</p>
+<h2 id="_8">三、信息的使用目的</h2>
+<h3 id="_9">（一）本网站层面的使用</h3>
+<p>我们收集的非个人身份信息仅用于以下合法目的：
+1. 提供和维护网站服务：确保本网站正常运行，结合 Cloudflare CDN 优化网站加载速度和访问稳定性，为您提供流畅的浏览体验；
+2. 内容优化：根据访问数据（如页面浏览量、点击热度等）分析用户整体偏好，优化网站内容布局、更新频率，为您提供更贴合需求的技术博客、科普内容及资源；
+3. 安全保障：结合 Cloudflare 的安全防护能力，分析访问日志，识别和防范恶意攻击、网络欺诈等安全风险，保护您和本网站的合法权益；
+4. 合规要求：遵守相关法律法规、监管要求，配合有权机关的合法调查。</p>
+<h3 id="_10">（二）第三方服务的使用目的</h3>
+<p>Cloudflare 对收集信息的使用：主要用于提供 CDN 加速、DDoS 防护、访问路由优化等服务，具体以 Cloudflare 隐私政策为准。</p>
+<h2 id="_11">四、信息的存储与保护</h2>
+<h3 id="_12">（一）本网站的存储与保护</h3>
+<p>因本网站为静态站点且未绑定数据库，不存储任何用户个人信息（包括主动提供的信息及自动收集的信息），所有自动收集的临时访问数据仅用于实时访问分析及安全校验，不会留存。</p>
+<h3 id="_13">（二）第三方服务的存储与保护</h3>
+<p>Cloudflare 收集的相关访问信息将由其按照自身数据存储政策存储在安全服务器中，Cloudflare 采用符合行业标准的安全技术措施（如数据加密、访问权限控制等）保护信息安全，存储期限以 Cloudflare 隐私政策为准。</p>
+<h3 id="_14">（三）共同安全保障责任</h3>
+<p>我们已审慎选择具备良好隐私保护资质的第三方服务提供商（Cloudflare），并通过服务协议明确要求其遵守相关法律法规，采取必要的安全保护措施，不得擅自泄露、篡改、滥用收集的信息。
+尽管已采取上述措施，但互联网环境存在不确定性，我们无法完全保证第三方服务提供商的信息传输与存储绝对安全。您应注意妥善保管自己的设备信息及网络访问环境，避免因自身操作不当导致信息泄露。</p>
+<h2 id="_15">五、信息的共享与披露</h2>
+<h3 id="_16">（一）本网站的信息共享与披露</h3>
+<p>本网站不存储任何用户个人信息，且不通过广告收集数据，因此不存在向第三方共享、出售、出租用户个人信息的行为。仅在符合以下情况时，可能配合第三方披露相关非个人身份信息（如汇总后的访问统计数据，不含任何可识别个人的信息）：
+1. 获得您的明确同意；
+2. 法律法规要求或司法裁定、行政命令强制要求；
+3. 为保护本网站、您或其他第三方的合法权益，在合理且必要的范围内。</p>
+<h3 id="_17">（二）第三方服务的信息共享与披露</h3>
+<p>Cloudflare 对信息的共享与披露，遵循其自身的隐私政策及相关法律法规，本网站不干预其合法的信息处理行为，但会要求其不得超出服务必要范围共享用户信息。</p>
+<h2 id="cookie">六、Cookie 及类似追踪技术的使用</h2>
+<h3 id="cookie_1">（一）本网站的 Cookie 使用</h3>
+<p>本网站自身不主动设置 Cookie，也不会通过广告相关功能设置任何追踪类 Cookie。</p>
+<h3 id="cookie_2">（二）第三方服务的 Cookie 使用</h3>
+<p>Cloudflare 可能会为实现 CDN 加速和安全防护功能，使用 Cookie 存储您的访问偏好、验证访问状态等（如识别合法访问请求、优化节点分配）。
+您可以通过浏览器设置禁用或删除 Cookie，具体操作方式可参考浏览器的帮助文档。若禁用 Cookie，可能会影响本网站的加载速度或部分第三方服务功能的正常使用，但不会影响广告展示及网站核心浏览功能。</p>
+<h2 id="_18">七、您的权利</h2>
+<p>您对自己的个人信息享有以下权利，我们将协助您向相关第三方服务提供商（如 Cloudflare）主张权利（因本网站不存储信息）：
+1. 访问权：您有权查询 Cloudflare 等第三方收集的关于您的个人信息，可通过第三方官方渠道提交访问请求；
+2. 更正权：若您发现第三方收集的您的个人信息存在错误或不完整，有权通过第三方官方渠道要求更正或补充；
+3. 删除权：在符合法律法规及第三方隐私政策规定的情况下，您有权通过第三方官方渠道要求删除您的个人信息；
+4. 撤回同意权：您有权撤回对第三方服务收集、使用您个人信息的同意（具体方式可参考第三方官方指引），但撤回同意后可能影响相关服务功能的使用；
+5. 投诉建议权：若您对本网站的隐私保护工作或第三方服务的信息处理行为有疑问、投诉或建议，可通过本政策预留的联系方式与我们沟通，我们将尽力协助您处理。</p>
+<h2 id="_19">八、未成年人保护</h2>
+<p>本网站主要面向具备完全民事行为能力的用户，不专门针对未成年人提供服务。若未成年人未经监护人同意使用本网站服务，本网站及第三方服务提供商（Cloudflare）不会主动收集未成年人的个人信息。如发现未成年人的个人信息被意外收集，我们将在接到监护人通知后，协助联系相关第三方服务提供商及时删除相关信息。建议监护人引导未成年人正确使用互联网，保护其个人信息安全。</p>
+<h2 id="_20">九、隐私政策的更新</h2>
+<p>本网站可能根据法律法规的修订、网站服务的调整（如第三方服务变更、广告展示方式调整等）或隐私保护需求的变化，对本隐私政策进行更新。更新后的隐私政策将在本网站显著位置公示（如首页公告、单独的隐私政策更新页面等），并以修改日期标注生效时间。
+您应定期查看本隐私政策的更新内容，若您在隐私政策更新后继续使用本网站服务，即表示您同意更新后的隐私政策；若您不同意，应立即停止使用本网站服务。</p>
+<h2 id="_21">十、联系方式</h2>
+<p>若您对本隐私政策有任何疑问、投诉或建议，或需要协助行使相关权利，请通过以下方式与我们联系：
+联系邮箱：cnfte.2@gmail.com</p>
+<p>我们将在收到您的反馈后，在合理期限内与您沟通并协助处理相关事宜。</p>
+            </article>
+
+            <!-- 版权卡片 -->
+            <section style="padding: 0 20px 40px; font-family: 'Fira Code'; font-size: 0.7rem; color: var(--text-muted);">
+                <div style="border: 1px solid var(--border); padding: 20px; background: var(--surface);">
+                    <div># SOURCE: <span id="page-url" style="word-break: break-all; color: var(--text);"></span></div>
+                    <div># LICENSE: CC-BY-NC-SA-4.0</div>
+                    <div style="margin-top: 10px; color: var(--text);">// EOF_SIGNAL</div>
+                </div>
+            </section>
+        </main>
+
+        <aside>
+            <section class="widget">
+                <h3 class="widget-title">IDENT_AUTH</h3>
+                <div style="border: 1px solid var(--border); padding: 20px; text-align: center; background: var(--bg);">
+                    <img src="https://edgeoneimg.cdn.sn/i/696b4d5b58c71_1768639835.webp" style="width: 50px; height: 50px; border: 1px solid var(--border); padding: 3px; margin-bottom: 10px;">
+                    <div class="mono" style="font-weight: 900; font-size: 0.9rem;">Cnfte</div>
+                    <div class="mono" style="font-size: 0.7rem; color: var(--text-muted); margin-top: 5px;">"滚滚长江东逝水，浪花淘尽英雄。"</div>
+                    <div style="display: flex; gap: 8px; justify-content: center; margin-top: 12px;">
+                        <a href="mailto:cnfte.2@gmail.com" style="font-size: 8px; border: 1px solid var(--border); padding: 3px 6px;" class="mono">EMAIL</a>
+                        <a href="https://github.com/cnfte/blog.git" target="_blank" style="font-size: 8px; border: 1px solid var(--border); padding: 3px 6px;" class="mono">GITHUB</a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="widget">
+                <h3 class="widget-title">NOTICE</h3>
+                <div style="background: var(--bg); border: 1px solid var(--border); padding: 15px; font-size: 0.75rem; color: var(--text-muted); line-height: 1.6;" class="mono">
+                    欢迎来到我的博客
+                </div>
+            </section>
+
+            
+            <section class="widget">
+                <h3 class="widget-title">TOC</h3>
+                <div class="mono" style="font-size: 0.7rem; line-height: 1.8;">
+                    <div class="toc">
+<ul>
+<li><a href="#_1">隐私政策</a><ul>
+<li><a href="#_2">一、适用范围</a></li>
+<li><a href="#_3">二、收集的信息类型及方式</a><ul>
+<li><a href="#_4">（一）本网站自身自动收集的信息</a></li>
+<li><a href="#_5">（二）第三方服务收集的信息</a></li>
+<li><a href="#_6">（三）广告相关信息说明</a></li>
+<li><a href="#_7">（四）您主动提供的信息</a></li>
+</ul>
+</li>
+<li><a href="#_8">三、信息的使用目的</a><ul>
+<li><a href="#_9">（一）本网站层面的使用</a></li>
+<li><a href="#_10">（二）第三方服务的使用目的</a></li>
+</ul>
+</li>
+<li><a href="#_11">四、信息的存储与保护</a><ul>
+<li><a href="#_12">（一）本网站的存储与保护</a></li>
+<li><a href="#_13">（二）第三方服务的存储与保护</a></li>
+<li><a href="#_14">（三）共同安全保障责任</a></li>
+</ul>
+</li>
+<li><a href="#_15">五、信息的共享与披露</a><ul>
+<li><a href="#_16">（一）本网站的信息共享与披露</a></li>
+<li><a href="#_17">（二）第三方服务的信息共享与披露</a></li>
+</ul>
+</li>
+<li><a href="#cookie">六、Cookie 及类似追踪技术的使用</a><ul>
+<li><a href="#cookie_1">（一）本网站的 Cookie 使用</a></li>
+<li><a href="#cookie_2">（二）第三方服务的 Cookie 使用</a></li>
+</ul>
+</li>
+<li><a href="#_18">七、您的权利</a></li>
+<li><a href="#_19">八、未成年人保护</a></li>
+<li><a href="#_20">九、隐私政策的更新</a></li>
+<li><a href="#_21">十、联系方式</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+                </div>
+            </section>
+            
+
+            <section class="widget">
+                <h3 class="widget-title">SYSLOG</h3>
+                <div style="background: #000; border: 1px solid #333; padding: 15px; font-family: 'Fira Code'; font-size: 0.6rem; color: #00ff00; line-height: 1.6;">
+                    <div>[OK] NODE: STABLE</div>
+                    <div>[OK] CLOCK: <span id="live-clock">00:00:00</span></div>
+                </div>
+            </section>
+        </aside>
+    </div>
+
+    <footer>
+        <p class="mono" style="font-size: 0.85rem; margin-bottom: 10px;"><a src="https://www.itdog.cn/ping/cnfte.top">本站已启用CLOUDFLARE CDN防护</a></p>
+        <p class="mono" style="font-size: 0.6rem; color: var(--text-muted);">© 2026 Cnfte // EOF</p>
+    </footer>
+
+    <script>
+        document.getElementById('page-url').innerText = window.location.href;
+        setInterval(() => { document.getElementById('live-clock').innerText = new Date().toTimeString().split(' ')[0]; }, 1000);
+
+        window.onscroll = function() {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            document.getElementById("progress").style.width = (winScroll / height * 100) + "%";
+        };
+
+        function toggleTheme() {
+            const target = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', target);
+            localStorage.setItem('geek-theme', target);
+        }
+
+        let searchData = null;
+        const sInput = document.getElementById('nav-search-input');
+        const sResults = document.getElementById('nav-search-results');
+        sInput.addEventListener('input', async (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            if (!searchData) {
+                const path = document.documentElement.lang === 'en' ? '/en/search.json' : '/search.json';
+                searchData = await (await fetch(path)).json();
+            }
+            sResults.innerHTML = '';
+            if (query.length < 1) { sResults.style.display = 'none'; return; }
+            const filtered = searchData.filter(i => i.title.toLowerCase().includes(query)).slice(0, 5);
+            if (filtered.length > 0) {
+                filtered.forEach(item => {
+                    const a = document.createElement('a'); a.href = item.url; a.style = "display:block;padding:10px;border-bottom:1px solid var(--border);font-size:11px;";
+                    a.innerText = item.title; sResults.appendChild(a);
+                });
+                sResults.style.display = 'block';
+            }
+        });
+        document.addEventListener('click', (e) => { if (!e.target.closest('.nav-search-wrapper')) sResults.style.display = 'none'; });
+
+        document.documentElement.setAttribute('data-theme', localStorage.getItem('geek-theme') || 'dark');
+    </script>
+</body>
+</html>
