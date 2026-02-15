@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO & Metadata -->
+    <title>Internet Science Popularization Series - What is a domain name? How to obtain and configure a domain name? - Cnfteの博客</title>
+    <meta name="description" content="What is a Domain Name? Imagine the internet as a giant city, inhabited by countless websites and servers (where website content is stored). Each server has...">
+    <link rel="icon" href="attachments/696b4d5b58c71_1768639835.webp">
+    
+    <!-- 引入二次元艺术字体与图标库 -->
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-heavy: rgba(15, 15, 20, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --accent: #ff99cc; 
+            --accent-gradient: linear-gradient(135deg, #ff99cc 0%, #ffcc99 100%);
+            --text: #ffffff;
+            --text-muted: #d1d1d1;
+            --bezier: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --shadow: 0 15px 45px rgba(0, 0, 0, 0.5);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            font-family: 'Inter', sans-serif; background: #000; color: var(--text); 
+            line-height: 1.8; overflow-x: hidden; width: 100%;
+        }
+
+        /* 极致背景 */
+        .bg-fixed {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://edgeoneimg.cdn.sn/i/699204f8026d7_1771177208.webp') no-repeat center center fixed;
+            background-size: cover; z-index: -2; transform: scale(1.02);
+        }
+        .bg-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(4px); z-index: -1;
+        }
+
+        @keyframes cardIn {
+            0% { opacity: 0; transform: translateY(50px) scale(0.96); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* 阅读进度条 */
+        #progress-bar {
+            position: fixed; top: 0; left: 0; width: 0%; height: 4px;
+            background: var(--accent-gradient); z-index: 2000; 
+            transition: width 0.1s ease; box-shadow: 0 0 15px rgba(255, 153, 204, 0.5);
+        }
+
+        /* 统一导航栏：悬浮胶囊 */
+        nav { 
+            position: sticky; top: 15px; z-index: 1000; 
+            margin: 0 auto; width: 94%; max-width: 1300px;
+            background: var(--glass); backdrop-filter: blur(20px); 
+            border-radius: 50px; border: 1px solid var(--glass-border);
+            padding: 8px 25px; display: flex; justify-content: space-between; align-items: center;
+            box-shadow: var(--shadow); transition: 0.4s var(--bezier);
+        }
+        .logo { font-family: 'ZCOOL KuaiLe', cursive; font-size: 1.5rem; color: var(--accent) !important; text-decoration: none; }
+        
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+        .nav-links { display: flex; align-items: center; gap: 15px; }
+        .nav-links a { font-weight: 700; font-size: 0.85rem; text-decoration: none; color: white; opacity: 0.8; transition: 0.3s; }
+        .nav-links a:hover { opacity: 1; color: var(--accent); }
+
+        /* 伸缩搜索框 (与首页保持一致) */
+        .search-container { position: relative; display: flex; align-items: center; }
+        #search-input {
+            width: 0; opacity: 0; pointer-events: none;
+            background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 20px;
+            padding: 5px 0; color: white; transition: all 0.5s var(--bezier); outline: none;
+        }
+        .search-container.active #search-input { width: 200px; opacity: 1; pointer-events: all; padding: 6px 15px; margin-right: 10px; }
+        #search-btn { cursor: pointer; color: var(--accent); font-size: 1.1rem; transition: 0.3s; }
+        #search-results {
+            position: absolute; top: 140%; right: 0; width: 280px; 
+            background: var(--glass-heavy); backdrop-filter: blur(25px);
+            border-radius: 20px; border: 1px solid var(--glass-border);
+            max-height: 350px; overflow-y: auto; display: none; flex-direction: column;
+            box-shadow: var(--shadow); z-index: 1001; animation: cardIn 0.3s var(--bezier);
+        }
+        .search-item { padding: 12px 18px; text-decoration: none; color: white; font-size: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .search-item:hover { background: var(--accent); color: #000; }
+
+        /* 文章 Hero 区域 */
+        .post-hero {
+            height: 55vh; min-height: 420px; width: 100%; position: relative;
+            display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden;
+        }
+        .post-hero-img {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; filter: brightness(0.6); z-index: -1;
+            animation: heroZoom 15s infinite alternate var(--bezier);
+        }
+        @keyframes heroZoom { from { transform: scale(1); } to { transform: scale(1.08); } }
+
+        .post-header-info { z-index: 1; padding: 0 30px; animation: cardIn 0.8s var(--bezier); }
+        .post-header-info h1 { font-family: 'ZCOOL KuaiLe'; font-size: clamp(2.2rem, 5vw, 4rem); text-shadow: 0 10px 30px rgba(0,0,0,0.6); margin-bottom: 20px; }
+        .post-meta-top { font-family: 'Fira Code'; font-size: 0.9rem; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; }
+
+        /* 主体布局 */
+        .main-grid { 
+            max-width: 1400px; margin: -80px auto 60px; 
+            display: grid; grid-template-columns: 1fr 360px; gap: 35px; padding: 0 3%;
+            position: relative; z-index: 10;
+        }
+
+        /* 统一广告位：胶囊设计 (前两个) */
+        .post-ads { 
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-bottom: 30px; 
+            animation: cardIn 0.9s var(--bezier) both;
+        }
+        .ad-capsule {
+            height: 70px; background: var(--glass); backdrop-filter: blur(12px);
+            border-radius: 50px; border: 1px solid var(--glass-border);
+            display: flex; align-items: center; padding: 8px; text-decoration: none; color: white;
+            transition: 0.4s var(--bezier);
+        }
+        .ad-capsule:hover { transform: translateY(-5px); border-color: var(--accent); background: rgba(255,153,204,0.15); }
+        .ad-capsule img { width: 54px; height: 54px; border-radius: 50%; object-fit: cover; margin-right: 15px; border: 2px solid var(--glass-border); }
+
+        /* 文章容器卡片 */
+        article.post-container { 
+            background: var(--glass-heavy); backdrop-filter: blur(35px);
+            padding: 60px; border-radius: 40px; border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow); animation: cardIn 0.8s var(--bezier) both;
+        }
+
+        /* 正文样式 */
+        .post-body { font-size: 1.15rem; color: #f0f0f0; line-height: 2.1; }
+        .post-body h2 { font-family: 'ZCOOL KuaiLe'; color: var(--accent); margin: 2.5em 0 1.2em; font-size: 1.8rem; border-bottom: 2px solid rgba(255,153,204,0.2); padding-bottom: 12px; }
+        .post-body p { margin-bottom: 1.8rem; text-align: justify; }
+        .post-body img { 
+            max-width: 100%; border-radius: 25px; margin: 35px 0; 
+            border: 1px solid var(--glass-border); box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            transition: 0.5s var(--bezier);
+        }
+        .post-body img:hover { transform: scale(1.02); }
+        .post-body pre { 
+            background: rgba(0,0,0,0.4) !important; padding: 25px; border-radius: 20px; 
+            border: 1px solid var(--glass-border); overflow-x: auto; margin: 2.5rem 0;
+            font-family: 'Fira Code', monospace !important;
+        }
+
+        /* 侧边栏 */
+        aside { position: sticky; top: 100px; height: fit-content; }
+        .widget { 
+            background: var(--glass); backdrop-filter: blur(20px);
+            padding: 30px; border-radius: 35px; border: 1px solid var(--glass-border);
+            margin-bottom: 30px; box-shadow: var(--shadow);
+            animation: cardIn 1s var(--bezier) both;
+        }
+        .widget-title { font-family: 'ZCOOL KuaiLe'; color: var(--accent); font-size: 1.3rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        
+        .toc-wrapper { font-size: 0.92rem; max-height: 50vh; overflow-y: auto; scrollbar-width: none; }
+        .toc-wrapper ul { list-style: none; }
+        .toc-wrapper a { color: var(--text-muted); text-decoration: none; transition: 0.3s; display: block; padding: 7px 0; }
+        .toc-wrapper a:hover { color: var(--accent); transform: translateX(10px); }
+
+        /* 响应式适配 */
+        @media (max-width: 1100px) {
+            .main-grid { grid-template-columns: 1fr; margin-top: -50px; }
+            article.post-container { padding: 35px 20px; border-radius: 30px; }
+            aside { display: none; }
+            .post-hero { height: 45vh; }
+            .post-ads { grid-template-columns: 1fr; }
+            .nav-links, .search-container { display: none; }
+        }
+
+        footer { text-align: center; padding: 80px 20px; opacity: 0.6; font-size: 0.8rem; background: var(--glass-heavy); margin-top: 40px; }
+    </style>
+</head>
+<body>
+    <div id="progress-bar"></div>
+    <div class="bg-fixed"></div>
+    <div class="bg-overlay"></div>
+
+    <!-- 统一导航栏 -->
+    <nav>
+        <a href="/" class="logo">CNFTE</a>
+        <div class="nav-right">
+            <div class="nav-links">
+                <a href="/en/Link Exchange.html">Link Exchange</a><a href="/en/Privacy Policy.html">Privacy Policy</a><a href="/en/about.html">about</a><a href="/en/公益服务项.html">service</a>
+            </div>
+            <!-- 伸缩搜索框 -->
+            <div class="search-container" id="search-box">
+                <input type="text" id="search-input" placeholder="关键词搜索...">
+                <i class="fas fa-search" id="search-btn" onclick="toggleSearch()"></i>
+                <div id="search-results"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 文章头图 Hero 区域 (樱花 API) -->
+    <header class="post-hero">
+        <img src="https://www.dmoe.cc/random.php?seed=b343e19c&r=849118" class="post-hero-img">
+        <div class="post-header-info">
+            <div class="post-meta-top">
+                <i class="far fa-calendar-alt"></i> 2026-01-24 // READ: 21 MIN
+            </div>
+            <h1>Internet Science Popularization Series - What is a domain name? How to obtain and configure a domain name?</h1>
+            <div style="font-family: 'Fira Code'; font-size: 0.75rem; opacity: 0.6; letter-spacing: 2px;">
+                AUTH_VERIFIED // NODE: STABLE // ID: b343e19c
+            </div>
+        </div>
+    </header>
+
+    <div class="main-grid">
+        <main>
+            <!-- 动态广告位胶囊 (前两个) -->
+            <div class="post-ads">
+                
+                <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="ad-capsule" target="_blank">
+                    <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" loading="lazy">
+                    <div style="font-size: 0.8rem;">
+                        <b style="color:var(--accent); display:block;">广告招租价格好商量</b>
+                        <span style="opacity:0.7;">广告招租价格好商量</span>
+                    </div>
+                </a>
+                
+                <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="ad-capsule" target="_blank">
+                    <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" loading="lazy">
+                    <div style="font-size: 0.8rem;">
+                        <b style="color:var(--accent); display:block;">广告招租价格好商量</b>
+                        <span style="opacity:0.7;">广告招租价格好商量</span>
+                    </div>
+                </a>
+                
+            </div>
+
+            <!-- 文章核心卡片 -->
+            <article class="post-container">
+                <div class="post-body">
+                    <h3 id="what-is-a-domain-name">What is a Domain Name?</h3>
+<p>Imagine the internet as a giant city, inhabited by countless websites and servers (where website content is stored). Each server has a unique "address," which is a string of numbers called an <strong>IP address</strong>.</p>
+<p>For example, your home address might be "XX Province, XX City, XX District, XX Street, XX Number," while an IP address would be a string of numbers like "192.168.1.1" or "203.0.113.45".</p>
+<p>But which is easier to remember: a long string of numbers or a name? Definitely a name! For example, if you want to go to Taobao, you'll remember "taobao.com," not a string of numbers.</p>
+<p><strong>A domain name is the name given to a server (or website) on the internet.</strong> It's like giving your website a memorable and distinctive name, making it easy for people to access.</p>
+<p><strong>Simply put: a domain name is the name of a website, used to replace a difficult-to-remember IP address.</strong></p>
+<hr />
+<h3 id="what-are-the-uses-of-a-domain-name">What are the uses of a Domain Name?</h3>
+<p>The main uses of a domain name are:</p>
+<ol>
+<li>
+<p><strong>Easy to remember and access:</strong></p>
+</li>
+<li>
+<p>Just as it's much easier to remember a friend's name than their house number, a domain name allows users to easily remember and access your website. </p>
+</li>
+<li>Without a domain name, you would only be able to access websites via IP addresses, which is very inconvenient for ordinary users.</li>
+<li>
+<p><strong>Building brand image:</strong></p>
+</li>
+<li>
+<p>A good domain name is like a catchy name that helps you build your brand image. </p>
+</li>
+<li>For example, "baidu.com" represents the Baidu company, and "tencent.com" represents Tencent. </li>
+<li>A professional and easy-to-remember domain name leaves a good impression on users.</li>
+<li>
+<p><strong>Email addresses:</strong></p>
+</li>
+<li>
+<p>Domain names can also be used to create professional email addresses, such as <code>[email protected]</code>. </p>
+</li>
+<li>This appears more professional and trustworthy than using free email services (such as <code>@gmail.com</code> or <code>@qq.com</code>).</li>
+<li>
+<p><strong>Unique identifier for a website:</strong></p>
+</li>
+<li>
+<p>Domain names are unique on the internet. Once you register a domain name, no one else can register the exact same domain name. </p>
+</li>
+<li>This ensures the uniqueness of your website on the internet. ---</li>
+</ol>
+<h3 id="how-to-obtain-a-domain-name-taking-registering-a-cn-domain-on-alibaba-cloud-as-an-example">How to Obtain a Domain Name (Taking Registering a .cn Domain on Alibaba Cloud as an Example)</h3>
+<p>Obtaining a domain name is like "registering" your website; you need to register it with a specialized institution (a domain registrar). Alibaba Cloud is a large domain registrar.</p>
+<p>Let's take registering a <code>.cn</code> domain on Alibaba Cloud as an example. The steps are simple:</p>
+<ol>
+<li>
+<p><strong>Open the Alibaba Cloud official website:</strong></p>
+</li>
+<li>
+<p>Enter <code>www.aliyun.com</code> in your browser to access the official Alibaba Cloud website.</p>
+</li>
+<li>
+<p><strong>Search for the domain you want to register:</strong></p>
+</li>
+<li>
+<p>On the Alibaba Cloud website's homepage or product page, find the "Domain" section. </p>
+</li>
+<li>You will see a search box. Enter the domain name you want to register, for example, if you want to register "mywebsite.cn", enter <code>mywebsite.cn</code>. </li>
+<li>Click search.</li>
+<li>
+<p><strong>Check availability and add to cart:</strong></p>
+</li>
+<li>
+<p>Alibaba Cloud will tell you if the domain name has already been registered by someone else. </p>
+</li>
+<li>If it's not registered, it will show "Available for registration," and you can click "Add to cart." </li>
+<li>If it's already registered, it will show "Registered," and you will need to try a different name.</li>
+<li>
+<p><strong>Proceed to checkout and fill in information:</strong></p>
+</li>
+<li>
+<p>Go to your shopping cart, confirm the domain name you want to register, and then click "Proceed to checkout." </p>
+</li>
+<li>At this point, you need to fill in some registration information, mainly your personal information (name, ID number, contact information, etc.) or company information. </li>
+<li><strong>Note:</strong> Registering a <code>.cn</code> domain usually requires real-name verification. You will need to upload a photo of your ID card or provide your company's business license information. This is a management regulation for domain names in mainland China.</li>
+<li>
+<p><strong>Pay the fee:</strong></p>
+</li>
+<li>
+<p>After filling in the information, select a payment method and complete the payment. Domain prices vary depending on the suffix (such as <code>.com</code>, <code>.cn</code>, <code>.net</code>, etc.) and the registrar.</p>
+</li>
+<li>
+<p><strong>Complete registration:</strong></p>
+</li>
+<li>
+<p>After successful payment, Alibaba Cloud will complete the domain registration for you. This usually takes a few minutes to a few hours. </p>
+</li>
+<li>Once registered, the domain name belongs to you, and you can manage it through the Alibaba Cloud management console.</li>
+</ol>
+<p><strong>In short: It's like naming your child; first, check if the name has already been used by someone else, if not, register it with the relevant department, pay a fee, and the name is yours.</strong></p>
+<hr />
+<h3 id="what-is-domain-name-resolution-domain-name-resolution-is-like-establishing-a-connection-between-your-domain-name-the-name-and-its-ip-address-the-house-number">What is Domain Name Resolution? Domain name resolution is like establishing a "connection" between your domain name (the name) and its IP address (the house number).</h3>
+<p>Imagine you have a friend named "Xiao Ming," who lives at "XX Community, Building XX, Unit XX, Apartment XX." You only know the name "Xiao Ming," but you don't know his exact address. Domain name resolution works like this: when you tell the postman the name "Xiao Ming," the postman knows to go to "XX Community, Building XX, Unit XX, Apartment XX" to find him.</p>
+<p>On the internet, when you type a domain name (such as <code>www.example.com</code>) into your browser, your computer doesn't know the corresponding IP address. This is where the domain name resolution service comes in to tell your computer: the domain name <code>www.example.com</code> corresponds to the IP address <code>192.168.1.100</code>.</p>
+<p><strong>Simply put: Domain name resolution tells the computer which IP address (house number) corresponds to the domain name (name) you entered.</strong></p>
+<hr />
+<h3 id="how-to-resolve-domain-names-taking-common-a-aaaa-and-cname-records-as-examples">How to Resolve Domain Names (Taking common A, AAAA, and CNAME records as examples)</h3>
+<p>Domain name resolution is achieved by setting <strong>DNS records</strong> in the domain registrar's management backend (such as Alibaba Cloud's domain management page). DNS records are like "address book entries" for your domain name.</p>
+<p>The most common record types are:</p>
+<h4 id="1-a-record-address-record">1. A Record (Address Record)</h4>
+<ul>
+<li><strong>Function:</strong> Points a domain name (or subdomain) to an <strong>IPv4 address</strong>.</li>
+<li><strong>Simple explanation:</strong> This is the most commonly used record. It's like telling the postman: "'Xiao Ming' lives at the address '192.168.1.100'."</li>
+<li><strong>Example:</strong></li>
+<li>You want <code>www.example.com</code> to point to your server's IP address <code>1.2.3.4</code>. </li>
+<li>In Alibaba Cloud's DNS management page, you would add a record:</li>
+<li><strong>Type:</strong> A</li>
+<li><strong>Host Record (or Subdomain):</strong> <code>www</code> (If you want to resolve <code>example.com</code> itself, enter <code>@</code> or leave it blank)</li>
+<li><strong>Record Value (IP Address):</strong> <code>1.2.3.4</code></li>
+<li>
+<p><strong>TTL (Time To Live):</strong>  The default value is usually fine; it indicates how often this record is updated. #### 2. AAAA Record (IPv6 Address Record)</p>
+</li>
+<li>
+<p><strong>Function:</strong> Maps a domain name (or subdomain) to an <strong>IPv6 address</strong>.</p>
+</li>
+<li><strong>Simple Explanation:</strong> Similar to A records, but IPv6 addresses are much longer than IPv4 addresses and represent the next generation of IP addresses. It's like telling the postman: "'Xiao Ming' lives at the address '2001:0db8:85a3:0000:0000:8a2e:0370:7334'."</li>
+<li><strong>Example:</strong></li>
+<li>You want <code>www.example.com</code> to point to your server's IPv6 address <code>2001:db8::1</code>. </li>
+<li>On the Alibaba Cloud DNS management page, you would add a record:</li>
+<li><strong>Type:</strong> AAAA</li>
+<li><strong>Host Record:</strong> <code>www</code></li>
+<li><strong>Record Value (IPv6 Address):</strong> <code>2001:db8::1</code></li>
+<li><strong>TTL:</strong> Default value</li>
+</ul>
+<h4 id="3-cname-record-canonical-name-record">3. CNAME Record (Canonical Name Record)</h4>
+<ul>
+<li><strong>Function:</strong> Maps a domain name (or subdomain) to <strong>another domain name</strong>.</li>
+<li><strong>Simple Explanation:</strong> This is like telling the postman: "'Xiao Ming's' house is actually 'Lao Wang's' house."  In other words, you're giving this domain name an "alias".</li>
+<li><strong>Example:</strong></li>
+<li>You have a service, such as a CDN (Content Delivery Network), which provides you with a fixed domain name, such as <code>mycdn.aliyuncs.com</code>. </li>
+<li>You want your domain name <code>blog.example.com</code> to point directly to this CDN service. </li>
+<li>On the Alibaba Cloud DNS management page, you would add a record:</li>
+<li><strong>Type:</strong> CNAME</li>
+<li><strong>Host Record:</strong> <code>blog</code></li>
+<li><strong>Record Value (Target Domain Name):</strong> <code>mycdn.aliyuncs.com</code></li>
+<li><strong>TTL:</strong> Default value</li>
+</ul>
+<p><strong>Important Note:</strong></p>
+<ul>
+<li><strong>Effective Time:</strong> After modifying DNS records, it usually takes a few minutes to tens of minutes (sometimes even longer, up to 24 hours) for the changes to take effect globally. This process is called "DNS propagation". * <strong>Host Record:</strong></li>
+<li><code>@</code> or leave blank: Represents the domain itself, such as <code>example.com</code>. </li>
+<li><code>www</code>: Represents <code>www.example.com</code>. </li>
+<li><code>blog</code>: Represents <code>blog.example.com</code>. </li>
+<li><code>mail</code>: Represents <code>mail.example.com</code>.</li>
+</ul>
+<p><strong>Summary of the resolution process:</strong></p>
+<ol>
+<li>You register a domain name <code>example.com</code>.</li>
+<li>You purchase a server with an IP address <code>1.2.3.4</code>.</li>
+<li>In the Alibaba Cloud domain management console, you add an <strong>A record</strong> for <code>example.com</code>, with the host record being <code>@</code> and the record value being <code>1.2.3.4</code>.</li>
+<li>When someone enters <code>example.com</code> in their browser, their computer queries the DNS server for the IP address of <code>example.com</code>. The DNS server tells them it's <code>1.2.3.4</code>.</li>
+<li>Knowing the IP address, the computer can connect to your server and display your website content.</li>
+</ol>
+                </div>
+
+                <!-- 版权卡片 -->
+                <section style="margin-top: 60px; padding: 30px; border-radius: 30px; background: rgba(0,0,0,0.25); border: 1px dashed var(--glass-border); font-size: 0.9rem;">
+                    <div style="color: var(--accent); font-weight: bold; margin-bottom: 12px; font-family: 'ZCOOL KuaiLe'; font-size: 1.3rem;"># 知识共享授权</div>
+                    <p style="opacity: 0.85;">本文作者：<span style="color: var(--accent); font-weight: bold;">Cnfte</span></p>
+                    <p style="opacity: 0.85; margin-top: 6px;">版权声明：遵循 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" style="color: var(--accent); text-decoration: underline;">CC BY-NC-SA 4.0</a> 授权协议。</p>
+                    <div style="margin-top: 20px; font-family: 'Fira Code'; font-size: 0.75rem; word-break: break-all; opacity: 0.4;">
+                        ID_PATH: <span id="current-url"></span>
+                    </div>
+                </section>
+            </article>
+        </main>
+
+        <aside>
+            <!-- 作者信息 -->
+            <section class="widget" style="text-align: center;">
+                <img src="https://cnfte.top/attachments/696b4d5b58c71_1768639835.webp" style="width: 100px; height: 100px; border-radius: 50%; border: 4px solid var(--accent); padding: 5px; margin-bottom: 15px; transition: 0.6s var(--bezier);" onmouseover="this.style.transform='rotate(360deg) scale(1.1)'">
+                <div style="font-family: 'ZCOOL KuaiLe'; font-size: 1.4rem;">Cnfte</div>
+                <p style="font-size: 0.85rem; opacity: 0.7; margin-top: 8px;">"滚滚长江东逝水，浪花淘尽英雄。"</p>
+                <div style="display: flex; gap: 15px; justify-content: center; margin-top: 15px;">
+                    <a href="mailto:cnfte.2@gmail.com" style="color: white; font-size: 1.1rem;"><i class="fas fa-envelope"></i></a>
+                    <a href="https://github.com/cnfte/blog.git" target="_blank" style="color: white; font-size: 1.1rem;"><i class="fab fa-github"></i></a>
+                </div>
+            </section>
+
+            <!-- 自动目录 -->
+            
+            <section class="widget">
+                <h3 class="widget-title"><i class="fas fa-list-ol"></i> CONTENTS</h3>
+                <div class="toc-wrapper">
+                    <div class="toc">
+<ul>
+<li><a href="#what-is-a-domain-name">What is a Domain Name?</a></li>
+<li><a href="#what-are-the-uses-of-a-domain-name">What are the uses of a Domain Name?</a></li>
+<li><a href="#how-to-obtain-a-domain-name-taking-registering-a-cn-domain-on-alibaba-cloud-as-an-example">How to Obtain a Domain Name (Taking Registering a .cn Domain on Alibaba Cloud as an Example)</a></li>
+<li><a href="#what-is-domain-name-resolution-domain-name-resolution-is-like-establishing-a-connection-between-your-domain-name-the-name-and-its-ip-address-the-house-number">What is Domain Name Resolution? Domain name resolution is like establishing a "connection" between your domain name (the name) and its IP address (the house number).</a></li>
+<li><a href="#how-to-resolve-domain-names-taking-common-a-aaaa-and-cname-records-as-examples">How to Resolve Domain Names (Taking common A, AAAA, and CNAME records as examples)</a><ul>
+<li><a href="#1-a-record-address-record">1. A Record (Address Record)</a></li>
+<li><a href="#3-cname-record-canonical-name-record">3. CNAME Record (Canonical Name Record)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+                </div>
+            </section>
+            
+
+            <!-- 系统监控日志 -->
+            <section class="widget" style="background: rgba(0,0,0,0.4); border-color: rgba(255,153,204,0.2);">
+                <div style="font-family: 'Fira Code'; font-size: 0.75rem; color: #00ffcc; line-height: 2.2;">
+                    <div>[SYS] DEPLOY: SUCCESS</div>
+                    <div>[SYS] CACHE: PURGED</div>
+                    <div>[SYS] TIME: <span id="live-clock">00:00:00</span></div>
+                    <div style="margin-top: 10px; opacity: 0.3;">// EOF_SIGNAL</div>
+                </div>
+            </section>
+        </aside>
+    </div>
+
+    <footer>
+        <div style="margin-bottom: 15px; font-weight: bold; color: var(--accent);">本站由Cloudflare和Github强力驱动
+Powered by：<img src="https://cnfte.top/attachments/gh.svg" alt="GitHub">
+Analyzed by：<img src="https://cnfte.top/attachments/cf.svg" alt="Cloudflare Analysis">
+Served by：<img src="https://cnfte.top/attachments/cf2.svg" alt="Cloudflare CDN">
+商业投广通道(仅支持支付宝与微信付款)：QQ 3793945630
+TG：<a src=https://t.me/cnfte1>https://t.me/cnfte1</a>
+如何联系Cnfte与bug反馈？>>>QQ群聊：887378676
+TG群组：<a src=https://t.me/+pCnCBiCsyOhhMWU9>https://t.me/+pCnCBiCsyOhhMWU9</a></div>
+        <p>© 2026 Cnfte // DESIGNED FOR THE MOE GEEKS</p>
+    </footer>
+
+    <script>
+        document.getElementById('current-url').innerText = window.location.href;
+
+        // 进度条逻辑
+        window.onscroll = function() {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrolled = (winScroll / height) * 100;
+            document.getElementById("progress-bar").style.width = scrolled + "%";
+        };
+
+        // 侧边栏时钟
+        setInterval(() => {
+            document.getElementById('live-clock').innerText = new Date().toLocaleTimeString();
+        }, 1000);
+
+        // 统一搜索系统逻辑
+        let searchData = null;
+        function toggleSearch() {
+            const container = document.getElementById('search-box');
+            container.classList.toggle('active');
+            if(container.classList.contains('active')) {
+                document.getElementById('search-input').focus();
+            } else {
+                document.getElementById('search-results').style.display = 'none';
+            }
+        }
+
+        document.getElementById('search-input').addEventListener('input', async (e) => {
+            const val = e.target.value.toLowerCase().trim();
+            const resDiv = document.getElementById('search-results');
+            const searchPath = document.documentElement.lang === 'en' ? '/en/search.json' : '/search.json';
+            if(!searchData) searchData = await (await fetch(searchPath)).json();
+            
+            resDiv.innerHTML = '';
+            if(val.length < 1) { resDiv.style.display = 'none'; return; }
+            
+            const filtered = searchData.filter(i => i.title.toLowerCase().includes(val));
+            if(filtered.length > 0) {
+                filtered.forEach(item => {
+                    const a = document.createElement('a');
+                    a.href = item.url;
+                    a.className = 'search-item';
+                    a.innerHTML = `<b>${item.title}</b>`;
+                    resDiv.appendChild(a);
+                });
+                resDiv.style.display = 'flex';
+            }
+        });
+
+        // 点击外部关闭搜索
+        document.addEventListener('click', (e) => {
+            if(!e.target.closest('#search-box')) {
+                document.getElementById('search-box').classList.remove('active');
+                document.getElementById('search-results').style.display = 'none';
+            }
+        });
+
+        // 图片点击全屏预览
+        document.querySelectorAll('.post-body img').forEach(img => {
+            img.style.cursor = 'zoom-in';
+            img.onclick = () => window.open(img.src, '_blank');
+        });
+    </script>
+</body>
+</html>

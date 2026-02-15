@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cnfteの博客</title>
+    
+    <!-- 引入二次元艺术字体与图标 -->
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="attachments/696b4d5b58c71_1768639835.webp">
+
+    <style>
+        :root {
+            /* 玻璃拟态颜色变量 */
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-heavy: rgba(15, 15, 20, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --accent: #ff99cc; 
+            --accent-gradient: linear-gradient(135deg, #ff99cc 0%, #ffcc99 100%);
+            --text: #ffffff;
+            --text-muted: #d1d1d1;
+            /* 非线性弹性曲线：类似 iOS 的丝滑感 */
+            --bezier: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --shadow: 0 15px 45px rgba(0, 0, 0, 0.45);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            background: #000;
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* 极致固定背景 */
+        .bg-fixed {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://edgeoneimg.cdn.sn/i/699204f8026d7_1771177208.webp') no-repeat center center fixed;
+            background-size: cover; z-index: -2; transform: scale(1.02);
+        }
+        .bg-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(4px); z-index: -1;
+        }
+
+        @keyframes cardIn {
+            0% { opacity: 0; transform: translateY(40px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* 1. 悬浮胶囊导航栏 */
+        nav {
+            position: sticky; top: 15px; z-index: 1000;
+            margin: 0 auto 20px; width: 94%; max-width: 1300px;
+            background: var(--glass); backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: 50px;
+            padding: 8px 25px; display: flex; justify-content: space-between; align-items: center;
+            box-shadow: var(--shadow); transition: 0.4s var(--bezier);
+        }
+        .logo { font-family: 'ZCOOL KuaiLe', cursive; font-size: 1.5rem; color: var(--accent) !important; text-decoration: none; }
+        
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+        .nav-links { display: flex; align-items: center; gap: 15px; }
+        .nav-links a { font-weight: 700; font-size: 0.85rem; text-decoration: none; color: white; opacity: 0.8; transition: 0.3s; }
+        .nav-links a:hover { opacity: 1; color: var(--accent); }
+
+        /* 弹性搜索框 */
+        .search-container { position: relative; display: flex; align-items: center; }
+        #search-input {
+            width: 0; opacity: 0; pointer-events: none;
+            background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 20px;
+            padding: 6px 0; color: white; transition: all 0.5s var(--bezier); outline: none;
+        }
+        .search-container.active #search-input { width: 220px; opacity: 1; pointer-events: all; padding: 6px 15px; margin-right: 10px; }
+        #search-btn { cursor: pointer; color: var(--accent); font-size: 1.1rem; transition: 0.3s var(--bezier); }
+        #search-btn:hover { transform: scale(1.2) rotate(10deg); }
+
+        #search-results {
+            position: absolute; top: 140%; right: 0; width: 300px; 
+            background: var(--glass-heavy); backdrop-filter: blur(25px);
+            border-radius: 20px; border: 1px solid var(--glass-border);
+            max-height: 350px; overflow-y: auto; display: none; flex-direction: column;
+            box-shadow: var(--shadow); z-index: 1001; animation: cardIn 0.3s var(--bezier);
+        }
+        .search-item { padding: 12px 18px; text-decoration: none; color: white; font-size: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.05); transition: 0.2s; }
+        .search-item:hover { background: var(--accent); color: #000; }
+
+        /* 2. Hero 区域：左侧标题 + 右侧监控面板 */
+        .hero {
+            height: 48vh; min-height: 400px; margin: 0 3% 30px;
+            border-radius: 40px; overflow: hidden; position: relative;
+            display: flex; align-items: center; box-shadow: var(--shadow);
+            animation: cardIn 0.8s var(--bezier);
+        }
+        .hero-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; filter: brightness(0.85); transition: 1.5s var(--bezier); }
+        .hero:hover .hero-img { transform: scale(1.05); }
+
+        .hero-layout {
+            width: 100%; padding: 0 60px; display: flex; justify-content: space-between; align-items: flex-end;
+            background: linear-gradient(transparent, rgba(0,0,0,0.75)); height: 100%; padding-bottom: 50px;
+        }
+        .hero-text h1 { font-family: 'ZCOOL KuaiLe'; font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 5px; text-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        .hero-text p { opacity: 0.8; font-weight: bold; letter-spacing: 5px; text-transform: uppercase; font-size: 0.9rem; }
+
+        .hero-widgets { display: flex; flex-direction: column; gap: 15px; width: 340px; }
+        .h-card {
+            background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(12px); border-radius: 20px;
+            padding: 15px 20px; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .hitokoto-text { font-size: 0.85rem; font-style: italic; opacity: 0.9; line-height: 1.5; color: #fff; }
+
+        /* 3. 广告位：横向胶囊 */
+        .spot-zone { margin: 0 3% 30px; }
+        .spot-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+        .spot-item {
+            height: 65px; border-radius: 50px; border: 1px solid var(--glass-border); 
+            transition: 0.4s var(--bezier); background: var(--glass); 
+            display: flex; align-items: center; padding: 6px; text-decoration: none; color: white;
+        }
+        .spot-item:hover { transform: translateY(-5px); border-color: var(--accent); background: rgba(255,153,204,0.15); }
+        .spot-icon { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; margin-right: 12px; border: 2px solid var(--glass-border); }
+
+        /* 4. 主体内容：横向文章卡片 */
+        .main-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 350px; gap: 35px; padding: 0 3%; }
+        .post-card {
+            background: var(--glass); backdrop-filter: blur(15px); border-radius: 35px;
+            margin-bottom: 30px; border: 1px solid var(--glass-border);
+            transition: 0.5s var(--bezier); animation: cardIn 0.8s var(--bezier) both;
+            display: flex; overflow: hidden; height: 240px;
+        }
+        .post-card:hover { transform: translateX(12px) scale(1.01); border-color: var(--accent); box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
+        
+        .post-cover { width: 35%; height: 100%; overflow: hidden; }
+        .post-cover img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s var(--bezier); }
+        .post-card:hover .post-cover img { transform: scale(1.15); }
+
+        .post-content { width: 65%; padding: 25px 35px; display: flex; flex-direction: column; justify-content: center; }
+        .post-meta { font-family: 'Fira Code'; font-size: 0.75rem; color: var(--accent); margin-bottom: 10px; }
+        .post-title { font-size: 1.6rem; font-weight: 800; color: white; text-decoration: none; margin-bottom: 12px; transition: 0.3s; }
+        .post-card:hover .post-title { color: var(--accent); }
+        .post-summary { color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+        /* 侧边栏 */
+        .widget { background: var(--glass); backdrop-filter: blur(15px); border-radius: 30px; padding: 25px; margin-bottom: 25px; border: 1px solid var(--glass-border); }
+        .widget-title { font-family: 'ZCOOL KuaiLe'; color: var(--accent); margin-bottom: 15px; font-size: 1.2rem; }
+        .profile-avatar { width: 90px; height: 90px; border-radius: 50%; border: 3px solid var(--accent); padding: 5px; margin-bottom: 15px; transition: 0.6s var(--bezier); }
+        .profile-avatar:hover { transform: rotate(360deg) scale(1.1); }
+
+        @media (max-width: 1100px) {
+            .main-grid { grid-template-columns: 1fr; }
+            .hero-widgets, .search-container { display: none; }
+            .spot-grid { grid-template-columns: repeat(2, 1fr); }
+            .post-card { height: auto; flex-direction: column; }
+            .post-cover { width: 100%; height: 200px; }
+            .post-content { width: 100%; }
+        }
+
+        footer { text-align: center; padding: 60px 20px; background: var(--glass-heavy); margin-top: 50px; opacity: 0.8; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <div class="bg-fixed"></div>
+    <div class="bg-overlay"></div>
+
+    <!-- 导航栏 -->
+    <nav>
+        <a href="/" class="logo">CNFTE</a>
+        <div class="nav-right">
+            <div class="nav-links">
+                <a href="/en/Link Exchange.html">Link Exchange</a><a href="/en/Privacy Policy.html">Privacy Policy</a><a href="/en/about.html">about</a><a href="/en/公益服务项.html">service</a>
+            </div>
+            <!-- 弹性伸缩搜索框 -->
+            <div class="search-container" id="search-box">
+                <input type="text" id="search-input" placeholder="输入关键词...">
+                <i class="fas fa-search" id="search-btn" onclick="toggleSearch()"></i>
+                <div id="search-results"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero 区域 -->
+    <header class="hero">
+        <img src="https://www.dmoe.cc/random.php?seed=145565" class="hero-img">
+        <div class="hero-layout">
+            <div class="hero-text">
+                <h1>CNFTE</h1>
+                <p>莫愁前路无知己，天下谁人不识君？</p>
+            </div>
+            <div class="hero-widgets">
+                <!-- 一言语录 -->
+                <div class="h-card">
+                    <div style="font-size: 0.6rem; color: var(--accent); margin-bottom: 8px; font-weight: bold;"># HITOKOTO</div>
+                    <div id="hitokoto" class="hitokoto-text">正在同步次元语录...</div>
+                </div>
+                <!-- 仪表盘 -->
+                <div class="h-card">
+                    <div style="display: flex; justify-content: space-around; font-size: 0.75rem; font-family: 'Fira Code'; color: var(--accent);">
+                        <div style="text-align:center;"><b>UPTIME</b><br><span id="days">0</span>D</div>
+                        <div style="text-align:center;"><b>POSTS</b><br>16</div>
+                        <div style="text-align:center;"><b>SIGNAL</b><br>STABLE</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 动态广告位胶囊 -->
+    <div class="spot-zone">
+        <div class="spot-grid">
+            
+            <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="spot-item" target="_blank">
+                <!-- 樱花 API 自动补位图标 -->
+                <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" class="spot-icon">
+                <div style="font-size: 0.75rem; overflow: hidden;">
+                    <b style="color:var(--accent); display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">广告招租价格好商量</b>
+                    <span style="opacity:0.6; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">广告招租价格好商量</span>
+                </div>
+            </a>
+            
+            <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="spot-item" target="_blank">
+                <!-- 樱花 API 自动补位图标 -->
+                <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" class="spot-icon">
+                <div style="font-size: 0.75rem; overflow: hidden;">
+                    <b style="color:var(--accent); display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">广告招租价格好商量</b>
+                    <span style="opacity:0.6; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">广告招租价格好商量</span>
+                </div>
+            </a>
+            
+            <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="spot-item" target="_blank">
+                <!-- 樱花 API 自动补位图标 -->
+                <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" class="spot-icon">
+                <div style="font-size: 0.75rem; overflow: hidden;">
+                    <b style="color:var(--accent); display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">广告招租价格好商量</b>
+                    <span style="opacity:0.6; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">广告招租价格好商量</span>
+                </div>
+            </a>
+            
+            <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="spot-item" target="_blank">
+                <!-- 樱花 API 自动补位图标 -->
+                <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" class="spot-icon">
+                <div style="font-size: 0.75rem; overflow: hidden;">
+                    <b style="color:var(--accent); display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">广告招租价格好商量</b>
+                    <span style="opacity:0.6; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">广告招租价格好商量</span>
+                </div>
+            </a>
+            
+        </div>
+    </div>
+
+    <!-- 主体 -->
+    <div class="main-grid">
+        <main>
+            
+            <article class="post-card" style="animation-delay: 0.0s">
+                <div class="post-cover">
+                    <!-- 使用每篇文章唯一的 UID 作为种子请求樱花 API -->
+                    <img src="https://www.dmoe.cc/random.php?v=06851bc6" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <i class="far fa-calendar-alt"></i> 2026-02-09 // 06851bc6
+                    </div>
+                    <a href="/en/archive/06851bc6/" style="text-decoration:none;"><h2 class="post-title">The Invisible Backbone of the Digital World: A Comprehensive Overview of the 150 Global Giants in Internet Infrastructure</h2></a>
+                    <p class="post-summary">Every time we swipe a screen, click a link, or load a highdefinition video, we are presented with dazzling digital applications. But "beneath the surface,"...</p>
+                    <div style="margin-top: 15px;">
+                        <a href="/en/archive/06851bc6/" style="color: var(--accent); font-weight: 900; font-size: 0.8rem; text-decoration: none;">READ_MORE <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 0.1s">
+                <div class="post-cover">
+                    <!-- 使用每篇文章唯一的 UID 作为种子请求樱花 API -->
+                    <img src="https://www.dmoe.cc/random.php?v=f08a66a0" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <i class="far fa-calendar-alt"></i> 2026-02-03 // f08a66a0
+                    </div>
+                    <a href="/en/archive/f08a66a0/" style="text-decoration:none;"><h2 class="post-title">[Tutorial] Zero-Barrier: Building Your Own Gemini AI Assistant with Vercel (Direct Access in China)</h2></a>
+                    <p class="post-summary">Introduction Gemini is the nextgeneration AI large language model launched by Google. It excels in code comprehension and web development, helping even abs...</p>
+                    <div style="margin-top: 15px;">
+                        <a href="/en/archive/f08a66a0/" style="color: var(--accent); font-weight: 900; font-size: 0.8rem; text-decoration: none;">READ_MORE <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 0.2s">
+                <div class="post-cover">
+                    <!-- 使用每篇文章唯一的 UID 作为种子请求樱花 API -->
+                    <img src="https://www.dmoe.cc/random.php?v=48c818d4" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <i class="far fa-calendar-alt"></i> 2026-01-25 // 48c818d4
+                    </div>
+                    <a href="/en/archive/48c818d4/" style="text-decoration:none;"><h2 class="post-title">A compilation of Cloudflare SaaS optimized IP addresses and domains built by the community.</h2></a>
+                    <p class="post-summary">1. Introduction As is well known, Cloudflare provides free unlimited traffic and DDoS protection via its CDN, but it has been criticized for its poor node ...</p>
+                    <div style="margin-top: 15px;">
+                        <a href="/en/archive/48c818d4/" style="color: var(--accent); font-weight: 900; font-size: 0.8rem; text-decoration: none;">READ_MORE <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 0.30000000000000004s">
+                <div class="post-cover">
+                    <!-- 使用每篇文章唯一的 UID 作为种子请求樱花 API -->
+                    <img src="https://www.dmoe.cc/random.php?v=2fd74e91" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <i class="far fa-calendar-alt"></i> 2026-01-24 // 2fd74e91
+                    </div>
+                    <a href="/en/archive/2fd74e91/" style="text-decoration:none;"><h2 class="post-title">December 22, 2025: The Kuaishou live streaming platform is involved in a pornography scandal; a dark moment for the Chinese internet.</h2></a>
+                    <p class="post-summary">I. Background of the Incident On the evening of December 22, 2025, several leading Chinese social media and content platforms experienced abnormal situatio...</p>
+                    <div style="margin-top: 15px;">
+                        <a href="/en/archive/2fd74e91/" style="color: var(--accent); font-weight: 900; font-size: 0.8rem; text-decoration: none;">READ_MORE <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 0.4s">
+                <div class="post-cover">
+                    <!-- 使用每篇文章唯一的 UID 作为种子请求樱花 API -->
+                    <img src="https://www.dmoe.cc/random.php?v=4b4e54b8" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <i class="far fa-calendar-alt"></i> 2026-01-24 // 4b4e54b8
+                    </div>
+                    <a href="/en/archive/4b4e54b8/" style="text-decoration:none;"><h2 class="post-title">Gemini reverse proxy script: No Cloudflare or Deno required, easily set up a stable proxy with Nginx.</h2></a>
+                    <p class="post-summary">Introduction: Bypassing the GFW to Enjoy the Gemini API For users in mainland China, accessing the Gemini API has always been hindered by the Great Firewal...</p>
+                    <div style="margin-top: 15px;">
+                        <a href="/en/archive/4b4e54b8/" style="color: var(--accent); font-weight: 900; font-size: 0.8rem; text-decoration: none;">READ_MORE <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 0.5s">
+                <div class="post-cover">
+                    <!-- 使用每篇文章唯一的 UID 作为种子请求樱花 API -->
+                    <img src="https://www.dmoe.cc/random.php?v=88cef5d5" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <i class="far fa-calendar-alt"></i> 2026-01-24 // 88cef5d5
+                    </div>
+                    <a href="/en/archive/88cef5d5/" style="text-decoration:none;"><h2 class="post-title">The JMcomic version download site has officially launched.</h2></a>
+                    <p class="post-summary">Using premium potatoes (referring to a highquality server/network) ensures a good basic download speed. Supported versions: JMComic2: 1.6.51.8.0 JMComic3: ...</p>
+                    <div style="margin-top: 15px;">
+                        <a href="/en/archive/88cef5d5/" style="color: var(--accent); font-weight: 900; font-size: 0.8rem; text-decoration: none;">READ_MORE <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 0.6000000000000001s">
+                <div class="post-cover">
+                    <!-- 使用每篇文章唯一的 UID 作为种子请求樱花 API -->
+                    <img src="https://www.dmoe.cc/random.php?v=b1db18ae" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <i class="far fa-calendar-alt"></i> 2026-01-24 // b1db18ae
+                    </div>
+                    <a href="/en/archive/b1db18ae/" style="text-decoration:none;"><h2 class="post-title">Internet Science Popularization Series - What is DNS?</h2></a>
+                    <p class="post-summary">What is DNS? Imagine the internet as a vast city, home to countless websites and servers, each with its own "address," which is a string of numbers like 19...</p>
+                    <div style="margin-top: 15px;">
+                        <a href="/en/archive/b1db18ae/" style="color: var(--accent); font-weight: 900; font-size: 0.8rem; text-decoration: none;">READ_MORE <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 0.7000000000000001s">
+                <div class="post-cover">
+                    <!-- 使用每篇文章唯一的 UID 作为种子请求樱花 API -->
+                    <img src="https://www.dmoe.cc/random.php?v=eb27fae5" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <i class="far fa-calendar-alt"></i> 2026-01-24 // eb27fae5
+                    </div>
+                    <a href="/en/archive/eb27fae5/" style="text-decoration:none;"><h2 class="post-title">Internet Science Popularization Series - What are HTTP and HTTPS?</h2></a>
+                    <p class="post-summary">Hello everyone! Today we're going to talk about two terms we often encounter when browsing the internet: HTTP and HTTPS. They sound a bit technical, but th...</p>
+                    <div style="margin-top: 15px;">
+                        <a href="/en/archive/eb27fae5/" style="color: var(--accent); font-weight: 900; font-size: 0.8rem; text-decoration: none;">READ_MORE <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 0.8s">
+                <div class="post-cover">
+                    <!-- 使用每篇文章唯一的 UID 作为种子请求樱花 API -->
+                    <img src="https://www.dmoe.cc/random.php?v=8149127f" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <i class="far fa-calendar-alt"></i> 2026-01-24 // 8149127f
+                    </div>
+                    <a href="/en/archive/8149127f/" style="text-decoration:none;"><h2 class="post-title">Internet Science Popularization Series - What is ICP Registration? How to obtain a registered domain name and alternative solutions.</h2></a>
+                    <p class="post-summary">I. What is China's Domain Name Registration? Simply put, China's domain name registration (also known as "domain registration" or "ICP registration") refer...</p>
+                    <div style="margin-top: 15px;">
+                        <a href="/en/archive/8149127f/" style="color: var(--accent); font-weight: 900; font-size: 0.8rem; text-decoration: none;">READ_MORE <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 0.9s">
+                <div class="post-cover">
+                    <!-- 使用每篇文章唯一的 UID 作为种子请求樱花 API -->
+                    <img src="https://www.dmoe.cc/random.php?v=bd532ddf" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <i class="far fa-calendar-alt"></i> 2026-01-24 // bd532ddf
+                    </div>
+                    <a href="/en/archive/bd532ddf/" style="text-decoration:none;"><h2 class="post-title">Internet Science Popularization Series - What are IPv4 and IPv6?</h2></a>
+                    <p class="post-summary">1. What are IPv4 / IPv6? Imagine the internet as a giant city, and every device connected to the internet (computers, mobile phones, servers, etc.) is like...</p>
+                    <div style="margin-top: 15px;">
+                        <a href="/en/archive/bd532ddf/" style="color: var(--accent); font-weight: 900; font-size: 0.8rem; text-decoration: none;">READ_MORE <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 1.0s">
+                <div class="post-cover">
+                    <!-- 使用每篇文章唯一的 UID 作为种子请求樱花 API -->
+                    <img src="https://www.dmoe.cc/random.php?v=913a193d" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <i class="far fa-calendar-alt"></i> 2026-01-24 // 913a193d
+                    </div>
+                    <a href="/en/archive/913a193d/" style="text-decoration:none;"><h2 class="post-title">Internet Science Popularization Series - What is the Great Firewall of China?</h2></a>
+                    <p class="post-summary">What is the Great Firewall of China? Simply put, the Great Firewall of China is a system and a series of policies used by the Chinese government to control...</p>
+                    <div style="margin-top: 15px;">
+                        <a href="/en/archive/913a193d/" style="color: var(--accent); font-weight: 900; font-size: 0.8rem; text-decoration: none;">READ_MORE <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 1.1s">
+                <div class="post-cover">
+                    <!-- 使用每篇文章唯一的 UID 作为种子请求樱花 API -->
+                    <img src="https://www.dmoe.cc/random.php?v=308531bb" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <i class="far fa-calendar-alt"></i> 2026-01-24 // 308531bb
+                    </div>
+                    <a href="/en/archive/308531bb/" style="text-decoration:none;"><h2 class="post-title">Internet Science Popularization Series - What is a Transmission Protocol?</h2></a>
+                    <p class="post-summary">Imagine we live in a large city, and every day we need to transport goods (information) from one place to another using various means of transportation (ca...</p>
+                    <div style="margin-top: 15px;">
+                        <a href="/en/archive/308531bb/" style="color: var(--accent); font-weight: 900; font-size: 0.8rem; text-decoration: none;">READ_MORE <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 1.2000000000000002s">
+                <div class="post-cover">
+                    <!-- 使用每篇文章唯一的 UID 作为种子请求樱花 API -->
+                    <img src="https://www.dmoe.cc/random.php?v=f1d36531" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <i class="far fa-calendar-alt"></i> 2026-01-24 // f1d36531
+                    </div>
+                    <a href="/en/archive/f1d36531/" style="text-decoration:none;"><h2 class="post-title">Internet Science Popularization Series - What is a protocol? How to set up a node with an encryption protocol?</h2></a>
+                    <p class="post-summary">We need to clarify a concept first: the tools we commonly use now (such as Shadowsocks, V2Ray, Singbox) are technically classified more as "proxies" rather...</p>
+                    <div style="margin-top: 15px;">
+                        <a href="/en/archive/f1d36531/" style="color: var(--accent); font-weight: 900; font-size: 0.8rem; text-decoration: none;">READ_MORE <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 1.3s">
+                <div class="post-cover">
+                    <!-- 使用每篇文章唯一的 UID 作为种子请求樱花 API -->
+                    <img src="https://www.dmoe.cc/random.php?v=b343e19c" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <i class="far fa-calendar-alt"></i> 2026-01-24 // b343e19c
+                    </div>
+                    <a href="/en/archive/b343e19c/" style="text-decoration:none;"><h2 class="post-title">Internet Science Popularization Series - What is a domain name? How to obtain and configure a domain name?</h2></a>
+                    <p class="post-summary">What is a Domain Name? Imagine the internet as a giant city, inhabited by countless websites and servers (where website content is stored). Each server has...</p>
+                    <div style="margin-top: 15px;">
+                        <a href="/en/archive/b343e19c/" style="color: var(--accent); font-weight: 900; font-size: 0.8rem; text-decoration: none;">READ_MORE <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 1.4000000000000001s">
+                <div class="post-cover">
+                    <!-- 使用每篇文章唯一的 UID 作为种子请求樱花 API -->
+                    <img src="https://www.dmoe.cc/random.php?v=d96a22b4" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <i class="far fa-calendar-alt"></i> 2026-01-24 // d96a22b4
+                    </div>
+                    <a href="/en/archive/d96a22b4/" style="text-decoration:none;"><h2 class="post-title">Internet Science Popularization Series - What is a server? How to get a server?</h2></a>
+                    <p class="post-summary">What is a Server? Imagine you're browsing the internet, watching videos, playing games, or chatting online. Where is all this information and content store...</p>
+                    <div style="margin-top: 15px;">
+                        <a href="/en/archive/d96a22b4/" style="color: var(--accent); font-weight: 900; font-size: 0.8rem; text-decoration: none;">READ_MORE <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 1.5s">
+                <div class="post-cover">
+                    <!-- 使用每篇文章唯一的 UID 作为种子请求樱花 API -->
+                    <img src="https://www.dmoe.cc/random.php?v=b519dc68" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <i class="far fa-calendar-alt"></i> 2026-01-24 // b519dc68
+                    </div>
+                    <a href="/en/archive/b519dc68/" style="text-decoration:none;"><h2 class="post-title">This corresponds to the recent warnings regarding Cloudflare's large-scale account suspensions of reverse proxy tools.</h2></a>
+                    <p class="post-summary">Recently, a largescale account suspension incident at Cloudflare has caused a huge stir in the internet community, with numerous user accounts, including b...</p>
+                    <div style="margin-top: 15px;">
+                        <a href="/en/archive/b519dc68/" style="color: var(--accent); font-weight: 900; font-size: 0.8rem; text-decoration: none;">READ_MORE <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </article>
+            
+        </main>
+
+        <aside>
+            <section class="widget" style="text-align: center;">
+                <img src="https://cnfte.top/attachments/696b4d5b58c71_1768639835.webp" class="profile-avatar">
+                <h2 style="font-family: 'ZCOOL KuaiLe';">Cnfte</h2>
+                <p style="font-size: 0.85rem; opacity: 0.7; margin-top: 10px;">"滚滚长江东逝水，浪花淘尽英雄。"</p>
+            </section>
+
+            <section class="widget">
+                <h3 class="widget-title"><i class="fas fa-bullhorn"></i> NOTICE</h3>
+                <div style="font-size: 0.9rem; opacity: 0.8; white-space: pre-line;">欢迎到来，投广与反馈请看下方：
+商业投广通道(仅支持支付宝与微信付款)：QQ 3793945630
+TG：<a src=https://t.me/cnfte1>https://t.me/cnfte1</a>
+如何联系Cnfte与bug反馈？>>>QQ群聊：887378676
+TG群组：<a src=https://t.me/+pCnCBiCsyOhhMWU9>https://t.me/+pCnCBiCsyOhhMWU9</a>
+欢迎到来</div>
+            </section>
+
+            <section class="widget" style="background: rgba(0,0,0,0.3);">
+                <div style="font-family: 'Fira Code'; font-size: 0.7rem; color: #00ffcc; line-height: 2;">
+                    <div>> NODE: ACTIVE</div>
+                    <div>> TIME: <span id="clock">00:00:00</span></div>
+                    <div style="margin-top: 10px; opacity: 0.5;">EOF // SYSTEM_READY</div>
+                </div>
+            </section>
+        </aside>
+    </div>
+
+    <footer>
+        <div style="margin-bottom: 15px; font-weight: bold; color: var(--accent);">本站由Cloudflare和Github强力驱动
+Powered by：<img src="https://cnfte.top/attachments/gh.svg" alt="GitHub">
+Analyzed by：<img src="https://cnfte.top/attachments/cf.svg" alt="Cloudflare Analysis">
+Served by：<img src="https://cnfte.top/attachments/cf2.svg" alt="Cloudflare CDN">
+商业投广通道(仅支持支付宝与微信付款)：QQ 3793945630
+TG：<a src=https://t.me/cnfte1>https://t.me/cnfte1</a>
+如何联系Cnfte与bug反馈？>>>QQ群聊：887378676
+TG群组：<a src=https://t.me/+pCnCBiCsyOhhMWU9>https://t.me/+pCnCBiCsyOhhMWU9</a></div>
+        <p>© 2026 Cnfte // MOE GEEK THEME</p>
+    </footer>
+
+    <script>
+        // 一言加载
+        fetch('https://v1.hitokoto.cn').then(res => res.json()).then(data => {
+            document.getElementById('hitokoto').innerText = data.hitokoto;
+        });
+
+        // 建站天数
+        const start = new Date("2025-05-01");
+        if(!isNaN(start)) {
+            document.getElementById('days').innerHTML = Math.floor((new Date() - start) / 86400000);
+        }
+
+        // 实时时钟
+        setInterval(() => {
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+        }, 1000);
+
+        // 伸缩搜索框核心逻辑
+        let searchData = null;
+        function toggleSearch() {
+            const container = document.getElementById('search-box');
+            container.classList.toggle('active');
+            if(container.classList.contains('active')) {
+                document.getElementById('search-input').focus();
+            } else {
+                document.getElementById('search-results').style.display = 'none';
+            }
+        }
+
+        document.getElementById('search-input').addEventListener('input', async (e) => {
+            const val = e.target.value.toLowerCase().trim();
+            const resDiv = document.getElementById('search-results');
+            if(!searchData) searchData = await (await fetch('search.json')).json();
+            
+            resDiv.innerHTML = '';
+            if(val.length < 1) { resDiv.style.display = 'none'; return; }
+            
+            const filtered = searchData.filter(i => i.title.toLowerCase().includes(val));
+            if(filtered.length > 0) {
+                filtered.forEach(item => {
+                    const a = document.createElement('a');
+                    a.href = item.url;
+                    a.className = 'search-item';
+                    a.innerHTML = `<b>${item.title}</b>`;
+                    resDiv.appendChild(a);
+                });
+                resDiv.style.display = 'flex';
+            }
+        });
+
+        // 点击外部自动收起搜索框
+        document.addEventListener('click', (e) => {
+            if(!e.target.closest('#search-box')) {
+                document.getElementById('search-box').classList.remove('active');
+                document.getElementById('search-results').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

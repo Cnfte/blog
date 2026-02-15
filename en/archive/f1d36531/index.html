@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO & Metadata -->
+    <title>Internet Science Popularization Series - What is a protocol? How to set up a node with an encryption protocol? - Cnfteの博客</title>
+    <meta name="description" content="We need to clarify a concept first: the tools we commonly use now (such as Shadowsocks, V2Ray, Singbox) are technically classified more as "proxies" rather...">
+    <link rel="icon" href="attachments/696b4d5b58c71_1768639835.webp">
+    
+    <!-- 引入二次元艺术字体与图标库 -->
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-heavy: rgba(15, 15, 20, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --accent: #ff99cc; 
+            --accent-gradient: linear-gradient(135deg, #ff99cc 0%, #ffcc99 100%);
+            --text: #ffffff;
+            --text-muted: #d1d1d1;
+            --bezier: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --shadow: 0 15px 45px rgba(0, 0, 0, 0.5);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            font-family: 'Inter', sans-serif; background: #000; color: var(--text); 
+            line-height: 1.8; overflow-x: hidden; width: 100%;
+        }
+
+        /* 极致背景 */
+        .bg-fixed {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://edgeoneimg.cdn.sn/i/699204f8026d7_1771177208.webp') no-repeat center center fixed;
+            background-size: cover; z-index: -2; transform: scale(1.02);
+        }
+        .bg-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(4px); z-index: -1;
+        }
+
+        @keyframes cardIn {
+            0% { opacity: 0; transform: translateY(50px) scale(0.96); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* 阅读进度条 */
+        #progress-bar {
+            position: fixed; top: 0; left: 0; width: 0%; height: 4px;
+            background: var(--accent-gradient); z-index: 2000; 
+            transition: width 0.1s ease; box-shadow: 0 0 15px rgba(255, 153, 204, 0.5);
+        }
+
+        /* 统一导航栏：悬浮胶囊 */
+        nav { 
+            position: sticky; top: 15px; z-index: 1000; 
+            margin: 0 auto; width: 94%; max-width: 1300px;
+            background: var(--glass); backdrop-filter: blur(20px); 
+            border-radius: 50px; border: 1px solid var(--glass-border);
+            padding: 8px 25px; display: flex; justify-content: space-between; align-items: center;
+            box-shadow: var(--shadow); transition: 0.4s var(--bezier);
+        }
+        .logo { font-family: 'ZCOOL KuaiLe', cursive; font-size: 1.5rem; color: var(--accent) !important; text-decoration: none; }
+        
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+        .nav-links { display: flex; align-items: center; gap: 15px; }
+        .nav-links a { font-weight: 700; font-size: 0.85rem; text-decoration: none; color: white; opacity: 0.8; transition: 0.3s; }
+        .nav-links a:hover { opacity: 1; color: var(--accent); }
+
+        /* 伸缩搜索框 (与首页保持一致) */
+        .search-container { position: relative; display: flex; align-items: center; }
+        #search-input {
+            width: 0; opacity: 0; pointer-events: none;
+            background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 20px;
+            padding: 5px 0; color: white; transition: all 0.5s var(--bezier); outline: none;
+        }
+        .search-container.active #search-input { width: 200px; opacity: 1; pointer-events: all; padding: 6px 15px; margin-right: 10px; }
+        #search-btn { cursor: pointer; color: var(--accent); font-size: 1.1rem; transition: 0.3s; }
+        #search-results {
+            position: absolute; top: 140%; right: 0; width: 280px; 
+            background: var(--glass-heavy); backdrop-filter: blur(25px);
+            border-radius: 20px; border: 1px solid var(--glass-border);
+            max-height: 350px; overflow-y: auto; display: none; flex-direction: column;
+            box-shadow: var(--shadow); z-index: 1001; animation: cardIn 0.3s var(--bezier);
+        }
+        .search-item { padding: 12px 18px; text-decoration: none; color: white; font-size: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .search-item:hover { background: var(--accent); color: #000; }
+
+        /* 文章 Hero 区域 */
+        .post-hero {
+            height: 55vh; min-height: 420px; width: 100%; position: relative;
+            display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden;
+        }
+        .post-hero-img {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; filter: brightness(0.6); z-index: -1;
+            animation: heroZoom 15s infinite alternate var(--bezier);
+        }
+        @keyframes heroZoom { from { transform: scale(1); } to { transform: scale(1.08); } }
+
+        .post-header-info { z-index: 1; padding: 0 30px; animation: cardIn 0.8s var(--bezier); }
+        .post-header-info h1 { font-family: 'ZCOOL KuaiLe'; font-size: clamp(2.2rem, 5vw, 4rem); text-shadow: 0 10px 30px rgba(0,0,0,0.6); margin-bottom: 20px; }
+        .post-meta-top { font-family: 'Fira Code'; font-size: 0.9rem; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; }
+
+        /* 主体布局 */
+        .main-grid { 
+            max-width: 1400px; margin: -80px auto 60px; 
+            display: grid; grid-template-columns: 1fr 360px; gap: 35px; padding: 0 3%;
+            position: relative; z-index: 10;
+        }
+
+        /* 统一广告位：胶囊设计 (前两个) */
+        .post-ads { 
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-bottom: 30px; 
+            animation: cardIn 0.9s var(--bezier) both;
+        }
+        .ad-capsule {
+            height: 70px; background: var(--glass); backdrop-filter: blur(12px);
+            border-radius: 50px; border: 1px solid var(--glass-border);
+            display: flex; align-items: center; padding: 8px; text-decoration: none; color: white;
+            transition: 0.4s var(--bezier);
+        }
+        .ad-capsule:hover { transform: translateY(-5px); border-color: var(--accent); background: rgba(255,153,204,0.15); }
+        .ad-capsule img { width: 54px; height: 54px; border-radius: 50%; object-fit: cover; margin-right: 15px; border: 2px solid var(--glass-border); }
+
+        /* 文章容器卡片 */
+        article.post-container { 
+            background: var(--glass-heavy); backdrop-filter: blur(35px);
+            padding: 60px; border-radius: 40px; border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow); animation: cardIn 0.8s var(--bezier) both;
+        }
+
+        /* 正文样式 */
+        .post-body { font-size: 1.15rem; color: #f0f0f0; line-height: 2.1; }
+        .post-body h2 { font-family: 'ZCOOL KuaiLe'; color: var(--accent); margin: 2.5em 0 1.2em; font-size: 1.8rem; border-bottom: 2px solid rgba(255,153,204,0.2); padding-bottom: 12px; }
+        .post-body p { margin-bottom: 1.8rem; text-align: justify; }
+        .post-body img { 
+            max-width: 100%; border-radius: 25px; margin: 35px 0; 
+            border: 1px solid var(--glass-border); box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            transition: 0.5s var(--bezier);
+        }
+        .post-body img:hover { transform: scale(1.02); }
+        .post-body pre { 
+            background: rgba(0,0,0,0.4) !important; padding: 25px; border-radius: 20px; 
+            border: 1px solid var(--glass-border); overflow-x: auto; margin: 2.5rem 0;
+            font-family: 'Fira Code', monospace !important;
+        }
+
+        /* 侧边栏 */
+        aside { position: sticky; top: 100px; height: fit-content; }
+        .widget { 
+            background: var(--glass); backdrop-filter: blur(20px);
+            padding: 30px; border-radius: 35px; border: 1px solid var(--glass-border);
+            margin-bottom: 30px; box-shadow: var(--shadow);
+            animation: cardIn 1s var(--bezier) both;
+        }
+        .widget-title { font-family: 'ZCOOL KuaiLe'; color: var(--accent); font-size: 1.3rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        
+        .toc-wrapper { font-size: 0.92rem; max-height: 50vh; overflow-y: auto; scrollbar-width: none; }
+        .toc-wrapper ul { list-style: none; }
+        .toc-wrapper a { color: var(--text-muted); text-decoration: none; transition: 0.3s; display: block; padding: 7px 0; }
+        .toc-wrapper a:hover { color: var(--accent); transform: translateX(10px); }
+
+        /* 响应式适配 */
+        @media (max-width: 1100px) {
+            .main-grid { grid-template-columns: 1fr; margin-top: -50px; }
+            article.post-container { padding: 35px 20px; border-radius: 30px; }
+            aside { display: none; }
+            .post-hero { height: 45vh; }
+            .post-ads { grid-template-columns: 1fr; }
+            .nav-links, .search-container { display: none; }
+        }
+
+        footer { text-align: center; padding: 80px 20px; opacity: 0.6; font-size: 0.8rem; background: var(--glass-heavy); margin-top: 40px; }
+    </style>
+</head>
+<body>
+    <div id="progress-bar"></div>
+    <div class="bg-fixed"></div>
+    <div class="bg-overlay"></div>
+
+    <!-- 统一导航栏 -->
+    <nav>
+        <a href="/" class="logo">CNFTE</a>
+        <div class="nav-right">
+            <div class="nav-links">
+                <a href="/en/Link Exchange.html">Link Exchange</a><a href="/en/Privacy Policy.html">Privacy Policy</a><a href="/en/about.html">about</a><a href="/en/公益服务项.html">service</a>
+            </div>
+            <!-- 伸缩搜索框 -->
+            <div class="search-container" id="search-box">
+                <input type="text" id="search-input" placeholder="关键词搜索...">
+                <i class="fas fa-search" id="search-btn" onclick="toggleSearch()"></i>
+                <div id="search-results"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 文章头图 Hero 区域 (樱花 API) -->
+    <header class="post-hero">
+        <img src="https://www.dmoe.cc/random.php?seed=f1d36531&r=740221" class="post-hero-img">
+        <div class="post-header-info">
+            <div class="post-meta-top">
+                <i class="far fa-calendar-alt"></i> 2026-01-24 // READ: 16 MIN
+            </div>
+            <h1>Internet Science Popularization Series - What is a protocol? How to set up a node with an encryption protocol?</h1>
+            <div style="font-family: 'Fira Code'; font-size: 0.75rem; opacity: 0.6; letter-spacing: 2px;">
+                AUTH_VERIFIED // NODE: STABLE // ID: f1d36531
+            </div>
+        </div>
+    </header>
+
+    <div class="main-grid">
+        <main>
+            <!-- 动态广告位胶囊 (前两个) -->
+            <div class="post-ads">
+                
+                <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="ad-capsule" target="_blank">
+                    <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" loading="lazy">
+                    <div style="font-size: 0.8rem;">
+                        <b style="color:var(--accent); display:block;">广告招租价格好商量</b>
+                        <span style="opacity:0.7;">广告招租价格好商量</span>
+                    </div>
+                </a>
+                
+                <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="ad-capsule" target="_blank">
+                    <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" loading="lazy">
+                    <div style="font-size: 0.8rem;">
+                        <b style="color:var(--accent); display:block;">广告招租价格好商量</b>
+                        <span style="opacity:0.7;">广告招租价格好商量</span>
+                    </div>
+                </a>
+                
+            </div>
+
+            <!-- 文章核心卡片 -->
+            <article class="post-container">
+                <div class="post-body">
+                    <p>We need to clarify a concept first: the tools we commonly use now (such as Shadowsocks, V2Ray, Sing-box) are technically classified more as <strong>"proxies"</strong> rather than traditional <strong>"VPNs,"</strong> but for ease of understanding, they will be collectively referred to as circumvention protocols below.</p>
+<hr />
+<h3 id="i-common-circumvention-protocols-and-their-working-principles">I. Common Circumvention Protocols and Their Working Principles</h3>
+<p>Traditional VPN protocols (such as L2TP, PPTP, OpenVPN) have very distinct characteristics and are easily identified and blocked by firewalls (GFW). Therefore, current circumvention protocols mainly focus on <strong>"obfuscation."</strong></p>
+<ol>
+<li><strong>Shadowsocks (SS/SS-Rust):</strong></li>
+<li><strong>Principle:</strong> The most classic protocol. It uses symmetric encryption on the traffic, making the data packets look like meaningless gibberish. </li>
+<li>
+<p><strong>Current Status:</strong> Native SS is easily detected by "active probing" (the GFW simulates a client sending packets to the server to see if the response matches SS characteristics), so it is now often used with AEAD encryption or as a basic tunnel.</p>
+</li>
+<li>
+<p><strong>VMess / VLESS (V2Ray/Xray):</strong></p>
+</li>
+<li><strong>Principle:</strong> A protocol developed by the V2Ray platform. <strong>VLESS</strong> is currently the most mainstream protocol; it does not encrypt itself and must be used with <strong>TLS</strong> (the same encryption layer as banking websites). </li>
+<li>
+<p><strong>Features:</strong> Extremely flexible, can be disguised as normal web traffic.</p>
+</li>
+<li>
+<p><strong>Trojan:</strong></p>
+</li>
+<li>
+<p><strong>Principle:</strong> Mimics the most common HTTPS protocol. It disguises the proxy traffic as ordinary website visits. If someone tries to probe it, it will display a real webpage.</p>
+</li>
+<li>
+<p><strong>Hysteria2 / Tuic (based on UDP):</strong></p>
+</li>
+<li><strong>Principle:</strong> Traditional protocols are mostly based on TCP. These protocols are based on <strong>QUIC (UDP)</strong>. </li>
+<li>
+<p><strong>Features:</strong> Aggressive and fast. In poor network environments (high packet loss), the speed far exceeds other protocols, but it is easily throttled by internet service providers (ISPs).</p>
+</li>
+<li>
+<p><strong>Reality (Currently the most recommended):</strong></p>
+</li>
+<li><strong>Principle:</strong> This is a new technology developed by the Xray team. It directly borrows the TLS fingerprints and certificates of real, well-known websites like <code>www.microsoft.com</code>, making the GFW believe you are actually visiting Microsoft. This is currently the <strong>most covert</strong> technology.</li>
+</ol>
+<hr />
+<h3 id="ii-how-do-they-bypass-the-great-firewall-gfw">II. How do they bypass the Great Firewall (GFW)?</h3>
+<p>The GFW primarily intercepts traffic through the following methods, and the protocols specifically address these:</p>
+<ol>
+<li><strong>Blocking IP/Ports:</strong> If the GFW detects abnormal traffic from a certain IP address that matches proxy characteristics, it directly blocks it. </li>
+<li><strong>Bypass:</strong> Use a CDN (such as Cloudflare) or dynamic IP addresses, or use strong obfuscation to make the traffic appear like normal internet traffic.</li>
+<li><strong>Deep Packet Inspection (DPI):</strong> The GFW analyzes the content of data packets, searching for characteristic patterns. </li>
+<li><strong>Bypass:</strong> Strong encryption (obfuscation) or complete disguise (transforming into standard HTTPS or using certificates from well-known websites).</li>
+<li><strong>Active Probing:</strong> The GFW sends specific signals like a police officer checking for suspicious activity. </li>
+<li><strong>Bypass:</strong> Reality technology can achieve "no entry without invitation." If it's not your client connecting, the server will behave exactly like the legitimate website being impersonated.</li>
+</ol>
+<hr />
+<h3 id="iii-what-can-you-do-after-bypassing-the-gfw">III. What can you do after bypassing the GFW?</h3>
+<ol>
+<li><strong>Academic Research:</strong> Access Google Scholar, GitHub, IEEE, etc.</li>
+<li><strong>Streaming Media:</strong> Watch YouTube, Netflix, Disney+, Twitch.</li>
+<li><strong>Social Networks:</strong> Use Telegram, X (Twitter), Instagram, Facebook.</li>
+<li><strong>Generative AI:</strong> Interact with ChatGPT, Claude, Gemini.</li>
+<li><strong>Developer Needs:</strong> Download development packages, access Docker Hub, etc.</li>
+</ol>
+<hr />
+<h3 id="iv-important-notes-must-read">IV. Important Notes (Must Read)</h3>
+<ol>
+<li><strong>Compliance:</strong> In mainland China, establishing and using illegal channels for international internet access without the approval of the telecommunications authorities is a violation of regulations. Please only use this technology for academic research and personal learning.</li>
+<li><strong>Privacy:</strong> Avoid using "free VPNs." Many free tools record your access logs and even sell your personal information.</li>
+<li><strong>Payment Security:</strong> When purchasing overseas VPS, try to choose reputable vendors that support Alipay or cryptocurrency.</li>
+<li><strong>Do Not Cross the Red Line:</strong> After bypassing the GFW, do not post politically sensitive remarks or participate in illegal activities on the internet. ---</li>
+</ol>
+<h3 id="v-setup-tutorial-using-yongges-sing-box-script-as-an-example">V. Setup Tutorial (Using Yongge's Sing-box Script as an Example)</h3>
+<p>Sing-box is considered the next-generation all-in-one network tool (a strong competitor to V2Ray/Xray). Yongge's script is known for its simplicity and comprehensive features.</p>
+<h4 id="1-preparation">1. Preparation</h4>
+<ul>
+<li><strong>An overseas VPS:</strong> Recommended providers: BandwagonHost, Aiyun, or mainstream providers like Oracle, BandwagonHost, RackNerd, etc.  The recommended operating system is <strong>Ubuntu 20.04+</strong> or <strong>Debian 11+</strong>.</li>
+<li><strong>An SSH connection tool:</strong> For Windows, <code>FinalShell</code> or <code>Termius</code> are recommended; Mac users can use the terminal directly.</li>
+</ul>
+<h4 id="2-connecting-to-the-vps">2. Connecting to the VPS</h4>
+<p>Open your SSH tool and enter your server IP address, username (root), and password to connect.</p>
+<h4 id="3-executing-yongges-sing-box-script">3. Executing Yongge's Sing-box Script</h4>
+<p>Enter the following command in the terminal (copy and paste directly):</p>
+<div class="codehilite"><pre><span></span><code>bash<span class="w"> </span>&lt;<span class="o">(</span>wget<span class="w"> </span>-qO-<span class="w"> </span>https://raw.githubusercontent.com/yonggekkk/sing-box-yg/main/sb.sh<span class="o">)</span>
+</code></pre></div>
+
+<p><em>(Note: If you receive a "wget ​​not found" error, first run <code>apt install wget -y</code>)</em></p>
+<h4 id="4-script-operation-process">4. Script Operation Process</h4>
+<p>After running the script, a Chinese menu will appear:
+1.  <strong>Install the core:</strong> Select <code>1</code> to install the Sing-box main program.
+2.  <strong>Select the protocol:</strong>
+*   If you are a beginner and don't have a domain name, <strong>VLESS-Reality is strongly recommended</strong>. 
+*   Follow the prompts; you can press Enter for the default port (usually 443). 
+*   For the SNI target website, you can choose <code>www.microsoft.com</code> or <code>www.lovelive-anime.jp</code>.
+3.  <strong>Generate configuration:</strong> After installation, the script will directly display a <strong>QR code</strong> and a <strong>URL sharing link</strong> starting with <code>vless://</code>.</p>
+<h4 id="5-connecting-and-using">5. Connecting and Using</h4>
+<ul>
+<li><strong>Computer (Windows/macOS):</strong> Download <code>v2rayN</code> (Windows) or <code>v2rayU</code> / <code>v2ray-core</code>. *   Directly copy the <code>vless://</code> link provided by the script and click "Import from clipboard" in the software. </li>
+<li>Select the server and set it to "Automatically configure system proxy".</li>
+<li><strong>Mobile Devices:</strong></li>
+<li>Android: Use <code>v2rayNG</code> or <code>Nekobox</code>. </li>
+<li>iOS: Use <code>Shadowrocket</code> (requires an overseas Apple ID for purchase) or <code>Stash</code>. </li>
+<li>Simply scan the QR code to use.</li>
+</ul>
+<h4 id="6-verification">6. Verification</h4>
+<p>Open your browser and visit <code>www.youtube.com</code>. If it opens, you have successfully connected.</p>
+<hr />
+<h3 id="summary">Summary</h3>
+<p>Currently, the most stable combination for bypassing censorship is: <strong>Mainstream overseas VPS + Sing-box/Xray + Reality protocol</strong>.
+This method maximizes the simulation of normal traffic, reducing the risk of connection interruptions or IP blocking. Always remember that technology should serve the purpose of acquiring knowledge and improving productivity.</p>
+                </div>
+
+                <!-- 版权卡片 -->
+                <section style="margin-top: 60px; padding: 30px; border-radius: 30px; background: rgba(0,0,0,0.25); border: 1px dashed var(--glass-border); font-size: 0.9rem;">
+                    <div style="color: var(--accent); font-weight: bold; margin-bottom: 12px; font-family: 'ZCOOL KuaiLe'; font-size: 1.3rem;"># 知识共享授权</div>
+                    <p style="opacity: 0.85;">本文作者：<span style="color: var(--accent); font-weight: bold;">Cnfte</span></p>
+                    <p style="opacity: 0.85; margin-top: 6px;">版权声明：遵循 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" style="color: var(--accent); text-decoration: underline;">CC BY-NC-SA 4.0</a> 授权协议。</p>
+                    <div style="margin-top: 20px; font-family: 'Fira Code'; font-size: 0.75rem; word-break: break-all; opacity: 0.4;">
+                        ID_PATH: <span id="current-url"></span>
+                    </div>
+                </section>
+            </article>
+        </main>
+
+        <aside>
+            <!-- 作者信息 -->
+            <section class="widget" style="text-align: center;">
+                <img src="https://cnfte.top/attachments/696b4d5b58c71_1768639835.webp" style="width: 100px; height: 100px; border-radius: 50%; border: 4px solid var(--accent); padding: 5px; margin-bottom: 15px; transition: 0.6s var(--bezier);" onmouseover="this.style.transform='rotate(360deg) scale(1.1)'">
+                <div style="font-family: 'ZCOOL KuaiLe'; font-size: 1.4rem;">Cnfte</div>
+                <p style="font-size: 0.85rem; opacity: 0.7; margin-top: 8px;">"滚滚长江东逝水，浪花淘尽英雄。"</p>
+                <div style="display: flex; gap: 15px; justify-content: center; margin-top: 15px;">
+                    <a href="mailto:cnfte.2@gmail.com" style="color: white; font-size: 1.1rem;"><i class="fas fa-envelope"></i></a>
+                    <a href="https://github.com/cnfte/blog.git" target="_blank" style="color: white; font-size: 1.1rem;"><i class="fab fa-github"></i></a>
+                </div>
+            </section>
+
+            <!-- 自动目录 -->
+            
+            <section class="widget">
+                <h3 class="widget-title"><i class="fas fa-list-ol"></i> CONTENTS</h3>
+                <div class="toc-wrapper">
+                    <div class="toc">
+<ul>
+<li><a href="#i-common-circumvention-protocols-and-their-working-principles">I. Common Circumvention Protocols and Their Working Principles</a></li>
+<li><a href="#ii-how-do-they-bypass-the-great-firewall-gfw">II. How do they bypass the Great Firewall (GFW)?</a></li>
+<li><a href="#iii-what-can-you-do-after-bypassing-the-gfw">III. What can you do after bypassing the GFW?</a></li>
+<li><a href="#iv-important-notes-must-read">IV. Important Notes (Must Read)</a></li>
+<li><a href="#v-setup-tutorial-using-yongges-sing-box-script-as-an-example">V. Setup Tutorial (Using Yongge's Sing-box Script as an Example)</a><ul>
+<li><a href="#1-preparation">1. Preparation</a></li>
+<li><a href="#2-connecting-to-the-vps">2. Connecting to the VPS</a></li>
+<li><a href="#3-executing-yongges-sing-box-script">3. Executing Yongge's Sing-box Script</a></li>
+<li><a href="#4-script-operation-process">4. Script Operation Process</a></li>
+<li><a href="#5-connecting-and-using">5. Connecting and Using</a></li>
+<li><a href="#6-verification">6. Verification</a></li>
+</ul>
+</li>
+<li><a href="#summary">Summary</a></li>
+</ul>
+</div>
+
+                </div>
+            </section>
+            
+
+            <!-- 系统监控日志 -->
+            <section class="widget" style="background: rgba(0,0,0,0.4); border-color: rgba(255,153,204,0.2);">
+                <div style="font-family: 'Fira Code'; font-size: 0.75rem; color: #00ffcc; line-height: 2.2;">
+                    <div>[SYS] DEPLOY: SUCCESS</div>
+                    <div>[SYS] CACHE: PURGED</div>
+                    <div>[SYS] TIME: <span id="live-clock">00:00:00</span></div>
+                    <div style="margin-top: 10px; opacity: 0.3;">// EOF_SIGNAL</div>
+                </div>
+            </section>
+        </aside>
+    </div>
+
+    <footer>
+        <div style="margin-bottom: 15px; font-weight: bold; color: var(--accent);">本站由Cloudflare和Github强力驱动
+Powered by：<img src="https://cnfte.top/attachments/gh.svg" alt="GitHub">
+Analyzed by：<img src="https://cnfte.top/attachments/cf.svg" alt="Cloudflare Analysis">
+Served by：<img src="https://cnfte.top/attachments/cf2.svg" alt="Cloudflare CDN">
+商业投广通道(仅支持支付宝与微信付款)：QQ 3793945630
+TG：<a src=https://t.me/cnfte1>https://t.me/cnfte1</a>
+如何联系Cnfte与bug反馈？>>>QQ群聊：887378676
+TG群组：<a src=https://t.me/+pCnCBiCsyOhhMWU9>https://t.me/+pCnCBiCsyOhhMWU9</a></div>
+        <p>© 2026 Cnfte // DESIGNED FOR THE MOE GEEKS</p>
+    </footer>
+
+    <script>
+        document.getElementById('current-url').innerText = window.location.href;
+
+        // 进度条逻辑
+        window.onscroll = function() {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrolled = (winScroll / height) * 100;
+            document.getElementById("progress-bar").style.width = scrolled + "%";
+        };
+
+        // 侧边栏时钟
+        setInterval(() => {
+            document.getElementById('live-clock').innerText = new Date().toLocaleTimeString();
+        }, 1000);
+
+        // 统一搜索系统逻辑
+        let searchData = null;
+        function toggleSearch() {
+            const container = document.getElementById('search-box');
+            container.classList.toggle('active');
+            if(container.classList.contains('active')) {
+                document.getElementById('search-input').focus();
+            } else {
+                document.getElementById('search-results').style.display = 'none';
+            }
+        }
+
+        document.getElementById('search-input').addEventListener('input', async (e) => {
+            const val = e.target.value.toLowerCase().trim();
+            const resDiv = document.getElementById('search-results');
+            const searchPath = document.documentElement.lang === 'en' ? '/en/search.json' : '/search.json';
+            if(!searchData) searchData = await (await fetch(searchPath)).json();
+            
+            resDiv.innerHTML = '';
+            if(val.length < 1) { resDiv.style.display = 'none'; return; }
+            
+            const filtered = searchData.filter(i => i.title.toLowerCase().includes(val));
+            if(filtered.length > 0) {
+                filtered.forEach(item => {
+                    const a = document.createElement('a');
+                    a.href = item.url;
+                    a.className = 'search-item';
+                    a.innerHTML = `<b>${item.title}</b>`;
+                    resDiv.appendChild(a);
+                });
+                resDiv.style.display = 'flex';
+            }
+        });
+
+        // 点击外部关闭搜索
+        document.addEventListener('click', (e) => {
+            if(!e.target.closest('#search-box')) {
+                document.getElementById('search-box').classList.remove('active');
+                document.getElementById('search-results').style.display = 'none';
+            }
+        });
+
+        // 图片点击全屏预览
+        document.querySelectorAll('.post-body img').forEach(img => {
+            img.style.cursor = 'zoom-in';
+            img.onclick = () => window.open(img.src, '_blank');
+        });
+    </script>
+</body>
+</html>

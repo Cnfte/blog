@@ -1,0 +1,122 @@
+[
+  {
+    "title": "about",
+    "url": "/en/about.html",
+    "date": "2026-01-24",
+    "summary": "I'm CNFTE, a developer and writer passionate about technology exploration and knowledge sharing (GitHub account: cnfte). On my blog (cnfte.top), I'm dedica..."
+  },
+  {
+    "title": "Link Exchange",
+    "url": "/en/Link Exchange.html",
+    "date": "2026-01-30",
+    "summary": "🤝 Link Exchange Here are some likeminded friends; feel free to visit their websites! 📢 Application Instructions Prerequisites: Your website content must be..."
+  },
+  {
+    "title": "Privacy Policy",
+    "url": "/en/Privacy Policy.html",
+    "date": "2026-02-01",
+    "summary": "Privacy Policy Effective Date: February 1, 2026 Thank you for visiting Cnfte Space (Website: https://cnfte.top, hereinafter referred to as \"this Website\")...."
+  },
+  {
+    "title": "service",
+    "url": "/en/公益服务项.html",
+    "date": "2026-01-24",
+    "summary": "Public Service Projects Projects developed by CNFTE GEMINI Reverse Proxy Project A simple project, I was too lazy to do it myself, so I used an AIgenerated..."
+  },
+  {
+    "title": "December 22, 2025: The Kuaishou live streaming platform is involved in a pornography scandal; a dark moment for the Chinese internet.",
+    "url": "/en/archive/2fd74e91/",
+    "date": "2026-01-24",
+    "summary": "I. Background of the Incident On the evening of December 22, 2025, several leading Chinese social media and content platforms experienced abnormal situatio..."
+  },
+  {
+    "title": "A compilation of Cloudflare SaaS optimized IP addresses and domains built by the community.",
+    "url": "/en/archive/48c818d4/",
+    "date": "2026-01-25",
+    "summary": "1. Introduction As is well known, Cloudflare provides free unlimited traffic and DDoS protection via its CDN, but it has been criticized for its poor node ..."
+  },
+  {
+    "title": "Gemini reverse proxy script: No Cloudflare or Deno required, easily set up a stable proxy with Nginx.",
+    "url": "/en/archive/4b4e54b8/",
+    "date": "2026-01-24",
+    "summary": "Introduction: Bypassing the GFW to Enjoy the Gemini API For users in mainland China, accessing the Gemini API has always been hindered by the Great Firewal..."
+  },
+  {
+    "title": "The JMcomic version download site has officially launched.",
+    "url": "/en/archive/88cef5d5/",
+    "date": "2026-01-24",
+    "summary": "Using premium potatoes (referring to a highquality server/network) ensures a good basic download speed. Supported versions: JMComic2: 1.6.51.8.0 JMComic3: ..."
+  },
+  {
+    "title": "[Tutorial] Zero-Barrier: Building Your Own Gemini AI Assistant with Vercel (Direct Access in China)",
+    "url": "/en/archive/f08a66a0/",
+    "date": "2026-02-03",
+    "summary": "Introduction Gemini is the nextgeneration AI large language model launched by Google. It excels in code comprehension and web development, helping even abs..."
+  },
+  {
+    "title": "Internet Science Popularization Series - What is DNS?",
+    "url": "/en/archive/b1db18ae/",
+    "date": "2026-01-24",
+    "summary": "What is DNS? Imagine the internet as a vast city, home to countless websites and servers, each with its own \"address,\" which is a string of numbers like 19..."
+  },
+  {
+    "title": "Internet Science Popularization Series - What are HTTP and HTTPS?",
+    "url": "/en/archive/eb27fae5/",
+    "date": "2026-01-24",
+    "summary": "Hello everyone! Today we're going to talk about two terms we often encounter when browsing the internet: HTTP and HTTPS. They sound a bit technical, but th..."
+  },
+  {
+    "title": "Internet Science Popularization Series - What is ICP Registration? How to obtain a registered domain name and alternative solutions.",
+    "url": "/en/archive/8149127f/",
+    "date": "2026-01-24",
+    "summary": "I. What is China's Domain Name Registration? Simply put, China's domain name registration (also known as \"domain registration\" or \"ICP registration\") refer..."
+  },
+  {
+    "title": "Internet Science Popularization Series - What are IPv4 and IPv6?",
+    "url": "/en/archive/bd532ddf/",
+    "date": "2026-01-24",
+    "summary": "1. What are IPv4 / IPv6? Imagine the internet as a giant city, and every device connected to the internet (computers, mobile phones, servers, etc.) is like..."
+  },
+  {
+    "title": "Internet Science Popularization Series - What is the Great Firewall of China?",
+    "url": "/en/archive/913a193d/",
+    "date": "2026-01-24",
+    "summary": "What is the Great Firewall of China? Simply put, the Great Firewall of China is a system and a series of policies used by the Chinese government to control..."
+  },
+  {
+    "title": "Internet Science Popularization Series - What is a Transmission Protocol?",
+    "url": "/en/archive/308531bb/",
+    "date": "2026-01-24",
+    "summary": "Imagine we live in a large city, and every day we need to transport goods (information) from one place to another using various means of transportation (ca..."
+  },
+  {
+    "title": "Internet Science Popularization Series - What is a protocol? How to set up a node with an encryption protocol?",
+    "url": "/en/archive/f1d36531/",
+    "date": "2026-01-24",
+    "summary": "We need to clarify a concept first: the tools we commonly use now (such as Shadowsocks, V2Ray, Singbox) are technically classified more as \"proxies\" rather..."
+  },
+  {
+    "title": "Internet Science Popularization Series - What is a domain name? How to obtain and configure a domain name?",
+    "url": "/en/archive/b343e19c/",
+    "date": "2026-01-24",
+    "summary": "What is a Domain Name? Imagine the internet as a giant city, inhabited by countless websites and servers (where website content is stored). Each server has..."
+  },
+  {
+    "title": "Internet Science Popularization Series - What is a server? How to get a server?",
+    "url": "/en/archive/d96a22b4/",
+    "date": "2026-01-24",
+    "summary": "What is a Server? Imagine you're browsing the internet, watching videos, playing games, or chatting online. Where is all this information and content store..."
+  },
+  {
+    "title": "This corresponds to the recent warnings regarding Cloudflare's large-scale account suspensions of reverse proxy tools.",
+    "url": "/en/archive/b519dc68/",
+    "date": "2026-01-24",
+    "summary": "Recently, a largescale account suspension incident at Cloudflare has caused a huge stir in the internet community, with numerous user accounts, including b..."
+  },
+  {
+    "title": "The Invisible Backbone of the Digital World: A Comprehensive Overview of the 150 Global Giants in Internet Infrastructure",
+    "url": "/en/archive/06851bc6/",
+    "date": "2026-02-09",
+    "summary": "Every time we swipe a screen, click a link, or load a highdefinition video, we are presented with dazzling digital applications. But \"beneath the surface,\"..."
+  }
+]

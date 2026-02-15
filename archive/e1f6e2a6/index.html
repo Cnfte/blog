@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO & Metadata -->
+    <title>Gemini 反代脚本：无需Cloudflare_Deno，用Nginx轻松搭建稳定代理 - Cnfteの博客</title>
+    <meta name="description" content="前言：绕过GFW，畅享Gemini API 对于国内用户而言，访问Gemini API一直面临着GFW的阻碍。过去常用的翻墙方式（如搭建梯子）不仅操作繁琐，还伴随着安全隐患。而曾经备受推崇的Cloudflare Pages/Workers和Deno，也因政策调整或滥用问题，不再是可靠的解决方案。Cloudfl...">
+    <link rel="icon" href="attachments/696b4d5b58c71_1768639835.webp">
+    
+    <!-- 引入二次元艺术字体与图标库 -->
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-heavy: rgba(15, 15, 20, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --accent: #ff99cc; 
+            --accent-gradient: linear-gradient(135deg, #ff99cc 0%, #ffcc99 100%);
+            --text: #ffffff;
+            --text-muted: #d1d1d1;
+            --bezier: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --shadow: 0 15px 45px rgba(0, 0, 0, 0.5);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            font-family: 'Inter', sans-serif; background: #000; color: var(--text); 
+            line-height: 1.8; overflow-x: hidden; width: 100%;
+        }
+
+        /* 极致背景 */
+        .bg-fixed {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://edgeoneimg.cdn.sn/i/699204f8026d7_1771177208.webp') no-repeat center center fixed;
+            background-size: cover; z-index: -2; transform: scale(1.02);
+        }
+        .bg-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(4px); z-index: -1;
+        }
+
+        @keyframes cardIn {
+            0% { opacity: 0; transform: translateY(50px) scale(0.96); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* 阅读进度条 */
+        #progress-bar {
+            position: fixed; top: 0; left: 0; width: 0%; height: 4px;
+            background: var(--accent-gradient); z-index: 2000; 
+            transition: width 0.1s ease; box-shadow: 0 0 15px rgba(255, 153, 204, 0.5);
+        }
+
+        /* 统一导航栏：悬浮胶囊 */
+        nav { 
+            position: sticky; top: 15px; z-index: 1000; 
+            margin: 0 auto; width: 94%; max-width: 1300px;
+            background: var(--glass); backdrop-filter: blur(20px); 
+            border-radius: 50px; border: 1px solid var(--glass-border);
+            padding: 8px 25px; display: flex; justify-content: space-between; align-items: center;
+            box-shadow: var(--shadow); transition: 0.4s var(--bezier);
+        }
+        .logo { font-family: 'ZCOOL KuaiLe', cursive; font-size: 1.5rem; color: var(--accent) !important; text-decoration: none; }
+        
+        .nav-right { display: flex; align-items: center; gap: 20px; }
+        .nav-links { display: flex; align-items: center; gap: 15px; }
+        .nav-links a { font-weight: 700; font-size: 0.85rem; text-decoration: none; color: white; opacity: 0.8; transition: 0.3s; }
+        .nav-links a:hover { opacity: 1; color: var(--accent); }
+
+        /* 伸缩搜索框 (与首页保持一致) */
+        .search-container { position: relative; display: flex; align-items: center; }
+        #search-input {
+            width: 0; opacity: 0; pointer-events: none;
+            background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 20px;
+            padding: 5px 0; color: white; transition: all 0.5s var(--bezier); outline: none;
+        }
+        .search-container.active #search-input { width: 200px; opacity: 1; pointer-events: all; padding: 6px 15px; margin-right: 10px; }
+        #search-btn { cursor: pointer; color: var(--accent); font-size: 1.1rem; transition: 0.3s; }
+        #search-results {
+            position: absolute; top: 140%; right: 0; width: 280px; 
+            background: var(--glass-heavy); backdrop-filter: blur(25px);
+            border-radius: 20px; border: 1px solid var(--glass-border);
+            max-height: 350px; overflow-y: auto; display: none; flex-direction: column;
+            box-shadow: var(--shadow); z-index: 1001; animation: cardIn 0.3s var(--bezier);
+        }
+        .search-item { padding: 12px 18px; text-decoration: none; color: white; font-size: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .search-item:hover { background: var(--accent); color: #000; }
+
+        /* 文章 Hero 区域 */
+        .post-hero {
+            height: 55vh; min-height: 420px; width: 100%; position: relative;
+            display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden;
+        }
+        .post-hero-img {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; filter: brightness(0.6); z-index: -1;
+            animation: heroZoom 15s infinite alternate var(--bezier);
+        }
+        @keyframes heroZoom { from { transform: scale(1); } to { transform: scale(1.08); } }
+
+        .post-header-info { z-index: 1; padding: 0 30px; animation: cardIn 0.8s var(--bezier); }
+        .post-header-info h1 { font-family: 'ZCOOL KuaiLe'; font-size: clamp(2.2rem, 5vw, 4rem); text-shadow: 0 10px 30px rgba(0,0,0,0.6); margin-bottom: 20px; }
+        .post-meta-top { font-family: 'Fira Code'; font-size: 0.9rem; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; }
+
+        /* 主体布局 */
+        .main-grid { 
+            max-width: 1400px; margin: -80px auto 60px; 
+            display: grid; grid-template-columns: 1fr 360px; gap: 35px; padding: 0 3%;
+            position: relative; z-index: 10;
+        }
+
+        /* 统一广告位：胶囊设计 (前两个) */
+        .post-ads { 
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-bottom: 30px; 
+            animation: cardIn 0.9s var(--bezier) both;
+        }
+        .ad-capsule {
+            height: 70px; background: var(--glass); backdrop-filter: blur(12px);
+            border-radius: 50px; border: 1px solid var(--glass-border);
+            display: flex; align-items: center; padding: 8px; text-decoration: none; color: white;
+            transition: 0.4s var(--bezier);
+        }
+        .ad-capsule:hover { transform: translateY(-5px); border-color: var(--accent); background: rgba(255,153,204,0.15); }
+        .ad-capsule img { width: 54px; height: 54px; border-radius: 50%; object-fit: cover; margin-right: 15px; border: 2px solid var(--glass-border); }
+
+        /* 文章容器卡片 */
+        article.post-container { 
+            background: var(--glass-heavy); backdrop-filter: blur(35px);
+            padding: 60px; border-radius: 40px; border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow); animation: cardIn 0.8s var(--bezier) both;
+        }
+
+        /* 正文样式 */
+        .post-body { font-size: 1.15rem; color: #f0f0f0; line-height: 2.1; }
+        .post-body h2 { font-family: 'ZCOOL KuaiLe'; color: var(--accent); margin: 2.5em 0 1.2em; font-size: 1.8rem; border-bottom: 2px solid rgba(255,153,204,0.2); padding-bottom: 12px; }
+        .post-body p { margin-bottom: 1.8rem; text-align: justify; }
+        .post-body img { 
+            max-width: 100%; border-radius: 25px; margin: 35px 0; 
+            border: 1px solid var(--glass-border); box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            transition: 0.5s var(--bezier);
+        }
+        .post-body img:hover { transform: scale(1.02); }
+        .post-body pre { 
+            background: rgba(0,0,0,0.4) !important; padding: 25px; border-radius: 20px; 
+            border: 1px solid var(--glass-border); overflow-x: auto; margin: 2.5rem 0;
+            font-family: 'Fira Code', monospace !important;
+        }
+
+        /* 侧边栏 */
+        aside { position: sticky; top: 100px; height: fit-content; }
+        .widget { 
+            background: var(--glass); backdrop-filter: blur(20px);
+            padding: 30px; border-radius: 35px; border: 1px solid var(--glass-border);
+            margin-bottom: 30px; box-shadow: var(--shadow);
+            animation: cardIn 1s var(--bezier) both;
+        }
+        .widget-title { font-family: 'ZCOOL KuaiLe'; color: var(--accent); font-size: 1.3rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        
+        .toc-wrapper { font-size: 0.92rem; max-height: 50vh; overflow-y: auto; scrollbar-width: none; }
+        .toc-wrapper ul { list-style: none; }
+        .toc-wrapper a { color: var(--text-muted); text-decoration: none; transition: 0.3s; display: block; padding: 7px 0; }
+        .toc-wrapper a:hover { color: var(--accent); transform: translateX(10px); }
+
+        /* 响应式适配 */
+        @media (max-width: 1100px) {
+            .main-grid { grid-template-columns: 1fr; margin-top: -50px; }
+            article.post-container { padding: 35px 20px; border-radius: 30px; }
+            aside { display: none; }
+            .post-hero { height: 45vh; }
+            .post-ads { grid-template-columns: 1fr; }
+            .nav-links, .search-container { display: none; }
+        }
+
+        footer { text-align: center; padding: 80px 20px; opacity: 0.6; font-size: 0.8rem; background: var(--glass-heavy); margin-top: 40px; }
+    </style>
+</head>
+<body>
+    <div id="progress-bar"></div>
+    <div class="bg-fixed"></div>
+    <div class="bg-overlay"></div>
+
+    <!-- 统一导航栏 -->
+    <nav>
+        <a href="/" class="logo">CNFTE</a>
+        <div class="nav-right">
+            <div class="nav-links">
+                <a href="/about.html">关于</a><a href="/公益服务项.html">公益服务项</a><a href="/友链.html">友链</a><a href="/隐私政策.html">隐私政策</a>
+            </div>
+            <!-- 伸缩搜索框 -->
+            <div class="search-container" id="search-box">
+                <input type="text" id="search-input" placeholder="关键词搜索...">
+                <i class="fas fa-search" id="search-btn" onclick="toggleSearch()"></i>
+                <div id="search-results"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 文章头图 Hero 区域 (樱花 API) -->
+    <header class="post-hero">
+        <img src="https://www.dmoe.cc/random.php?seed=e1f6e2a6&r=423332" class="post-hero-img">
+        <div class="post-header-info">
+            <div class="post-meta-top">
+                <i class="far fa-calendar-alt"></i> 2026-01-17 // READ: 4 MIN
+            </div>
+            <h1>Gemini 反代脚本：无需Cloudflare_Deno，用Nginx轻松搭建稳定代理</h1>
+            <div style="font-family: 'Fira Code'; font-size: 0.75rem; opacity: 0.6; letter-spacing: 2px;">
+                AUTH_VERIFIED // NODE: STABLE // ID: e1f6e2a6
+            </div>
+        </div>
+    </header>
+
+    <div class="main-grid">
+        <main>
+            <!-- 动态广告位胶囊 (前两个) -->
+            <div class="post-ads">
+                
+                <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="ad-capsule" target="_blank">
+                    <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" loading="lazy">
+                    <div style="font-size: 0.8rem;">
+                        <b style="color:var(--accent); display:block;">广告招租价格好商量</b>
+                        <span style="opacity:0.7;">广告招租价格好商量</span>
+                    </div>
+                </a>
+                
+                <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="ad-capsule" target="_blank">
+                    <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" loading="lazy">
+                    <div style="font-size: 0.8rem;">
+                        <b style="color:var(--accent); display:block;">广告招租价格好商量</b>
+                        <span style="opacity:0.7;">广告招租价格好商量</span>
+                    </div>
+                </a>
+                
+            </div>
+
+            <!-- 文章核心卡片 -->
+            <article class="post-container">
+                <div class="post-body">
+                    <p><strong>前言：绕过GFW，畅享Gemini API</strong></p>
+<p>对于国内用户而言，访问Gemini API一直面临着GFW的阻碍。过去常用的翻墙方式（如搭建梯子）不仅操作繁琐，还伴随着安全隐患。而曾经备受推崇的Cloudflare Pages/Workers和Deno，也因政策调整或滥用问题，不再是可靠的解决方案。Cloudflare已明确禁止利用其平台搭建代理服务，并加强了封禁力度，导致许多用户搭建的代理失效。Deno则因国内用户过度使用导致服务器不堪重负，开始限制中国大陆IP的访问。</p>
+<p>在这些途径受阻后，我一直在积极寻找新的方法。偶然间，我发现了佛布朗斯基关于“如何用Nginx反向代理Gemini接口”的文章，这给了我很大的启发。在自己的服务器上进行实践后，我成功地搭建了一个可用的反向代理。为了让更多人能够轻松复制这一成功，我结合AI工具和个人经验，开发了<code>GeminiProxy</code>项目。</p>
+<p><strong>准备工作</strong></p>
+<ul>
+<li>一台海外服务器</li>
+<li>有效的Gemini API Key</li>
+<li>（可选）一个可靠的梯子，用于初始服务器连接或特定情况下的网络辅助</li>
+</ul>
+<p><strong>服务器推荐</strong></p>
+<p>如果您还没有服务器，可以考虑 <a href="http://yun.timeidc.cn">时光云</a>。他们提供月付仅需20元的美国2-2 50M上下宽联通AS9929（联通A网）服务器，并且是原生IP，非常适合用于搭建代理服务。</p>
+<h2 id="_1"><strong>一、服务器配置与连接</strong></h2>
+<p>在选购好服务器后，请在产品详情页选择“重装系统”，并选择基于Debian的操作系统（如Ubuntu）。确认数据已备份后，点击开始重装。</p>
+<p>系统重装完成后，您需要使用SSH客户端连接到您的服务器。以下是连接示例（以Ubuntu自带的SSH服务为例）：</p>
+<div class="codehilite"><pre><span></span><code><span class="n">ssh</span><span class="w"> </span><span class="n">root</span><span class="nv">@your_server_ip</span>
+</code></pre></div>
+
+<h2 id="geminiproxy"><strong>二、GeminiProxy安装脚本</strong></h2>
+<p>连接到服务器后，在终端输入以下命令来下载并执行安装脚本：</p>
+<div class="codehilite"><pre><span></span><code>wget https://raw.githubusercontent.com/Cnfte/geminiproxy/refs/heads/main/proxy.sh &amp;&amp; sudo bash proxy.sh
+</code></pre></div>
+
+<p>按下回车键，脚本将开始自动安装。</p>
+<h2 id="_2"><strong>三、信息配置与域名绑定</strong></h2>
+<p>安装过程中，您会看到一个交互式面板。选择“1”开始配置。首次安装可能需要一些时间，请耐心等待。</p>
+<p>在配置页面，您需要输入您的域名（例如：<code>yourdomain.com</code>）。请确保您已将该域名的A记录指向您的服务器IP地址。</p>
+<p><strong>域名获取：</strong> 如果您还没有域名，可以考虑在 <a href="https://register.us.kg">register.us.kg</a> 免费注册一个 <code>dpdns.org</code> 域名，有效期为180天，到期后可免费续费。</p>
+<p><strong>SSL证书申请：</strong> 您可以通过 <a href="http://okssl.com.cn">okssl.com.cn</a> 申请免费的SSL证书。</p>
+<p>接下来，您需要配置端口。对于NAT服务器，请确保内外网端口一致。例如，如果您将HTTP端口绑定为 <code>12345</code>，HTTPS端口绑定为 <code>40443</code>，那么在服务器控制面板中也需要开放这两个端口。访问时，请使用 <code>https://yourdomain.com:https_port</code> 的格式。</p>
+<p>然后，您需要提供SSL证书的完整路径：</p>
+<ul>
+<li>证书文件（通常为 <code>.pem</code> 格式）</li>
+<li>证书密钥文件（通常为 <code>.key</code> 格式）</li>
+</ul>
+<p>输入以上信息后，脚本将开始写入配置。</p>
+<h2 id="_3"><strong>四、完成搭建与使用</strong></h2>
+<p>至此，您的专属Gemini反向代理已成功搭建！您只需将配置好的域名填入API请求工具（如Chatbox等），即可畅享Gemini的服务。</p>
+<p><strong>演示地址：</strong> <a href="https://openproxy.cnfte.top:40443">https://openproxy.cnfte.top:40443</a></p>
+<p><strong>重要提示：</strong> 请合理使用网络代理技术，并禁止制作任何违反中国大陆法律法规的工具。</p>
+                </div>
+
+                <!-- 版权卡片 -->
+                <section style="margin-top: 60px; padding: 30px; border-radius: 30px; background: rgba(0,0,0,0.25); border: 1px dashed var(--glass-border); font-size: 0.9rem;">
+                    <div style="color: var(--accent); font-weight: bold; margin-bottom: 12px; font-family: 'ZCOOL KuaiLe'; font-size: 1.3rem;"># 知识共享授权</div>
+                    <p style="opacity: 0.85;">本文作者：<span style="color: var(--accent); font-weight: bold;">Cnfte</span></p>
+                    <p style="opacity: 0.85; margin-top: 6px;">版权声明：遵循 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" style="color: var(--accent); text-decoration: underline;">CC BY-NC-SA 4.0</a> 授权协议。</p>
+                    <div style="margin-top: 20px; font-family: 'Fira Code'; font-size: 0.75rem; word-break: break-all; opacity: 0.4;">
+                        ID_PATH: <span id="current-url"></span>
+                    </div>
+                </section>
+            </article>
+        </main>
+
+        <aside>
+            <!-- 作者信息 -->
+            <section class="widget" style="text-align: center;">
+                <img src="https://cnfte.top/attachments/696b4d5b58c71_1768639835.webp" style="width: 100px; height: 100px; border-radius: 50%; border: 4px solid var(--accent); padding: 5px; margin-bottom: 15px; transition: 0.6s var(--bezier);" onmouseover="this.style.transform='rotate(360deg) scale(1.1)'">
+                <div style="font-family: 'ZCOOL KuaiLe'; font-size: 1.4rem;">Cnfte</div>
+                <p style="font-size: 0.85rem; opacity: 0.7; margin-top: 8px;">"滚滚长江东逝水，浪花淘尽英雄。"</p>
+                <div style="display: flex; gap: 15px; justify-content: center; margin-top: 15px;">
+                    <a href="mailto:cnfte.2@gmail.com" style="color: white; font-size: 1.1rem;"><i class="fas fa-envelope"></i></a>
+                    <a href="https://github.com/cnfte/blog.git" target="_blank" style="color: white; font-size: 1.1rem;"><i class="fab fa-github"></i></a>
+                </div>
+            </section>
+
+            <!-- 自动目录 -->
+            
+            <section class="widget">
+                <h3 class="widget-title"><i class="fas fa-list-ol"></i> CONTENTS</h3>
+                <div class="toc-wrapper">
+                    <div class="toc">
+<ul>
+<li><a href="#_1">一、服务器配置与连接</a></li>
+<li><a href="#geminiproxy">二、GeminiProxy安装脚本</a></li>
+<li><a href="#_2">三、信息配置与域名绑定</a></li>
+<li><a href="#_3">四、完成搭建与使用</a></li>
+</ul>
+</div>
+
+                </div>
+            </section>
+            
+
+            <!-- 系统监控日志 -->
+            <section class="widget" style="background: rgba(0,0,0,0.4); border-color: rgba(255,153,204,0.2);">
+                <div style="font-family: 'Fira Code'; font-size: 0.75rem; color: #00ffcc; line-height: 2.2;">
+                    <div>[SYS] DEPLOY: SUCCESS</div>
+                    <div>[SYS] CACHE: PURGED</div>
+                    <div>[SYS] TIME: <span id="live-clock">00:00:00</span></div>
+                    <div style="margin-top: 10px; opacity: 0.3;">// EOF_SIGNAL</div>
+                </div>
+            </section>
+        </aside>
+    </div>
+
+    <footer>
+        <div style="margin-bottom: 15px; font-weight: bold; color: var(--accent);">本站由Cloudflare和Github强力驱动
+Powered by：<img src="https://cnfte.top/attachments/gh.svg" alt="GitHub">
+Analyzed by：<img src="https://cnfte.top/attachments/cf.svg" alt="Cloudflare Analysis">
+Served by：<img src="https://cnfte.top/attachments/cf2.svg" alt="Cloudflare CDN">
+商业投广通道(仅支持支付宝与微信付款)：QQ 3793945630
+TG：<a src=https://t.me/cnfte1>https://t.me/cnfte1</a>
+如何联系Cnfte与bug反馈？>>>QQ群聊：887378676
+TG群组：<a src=https://t.me/+pCnCBiCsyOhhMWU9>https://t.me/+pCnCBiCsyOhhMWU9</a></div>
+        <p>© 2026 Cnfte // DESIGNED FOR THE MOE GEEKS</p>
+    </footer>
+
+    <script>
+        document.getElementById('current-url').innerText = window.location.href;
+
+        // 进度条逻辑
+        window.onscroll = function() {
+            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            let scrolled = (winScroll / height) * 100;
+            document.getElementById("progress-bar").style.width = scrolled + "%";
+        };
+
+        // 侧边栏时钟
+        setInterval(() => {
+            document.getElementById('live-clock').innerText = new Date().toLocaleTimeString();
+        }, 1000);
+
+        // 统一搜索系统逻辑
+        let searchData = null;
+        function toggleSearch() {
+            const container = document.getElementById('search-box');
+            container.classList.toggle('active');
+            if(container.classList.contains('active')) {
+                document.getElementById('search-input').focus();
+            } else {
+                document.getElementById('search-results').style.display = 'none';
+            }
+        }
+
+        document.getElementById('search-input').addEventListener('input', async (e) => {
+            const val = e.target.value.toLowerCase().trim();
+            const resDiv = document.getElementById('search-results');
+            const searchPath = document.documentElement.lang === 'en' ? '/en/search.json' : '/search.json';
+            if(!searchData) searchData = await (await fetch(searchPath)).json();
+            
+            resDiv.innerHTML = '';
+            if(val.length < 1) { resDiv.style.display = 'none'; return; }
+            
+            const filtered = searchData.filter(i => i.title.toLowerCase().includes(val));
+            if(filtered.length > 0) {
+                filtered.forEach(item => {
+                    const a = document.createElement('a');
+                    a.href = item.url;
+                    a.className = 'search-item';
+                    a.innerHTML = `<b>${item.title}</b>`;
+                    resDiv.appendChild(a);
+                });
+                resDiv.style.display = 'flex';
+            }
+        });
+
+        // 点击外部关闭搜索
+        document.addEventListener('click', (e) => {
+            if(!e.target.closest('#search-box')) {
+                document.getElementById('search-box').classList.remove('active');
+                document.getElementById('search-results').style.display = 'none';
+            }
+        });
+
+        // 图片点击全屏预览
+        document.querySelectorAll('.post-body img').forEach(img => {
+            img.style.cursor = 'zoom-in';
+            img.onclick = () => window.open(img.src, '_blank');
+        });
+    </script>
+</body>
+</html>
