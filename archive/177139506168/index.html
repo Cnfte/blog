@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO & Metadata -->
+    <title>互联网科普系列-什么是域名_怎么获得一个域名并解析 - Cnfteの博客</title>
+    <meta name="description" content="什么是域名？ 想象一下，互联网就像一个巨大的城市，里面住着无数的网站、服务器（就是存放网站内容的地方）。每个服务器都有一个独一无二的“门牌号”，这个门牌号就是一串数字，叫做 IP地址。 比如，你家地址是“XX省XX市XX区XX街道XX号”，IP地址就是“192.168.1.1”或者“203.0.11...">
+    <link rel="icon" href="/favicon.ico">
+    
+    <!-- 引入艺术字体与图标库 (社交图标必备) -->
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-heavy: rgba(15, 15, 20, 0.98);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --accent: #ff99cc; 
+            --accent-gradient: linear-gradient(135deg, #ff99cc 0%, #ffcc99 100%);
+            --bezier: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --shadow: 0 15px 45px rgba(0, 0, 0, 0.6);
+        }
+
+        /* --- 🛡️ 暴力抗溢出：物理禁止任何元素超出容器 --- */
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+            max-width: 100% !important; 
+            overflow-wrap: anywhere !important; 
+            word-break: break-all !important; 
+        }
+
+        /* 彻底消除浏览器默认的丑陋蓝紫色链接 */
+        a { color: var(--accent) !important; text-decoration: none !important; transition: 0.3s var(--bezier); }
+        a:hover { filter: brightness(1.2); opacity: 0.8; }
+        ul { list-style: none; }
+
+        body { 
+            font-family: 'Inter', sans-serif; background: #000; color: #fff; 
+            line-height: 1.8; overflow-x: hidden; width: 100%; min-height: 100vh;
+            display: flex; flex-direction: column;
+        }
+
+        /* 固定背景 */
+        .bg-fixed { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://cnfte.top/attachments/bj.webp') no-repeat center center fixed; background-size: cover; z-index: -2; }
+        .bg-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(5px); z-index: -1; }
+        
+        /* 阅读进度条 */
+        #progress-bar { position: fixed; top: 0; left: 0; width: 0%; height: 4px; background: var(--accent-gradient); z-index: 2000; transition: width 0.1s; }
+
+        @keyframes cardIn { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
+
+        /* 1. 统一胶囊导航栏 (与首页1:1对齐) */
+        nav { 
+            position: sticky; top: 10px; z-index: 1000; margin: 0 auto 20px; width: 95%; max-width: 1300px;
+            background: var(--glass); backdrop-filter: blur(25px); border-radius: 50px; border: 1px solid var(--glass-border);
+            padding: 8px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .logo { font-family: 'ZCOOL KuaiLe'; font-size: 1.3rem; color: var(--accent) !important; flex-shrink: 0; margin-right: 15px; }
+        
+        .nav-right { display: flex; align-items: center; gap: 15px; flex: 1; justify-content: flex-end; overflow: hidden; min-width: 0; }
+        .nav-links { display: flex; gap: 15px; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
+        .nav-links::-webkit-scrollbar { display: none; }
+        .nav-links a { font-weight: 700; font-size: 0.85rem; color: #fff !important; opacity: 0.8; }
+
+        /* 搜索框逻辑 */
+        .search-container { position: relative; display: flex; align-items: center; flex-shrink: 0; }
+        #search-input { width: 0; opacity: 0; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); border-radius: 20px; padding: 5px 0; color: white; transition: 0.5s var(--bezier); outline: none; font-size: 0.8rem; }
+        .search-container.active #search-input { width: 140px; opacity: 1; padding: 5px 12px; margin-right: 8px; }
+        #search-results { position: absolute; top: 140%; right: 0; width: 280px; background: var(--glass-heavy); border-radius: 20px; border: 1px solid var(--glass-border); max-height: 350px; overflow-y: auto; display: none; flex-direction: column; z-index: 1100; box-shadow: 0 15px 30px #000; }
+
+        /* 2. 文章大头图 */
+        .post-hero { height: 45vh; min-height: 350px; width: 100%; position: relative; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; }
+        .post-hero-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6); z-index: -1; animation: heroZoom 20s infinite alternate; }
+        @keyframes heroZoom { from { transform: scale(1); } to { transform: scale(1.1); } }
+        .post-header-content { z-index: 1; padding: 0 30px; animation: cardIn 0.8s var(--bezier); }
+        .post-header-content h1 { font-family: 'ZCOOL KuaiLe'; font-size: clamp(1.8rem, 5vw, 3.5rem); text-shadow: 0 10px 30px #000; color: #fff; margin-bottom: 10px; line-height: 1.2; }
+
+        /* 3. 布局网格 */
+        .main-grid { max-width: 1400px; margin: -60px auto 60px; display: grid; grid-template-columns: 1fr 340px; gap: 30px; padding: 0 2.5%; position: relative; z-index: 10; flex: 1; width: 100%; }
+        
+        /* 🛡️ 广告位修正：四个广告位全部回归，自适应排版 */
+        .post-ads { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 30px; width: 100%; }
+        .ad-capsule { height: 65px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 50px; display: flex; align-items: center; padding: 6px; overflow: hidden; }
+        .ad-capsule img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; margin-right: 12px; flex-shrink: 0; border: 2px solid var(--accent); }
+        .ad-info b { display: block; color: var(--accent); font-size: 0.8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .ad-info span { font-size: 0.7rem; color: #fff; opacity: 0.6; white-space: nowrap; }
+
+        /* 4. 文章主体核心：暴力 Padding + 物理隔离 */
+        article.post-container { 
+            background: var(--glass-heavy); backdrop-filter: blur(40px); border-radius: 40px; border: 1px solid var(--glass-border);
+            padding: 50px 40px; /* 🛡️ 暴力内边距：拒绝贴墙 */
+            box-shadow: var(--shadow); width: 100% !important; 
+            display: grid !important; grid-template-columns: minmax(0, 1fr) !important; /* 🛡️ 物理降维 */
+            overflow: hidden !important; 
+            animation: cardIn 0.8s var(--bezier) both;
+        }
+
+        /* --- 正文元素物理禁锢 --- */
+        .post-body { font-size: 1.12rem; color: #f0f0f0; min-width: 0; }
+        /* 物理修正：删掉那些丑线 */
+        .post-body h1, .post-body h2 { font-family: 'ZCOOL KuaiLe'; color: var(--accent); margin: 2em 0 1em; border-bottom: none !important; }
+        .post-body p { margin-bottom: 1.5rem; text-align: justify; }
+        
+        /* 代码块锁定 */
+        .post-body pre, .codehilite { 
+            width: 100% !important; max-width: 100% !important; overflow-x: auto !important; 
+            display: block !important; background: rgba(0,0,0,0.5) !important; 
+            padding: 25px; border-radius: 20px; border: 1px solid var(--glass-border); 
+            margin: 25px 0; white-space: pre !important; -webkit-overflow-scrolling: touch;
+        }
+        /* 表格锁定 */
+        .post-body table { display: block !important; width: 100% !important; overflow-x: auto !important; border-collapse: collapse; margin: 25px 0; border: 1px solid var(--glass-border); border-radius: 15px; }
+        .post-body th, .post-body td { border: 1px solid rgba(255,255,255,0.1); padding: 12px 20px; min-width: 120px; }
+        .post-body th { background: rgba(255,153,204,0.15); color: var(--accent); }
+
+        /* 5. 返回按钮：归位于容器内部最下方 */
+        .btn-wrapper { margin-top: 60px; padding-top: 30px; border-top: 1px solid var(--glass-border); text-align: center; width: 100%; }
+        .back-btn { 
+            display: inline-block !important; background: var(--accent-gradient); color: #000 !important; 
+            padding: 15px 45px; border-radius: 50px; font-weight: 900; font-size: 1rem; 
+            box-shadow: 0 10px 25px rgba(255, 153, 204, 0.4); transition: 0.3s;
+        }
+        .back-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(255, 153, 204, 0.6); }
+
+        /* 6. 侧边栏小组件 (回归所有丢失的功能) */
+        aside { position: sticky; top: 90px; height: fit-content; }
+        .widget { background: var(--glass); border-radius: 35px; padding: 25px; border: 1px solid var(--glass-border); margin-bottom: 25px; }
+        .social-links { display: flex; justify-content: center; gap: 20px; margin-top: 15px; font-size: 1.5rem; }
+
+        @media (max-width: 1000px) {
+            .main-grid { grid-template-columns: 1fr; margin-top: -30px; }
+            article.post-container { padding: 35px 20px; border-radius: 30px; }
+            aside { display: none; }
+            .post-hero { height: 40vh; }
+            nav { padding: 8px 15px; }
+            .logo { font-size: 1.1rem; }
+        }
+
+        footer { text-align: center; padding: 60px 20px; background: rgba(0,0,0,0.9); border-top: 1px solid var(--glass-border); margin-top: auto; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <div id="progress-bar"></div>
+    <div class="bg-fixed"></div><div class="bg-overlay"></div>
+    
+    <nav>
+        <a href="/" class="logo">CNFTE</a>
+        <div class="nav-right">
+            <div class="nav-links">
+                <a href="/about.html">关于</a><a href="/公益服务项.html">公益服务项</a><a href="/友链.html">友链</a><a href="/隐私政策.html">隐私政策</a>
+                <a href="/">HOME</a>
+            </div>
+            <div class="search-container" id="search-box">
+                <input type="text" id="search-input" placeholder="SEARCH...">
+                <i class="fas fa-search" onclick="toggleSearch()" style="cursor:pointer;color:var(--accent);font-size:1.2rem;"></i>
+                <div id="search-results"></div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="post-hero">
+        <img src="https://www.dmoe.cc/random.php?seed=177139506168&r=286477" class="post-hero-img">
+        <div class="post-header-content">
+            <p style="color:var(--accent); font-family:monospace; font-size:0.9rem; letter-spacing: 2px;">2026-01-17 // READ: 9 MIN</p>
+            <h1>互联网科普系列-什么是域名_怎么获得一个域名并解析</h1>
+        </div>
+    </header>
+
+    <div class="main-grid">
+        <main>
+            <!-- 🛡️ 暴力修正：四个广告位全部动态显示 -->
+            <div class="post-ads">
+                
+                <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="ad-capsule" target="_blank">
+                    <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" loading="lazy">
+                    <div class="ad-info">
+                        <b>广告招租价格好商量</b>
+                        <span>广告招租价格好商量</span>
+                    </div>
+                </a>
+                
+                <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="ad-capsule" target="_blank">
+                    <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" loading="lazy">
+                    <div class="ad-info">
+                        <b>广告招租价格好商量</b>
+                        <span>广告招租价格好商量</span>
+                    </div>
+                </a>
+                
+                <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="ad-capsule" target="_blank">
+                    <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" loading="lazy">
+                    <div class="ad-info">
+                        <b>广告招租价格好商量</b>
+                        <span>广告招租价格好商量</span>
+                    </div>
+                </a>
+                
+                <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="ad-capsule" target="_blank">
+                    <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" loading="lazy">
+                    <div class="ad-info">
+                        <b>广告招租价格好商量</b>
+                        <span>广告招租价格好商量</span>
+                    </div>
+                </a>
+                
+            </div>
+
+            <!-- 文章卡片 -->
+            <article class="post-container">
+                <div class="post-body">
+                    <h3 id="_1">什么是域名？</h3>
+<p>想象一下，互联网就像一个巨大的城市，里面住着无数的网站、服务器（就是存放网站内容的地方）。每个服务器都有一个独一无二的“门牌号”，这个门牌号就是一串数字，叫做 <strong>IP地址</strong>。</p>
+<p>比如，你家地址是“XX省XX市XX区XX街道XX号”，IP地址就是“192.168.1.1”或者“203.0.113.45”这样的数字串。</p>
+<p>但是，你觉得记住一长串数字方便，还是记住一个名字方便呢？肯定是一个名字吧！比如你想去淘宝，你会记住“taobao.com”，而不是一串数字。</p>
+<p><strong>域名，就是给互联网上的服务器（或者说网站）起的名字。</strong> 它就像是给你的网站一个好记的、有特色的名字，方便大家来访问。</p>
+<p><strong>简单来说：域名就是网站的名字，用来代替一串难记的IP地址。</strong></p>
+<hr />
+<h3 id="_2">域名有什么用？</h3>
+<p>域名最主要的作用就是：</p>
+<ol>
+<li>
+<p><strong>方便记忆和访问：</strong></p>
+</li>
+<li>
+<p>就像你记住朋友的名字比记住他家的门牌号容易得多一样，域名让用户能够轻松地记住并访问你的网站。</p>
+</li>
+<li>没有域名，你就只能通过IP地址访问网站，这对于普通用户来说太不友好了。</li>
+<li>
+<p><strong>建立品牌形象：</strong></p>
+</li>
+<li>
+<p>一个好的域名就像一个响亮的名字，能够帮助你建立品牌形象。</p>
+</li>
+<li>比如“baidu.com”就是百度公司的品牌代表，“tencent.com”就是腾讯的代表。</li>
+<li>一个专业、易记的域名能给用户留下好印象。</li>
+<li>
+<p><strong>电子邮件地址：</strong></p>
+</li>
+<li>
+<p>域名也可以用来创建专业的电子邮件地址，比如 <code>[email protected]</code>。</p>
+</li>
+<li>这比使用免费邮箱（如 <code>@gmail.com</code> 或 <code>@qq.com</code>）显得更专业和可信。</li>
+<li>
+<p><strong>网站的唯一标识：</strong></p>
+</li>
+<li>
+<p>在互联网上，域名是唯一的。一旦你注册了一个域名，别人就不能再注册完全相同的域名了。</p>
+</li>
+<li>这保证了你的网站在互联网上的独特性。</li>
+</ol>
+<hr />
+<h3 id="cn">怎么获得一个域名 (以阿里云平台注册.cn域名为例)</h3>
+<p>获得域名就像给你的网站“上户口”，你需要去一个专门的机构（域名注册商）那里登记。阿里云就是一个很大的域名注册商。</p>
+<p>咱们以在阿里云注册一个<code>.cn</code>域名为例，步骤很简单：</p>
+<ol>
+<li>
+<p><strong>打开阿里云官网：</strong></p>
+</li>
+<li>
+<p>在浏览器里输入 <code>www.aliyun.com</code>，进入阿里云的官方网站。</p>
+</li>
+<li>
+<p><strong>搜索你想注册的域名：</strong></p>
+</li>
+<li>
+<p>在阿里云网站的首页或者产品页面，找到“域名”相关的入口。</p>
+</li>
+<li>你会看到一个搜索框，输入你想要注册的域名，比如你想注册“我的网站.cn”，就输入 <code>mywebsite.cn</code>。</li>
+<li>点击搜索。</li>
+<li>
+<p><strong>查看是否可用并加入购物车：</strong></p>
+</li>
+<li>
+<p>阿里云会告诉你这个域名是否已经被别人注册了。</p>
+</li>
+<li>如果没被注册，它会显示“可注册”，你可以点击“加入购物车”。</li>
+<li>如果已经被注册了，它会显示“已注册”，你就需要换一个名字试试。</li>
+<li>
+<p><strong>去结算并填写信息：</strong></p>
+</li>
+<li>
+<p>进入购物车，确认你要注册的域名，然后点击“去结算”。</p>
+</li>
+<li>这时候，你需要填写一些注册信息，主要是你的个人信息（姓名、身份证号、联系方式等）或者公司信息。</li>
+<li><strong>注意：</strong> 注册<code>.cn</code>域名通常需要进行实名认证，你需要上传身份证照片或者提供公司营业执照等信息，这是中国大陆地区对域名的管理规定。</li>
+<li>
+<p><strong>支付费用：</strong></p>
+</li>
+<li>
+<p>填写完信息后，选择支付方式，完成支付。域名的价格根据后缀（如<code>.com</code>, <code>.cn</code>, <code>.net</code>等）和注册商不同而有所差异。</p>
+</li>
+<li>
+<p><strong>完成注册：</strong></p>
+</li>
+<li>
+<p>支付成功后，阿里云会帮你完成域名的注册。通常需要几分钟到几个小时不等。</p>
+</li>
+<li>注册成功后，这个域名就属于你了，你可以通过阿里云的管理后台来管理它。</li>
+</ol>
+<p><strong>简单来说：就像你去给孩子起名字，先看看这个名字有没有被别人用了，没用就去相关部门登记，然后交点钱，名字就归你了。</strong></p>
+<hr />
+<h3 id="_3">什么是域名解析？</h3>
+<p>域名解析，就像是给你的域名（名字）和它的IP地址（门牌号）建立一个“联系”。</p>
+<p>想象一下，你有一个朋友叫“小明”，他住在“XX小区XX栋XX单元XX号”。你只知道“小明”这个名字，但不知道他家具体在哪。域名解析的作用就是，当你告诉邮递员“小明”这个名字时，邮递员就知道要去“XX小区XX栋XX单元XX号”才能找到他。</p>
+<p>在互联网上，当你在浏览器输入一个域名（比如 <code>www.example.com</code>）时，你的电脑不知道这个域名对应的IP地址是多少。这时候就需要域名解析服务来告诉你的电脑：<code>www.example.com</code> 这个名字对应的IP地址是 <code>192.168.1.100</code>。</p>
+<p><strong>简单来说：域名解析就是告诉电脑，你输入的这个域名（名字）到底对应着哪个IP地址（门牌号）。</strong></p>
+<hr />
+<h3 id="aaaaacname">怎么解析域名 (以常见的A、AAAA、CNAME记录为例)</h3>
+<p>域名解析是通过在域名注册商的管理后台（比如阿里云的域名管理页面）设置 <strong>DNS记录</strong> 来实现的。DNS记录就像是给域名写下的“地址簿条目”。</p>
+<p>最常见的几种记录类型有：</p>
+<h4 id="1-a-address-record">1. A记录 (Address Record)</h4>
+<ul>
+<li><strong>作用：</strong> 将一个域名（或子域名）指向一个 <strong>IPv4地址</strong>。</li>
+<li><strong>白话解释：</strong> 这是最常用的记录。就像你告诉邮递员：“‘小明’住在‘192.168.1.100’这个地址。”</li>
+<li><strong>举例：</strong></li>
+<li>你想让 <code>www.example.com</code> 指向你的服务器IP地址 <code>1.2.3.4</code>。</li>
+<li>在阿里云的DNS管理页面，你会添加一条记录：<ul>
+<li><strong>类型：</strong> A</li>
+<li><strong>主机记录（或叫子域名）：</strong> <code>www</code> (如果你想解析的是 <code>example.com</code> 本身，这里就填 <code>@</code> 或者留空)</li>
+<li><strong>记录值（IP地址）：</strong> <code>1.2.3.4</code></li>
+<li><strong>TTL（生存时间）：</strong> 一般用默认值即可，表示这条记录多久更新一次。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-aaaa-ipv6-address-record">2. AAAA记录 (IPv6 Address Record)</h4>
+<ul>
+<li><strong>作用：</strong> 将一个域名（或子域名）指向一个 <strong>IPv6地址</strong>。</li>
+<li><strong>白话解释：</strong> 和A记录类似，只是IPv6地址比IPv4地址长很多，是新一代的IP地址。就像你告诉邮递员：“‘小明’住在‘2001:0db8:85a3:0000:0000:8a2e:0370:7334’这个地址。”</li>
+<li><strong>举例：</strong></li>
+<li>你想让 <code>www.example.com</code> 指向你的服务器IPv6地址 <code>2001:db8::1</code>。</li>
+<li>在阿里云的DNS管理页面，你会添加一条记录：<ul>
+<li><strong>类型：</strong> AAAA</li>
+<li><strong>主机记录：</strong> <code>www</code></li>
+<li><strong>记录值（IPv6地址）：</strong> <code>2001:db8::1</code></li>
+<li><strong>TTL：</strong> 默认值</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-cname-canonical-name-record">3. CNAME记录 (Canonical Name Record)</h4>
+<ul>
+<li><strong>作用：</strong> 将一个域名（或子域名）指向 <strong>另一个域名</strong>。</li>
+<li><strong>白话解释：</strong> 这就像你告诉邮递员：“‘小明’的家，其实就是‘老王’的家。” 也就是说，你给这个域名起了一个“别名”。</li>
+<li><strong>举例：</strong></li>
+<li>你有一个服务，比如CDN（内容分发网络），它提供了一个固定的域名给你，比如 <code>mycdn.aliyuncs.com</code>。</li>
+<li>你想让你的域名 <code>blog.example.com</code> 直接指向这个CDN服务。</li>
+<li>在阿里云的DNS管理页面，你会添加一条记录：<ul>
+<li><strong>类型：</strong> CNAME</li>
+<li><strong>主机记录：</strong> <code>blog</code></li>
+<li><strong>记录值（指向的域名）：</strong> <code>mycdn.aliyuncs.com</code></li>
+<li><strong>TTL：</strong> 默认值</li>
+</ul>
+</li>
+</ul>
+<p><strong>重要提示：</strong></p>
+<ul>
+<li><strong>生效时间：</strong> 修改DNS记录后，通常需要几分钟到几十分钟（有时甚至更长，最多24小时）才能在全球范围内生效，这个过程叫做“DNS传播”。</li>
+<li><strong>主机记录：</strong></li>
+<li><code>@</code> 或留空：表示解析的是域名本身，比如 <code>example.com</code>。</li>
+<li><code>www</code>：表示解析的是 <code>www.example.com</code>。</li>
+<li><code>blog</code>：表示解析的是 <code>blog.example.com</code>。</li>
+<li><code>mail</code>：表示解析的是 <code>mail.example.com</code>。</li>
+</ul>
+<p><strong>总结一下解析过程：</strong></p>
+<ol>
+<li>你注册了一个域名 <code>example.com</code>。</li>
+<li>你购买了一台服务器，服务器有一个IP地址 <code>1.2.3.4</code>。</li>
+<li>你在阿里云的域名管理后台，为 <code>example.com</code> 添加了一条 <strong>A记录</strong>，主机记录是 <code>@</code>，记录值是 <code>1.2.3.4</code>。</li>
+<li>当别人在浏览器输入 <code>example.com</code> 时，电脑会去DNS服务器查询 <code>example.com</code> 的IP地址，DNS服务器告诉你它是 <code>1.2.3.4</code>。</li>
+<li>电脑知道了IP地址，就能连接到你的服务器，显示你的网站内容了。</li>
+</ol>
+                </div>
+                
+                <!-- 🛡️ 暴力归位：返回按钮固定在容器内底部 -->
+                <div class="btn-wrapper">
+                    <a href="/" class="back-btn">RETURN_TERMINAL</a>
+                </div>
+            </article>
+        </main>
+        
+        <aside>
+            <section class="widget" style="text-align: center;">
+                <img src="https://cnfte.top/attachments/696b4d5b58c71_1768639835.webp" style="width: 80px; border-radius: 50%; border: 3px solid var(--accent); padding: 4px; margin-bottom: 10px;">
+                <h3 style="color:#fff; font-family:'ZCOOL KuaiLe';">Cnfte</h3>
+                <p style="font-size:0.8rem; color:#fff; opacity:0.6; margin-top:5px;">"滚滚长江东逝水，浪花淘尽英雄。"</p>
+                <div class="social-links">
+                    <a href="https://github.com/cnfte" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="https://t.me/cnfte1" target="_blank"><i class="fab fa-telegram"></i></a>
+                </div>
+            </section>
+            
+            <section class="widget">
+                <h3 style="color:var(--accent); font-size:1.1rem; margin-bottom:15px; font-family:'ZCOOL KuaiLe';">CONTENTS</h3>
+                <div style="font-size:0.9rem; max-height: 50vh; overflow-y: auto;"><div class="toc">
+<ul>
+<li><a href="#_1">什么是域名？</a></li>
+<li><a href="#_2">域名有什么用？</a></li>
+<li><a href="#cn">怎么获得一个域名 (以阿里云平台注册.cn域名为例)</a></li>
+<li><a href="#_3">什么是域名解析？</a></li>
+<li><a href="#aaaaacname">怎么解析域名 (以常见的A、AAAA、CNAME记录为例)</a><ul>
+<li><a href="#1-a-address-record">1. A记录 (Address Record)</a></li>
+<li><a href="#2-aaaa-ipv6-address-record">2. AAAA记录 (IPv6 Address Record)</a></li>
+<li><a href="#3-cname-canonical-name-record">3. CNAME记录 (Canonical Name Record)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+            </section>
+            
+            <section class="widget" style="background: rgba(0,0,0,0.4); border-color: rgba(255,153,204,0.2);">
+                <div style="font-family: 'Fira Code'; font-size: 0.75rem; color: #00ffcc; line-height: 2.2;">
+                    <div>[SYS] NODE: STABLE</div>
+                    <div>[SYS] ID: 177139506168</div>
+                    <div>[SYS] TIME: <span id="live-clock">00:00:00</span></div>
+                </div>
+            </section>
+        </aside>
+    </div>
+
+    <footer>本站由Cloudflare和Github强力驱动
+Powered by：<img src="https://cnfte.top/attachments/gh.svg" alt="GitHub">
+Analyzed by：<img src="https://cnfte.top/attachments/cf.svg" alt="Cloudflare Analysis">
+Served by：<img src="https://cnfte.top/attachments/cf2.svg" alt="Cloudflare CDN">
+商业投广通道(仅支持支付宝与微信付款)：QQ 3793945630
+TG：<a src=https://t.me/cnfte1>https://t.me/cnfte1</a>
+如何联系Cnfte与bug反馈？>>>QQ群聊：887378676
+TG群组：<a src=https://t.me/+pCnCBiCsyOhhMWU9>https://t.me/+pCnCBiCsyOhhMWU9</a>
+状态监控：<a src=https://probe.cnfte.top>https://probe.cnfte.top</a><br>© 2026 Cnfte // CNFTE MOE PANEL</footer>
+    
+    <script>
+        window.onscroll = () => { document.getElementById("progress-bar").style.width = ((document.body.scrollTop || document.documentElement.scrollTop) / (document.documentElement.scrollHeight - document.documentElement.clientHeight) * 100) + "%"; };
+        setInterval(() => { document.getElementById('live-clock').innerText = new Date().toLocaleTimeString(); }, 1000);
+
+        let searchData = null;
+        function toggleSearch() {
+            const box = document.getElementById('search-box');
+            box.classList.toggle('active');
+            if(box.classList.contains('active')) document.getElementById('search-input').focus();
+        }
+        document.getElementById('search-input').addEventListener('input', async (e) => {
+            if(!searchData) {
+                const sp = window.location.pathname.includes('/en/') ? '/en/search.json' : '/search.json';
+                searchData = await (await fetch(sp)).json();
+            }
+            const val = e.target.value.toLowerCase().trim();
+            const resDiv = document.getElementById('search-results');
+            resDiv.innerHTML = '';
+            if(val.length < 1) { resDiv.style.display='none'; return; }
+            searchData.filter(i => i.title.toLowerCase().includes(val)).forEach(i => {
+                resDiv.innerHTML += `<a href="${i.url}" class="search-item" style="color:#fff !important;display:block;"><b>${i.title}</b></a>`;
+            });
+            resDiv.style.display = 'flex';
+        });
+        document.addEventListener('click', (e) => { if(!e.target.closest('#search-box')) { document.getElementById('search-box').classList.remove('active'); document.getElementById('search-results').style.display='none'; } });
+    </script>
+</body>
+</html>
