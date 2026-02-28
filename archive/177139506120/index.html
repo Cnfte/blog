@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO & Metadata -->
+    <title>互联网科普系列-什么是HTTP_HTTPS - Cnfteの博客</title>
+    <meta name="description" content="大家好！今天我们要聊聊咱们上网时经常会遇到的两个词：HTTP和HTTPS。听起来有点技术范儿，但其实它们就像我们生活中寄信和寄挂号信一样，一个普通，一个安全。别担心，今天我们就用最白话的方式，把它们讲清楚！ 1. 什么是传输协议？—— 网络世界的“邮递员” 想象一下，你想给远方的朋友寄一封信。这封信...">
+    <link rel="icon" href="/favicon.ico">
+    
+    <!-- 引入艺术字体与图标库 -->
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-heavy: rgba(15, 15, 20, 0.98);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --accent: #ff99cc; 
+            --accent-gradient: linear-gradient(135deg, #ff99cc 0%, #ffcc99 100%);
+            --bezier: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --shadow: 0 15px 45px rgba(0, 0, 0, 0.6);
+        }
+
+        /* --- 🛡️ 物理抗溢出规则 --- */
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+            max-width: 100% !important; 
+            overflow-wrap: anywhere !important; 
+            word-break: break-all !important; 
+        }
+
+        a { color: var(--accent) !important; text-decoration: none !important; transition: 0.3s var(--bezier); }
+        a:hover { filter: brightness(1.2); opacity: 0.8; }
+        ul { list-style: none; }
+
+        body { 
+            font-family: 'Inter', sans-serif; background: #000; color: #fff; 
+            line-height: 1.8; overflow-x: hidden; width: 100%; min-height: 100vh;
+            display: flex; flex-direction: column;
+        }
+
+        .bg-fixed { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://cnfte.top/attachments/bj.webp') no-repeat center center fixed; background-size: cover; z-index: -2; }
+        .bg-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(5px); z-index: -1; }
+        
+        #progress-bar { position: fixed; top: 0; left: 0; width: 0%; height: 4px; background: var(--accent-gradient); z-index: 2000; transition: width 0.1s; }
+
+        @keyframes cardIn { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
+
+        /* 导航栏 */
+        nav { 
+            position: sticky; top: 10px; z-index: 1000; margin: 0 auto 20px; width: 95%; max-width: 1300px;
+            background: var(--glass); backdrop-filter: blur(25px); border-radius: 50px; border: 1px solid var(--glass-border);
+            padding: 8px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .logo { font-family: 'ZCOOL KuaiLe'; font-size: 1.3rem; color: var(--accent) !important; flex-shrink: 0; margin-right: 15px; }
+        
+        .nav-right { display: flex; align-items: center; gap: 15px; flex: 1; justify-content: flex-end; overflow: hidden; min-width: 0; }
+        .nav-links { display: flex; gap: 15px; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
+        .nav-links::-webkit-scrollbar { display: none; }
+        .nav-links a { font-weight: 700; font-size: 0.85rem; color: #fff !important; opacity: 0.8; }
+
+        /* 搜索框 */
+        .search-container { position: relative; display: flex; align-items: center; flex-shrink: 0; }
+        #search-input { width: 0; opacity: 0; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); border-radius: 20px; padding: 5px 0; color: white; transition: 0.5s var(--bezier); outline: none; font-size: 0.8rem; }
+        .search-container.active #search-input { width: 140px; opacity: 1; padding: 5px 12px; margin-right: 8px; }
+        #search-results { position: absolute; top: 140%; right: 0; width: 280px; background: var(--glass-heavy); border-radius: 20px; border: 1px solid var(--glass-border); max-height: 350px; overflow-y: auto; display: none; flex-direction: column; z-index: 1100; box-shadow: 0 15px 30px #000; }
+
+        /* 文章大头图 */
+        .post-hero { height: 45vh; min-height: 350px; width: 100%; position: relative; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; }
+        .post-hero-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6); z-index: -1; animation: heroZoom 20s infinite alternate; }
+        @keyframes heroZoom { from { transform: scale(1); } to { transform: scale(1.1); } }
+        .post-header-content { z-index: 1; padding: 0 30px; animation: cardIn 0.8s var(--bezier); }
+        .post-header-content h1 { font-family: 'ZCOOL KuaiLe'; font-size: clamp(1.8rem, 5vw, 3.5rem); text-shadow: 0 10px 30px #000; color: #fff; margin-bottom: 10px; line-height: 1.2; }
+
+        /* 布局网格 */
+        .main-grid { max-width: 1400px; margin: -60px auto 60px; display: grid; grid-template-columns: 1fr 340px; gap: 30px; padding: 0 2.5%; position: relative; z-index: 10; flex: 1; width: 100%; }
+        
+        /* 胶囊广告位排版 */
+        .post-ads { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 30px; width: 100%; }
+        .ad-capsule { height: 65px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 50px; display: flex; align-items: center; padding: 6px; overflow: hidden; }
+        .ad-capsule img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; margin-right: 12px; flex-shrink: 0; border: 2px solid var(--accent); }
+        .ad-info b { display: block; color: var(--accent); font-size: 0.8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .ad-info span { font-size: 0.7rem; color: #fff; opacity: 0.6; white-space: nowrap; }
+
+        /* 文章主体 */
+        article.post-container { 
+            background: var(--glass-heavy); backdrop-filter: blur(40px); border-radius: 40px; border: 1px solid var(--glass-border);
+            padding: 50px 40px; box-shadow: var(--shadow); width: 100% !important; 
+            display: grid !important; grid-template-columns: minmax(0, 1fr) !important;
+            overflow: hidden !important; 
+            animation: cardIn 0.8s var(--bezier) both;
+        }
+
+        .post-body { font-size: 1.12rem; color: #f0f0f0; min-width: 0; }
+        .post-body h1, .post-body h2 { font-family: 'ZCOOL KuaiLe'; color: var(--accent); margin: 2em 0 1em; border-bottom: none !important; }
+        .post-body p { margin-bottom: 1.5rem; text-align: justify; }
+        .post-body img { border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin: 20px 0; }
+        
+        /* 代码与表格锁定 */
+        .post-body pre, .codehilite { 
+            width: 100% !important; max-width: 100% !important; overflow-x: auto !important; 
+            display: block !important; background: rgba(0,0,0,0.5) !important; 
+            padding: 25px; border-radius: 20px; border: 1px solid var(--glass-border); 
+            margin: 25px 0; white-space: pre !important;
+        }
+        .post-body table { display: block !important; width: 100% !important; overflow-x: auto !important; border-collapse: collapse; margin: 25px 0; }
+        .post-body th, .post-body td { border: 1px solid rgba(255,255,255,0.1); padding: 12px 20px; min-width: 120px; }
+        .post-body th { background: rgba(255,153,204,0.15); color: var(--accent); }
+
+        .btn-wrapper { margin-top: 60px; padding-top: 30px; border-top: 1px solid var(--glass-border); text-align: center; width: 100%; }
+        .back-btn { 
+            display: inline-block !important; background: var(--accent-gradient); color: #000 !important; 
+            padding: 15px 45px; border-radius: 50px; font-weight: 900; font-size: 1rem; 
+            box-shadow: 0 10px 25px rgba(255, 153, 204, 0.4); transition: 0.3s;
+        }
+
+        aside { position: sticky; top: 90px; height: fit-content; }
+        .widget { background: var(--glass); border-radius: 35px; padding: 25px; border: 1px solid var(--glass-border); margin-bottom: 25px; }
+        .social-links { display: flex; justify-content: center; gap: 20px; margin-top: 15px; font-size: 1.5rem; }
+
+        @media (max-width: 1000px) {
+            .main-grid { grid-template-columns: 1fr; margin-top: -30px; }
+            article.post-container { padding: 35px 20px; border-radius: 30px; }
+            aside { display: none; }
+            .post-hero { height: 40vh; }
+        }
+
+        footer { text-align: center; padding: 60px 20px; background: rgba(0,0,0,0.9); border-top: 1px solid var(--glass-border); margin-top: auto; font-size: 0.8rem; }
+    </style>
+
+    <!-- 🔥 MONETAG ADS 自动注入 -->
+    
+    <script src="https://quge5.com/88/tag.min.js" data-zone="213975" async data-cfasync="false"></script>
+<script src="https://quge5.com/88/tag.min.js" data-zone="213982" async data-cfasync="false"></script>
+    
+
+</head>
+<body>
+    <div id="progress-bar"></div>
+    <div class="bg-fixed"></div><div class="bg-overlay"></div>
+    
+    <nav>
+        <a href="/" class="logo">CNFTE</a>
+        <div class="nav-right">
+            <div class="nav-links">
+                <a href="/about.html">关于</a><a href="/公益服务项.html">公益服务项</a><a href="/友链.html">友链</a><a href="/隐私政策.html">隐私政策</a>
+                <a href="/">HOME</a>
+            </div>
+            <div class="search-container" id="search-box">
+                <input type="text" id="search-input" placeholder="SEARCH...">
+                <i class="fas fa-search" onclick="toggleSearch()" style="cursor:pointer;color:var(--accent);font-size:1.2rem;"></i>
+                <div id="search-results"></div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="post-hero">
+        <img src="https://www.dmoe.cc/random.php?seed=177139506120&r=546266" class="post-hero-img">
+        <div class="post-header-content">
+            <p style="color:var(--accent); font-family:monospace; font-size:0.9rem; letter-spacing: 2px;">2026-01-17 // READ: 7 MIN</p>
+            <h1>互联网科普系列-什么是HTTP_HTTPS</h1>
+        </div>
+    </header>
+
+    <div class="main-grid">
+        <main>
+            <!-- 胶囊广告位 -->
+            <div class="post-ads">
+                
+                <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="ad-capsule" target="_blank">
+                    <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" loading="lazy">
+                    <div class="ad-info">
+                        <b>广告招租价格好商量</b>
+                        <span>广告招租价格好商量</span>
+                    </div>
+                </a>
+                
+                <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="ad-capsule" target="_blank">
+                    <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" loading="lazy">
+                    <div class="ad-info">
+                        <b>广告招租价格好商量</b>
+                        <span>广告招租价格好商量</span>
+                    </div>
+                </a>
+                
+                <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="ad-capsule" target="_blank">
+                    <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" loading="lazy">
+                    <div class="ad-info">
+                        <b>广告招租价格好商量</b>
+                        <span>广告招租价格好商量</span>
+                    </div>
+                </a>
+                
+                <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="ad-capsule" target="_blank">
+                    <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" loading="lazy">
+                    <div class="ad-info">
+                        <b>广告招租价格好商量</b>
+                        <span>广告招租价格好商量</span>
+                    </div>
+                </a>
+                
+            </div>
+
+            <article class="post-container">
+                <div class="post-body">
+                    <p>大家好！今天我们要聊聊咱们上网时经常会遇到的两个词：HTTP和HTTPS。听起来有点技术范儿，但其实它们就像我们生活中寄信和寄挂号信一样，一个普通，一个安全。别担心，今天我们就用最白话的方式，把它们讲清楚！</p>
+<h3 id="1">1. 什么是传输协议？—— 网络世界的“邮递员”</h3>
+<p>想象一下，你想给远方的朋友寄一封信。这封信需要经过邮局、邮递员、各种交通工具，才能最终送到朋友手里。在这个过程中，有一套规则，比如信封怎么写、邮戳怎么盖、邮递员怎么投递，这些规则就是“协议”。</p>
+<p>在互联网上，我们电脑和服务器之间也要“通信”，也就是传递信息，比如你打开一个网页，电脑就要去服务器那里把网页内容“拿”过来。这个传递信息的“规则”就叫做<strong>传输协议</strong>。</p>
+<p>HTTP和HTTPS，就是两种不同的传输协议，它们就像是网络世界的“邮递员”，负责把信息从一个地方安全、准确地送到另一个地方。</p>
+<h3 id="2-http">2. HTTP连接的用处—— 畅通无阻的“普通信件”</h3>
+<p><strong>HTTP</strong>（HyperText Transfer Protocol），中文叫做“超文本传输协议”。它就像我们平时寄的“普通信件”。</p>
+<p><strong>用处：</strong></p>
+<ul>
+<li><strong>浏览网页：</strong> 当你在浏览器里输入网址，按下回车键，你的电脑就会通过HTTP协议向服务器发送一个请求，服务器收到请求后，就把网页的内容（文字、图片、视频等）通过HTTP协议“寄”回来，然后你的浏览器就能把网页显示出来啦！</li>
+<li><strong>下载文件：</strong> 很多时候，我们下载软件、图片、音乐，也是通过HTTP协议来完成的。</li>
+</ul>
+<p><strong>优点与特点：</strong></p>
+<ul>
+<li><strong>简单快捷：</strong> HTTP协议的设计比较简单，传输速度相对较快，因为它不需要做额外的加密和解密工作。</li>
+<li><strong>普及广泛：</strong> 几乎所有的网站都支持HTTP，是我们上网最基础的协议。</li>
+</ul>
+<h3 id="3-http">3. HTTP流量的特征—— “透明”的信件</h3>
+<p>既然是普通信件，那它的内容就是<strong>公开透明</strong>的。</p>
+<p><strong>特征：</strong></p>
+<ul>
+<li><strong>明文传输：</strong> 你在浏览器里输入账号密码、提交表单信息，这些数据都是以明文的形式在网络上传输的。这就好比你把银行卡密码写在明信片上寄出去一样，任何人只要截获了这封信，都能看到里面的内容。</li>
+<li><strong>容易被窃听：</strong> 如果有人在网络中间“偷听”（比如在公共Wi-Fi环境下），他们就能轻易地看到你传输的所有信息，包括你的用户名、密码、浏览记录等等。</li>
+<li><strong>容易被篡改：</strong> 同样，中间的“坏人”也可以修改你发送或接收的信息，比如把网页上的某个文字改掉，或者在你下载的文件里偷偷加点“料”。</li>
+</ul>
+<p>所以，虽然HTTP很方便，但在涉及敏感信息的时候，它就显得不太安全了。</p>
+<h3 id="4-httphttps">4. HTTP与HTTPS—— “普通信件”与“加密挂号信”的较量</h3>
+<p>现在我们来对比一下HTTP和HTTPS。</p>
+<table>
+<thead>
+<tr>
+<th>特征</th>
+<th>HTTP</th>
+<th>HTTPS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>全称</strong></td>
+<td>HyperText Transfer Protocol</td>
+<td>HyperText Transfer Protocol Secure</td>
+</tr>
+<tr>
+<td><strong>安全性</strong></td>
+<td>不安全，明文传输</td>
+<td>安全，加密传输</td>
+</tr>
+<tr>
+<td><strong>加密</strong></td>
+<td>无</td>
+<td>有（通过SSL/TLS协议）</td>
+</tr>
+<tr>
+<td><strong>端口</strong></td>
+<td>默认80端口</td>
+<td>默认443端口</td>
+</tr>
+<tr>
+<td><strong>网址前缀</strong></td>
+<td><code>http://</code></td>
+<td><code>https://</code></td>
+</tr>
+<tr>
+<td><strong>浏览器显示</strong></td>
+<td>通常不显示前缀，或显示“不安全”</td>
+<td>显示“锁”图标，或显示“安全”字样</td>
+</tr>
+<tr>
+<td><strong>速度</strong></td>
+<td>相对较快</td>
+<td>相对较慢（因为有加密解密过程）</td>
+</tr>
+<tr>
+<td><strong>用途</strong></td>
+<td>浏览普通网页，非敏感信息</td>
+<td>网上银行、购物、登录等敏感信息传输</td>
+</tr>
+</tbody>
+</table>
+<p>简单来说，HTTPS就是在HTTP的基础上，增加了一层“加密保护”，就像把普通信件升级成了“加密挂号信”。</p>
+<h3 id="5-https">5. HTTPS流量的特征—— “加密”的挂号信</h3>
+<p>HTTPS之所以安全，是因为它使用了<strong>SSL/TLS协议</strong>（安全套接层/传输层安全协议）来对数据进行加密。</p>
+<p><strong>特征：</strong></p>
+<ul>
+<li><strong>加密传输：</strong> 你在浏览器里输入的所有信息，在发送到服务器之前，都会被加密成一串乱码。只有服务器端拥有密钥，才能把这些乱码“解密”成原始信息。反之亦然，服务器发回来的信息也会被加密。</li>
+<li><strong>身份验证：</strong> HTTPS还能验证服务器的身份，确保你访问的是真正的网站，而不是一个冒牌货。这就好比挂号信需要收件人签字确认一样，能防止你被骗。</li>
+<li><strong>数据完整性：</strong> HTTPS还能保证数据在传输过程中不被篡改。如果有人试图修改数据，接收方就能发现，并拒绝接收。</li>
+</ul>
+<p><strong>优点与特点：</strong></p>
+<ul>
+<li><strong>高度安全：</strong> 能够有效防止数据被窃听、篡改和伪造，保护用户的隐私和财产安全。</li>
+<li><strong>信任度高：</strong> 浏览器会给HTTPS网站打上“安全”的标签（比如显示锁图标），让用户更放心。</li>
+<li><strong>搜索引擎优化：</strong> 搜索引擎（如百度、谷歌）更青睐HTTPS网站，会给予更高的排名。</li>
+</ul>
+<h3 id="6-https">6. HTTPS连接的用处—— 安全上网的“守护神”</h3>
+<p>HTTPS连接主要用于那些需要保护用户隐私和数据安全的场景：</p>
+<ul>
+<li><strong>网上银行和支付：</strong> 保护你的银行账号、密码、交易信息。</li>
+<li><strong>在线购物：</strong> 保护你的信用卡信息、收货地址等。</li>
+<li><strong>社交媒体和邮箱登录：</strong> 保护你的账号密码和个人信息。</li>
+<li><strong>任何需要用户输入敏感信息的网站：</strong> 比如注册账号、填写个人资料等。</li>
+</ul>
+<h3 id="7-s">7. 总结—— 选择安全，从“S”开始！</h3>
+<table>
+<thead>
+<tr>
+<th>方面</th>
+<th>HTTP</th>
+<th>HTTPS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>安全性</strong></td>
+<td>不安全，明文传输</td>
+<td>安全，加密传输</td>
+</tr>
+<tr>
+<td><strong>用途</strong></td>
+<td>普通网页浏览</td>
+<td>敏感信息传输（银行、购物、登录等）</td>
+</tr>
+<tr>
+<td><strong>浏览器表现</strong></td>
+<td>可能显示“不安全”</td>
+<td>显示“锁”图标，表示安全</td>
+</tr>
+<tr>
+<td><strong>建议</strong></td>
+<td>尽量避免在HTTP网站输入敏感信息</td>
+<td>优先选择HTTPS网站进行敏感操作</td>
+</tr>
+</tbody>
+</table>
+<p>总而言之，HTTP就像是我们在街上随便聊天，内容大家都能听到；而HTTPS则是在一个私密的房间里进行对话，只有参与者才能知道内容。</p>
+<p>在如今这个信息爆炸的时代，保护个人信息安全至关重要。所以，下次你在上网时，看到网址前面是<code>https://</code>并且有小锁图标，就说明你正在使用一个更安全的连接，可以更放心地进行操作啦！记住，多一个“S”，多一份安心！</p>
+                </div>
+                
+                <div class="btn-wrapper">
+                    <a href="/" class="back-btn">RETURN_TERMINAL</a>
+                </div>
+            </article>
+        </main>
+        
+        <aside>
+            <section class="widget" style="text-align: center;">
+                <img src="https://cnfte.top/attachments/696b4d5b58c71_1768639835.webp" style="width: 80px; border-radius: 50%; border: 3px solid var(--accent); padding: 4px; margin-bottom: 10px;">
+                <h3 style="color:#fff; font-family:'ZCOOL KuaiLe';">Cnfte</h3>
+                <p style="font-size:0.8rem; color:#fff; opacity:0.6; margin-top:5px;">"滚滚长江东逝水，浪花淘尽英雄。"</p>
+                <div class="social-links">
+                    <a href="https://github.com/cnfte" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="https://t.me/cnfte1" target="_blank"><i class="fab fa-telegram"></i></a>
+                </div>
+            </section>
+            
+            
+            <section class="widget">
+                <h3 style="color:var(--accent); font-size:1.1rem; margin-bottom:15px; font-family:'ZCOOL KuaiLe';">CONTENTS</h3>
+                <div style="font-size:0.9rem; max-height: 50vh; overflow-y: auto; color:#fff;"><div class="toc">
+<ul>
+<li><a href="#1">1. 什么是传输协议？—— 网络世界的“邮递员”</a></li>
+<li><a href="#2-http">2. HTTP连接的用处—— 畅通无阻的“普通信件”</a></li>
+<li><a href="#3-http">3. HTTP流量的特征—— “透明”的信件</a></li>
+<li><a href="#4-httphttps">4. HTTP与HTTPS—— “普通信件”与“加密挂号信”的较量</a></li>
+<li><a href="#5-https">5. HTTPS流量的特征—— “加密”的挂号信</a></li>
+<li><a href="#6-https">6. HTTPS连接的用处—— 安全上网的“守护神”</a></li>
+<li><a href="#7-s">7. 总结—— 选择安全，从“S”开始！</a></li>
+</ul>
+</div>
+</div>
+            </section>
+            
+
+            <section class="widget" style="background: rgba(0,0,0,0.4); border-color: rgba(255,153,204,0.2);">
+                <div style="font-family: 'Fira Code'; font-size: 0.75rem; color: #00ffcc; line-height: 2.2;">
+                    <div>[SYS] NODE: STABLE</div>
+                    <div>[SYS] ID: 177139506120</div>
+                    <div>[SYS] TIME: <span id="live-clock">00:00:00</span></div>
+                </div>
+            </section>
+        </aside>
+    </div>
+
+    <footer>
+        <div style="margin-bottom: 15px; font-weight: bold; color: var(--accent);">本站由Cloudflare和Github强力驱动
+Powered by：<img src="https://cnfte.top/attachments/gh.svg" alt="GitHub">
+Analyzed by：<img src="https://cnfte.top/attachments/cf.svg" alt="Cloudflare Analysis">
+Served by：<img src="https://cnfte.top/attachments/cf2.svg" alt="Cloudflare CDN">
+商业投广通道(仅支持支付宝与微信付款)：QQ 3793945630
+TG：<a src=https://t.me/cnfte1>https://t.me/cnfte1</a>
+如何联系Cnfte与bug反馈？>>>QQ群聊：887378676
+TG群组：<a src=https://t.me/+pCnCBiCsyOhhMWU9>https://t.me/+pCnCBiCsyOhhMWU9</a>
+状态监控：<a src=https://probe.cnfte.top>https://probe.cnfte.top</a></div>
+        © 2026 Cnfte // CNFTE MOE PANEL
+    </footer>
+    
+    <script>
+        window.onscroll = () => { document.getElementById("progress-bar").style.width = ((document.body.scrollTop || document.documentElement.scrollTop) / (document.documentElement.scrollHeight - document.documentElement.clientHeight) * 100) + "%"; };
+        setInterval(() => { document.getElementById('live-clock').innerText = new Date().toLocaleTimeString(); }, 1000);
+
+        let searchData = null;
+        function toggleSearch() {
+            const box = document.getElementById('search-box');
+            box.classList.toggle('active');
+            if(box.classList.contains('active')) document.getElementById('search-input').focus();
+        }
+        document.getElementById('search-input').addEventListener('input', async (e) => {
+            if(!searchData) {
+                const sp = window.location.pathname.includes('/en/') ? '/en/search.json' : '/search.json';
+                searchData = await (await fetch(sp)).json();
+            }
+            const val = e.target.value.toLowerCase().trim();
+            const resDiv = document.getElementById('search-results');
+            resDiv.innerHTML = '';
+            if(val.length < 1) { resDiv.style.display='none'; return; }
+            searchData.filter(i => i.title.toLowerCase().includes(val)).forEach(i => {
+                resDiv.innerHTML += `<a href="${i.url}" class="search-item" style="color:#fff !important;display:block;"><b>${i.title}</b></a>`;
+            });
+            resDiv.style.display = 'flex';
+        });
+        document.addEventListener('click', (e) => { if(!e.target.closest('#search-box')) { document.getElementById('search-box').classList.remove('active'); document.getElementById('search-results').style.display='none'; } });
+    </script>
+</body>
+</html>

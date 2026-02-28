@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO & Metadata -->
+    <title>互联网科普系列-什么是IPv4_v6 - Cnfteの博客</title>
+    <meta name="description" content="1. 什么是 IPv4 / IPv6？ 想象一下，互联网就像一个巨大的城市，而每一台连接到互联网的设备（电脑、手机、服务器等）都像是这个城市里的一个房子。为了让这些房子能够互相找到并通信，它们都需要一个地址。 IPv4 (Internet Protocol version 4)：这是互联网早期使用的...">
+    <link rel="icon" href="/favicon.ico">
+    
+    <!-- 引入艺术字体与图标库 -->
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-heavy: rgba(15, 15, 20, 0.98);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --accent: #ff99cc; 
+            --accent-gradient: linear-gradient(135deg, #ff99cc 0%, #ffcc99 100%);
+            --bezier: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --shadow: 0 15px 45px rgba(0, 0, 0, 0.6);
+        }
+
+        /* --- 🛡️ 物理抗溢出规则 --- */
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+            max-width: 100% !important; 
+            overflow-wrap: anywhere !important; 
+            word-break: break-all !important; 
+        }
+
+        a { color: var(--accent) !important; text-decoration: none !important; transition: 0.3s var(--bezier); }
+        a:hover { filter: brightness(1.2); opacity: 0.8; }
+        ul { list-style: none; }
+
+        body { 
+            font-family: 'Inter', sans-serif; background: #000; color: #fff; 
+            line-height: 1.8; overflow-x: hidden; width: 100%; min-height: 100vh;
+            display: flex; flex-direction: column;
+        }
+
+        .bg-fixed { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://cnfte.top/attachments/bj.webp') no-repeat center center fixed; background-size: cover; z-index: -2; }
+        .bg-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(5px); z-index: -1; }
+        
+        #progress-bar { position: fixed; top: 0; left: 0; width: 0%; height: 4px; background: var(--accent-gradient); z-index: 2000; transition: width 0.1s; }
+
+        @keyframes cardIn { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
+
+        /* 导航栏 */
+        nav { 
+            position: sticky; top: 10px; z-index: 1000; margin: 0 auto 20px; width: 95%; max-width: 1300px;
+            background: var(--glass); backdrop-filter: blur(25px); border-radius: 50px; border: 1px solid var(--glass-border);
+            padding: 8px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .logo { font-family: 'ZCOOL KuaiLe'; font-size: 1.3rem; color: var(--accent) !important; flex-shrink: 0; margin-right: 15px; }
+        
+        .nav-right { display: flex; align-items: center; gap: 15px; flex: 1; justify-content: flex-end; overflow: hidden; min-width: 0; }
+        .nav-links { display: flex; gap: 15px; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
+        .nav-links::-webkit-scrollbar { display: none; }
+        .nav-links a { font-weight: 700; font-size: 0.85rem; color: #fff !important; opacity: 0.8; }
+
+        /* 搜索框 */
+        .search-container { position: relative; display: flex; align-items: center; flex-shrink: 0; }
+        #search-input { width: 0; opacity: 0; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); border-radius: 20px; padding: 5px 0; color: white; transition: 0.5s var(--bezier); outline: none; font-size: 0.8rem; }
+        .search-container.active #search-input { width: 140px; opacity: 1; padding: 5px 12px; margin-right: 8px; }
+        #search-results { position: absolute; top: 140%; right: 0; width: 280px; background: var(--glass-heavy); border-radius: 20px; border: 1px solid var(--glass-border); max-height: 350px; overflow-y: auto; display: none; flex-direction: column; z-index: 1100; box-shadow: 0 15px 30px #000; }
+
+        /* 文章大头图 */
+        .post-hero { height: 45vh; min-height: 350px; width: 100%; position: relative; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; }
+        .post-hero-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6); z-index: -1; animation: heroZoom 20s infinite alternate; }
+        @keyframes heroZoom { from { transform: scale(1); } to { transform: scale(1.1); } }
+        .post-header-content { z-index: 1; padding: 0 30px; animation: cardIn 0.8s var(--bezier); }
+        .post-header-content h1 { font-family: 'ZCOOL KuaiLe'; font-size: clamp(1.8rem, 5vw, 3.5rem); text-shadow: 0 10px 30px #000; color: #fff; margin-bottom: 10px; line-height: 1.2; }
+
+        /* 布局网格 */
+        .main-grid { max-width: 1400px; margin: -60px auto 60px; display: grid; grid-template-columns: 1fr 340px; gap: 30px; padding: 0 2.5%; position: relative; z-index: 10; flex: 1; width: 100%; }
+        
+        /* 胶囊广告位排版 */
+        .post-ads { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 30px; width: 100%; }
+        .ad-capsule { height: 65px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 50px; display: flex; align-items: center; padding: 6px; overflow: hidden; }
+        .ad-capsule img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; margin-right: 12px; flex-shrink: 0; border: 2px solid var(--accent); }
+        .ad-info b { display: block; color: var(--accent); font-size: 0.8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .ad-info span { font-size: 0.7rem; color: #fff; opacity: 0.6; white-space: nowrap; }
+
+        /* 文章主体 */
+        article.post-container { 
+            background: var(--glass-heavy); backdrop-filter: blur(40px); border-radius: 40px; border: 1px solid var(--glass-border);
+            padding: 50px 40px; box-shadow: var(--shadow); width: 100% !important; 
+            display: grid !important; grid-template-columns: minmax(0, 1fr) !important;
+            overflow: hidden !important; 
+            animation: cardIn 0.8s var(--bezier) both;
+        }
+
+        .post-body { font-size: 1.12rem; color: #f0f0f0; min-width: 0; }
+        .post-body h1, .post-body h2 { font-family: 'ZCOOL KuaiLe'; color: var(--accent); margin: 2em 0 1em; border-bottom: none !important; }
+        .post-body p { margin-bottom: 1.5rem; text-align: justify; }
+        .post-body img { border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin: 20px 0; }
+        
+        /* 代码与表格锁定 */
+        .post-body pre, .codehilite { 
+            width: 100% !important; max-width: 100% !important; overflow-x: auto !important; 
+            display: block !important; background: rgba(0,0,0,0.5) !important; 
+            padding: 25px; border-radius: 20px; border: 1px solid var(--glass-border); 
+            margin: 25px 0; white-space: pre !important;
+        }
+        .post-body table { display: block !important; width: 100% !important; overflow-x: auto !important; border-collapse: collapse; margin: 25px 0; }
+        .post-body th, .post-body td { border: 1px solid rgba(255,255,255,0.1); padding: 12px 20px; min-width: 120px; }
+        .post-body th { background: rgba(255,153,204,0.15); color: var(--accent); }
+
+        .btn-wrapper { margin-top: 60px; padding-top: 30px; border-top: 1px solid var(--glass-border); text-align: center; width: 100%; }
+        .back-btn { 
+            display: inline-block !important; background: var(--accent-gradient); color: #000 !important; 
+            padding: 15px 45px; border-radius: 50px; font-weight: 900; font-size: 1rem; 
+            box-shadow: 0 10px 25px rgba(255, 153, 204, 0.4); transition: 0.3s;
+        }
+
+        aside { position: sticky; top: 90px; height: fit-content; }
+        .widget { background: var(--glass); border-radius: 35px; padding: 25px; border: 1px solid var(--glass-border); margin-bottom: 25px; }
+        .social-links { display: flex; justify-content: center; gap: 20px; margin-top: 15px; font-size: 1.5rem; }
+
+        @media (max-width: 1000px) {
+            .main-grid { grid-template-columns: 1fr; margin-top: -30px; }
+            article.post-container { padding: 35px 20px; border-radius: 30px; }
+            aside { display: none; }
+            .post-hero { height: 40vh; }
+        }
+
+        footer { text-align: center; padding: 60px 20px; background: rgba(0,0,0,0.9); border-top: 1px solid var(--glass-border); margin-top: auto; font-size: 0.8rem; }
+    </style>
+
+    <!-- 🔥 MONETAG ADS 自动注入 -->
+    
+    <script src="https://quge5.com/88/tag.min.js" data-zone="213975" async data-cfasync="false"></script>
+<script src="https://quge5.com/88/tag.min.js" data-zone="213982" async data-cfasync="false"></script>
+    
+
+</head>
+<body>
+    <div id="progress-bar"></div>
+    <div class="bg-fixed"></div><div class="bg-overlay"></div>
+    
+    <nav>
+        <a href="/" class="logo">CNFTE</a>
+        <div class="nav-right">
+            <div class="nav-links">
+                <a href="/about.html">关于</a><a href="/公益服务项.html">公益服务项</a><a href="/友链.html">友链</a><a href="/隐私政策.html">隐私政策</a>
+                <a href="/">HOME</a>
+            </div>
+            <div class="search-container" id="search-box">
+                <input type="text" id="search-input" placeholder="SEARCH...">
+                <i class="fas fa-search" onclick="toggleSearch()" style="cursor:pointer;color:var(--accent);font-size:1.2rem;"></i>
+                <div id="search-results"></div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="post-hero">
+        <img src="https://www.dmoe.cc/random.php?seed=177139506135&r=427309" class="post-hero-img">
+        <div class="post-header-content">
+            <p style="color:var(--accent); font-family:monospace; font-size:0.9rem; letter-spacing: 2px;">2026-01-17 // READ: 10 MIN</p>
+            <h1>互联网科普系列-什么是IPv4_v6</h1>
+        </div>
+    </header>
+
+    <div class="main-grid">
+        <main>
+            <!-- 胶囊广告位 -->
+            <div class="post-ads">
+                
+                <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="ad-capsule" target="_blank">
+                    <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" loading="lazy">
+                    <div class="ad-info">
+                        <b>广告招租价格好商量</b>
+                        <span>广告招租价格好商量</span>
+                    </div>
+                </a>
+                
+                <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="ad-capsule" target="_blank">
+                    <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" loading="lazy">
+                    <div class="ad-info">
+                        <b>广告招租价格好商量</b>
+                        <span>广告招租价格好商量</span>
+                    </div>
+                </a>
+                
+                <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="ad-capsule" target="_blank">
+                    <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" loading="lazy">
+                    <div class="ad-info">
+                        <b>广告招租价格好商量</b>
+                        <span>广告招租价格好商量</span>
+                    </div>
+                </a>
+                
+                <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="ad-capsule" target="_blank">
+                    <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" loading="lazy">
+                    <div class="ad-info">
+                        <b>广告招租价格好商量</b>
+                        <span>广告招租价格好商量</span>
+                    </div>
+                </a>
+                
+            </div>
+
+            <article class="post-container">
+                <div class="post-body">
+                    <h3 id="1-ipv4-ipv6">1. 什么是 IPv4 / IPv6？</h3>
+<p>想象一下，互联网就像一个巨大的城市，而每一台连接到互联网的设备（电脑、手机、服务器等）都像是这个城市里的一个房子。为了让这些房子能够互相找到并通信，它们都需要一个地址。</p>
+<ul>
+<li><strong>IPv4 (Internet Protocol version 4)</strong>：这是互联网早期使用的地址系统。你可以把它想象成一个<strong>四段数字</strong>的地址，每段数字由0到255组成，中间用点隔开。</li>
+<li><strong>例子：</strong> <code>192.168.1.1</code> 或者 <code>8.8.8.8</code> (这是Google的DNS服务器地址)</li>
+<li><strong>特点：</strong> 就像早期的电话号码，虽然够用了一段时间，但随着城市（互联网）越来越大，房子（设备）越来越多，这个地址系统就显得不够用了。</li>
+<li><strong>IPv6 (Internet Protocol version 6)</strong>：这是为了解决IPv4地址不足而设计的新一代地址系统。你可以把它想象成一个<strong>更长、更复杂的地址</strong>，由数字和字母组成，中间用冒号隔开。</li>
+<li><strong>例子：</strong> <code>2001:0db8:85a3:0000:0000:8a2e:0370:7334</code> (这是一个示例地址)</li>
+<li><strong>特点：</strong> 地址数量极其庞大，可以为地球上几乎每一个原子都分配一个地址，彻底解决了地址枯竭的问题。</li>
+</ul>
+<hr />
+<h3 id="2">2. 它们间的差异</h3>
+<p>最核心的差异就是<strong>地址数量</strong>和<strong>地址格式</strong>：</p>
+<ul>
+<li><strong>地址数量：</strong></li>
+<li><strong>IPv4：</strong> 大约有43亿个地址。听起来很多，但在全球设备爆炸式增长的今天，已经远远不够用了。</li>
+<li><strong>IPv6：</strong> 地址数量是天文数字，大约是2的128次方个，比IPv4多到无法想象。你可以理解为，IPv4地址就像地球上的沙子数量，而IPv6地址就像宇宙中的所有沙子加起来还要多得多。</li>
+<li><strong>地址格式：</strong></li>
+<li><strong>IPv4：</strong> 四段十进制数字，用点分隔（如 <code>192.168.1.1</code>）。</li>
+<li><strong>IPv6：</strong> 八段十六进制数字，用冒号分隔（如 <code>2001:db8::1</code>，这里省略了一些零）。</li>
+<li><strong>其他差异（更技术性，但简单说）：</strong></li>
+<li><strong>安全性：</strong> IPv6在设计时就考虑了安全性，内置了IPsec协议，可以提供更好的加密和认证。</li>
+<li><strong>效率：</strong> IPv6的报头（数据包的头部信息）更简洁，处理起来可能更有效率。</li>
+<li><strong>配置：</strong> IPv6支持更方便的自动配置，设备连接网络时可以更容易地获取地址。</li>
+</ul>
+<hr />
+<h3 id="3-ipv4">3. IPv4 诞生的意义</h3>
+<p>在互联网的早期，大家并没有预料到它会发展得如此迅猛。IPv4的诞生，就像是给刚刚起步的互联网提供了一套<strong>基础的通信规则和地址系统</strong>。</p>
+<ul>
+<li><strong>意义：</strong></li>
+<li><strong>让设备能够互相通信：</strong> 就像给每个房子一个门牌号，让邮递员（数据包）知道该送到哪里去。</li>
+<li><strong>构建了早期的互联网：</strong> 使得计算机之间能够进行数据交换，为后来的信息革命奠定了基础。</li>
+<li><strong>推动了信息时代的到来：</strong> 没有IPv4，就没有我们今天看到的互联网。</li>
+</ul>
+<hr />
+<h3 id="4-ipv6">4. IPv6 诞生的意义</h3>
+<p>随着互联网的普及，尤其是智能手机、物联网设备的出现，IPv4的地址很快就不够用了。IPv6的诞生，是为了<strong>解决地址枯竭的危机，并为互联网的未来发展提供无限可能</strong>。</p>
+<ul>
+<li><strong>意义：</strong></li>
+<li><strong>解决地址枯竭问题：</strong> 确保未来更多的设备（手机、智能家居、汽车、传感器等）都能连接到互联网，不会因为没地址而掉队。</li>
+<li><strong>支持万物互联 (IoT)：</strong> 为海量的物联网设备提供充足的地址，让智能家居、智慧城市等成为可能。</li>
+<li><strong>提升网络效率和安全性：</strong> 在设计上做了优化，让网络运行更顺畅，安全性也更高。</li>
+<li><strong>为互联网的持续发展铺平道路：</strong> 确保互联网能够继续扩展和创新。</li>
+</ul>
+<hr />
+<h3 id="5">5. 它们间为何互不兼容</h3>
+<p>想象一下，你有一套英文字母的地址系统，而你的朋友有一套俄文字母的地址系统。你们的地址格式完全不同，所以你无法直接给朋友的俄文地址写信，朋友也无法直接给你写信。</p>
+<ul>
+<li><strong>根本原因：</strong> IPv4和IPv6在<strong>数据包的格式、寻址方式、路由协议</strong>等方面都有根本性的不同。它们是两套独立设计的通信协议。</li>
+<li><strong>数据包结构不同：</strong> 就像信封的尺寸和填写信息的方式不一样。</li>
+<li><strong>寻址方式不同：</strong> 地址的长度和表示方法完全不同。</li>
+<li><strong>路由规则不同：</strong> 网络设备（路由器）识别和转发数据包的规则也不同。</li>
+</ul>
+<p>因此，一台只认识IPv4地址的设备，无法直接理解IPv6地址的数据包，反之亦然。这就好比一个只懂中文的人，无法直接阅读法文书籍。</p>
+<hr />
+<h3 id="6">6. 公网的概念</h3>
+<p>在互联网这个大城市里，我们每个人都住在自己的房子里。</p>
+<ul>
+<li><strong>公网 (Public Network) / 公网地址 (Public IP Address)：</strong></li>
+<li><strong>概念：</strong> 公网地址就像是你在城市里<strong>对外公开的、独一无二的门牌号</strong>。有了这个地址，全世界任何地方的人都可以直接找到你，和你通信。</li>
+<li><strong>作用：</strong> 你的电脑、手机、服务器等设备需要一个公网地址，才能直接连接到互联网，被别人访问到，或者访问互联网上的其他服务。</li>
+<li><strong>例子：</strong> 你在家里上网，你的路由器可能有一个公网IP地址，这个地址是你的ISP（网络服务提供商）分配给你的，它让你家的设备能够“走出去”与互联网上的其他设备交流。</li>
+<li><strong>私网 (Private Network) / 私网地址 (Private IP Address)：</strong></li>
+<li><strong>概念：</strong> 私网地址就像是你家里的<strong>房间号或者小区内的楼栋号</strong>。这些地址只在你自己的家里（局域网）内有效，外面的人不知道，也无法直接通过这个地址找到你。</li>
+<li><strong>作用：</strong> 在一个家庭或公司内部，大家使用私网地址互相通信，比如你家里的电脑和打印机互相访问。这些地址是重复使用的，比如你家里的<code>192.168.1.100</code>和你邻居家里的<code>192.168.1.100</code>是两个不同的地址，因为它们在不同的“家里”。</li>
+<li><strong>例子：</strong> <code>192.168.x.x</code>、<code>10.x.x.x</code>、<code>172.16.x.x</code> 到 <code>172.31.x.x</code> 这些地址段通常被用作私网地址。</li>
+</ul>
+<p><strong>为什么需要私网地址？</strong> 因为公网地址太宝贵了（尤其是IPv4），如果每台设备都分配一个公网地址，早就用完了。通过NAT（网络地址转换）技术，一个公网地址可以供很多私网地址的设备共享上网。</p>
+<hr />
+<h3 id="7-ipv4">7. 怎么获得一个公网 IPv4 地址？</h3>
+<p>通常情况下，你个人无法直接“购买”或“申请”一个公网IPv4地址。</p>
+<ul>
+<li><strong>主要途径：</strong></li>
+<li><strong>通过你的ISP（网络服务提供商）：</strong> 当你办理宽带业务时，ISP会分配给你一个公网IP地址（通常是动态的，可能会变动，或者你也可以付费申请一个固定的静态IP）。你的路由器会使用这个地址连接到互联网。</li>
+<li><strong>企业用户：</strong> 大型企业或组织可以直接向区域互联网注册机构（RIR，如亚太地区的APNIC）申请IP地址块，但申请门槛和费用都比较高。</li>
+<li><strong>购买/租赁：</strong> 在一些IP地址交易市场，你可以购买或租赁闲置的公网IPv4地址，但这通常成本很高，且有严格的监管。</li>
+<li><strong>小白理解：</strong> 就像你想要一个对外公开的门牌号，你需要向当地的邮政部门（ISP）申请，他们给你分配一个。</li>
+</ul>
+<hr />
+<h3 id="8-ipv6">8. 怎么获得一个公网 IPv6 地址？</h3>
+<p>获得公网IPv6地址相对来说更容易，因为地址数量非常多。</p>
+<ul>
+<li><strong>主要途径：</strong></li>
+<li><strong>通过你的ISP（网络服务提供商）：</strong> 现在越来越多的ISP已经开始提供IPv6服务。当你连接到支持IPv6的ISP网络时，你的设备（通常是路由器）会自动从ISP那里获得一个公网IPv6地址。</li>
+<li><strong>自动配置：</strong> IPv6支持无状态地址自动配置（SLAAC），即使没有DHCP服务器，设备也能根据网络信息自动生成一个公网IPv6地址。</li>
+<li><strong>企业用户：</strong> 同样可以向RIR申请IPv6地址块。</li>
+<li><strong>小白理解：</strong> 就像现在城市里房子太多了，政府（ISP）会很慷慨地给你一个新地址，而且这个地址系统非常庞大，几乎每个人都能轻松获得一个。很多时候，你只要连接到支持IPv6的网络，它就会自动给你一个。</li>
+</ul>
+<hr />
+<h3 id="9-ipv4">9. IPv4 的用途</h3>
+<p>在它有限的生命周期里，IPv4支撑了互联网的早期发展和普及。</p>
+<ul>
+<li><strong>主要用途：</strong></li>
+<li><strong>连接设备到互联网：</strong> 让电脑、服务器、早期手机等能够访问网页、发送邮件、进行在线交流。</li>
+<li><strong>构建早期互联网服务：</strong> 支撑了电子邮件、FTP、早期网站等服务的运行。</li>
+<li><strong>局域网通信：</strong> 在家庭和企业内部，私网IPv4地址用于设备间的通信。</li>
+<li><strong>小白理解：</strong> 就像早期的电话系统，让人们可以互相打电话，传递信息。虽然号码有限，但在那个时代已经足够强大了。</li>
+</ul>
+<hr />
+<h3 id="10-ipv6">10. IPv6 的用途</h3>
+<p>IPv6是互联网的未来，它的用途更加广泛和深远。</p>
+<ul>
+<li><strong>主要用途：</strong></li>
+<li><strong>支持海量设备连接：</strong> 为智能手机、平板电脑、智能电视、智能家居设备、可穿戴设备、汽车、工业传感器等<strong>所有物联网设备</strong>提供充足的地址，实现真正的“万物互联”。</li>
+<li><strong>提升网络性能和效率：</strong> 更优化的报头设计，可能带来更快的传输速度和更低的延迟。</li>
+<li><strong>增强网络安全性：</strong> 内置的IPsec协议可以提供更好的端到端安全保障。</li>
+<li><strong>简化网络配置：</strong> 自动配置功能让网络管理更便捷。</li>
+<li><strong>支持新的网络应用：</strong> 为未来可能出现的各种创新应用和服务提供基础地址支持。</li>
+<li><strong>小白理解：</strong> 就像一个全新的、无限大的城市，里面有无数的街道和门牌号，你可以把任何东西（任何设备）都放进去，让它们都能自由地互相联系，并且通信更顺畅、更安全。比如，你家里的冰箱、空调、灯泡，甚至你的鞋子，都可以有一个自己的地址，并且能联网互相沟通，听你的指令。</li>
+</ul>
+                </div>
+                
+                <div class="btn-wrapper">
+                    <a href="/" class="back-btn">RETURN_TERMINAL</a>
+                </div>
+            </article>
+        </main>
+        
+        <aside>
+            <section class="widget" style="text-align: center;">
+                <img src="https://cnfte.top/attachments/696b4d5b58c71_1768639835.webp" style="width: 80px; border-radius: 50%; border: 3px solid var(--accent); padding: 4px; margin-bottom: 10px;">
+                <h3 style="color:#fff; font-family:'ZCOOL KuaiLe';">Cnfte</h3>
+                <p style="font-size:0.8rem; color:#fff; opacity:0.6; margin-top:5px;">"滚滚长江东逝水，浪花淘尽英雄。"</p>
+                <div class="social-links">
+                    <a href="https://github.com/cnfte" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="https://t.me/cnfte1" target="_blank"><i class="fab fa-telegram"></i></a>
+                </div>
+            </section>
+            
+            
+            <section class="widget">
+                <h3 style="color:var(--accent); font-size:1.1rem; margin-bottom:15px; font-family:'ZCOOL KuaiLe';">CONTENTS</h3>
+                <div style="font-size:0.9rem; max-height: 50vh; overflow-y: auto; color:#fff;"><div class="toc">
+<ul>
+<li><a href="#1-ipv4-ipv6">1. 什么是 IPv4 / IPv6？</a></li>
+<li><a href="#2">2. 它们间的差异</a></li>
+<li><a href="#3-ipv4">3. IPv4 诞生的意义</a></li>
+<li><a href="#4-ipv6">4. IPv6 诞生的意义</a></li>
+<li><a href="#5">5. 它们间为何互不兼容</a></li>
+<li><a href="#6">6. 公网的概念</a></li>
+<li><a href="#7-ipv4">7. 怎么获得一个公网 IPv4 地址？</a></li>
+<li><a href="#8-ipv6">8. 怎么获得一个公网 IPv6 地址？</a></li>
+<li><a href="#9-ipv4">9. IPv4 的用途</a></li>
+<li><a href="#10-ipv6">10. IPv6 的用途</a></li>
+</ul>
+</div>
+</div>
+            </section>
+            
+
+            <section class="widget" style="background: rgba(0,0,0,0.4); border-color: rgba(255,153,204,0.2);">
+                <div style="font-family: 'Fira Code'; font-size: 0.75rem; color: #00ffcc; line-height: 2.2;">
+                    <div>[SYS] NODE: STABLE</div>
+                    <div>[SYS] ID: 177139506135</div>
+                    <div>[SYS] TIME: <span id="live-clock">00:00:00</span></div>
+                </div>
+            </section>
+        </aside>
+    </div>
+
+    <footer>
+        <div style="margin-bottom: 15px; font-weight: bold; color: var(--accent);">本站由Cloudflare和Github强力驱动
+Powered by：<img src="https://cnfte.top/attachments/gh.svg" alt="GitHub">
+Analyzed by：<img src="https://cnfte.top/attachments/cf.svg" alt="Cloudflare Analysis">
+Served by：<img src="https://cnfte.top/attachments/cf2.svg" alt="Cloudflare CDN">
+商业投广通道(仅支持支付宝与微信付款)：QQ 3793945630
+TG：<a src=https://t.me/cnfte1>https://t.me/cnfte1</a>
+如何联系Cnfte与bug反馈？>>>QQ群聊：887378676
+TG群组：<a src=https://t.me/+pCnCBiCsyOhhMWU9>https://t.me/+pCnCBiCsyOhhMWU9</a>
+状态监控：<a src=https://probe.cnfte.top>https://probe.cnfte.top</a></div>
+        © 2026 Cnfte // CNFTE MOE PANEL
+    </footer>
+    
+    <script>
+        window.onscroll = () => { document.getElementById("progress-bar").style.width = ((document.body.scrollTop || document.documentElement.scrollTop) / (document.documentElement.scrollHeight - document.documentElement.clientHeight) * 100) + "%"; };
+        setInterval(() => { document.getElementById('live-clock').innerText = new Date().toLocaleTimeString(); }, 1000);
+
+        let searchData = null;
+        function toggleSearch() {
+            const box = document.getElementById('search-box');
+            box.classList.toggle('active');
+            if(box.classList.contains('active')) document.getElementById('search-input').focus();
+        }
+        document.getElementById('search-input').addEventListener('input', async (e) => {
+            if(!searchData) {
+                const sp = window.location.pathname.includes('/en/') ? '/en/search.json' : '/search.json';
+                searchData = await (await fetch(sp)).json();
+            }
+            const val = e.target.value.toLowerCase().trim();
+            const resDiv = document.getElementById('search-results');
+            resDiv.innerHTML = '';
+            if(val.length < 1) { resDiv.style.display='none'; return; }
+            searchData.filter(i => i.title.toLowerCase().includes(val)).forEach(i => {
+                resDiv.innerHTML += `<a href="${i.url}" class="search-item" style="color:#fff !important;display:block;"><b>${i.title}</b></a>`;
+            });
+            resDiv.style.display = 'flex';
+        });
+        document.addEventListener('click', (e) => { if(!e.target.closest('#search-box')) { document.getElementById('search-box').classList.remove('active'); document.getElementById('search-results').style.display='none'; } });
+    </script>
+</body>
+</html>

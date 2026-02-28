@@ -1,0 +1,1851 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO & Metadata -->
+    <title>The Invisible Backbone of the Digital World: A Comprehensive Overview of the 150 Global Giants in Internet Infrastructure - Cnfteの博客</title>
+    <meta name="description" content="Every time we swipe a screen, click a link, or load a highdefinition video, we are presented with dazzling digital applications. But "beneath the surf...">
+    <link rel="icon" href="/favicon.ico">
+    
+    <!-- 引入艺术字体与图标库 -->
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-heavy: rgba(15, 15, 20, 0.98);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --accent: #ff99cc; 
+            --accent-gradient: linear-gradient(135deg, #ff99cc 0%, #ffcc99 100%);
+            --bezier: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --shadow: 0 15px 45px rgba(0, 0, 0, 0.6);
+        }
+
+        /* --- 🛡️ 物理抗溢出规则 --- */
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+            max-width: 100% !important; 
+            overflow-wrap: anywhere !important; 
+            word-break: break-all !important; 
+        }
+
+        a { color: var(--accent) !important; text-decoration: none !important; transition: 0.3s var(--bezier); }
+        a:hover { filter: brightness(1.2); opacity: 0.8; }
+        ul { list-style: none; }
+
+        body { 
+            font-family: 'Inter', sans-serif; background: #000; color: #fff; 
+            line-height: 1.8; overflow-x: hidden; width: 100%; min-height: 100vh;
+            display: flex; flex-direction: column;
+        }
+
+        .bg-fixed { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://cnfte.top/attachments/bj.webp') no-repeat center center fixed; background-size: cover; z-index: -2; }
+        .bg-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(5px); z-index: -1; }
+        
+        #progress-bar { position: fixed; top: 0; left: 0; width: 0%; height: 4px; background: var(--accent-gradient); z-index: 2000; transition: width 0.1s; }
+
+        @keyframes cardIn { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
+
+        /* 导航栏 */
+        nav { 
+            position: sticky; top: 10px; z-index: 1000; margin: 0 auto 20px; width: 95%; max-width: 1300px;
+            background: var(--glass); backdrop-filter: blur(25px); border-radius: 50px; border: 1px solid var(--glass-border);
+            padding: 8px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .logo { font-family: 'ZCOOL KuaiLe'; font-size: 1.3rem; color: var(--accent) !important; flex-shrink: 0; margin-right: 15px; }
+        
+        .nav-right { display: flex; align-items: center; gap: 15px; flex: 1; justify-content: flex-end; overflow: hidden; min-width: 0; }
+        .nav-links { display: flex; gap: 15px; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
+        .nav-links::-webkit-scrollbar { display: none; }
+        .nav-links a { font-weight: 700; font-size: 0.85rem; color: #fff !important; opacity: 0.8; }
+
+        /* 搜索框 */
+        .search-container { position: relative; display: flex; align-items: center; flex-shrink: 0; }
+        #search-input { width: 0; opacity: 0; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); border-radius: 20px; padding: 5px 0; color: white; transition: 0.5s var(--bezier); outline: none; font-size: 0.8rem; }
+        .search-container.active #search-input { width: 140px; opacity: 1; padding: 5px 12px; margin-right: 8px; }
+        #search-results { position: absolute; top: 140%; right: 0; width: 280px; background: var(--glass-heavy); border-radius: 20px; border: 1px solid var(--glass-border); max-height: 350px; overflow-y: auto; display: none; flex-direction: column; z-index: 1100; box-shadow: 0 15px 30px #000; }
+
+        /* 文章大头图 */
+        .post-hero { height: 45vh; min-height: 350px; width: 100%; position: relative; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; }
+        .post-hero-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6); z-index: -1; animation: heroZoom 20s infinite alternate; }
+        @keyframes heroZoom { from { transform: scale(1); } to { transform: scale(1.1); } }
+        .post-header-content { z-index: 1; padding: 0 30px; animation: cardIn 0.8s var(--bezier); }
+        .post-header-content h1 { font-family: 'ZCOOL KuaiLe'; font-size: clamp(1.8rem, 5vw, 3.5rem); text-shadow: 0 10px 30px #000; color: #fff; margin-bottom: 10px; line-height: 1.2; }
+
+        /* 布局网格 */
+        .main-grid { max-width: 1400px; margin: -60px auto 60px; display: grid; grid-template-columns: 1fr 340px; gap: 30px; padding: 0 2.5%; position: relative; z-index: 10; flex: 1; width: 100%; }
+        
+        /* 胶囊广告位排版 */
+        .post-ads { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 30px; width: 100%; }
+        .ad-capsule { height: 65px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 50px; display: flex; align-items: center; padding: 6px; overflow: hidden; }
+        .ad-capsule img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; margin-right: 12px; flex-shrink: 0; border: 2px solid var(--accent); }
+        .ad-info b { display: block; color: var(--accent); font-size: 0.8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .ad-info span { font-size: 0.7rem; color: #fff; opacity: 0.6; white-space: nowrap; }
+
+        /* 文章主体 */
+        article.post-container { 
+            background: var(--glass-heavy); backdrop-filter: blur(40px); border-radius: 40px; border: 1px solid var(--glass-border);
+            padding: 50px 40px; box-shadow: var(--shadow); width: 100% !important; 
+            display: grid !important; grid-template-columns: minmax(0, 1fr) !important;
+            overflow: hidden !important; 
+            animation: cardIn 0.8s var(--bezier) both;
+        }
+
+        .post-body { font-size: 1.12rem; color: #f0f0f0; min-width: 0; }
+        .post-body h1, .post-body h2 { font-family: 'ZCOOL KuaiLe'; color: var(--accent); margin: 2em 0 1em; border-bottom: none !important; }
+        .post-body p { margin-bottom: 1.5rem; text-align: justify; }
+        .post-body img { border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin: 20px 0; }
+        
+        /* 代码与表格锁定 */
+        .post-body pre, .codehilite { 
+            width: 100% !important; max-width: 100% !important; overflow-x: auto !important; 
+            display: block !important; background: rgba(0,0,0,0.5) !important; 
+            padding: 25px; border-radius: 20px; border: 1px solid var(--glass-border); 
+            margin: 25px 0; white-space: pre !important;
+        }
+        .post-body table { display: block !important; width: 100% !important; overflow-x: auto !important; border-collapse: collapse; margin: 25px 0; }
+        .post-body th, .post-body td { border: 1px solid rgba(255,255,255,0.1); padding: 12px 20px; min-width: 120px; }
+        .post-body th { background: rgba(255,153,204,0.15); color: var(--accent); }
+
+        .btn-wrapper { margin-top: 60px; padding-top: 30px; border-top: 1px solid var(--glass-border); text-align: center; width: 100%; }
+        .back-btn { 
+            display: inline-block !important; background: var(--accent-gradient); color: #000 !important; 
+            padding: 15px 45px; border-radius: 50px; font-weight: 900; font-size: 1rem; 
+            box-shadow: 0 10px 25px rgba(255, 153, 204, 0.4); transition: 0.3s;
+        }
+
+        aside { position: sticky; top: 90px; height: fit-content; }
+        .widget { background: var(--glass); border-radius: 35px; padding: 25px; border: 1px solid var(--glass-border); margin-bottom: 25px; }
+        .social-links { display: flex; justify-content: center; gap: 20px; margin-top: 15px; font-size: 1.5rem; }
+
+        @media (max-width: 1000px) {
+            .main-grid { grid-template-columns: 1fr; margin-top: -30px; }
+            article.post-container { padding: 35px 20px; border-radius: 30px; }
+            aside { display: none; }
+            .post-hero { height: 40vh; }
+        }
+
+        footer { text-align: center; padding: 60px 20px; background: rgba(0,0,0,0.9); border-top: 1px solid var(--glass-border); margin-top: auto; font-size: 0.8rem; }
+    </style>
+
+    <!-- 🔥 MONETAG ADS 自动注入 -->
+    
+    <script src="https://quge5.com/88/tag.min.js" data-zone="213975" async data-cfasync="false"></script>
+<script src="https://quge5.com/88/tag.min.js" data-zone="213982" async data-cfasync="false"></script>
+    
+
+</head>
+<body>
+    <div id="progress-bar"></div>
+    <div class="bg-fixed"></div><div class="bg-overlay"></div>
+    
+    <nav>
+        <a href="/" class="logo">CNFTE</a>
+        <div class="nav-right">
+            <div class="nav-links">
+                <a href="/en/Link Exchange.html">Link Exchange</a><a href="/en/Privacy Policy.html">Privacy Policy</a><a href="/en/about.html">about</a><a href="/en/公益服务项.html">service</a>
+                <a href="/">HOME</a>
+            </div>
+            <div class="search-container" id="search-box">
+                <input type="text" id="search-input" placeholder="SEARCH...">
+                <i class="fas fa-search" onclick="toggleSearch()" style="cursor:pointer;color:var(--accent);font-size:1.2rem;"></i>
+                <div id="search-results"></div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="post-hero">
+        <img src="https://www.dmoe.cc/random.php?seed=06851bc6&r=782318" class="post-hero-img">
+        <div class="post-header-content">
+            <p style="color:var(--accent); font-family:monospace; font-size:0.9rem; letter-spacing: 2px;">2026-02-09 // READ: 231 MIN</p>
+            <h1>The Invisible Backbone of the Digital World: A Comprehensive Overview of the 150 Global Giants in Internet Infrastructure</h1>
+        </div>
+    </header>
+
+    <div class="main-grid">
+        <main>
+            <!-- 胶囊广告位 -->
+            <div class="post-ads">
+                
+                <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="ad-capsule" target="_blank">
+                    <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" loading="lazy">
+                    <div class="ad-info">
+                        <b>广告招租价格好商量</b>
+                        <span>广告招租价格好商量</span>
+                    </div>
+                </a>
+                
+                <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="ad-capsule" target="_blank">
+                    <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" loading="lazy">
+                    <div class="ad-info">
+                        <b>广告招租价格好商量</b>
+                        <span>广告招租价格好商量</span>
+                    </div>
+                </a>
+                
+                <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="ad-capsule" target="_blank">
+                    <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" loading="lazy">
+                    <div class="ad-info">
+                        <b>广告招租价格好商量</b>
+                        <span>广告招租价格好商量</span>
+                    </div>
+                </a>
+                
+                <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="ad-capsule" target="_blank">
+                    <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" loading="lazy">
+                    <div class="ad-info">
+                        <b>广告招租价格好商量</b>
+                        <span>广告招租价格好商量</span>
+                    </div>
+                </a>
+                
+            </div>
+
+            <article class="post-container">
+                <div class="post-body">
+                    <p>Every time we swipe a screen, click a link, or load a high-definition video, we are presented with dazzling digital applications. But "beneath the surface," a vast and meticulous physical empire operates on milliseconds. From the thousands of miles of fiber optic cables buried deep in the ocean to the Starlink satellites soaring in near-Earth orbit; from authoritative DNS handling billions of requests to edge computing nodes absorbing traffic surges—these "invisible" infrastructures are the true backbone supporting the operation of modern civilization.</p>
+<p>The internet is more than just code and algorithms; it involves expensive hardware, complex protocols, and global resource collaboration. To clarify this complex "digital foundation," we conducted in-depth research across 15 core sectors, including network infrastructure, data centers, CDN, and domain name services, compiling this highly detailed summary covering 150 leading global companies. This article will be divided into three parts, taking you behind the scenes to unveil the most fundamental and hardcore business landscape of the internet.</p>
+<p>The entire article contains 104,338 words. Thank you for choosing to read this article.</p>
+<h3 id="part-one-the-cornerstone-of-the-global-internet">Part One: The Cornerstone of the Global Internet</h3>
+<h4 id="i-domain-registration-and-management">I. Domain Registration and Management</h4>
+<ol>
+<li>
+<p><strong>GoDaddy</strong>
+    Official website: www.godaddy.com
+    <strong>Main Business</strong>: Domain registration, virtual hosting, corporate email, website development.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Small and medium-sized enterprises, individual developers.
+<strong>Detailed Introduction:</strong> GoDaddy is the world's largest ICANN-certified domain registrar, managing over 84 million domains. Its core advantages lie in its extremely low first-year entry barrier and an exceptionally wide selection of domain extensions. As the "face" of internet infrastructure, GoDaddy not only provides simple registration services but also builds a one-stop ecosystem from domains to hosting to digital marketing. With multiple data centers worldwide supporting its massive DNS requests, and a user interface that supports multiple languages, it is one of the preferred tools for website owners going global.</li>
+</ul>
+</li>
+<li>
+<p><strong>Namecheap</strong>
+    Official website: www.namecheap.com
+    <strong>Main Business</strong>: Domain registration, SSL certificates, Whois privacy protection.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> IT professionals and privacy-conscious individuals.
+<strong>Detailed Introduction:</strong> Namecheap is renowned in the industry for its high cost-performance ratio and respect for user privacy. Unlike its competitors, it has long offered free domain privacy protection services (WhoisGuard) to prevent user information leaks. Its platform boasts a simple operating logic and rapid technical support. For internet infrastructure, Namecheap provides extremely stable underlying registration database management and integrates its own DNS servers, ensuring global resolution speeds. It is currently the most reputable and leading second-tier registrar.</li>
+</ul>
+</li>
+<li>
+<p><strong>Dynadot</strong>
+    Official website: www.dynadot.com
+    <strong>Main Business</strong>: Domain name auctions, domain name registration, and backend API services.</p>
+<ul>
+<li><strong>Coverage Area</strong>: North American and Asian markets.</li>
+<li><strong>Target Audience:</strong> Domain investors and experienced internet users.
+<strong>Detailed Introduction:</strong> Dynadot is a technology-driven registrar renowned for its user-friendly control panel and transparent pricing strategy. It plays a crucial role in the "resource flow" of internet infrastructure, and its domain auction system is a major global marketplace for secondhand domain names. Dynadot offers robust API support, allowing developers to integrate domain management functionality into their applications. Its servers are extremely stable, making it a highly reliable infrastructure provider for businesses requiring long-term brand domain maintenance.</li>
+</ul>
+</li>
+<li>
+<p><strong>Google Domains (currently hosted by Squarespace)</strong>
+    Official website: domains.google.com
+    <strong>Main Business</strong>: Domain registration and DNS integration.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Google Workspace users and developers.</li>
+<li><strong>Detailed Introduction</strong>: Originally a Google infrastructure service, although the business has been spun off, its infrastructure foundation remains robust. It leverages Google's globally distributed edge nodes to provide users with extremely fast DNS responses. Its biggest feature is its seamless integration with the Google ecosystem; for enterprises relying on Google Cloud or Workspace, managing domain names through it provides optimal routing and resolution performance. It represents minimalism in internet infrastructure.</li>
+</ul>
+</li>
+<li>
+<p><strong>Alibaba Cloud Domains</strong>
+    Official website: www.aliyun.com
+    <strong>Main Business</strong>: Domain registration, Alibaba Cloud hosting, and domestic filing services.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Primarily in China, but extending globally.</li>
+<li><strong>Target Audience:</strong> Domestic enterprises and businesses with high compliance requirements.</li>
+<li><strong>Detailed Introduction</strong>: After acquiring the former "China Wanwang," Alibaba Cloud has become China's largest domain name service provider. It serves as the "gatekeeper" of China's internet infrastructure, providing end-to-end compliance services from registration, real-name authentication, and filing to DNS resolution. Its underlying infrastructure is deeply integrated with Alibaba Cloud's CDN, Cloud Shield, and other security products, providing the most robust administrative compliance and technical support guarantees for internet businesses operating in China.</li>
+</ul>
+</li>
+<li>
+<p><strong>Tencent Cloud Domains</strong>
+    Official website: cloud.tencent.com
+    <strong>Main Business</strong>: Domain registration and integration with WeChat for businesses.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Asia Pacific and China.</li>
+<li><strong>Target Audience:</strong> Developers, game developers, and social application developers within the Tencent ecosystem.
+<strong>Detailed Introduction:</strong> Tencent Cloud has made rapid strides in the domain name field, leveraging the underlying technology of DNSPod (a top-tier domestic DNS provider) to deliver an ultra-fast resolution experience. Tencent Cloud's domain name registration service is not only competitively priced, but more importantly, it boasts deep integration with Tencent's social ecosystem, such as one-click configuration of enterprise email and association with WeChat Docs. It is one of China's two leading internet infrastructure providers, particularly in DDoS attack mitigation and domain name security protection, possessing industry-leading infrastructure capabilities.</li>
+</ul>
+</li>
+<li>
+<p><strong>Name.com</strong>
+    Official website: www.name.com
+    <strong>Main Business:</strong> Internationalized domain name registration.</p>
+<ul>
+<li><strong>Coverage Area</strong>: North America, Europe.</li>
+<li><strong>Target Audience:</strong> Small studios, website owners in Europe and America.</li>
+<li><strong>Detailed Introduction</strong>: As one of the early domain giants, Name.com boasts a strong infrastructure foundation in the North American market. Its DNSSEC security protocol support is comprehensive, effectively preventing domain spoofing and cache pollution. Its infrastructure leans towards stability and technology, and through deep integration with various third-party cloud services (such as Wix and DigitalOcean), it has become a bridge connecting users with backend computing resources.</li>
+</ul>
+</li>
+<li>
+<p><strong>Gandi.net</strong>
+    Official website: www.gandi.net
+    <strong>Main Business</strong>: Domain name and open-source project hosting.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Europe and globally.</li>
+<li><strong>Target Audience:</strong> Open source community and geeks.
+<strong>Detailed Introduction:</strong> Gandi adheres to the "No Bullshit" principle and is one of the most trusted infrastructure providers in the global open-source community. It supports hundreds of domain extensions and is extremely rigorous in its domain security audits. Its infrastructure is located in Europe, making Gandi a preferred underlying provider for internet companies that prioritize data compliance (such as GDPR). It not only sells domain names but also deeply participates in the discussion and development of fundamental internet protocols.</li>
+</ul>
+</li>
+<li>
+<p><strong>Network Solutions</strong>
+    Official website: www.networksolutions.com
+    <strong>Main Business</strong>: Traditional domain name registration and corporate identity services.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Large traditional enterprises and long-established institutions.</li>
+<li><strong>Detailed Introduction:</strong> It was the world's first domain name registrar, laying the foundation for internet infrastructure. While somewhat cumbersome in the mobile internet era, its management services and patent protection for large enterprises remain top-notch. Its infrastructure is extremely robust, making it suitable for giant companies with extremely stringent requirements for brand domain name security.</li>
+</ul>
+</li>
+<li>
+<p><strong>Porkbun</strong>
+    Official website: porkbun.com
+    <strong>Main Business:</strong> Low-cost domain names and SSL certificates.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Individual developers and creative professionals.</li>
+<li><strong>Detailed Introduction</strong>: A dark horse in the infrastructure industry that has emerged in recent years, Porkbun is known for its transparent pricing and modern UI. Despite its playful name, its underlying API is very powerful, supporting extensive automation. For developers who need to deploy infrastructure in batches, Porkbun offers an extremely user-friendly integration method.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h4 id="ii-authoritative-dns-resolution-services-dns-providers">II. Authoritative DNS Resolution Services (DNS Providers)</h4>
+<ol>
+<li>
+<p><strong>Cloudflare (DNS)</strong>
+    Official website: www.cloudflare.com
+    <strong>Main Business</strong>: Global CDN, 1.1.1.1 Public DNS Resolution, Authoritative DNS.</p>
+<ul>
+<li><strong>Coverage Area</strong>: 300+ cities worldwide.</li>
+<li><strong>Target Audience:</strong> From personal bloggers to Fortune 500 companies.
+<strong>Detailed Introduction:</strong> Cloudflare is synonymous with modern internet infrastructure. Its DNS resolution speed has consistently ranked first globally. It not only provides domain name resolution but also deploys resolution nodes as close to users as possible through its vast Anycast network. Its infrastructure capabilities lie in its ability to instantly handle terabyte-scale DDoS attacks; its "unrestricted traffic scrubbing" has completely revolutionized the game of internet security infrastructure.</li>
+</ul>
+</li>
+<li>
+<p><strong>DNSPod (owned by Tencent Cloud)</strong>
+    Official website: www.dnspod.cn
+    <strong>Main Business:</strong> Intelligent DNS resolution and monitoring.</p>
+<ul>
+<li><strong>Coverage Area</strong>: China and Asia-Pacific region.</li>
+<li><strong>Target Audience:</strong> Domestic high-concurrency businesses.
+<strong>Detailed Introduction:</strong> As one of the earliest intelligent DNS providers in China, DNSPod pioneered line-specific DNS resolution (separating traffic according to China Telecom, China Unicom, and China Mobile). At the infrastructure level, it can allocate the optimal IP address in real time based on the user's geographical location and carrier, significantly reducing access latency in China's complex network environment. It is one of the largest and most stable authoritative DNS providers in China.</li>
+</ul>
+</li>
+<li>
+<p><strong>Akamai (Edge DNS)</strong>
+    Official website: www.akamai.com</p>
+<ul>
+<li><strong>Main Business</strong>: Enterprise-grade DNS, global distribution.</li>
+<li><strong>Coverage Area</strong>: Top global operators.</li>
+<li><strong>Target Audience:</strong> Government, banks, top e-commerce companies.</li>
+<li><strong>Detailed Introduction</strong>: Akamai is the inventor of CDN, and its Edge DNS service is one of the most robust DNS resolution systems in the world. It is not geared towards ordinary individual users, but rather provides security for giants handling 30% of global internet traffic. Its infrastructure is highly distributed, with nodes in almost every major ISP's data center, ensuring business continuity even in extreme network wars or major network outages.</li>
+</ul>
+</li>
+<li>
+<p><strong>NS1 (owned by IBM)</strong>
+    Official website: ns1.com
+    <strong>Main Business:</strong> Next-generation traffic distribution and controlled parsing.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Large-scale SaaS and streaming media platforms.
+<strong>Detailed Introduction:</strong> NS1 is known as a "programmable DNS." Its infrastructure allows users to change traffic flow in real time via APIs, such as dynamically switching nodes based on server load or bandwidth costs. For companies like Dropbox that require precise traffic scheduling, NS1 is an indispensable underlying logic control center.</li>
+</ul>
+</li>
+<li>
+<p><strong>Constellix</strong>
+    Official website: consttellix.com
+    <strong>Main Business</strong>: Real-time traffic scheduling and DNS monitoring.</p>
+<ul>
+<li><strong>Coverage Area</strong>: North America and Europe.</li>
+<li><strong>Target Audience:</strong> High Availability Architects.
+<strong>Detailed Introduction:</strong> Constellix focuses on real-time monitoring and response. Its role in internet infrastructure is like a precise traffic light. It can detect subtle fluctuations in global networks and automatically switch DNS records. For industries extremely sensitive to latency, such as financial transactions, its infrastructure provides exceptionally high millisecond-level decision-making capabilities.</li>
+</ul>
+</li>
+<li>
+<p><strong>Oracle Cloud DNS (formerly Dyn)</strong>
+    <strong>Official Website:</strong> www.oracle.com/cloud/networking/dns/</p>
+<ul>
+<li><strong>Main Business</strong>: Authoritative enterprise-level analysis.</li>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Oracle ecosystem users and traditional large-scale IT architectures.</li>
+<li><strong>Detailed Introduction</strong>: Dyn was once one of the world's most important DNS service providers (having experienced the infamous 2016 internet outage), and was later acquired by Oracle. Even so, its infrastructure network remains a crucial component of the global backbone network, supporting extremely complex geo-location resolution and serving as a vital network pillar in the cloudification process of traditional enterprises.</li>
+</ul>
+</li>
+<li>
+<p><strong>Amazon Route 53</strong>
+    <strong>Official Website:</strong> aws.amazon.com/route53/
+    <strong>Main Business</strong>: Cloud-native DNS, health checks.</p>
+<ul>
+<li><strong>Coverage</strong>: AWS Global Regions.</li>
+<li><strong>Target Audience:</strong> AWS ecosystem users and full-stack developers.</li>
+<li><strong>Detailed Introduction</strong>: Route 53 is renowned for its "100% availability SLA" commitment. As a vital link in the AWS ecosystem, it is deeply integrated with ELB load balancing and S3 buckets. Its infrastructure, through multi-level redundancy, ensures rapid traffic redirection in the event of a single region failure, making it one of the most robust cornerstones of modern public cloud architectures.</li>
+</ul>
+</li>
+<li>
+<p><strong>Azure DNS</strong>
+    Official website: azure.microsoft.com</p>
+<ul>
+<li><strong>Main Business:</strong> Analysis of the Microsoft cloud ecosystem.</li>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Windows ecosystem, multinational corporations.</li>
+<li><strong>Detailed Introduction</strong>: Leveraging Microsoft's robust global fiber optic backbone, Azure DNS offers extremely high response speeds. Its infrastructure is deeply integrated with Active Directory, making it an ideal choice for unified management of enterprise intranets and public networks. Its security is based on Microsoft's substantial annual investment in security research and development, ensuring exceptional reliability.</li>
+</ul>
+</li>
+<li>
+<p><strong>Vercel DNS (Edge Routing)</strong>
+    Official website: vercel.com</p>
+<ul>
+<li><strong>Main Business:</strong> Front-end deployment and analysis.</li>
+<li><strong>Coverage Scope</strong>: Global edge nodes.</li>
+<li><strong>Target Audience:</strong> Next.js developers and front-end engineers.</li>
+<li><strong>Detailed Introduction</strong>: Vercel represents a new generation of "serverless infrastructure." It not only provides DNS but also combines DNS resolution with edge computing. When you modify and commit code, Vercel's infrastructure automatically updates routes globally, ensuring users always access the nearest static resource node.</li>
+</ul>
+</li>
+<li>
+<p><strong>Quad9</strong>
+    Official website: www.quad9.net</p>
+<ul>
+<li><strong>Main Business</strong>: Public-service secure DNS.</li>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> The general public and organizations that prioritize safety.
+<strong>Detailed Introduction:</strong> Quad9 (9.9.9.9) is a representative of public-interest internet infrastructure. Initiated by IBM, PCH, and others, it aims to block malicious websites and phishing links at the DNS level. Its infrastructure nodes are located globally, and although it's a free service, its stability and security are sufficient to support professional-grade applications.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h4 id="iii-cdn-and-edge-computing-cdn-edge-services">III. CDN and Edge Computing (CDN &amp; Edge Services)</h4>
+<ol>
+<li>
+<p><strong>Fastly</strong>
+    Official website: www.fastly.com
+    <strong>Main Business</strong>: Programmable CDN, real-time cleanup.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global high-speed network.</li>
+<li><strong>Target Audience:</strong> TikTok, The New York Times, and other frequently updated media outlets.</li>
+<li><strong>Detailed Introduction</strong>: Fastly redefines CDN infrastructure: it allows developers to run code at the edge (VCL). Its key infrastructure feature is "speed," not only in access speed but also in cache refresh speed (milliseconds). For internet businesses that require instant content distribution, such as news and social media, Fastly is an irreplaceable underlying accelerator.</li>
+</ul>
+</li>
+<li>
+<p><strong>Bunny.net</strong>
+    Official website: bunny.net
+    <strong>Main Business:</strong> High-performance CDN and storage with exceptional cost-effectiveness.</p>
+<ul>
+<li><strong>Coverage</strong>: Global (especially emerging markets such as Africa and Latin America).</li>
+<li><strong>Target Audience:</strong> Independent developers and video website owners.
+<strong>Detailed Introduction:</strong> Bunny.net has been a disruptor in the infrastructure sector in recent years. It offers performance comparable to industry giants at extremely low prices. Its infrastructure network is highly sophisticated, covering not only Europe and America but also boasting high-quality nodes in remote areas. It is the best choice for small and medium-sized enterprises to achieve global acceleration on a limited budget.</li>
+</ul>
+</li>
+<li>
+<p><strong>Edgio (formed by the merger of Limelight and EdgeCast)</strong>
+    Official website: edg.io
+    <strong>Main Business</strong>: Streaming media acceleration, Web security.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Relay service for major global carriers.</li>
+<li><strong>Target Audience:</strong> OTT video platforms and large-scale game downloaders.</li>
+<li><strong>Detailed Introduction</strong>: Edgio integrates the infrastructure assets of two established CDN giants. Its core advantage lies in handling massive concurrent downloads and live streaming, making it the unsung hero behind many AAA games and World Cup broadcasts. Its massive infrastructure capacity is a major contributor to reducing global internet traffic.</li>
+</ul>
+</li>
+<li>
+<p><strong>Baidu Cloud Acceleration</strong>
+    Official website: su.baidu.com
+    <strong>Main Business</strong>: Domestic CDN, WAF, and SEO optimization.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Within China and some overseas nodes.</li>
+<li><strong>Target Audience:</strong> Small and medium-sized websites and website owners in China.</li>
+<li><strong>Detailed Introduction</strong>: Baidu leverages its powerful search spider network at the infrastructure level. Its CDN not only accelerates search engine performance but also helps websites get indexed by Baidu search engines faster. With a massive number of edge nodes in China, it has a natural advantage in improving rankings on domestic search engines and countering domestic cyberattacks.</li>
+</ul>
+</li>
+<li>
+<p><strong>KeyCDN</strong>
+    Official website: www.keycdn.com
+    <strong>Main Business: Transparent CDN Service</strong></p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> WordPress users and medium-sized businesses.
+<strong>Detailed Introduction:</strong> KeyCDN is known for its transparent, pay-as-you-go pricing. Its infrastructure is entirely based on SSD storage, ensuring high I/O responsiveness for static resources. With no minimum spending requirement, it's one of the most commonly used infrastructure services for developers building startup projects.</li>
+</ul>
+</li>
+<li>
+<p><strong>CacheFly</strong>
+    Official website: www.cachefly.com
+    <strong>Main Business:</strong> High-throughput CDN.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Game publishers and large software companies.
+<strong>Detailed Introduction:</strong> CacheFly is a pioneer in TCP acceleration. Its infrastructure focuses on the ultra-fast distribution of large files. In numerous global infrastructure speed tests, its throughput performance has been outstanding. It deploys specialized transmission algorithms at edge nodes, significantly reducing the impact of packet loss during long-distance transmission.</li>
+</ul>
+</li>
+<li>
+<p><strong>StackPath (integrated with multiple services)</strong>
+    Official website: www.stackpath.com
+    <strong>Main Business</strong>: Edge computing and container distribution.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Major cities worldwide.</li>
+<li><strong>Target Audience:</strong> Developers who require edge computing capabilities.
+<strong>Detailed Introduction:</strong> StackPath deeply integrates CDN with computing. Its infrastructure goes beyond simply distributing images; it can also run virtual machines or containers directly on nodes closest to users. It is a powerful driver of "edge-side internet" infrastructure.</li>
+</ul>
+</li>
+<li>
+<p><strong>CDNetworks</strong>
+    Official website: www.cdnetworks.com
+    <strong>Main Business:</strong> Accelerating cross-border trade (especially trade with and from China).</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global, stronger than Asia.</li>
+<li><strong>Target Audience:</strong> Multinational manufacturing companies and brands expanding overseas.</li>
+<li><strong>Detailed Introduction</strong>: As one of Asia's largest CDN service providers, its infrastructure possesses unique advantages in connecting Eastern and Western networks. It boasts extremely strong penetration capabilities in complex network environments such as Russia and Southeast Asia, serving as a crucial network springboard for enterprises' global deployments.</li>
+</ul>
+</li>
+<li>
+<p><strong>BelugaCDN</strong>
+    Official website: www.belugacdn.com</p>
+<ul>
+<li><strong>Main Business: Lightweight Acceleration</strong></li>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target audience:</strong> Startups.</li>
+<li><strong>Detailed Introduction</strong>: Leveraging advanced infrastructure technologies such as IPv6, it provides a minimalist acceleration solution. While not as large as Cloudflare, its network nodes feature highly optimized links with no excessive redundancy.</li>
+</ul>
+</li>
+<li>
+<p><strong>CDN77</strong>
+    Official website: www.cdn77.com
+    <strong>Main Business:</strong> Large-scale traffic and software distribution.</p>
+<ul>
+<li><strong>Coverage</strong>: Global, with a focus on Europe and North America.</li>
+<li><strong>Target Audience:</strong> Space exploration projects (such as SpaceX live streams) and large-scale SaaS companies.
+<strong>Detailed Introduction:</strong> CDN77 excels in customized infrastructure. It can add nodes in specific regions based on customer needs. Its underlying layer supports the latest HTTP/3 protocol, making it an active driver of the evolution of internet transmission protocols.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h4 id="iv-basic-cloud-architecture-cloud-iaas-infrastructure">IV. Basic Cloud Architecture (Cloud IaaS / Infrastructure)</h4>
+<ol>
+<li>
+<p><strong>AWS (Amazon Web Services)</strong>
+    Official website: aws.amazon.com
+    <strong>Main Business</strong>: EC2, S3, and full range of IaaS/PaaS.</p>
+<ul>
+<li><strong>Coverage Area</strong>: 30+ geographical regions worldwide.</li>
+<li><strong>Target Audience:</strong> All industries, from startups to government.
+<strong>Detailed Introduction:</strong> AWS is the "standard setter" for modern internet infrastructure. It provides virtually scalable computing power through EC2 and defines object storage through S3. Its infrastructure covers everything from submarine fiber optic cables to satellite receiving stations. It is currently the world's most mature and comprehensive underlying resource pool, and almost all modern internet applications run directly or indirectly on AWS.</li>
+</ul>
+</li>
+<li>
+<p><strong>Microsoft Azure</strong>
+    Official website: azure.microsoft.com
+    <strong>Main Business</strong>: Cloud servers, hybrid cloud.</p>
+<ul>
+<li><strong>Coverage Area</strong>: The widest regional coverage globally.</li>
+<li><strong>Target Audience:</strong> Enterprise users and government agencies.
+<strong>Detailed Introduction:</strong> Azure's advantages lie in its massive data center clusters and its natural integration with the Windows ecosystem. At the infrastructure level, Azure has invested heavily in cutting-edge areas such as submarine data centers. It is the preferred underlying platform for multinational corporations to conduct unified global IT governance.</li>
+</ul>
+</li>
+<li>
+<p><strong>Google Cloud Platform (GCP)</strong>
+    Official website: cloud.google.com
+    <strong>Main Business</strong>: BigQuery, Data Computing, Kubernetes.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Data scientists and high-tech teams.</li>
+<li><strong>Detailed Introduction</strong>: GCP's infrastructure is built on Google's own backbone network. Its infrastructure for artificial intelligence and big data processing (such as TPU chips) is unique in the industry. For internet projects requiring extremely high-performance intranet bandwidth and powerful computing capabilities, GCP provides a top-tier physical foundation.</li>
+</ul>
+</li>
+<li>
+<p><strong>Alibaba Cloud</strong>
+    Official website: www.aliyun.com
+    <strong>Main Business</strong>: Shenlong Servers, Cloud-Native Architecture.
+    <strong>Coverage Area:</strong> Absolutely leading in China, radiating globally.</p>
+<ul>
+<li><strong>Target Audience:</strong> Digital transformation and e-commerce in all industries across China.
+<strong>Detailed Introduction:</strong> Alibaba Cloud represents the pinnacle of China's internet infrastructure. It independently developed the Apsara cloud operating system, and its Shenlong architecture leads the field of high-performance computing. It not only supports the world's largest traffic surge during events like "Double 11," but also provides a reliable foundation for numerous domestic government and financial systems.</li>
+</ul>
+</li>
+<li>
+<p><strong>Huawei Cloud</strong>
+    Official website: www.huaweicloud.com
+    <strong>Main Business</strong>: Full-stack cloud computing and hard technology infrastructure.</p>
+<ul>
+<li><strong>Coverage</strong>: Global (especially with a strong presence in the Middle East, Africa, and Southeast Asia).</li>
+<li><strong>Target Audience:</strong> Government and enterprise entities, manufacturing companies, transportation companies, and internet giants.</li>
+<li><strong>Detailed Introduction</strong>: Huawei Cloud leverages Huawei's decades of experience in the communications hardware field, boasting significant vertical integration advantages in its infrastructure, particularly in network equipment and self-developed chips (Kunpeng and Ascend). It emphasizes "software-hardware synergy," providing extremely stable underlying computing and communication capabilities for the internet.</li>
+</ul>
+</li>
+<li>
+<p><strong>Tencent Cloud</strong>
+    Official website: cloud.tencent.com
+    <strong>Main Business</strong>: Audio/video and gaming cloud solutions.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global (with extremely strong coverage in Asia).</li>
+<li><strong>Target Audience:</strong> Entertainment, gaming, social media, and finance.
+<strong>Detailed Introduction:</strong> Tencent Cloud has made extreme optimizations to its infrastructure for audio and video transmission. Its underlying protocols, such as TRTC, support audio and video interaction for hundreds of millions of people worldwide. It is a global leader in infrastructure for the entire lifecycle of game development, distribution, and operation.</li>
+</ul>
+</li>
+<li>
+<p><strong>DigitalOcean</strong>
+    Official website: www.digitalocean.com</p>
+<ul>
+<li><strong>Main Business</strong>: Minimalist cloud hosting (Droplets).</li>
+<li><strong>Coverage Area</strong>: Major data centers worldwide.</li>
+<li><strong>Target Audience:</strong> Individual developers and small SaaS companies.</li>
+<li><strong>Detailed Introduction</strong>: DO simplifies internet infrastructure. Its "Droplets" make configuring servers as easy as drinking water. While it lacks the complex features of AWS, its stable infrastructure performance and transparent pricing make it one of the most popular cloud platforms among global developers.</li>
+</ul>
+</li>
+<li>
+<p><strong>Linode (now part of Akamai)</strong>
+    Official website: www.linode.com
+    <strong>Main Business</strong>: High-performance computing, Simple Cloud.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Senior developers and mid-sized IT professionals.</li>
+<li><strong>Detailed Introduction</strong>: Linode was once synonymous with high-performance VPS. After being acquired by Akamai, its infrastructure was deeply integrated with Akamai's edge nodes, achieving a closed loop "from cloud to edge." Its network quality is highly regarded in the tech community.</li>
+</ul>
+</li>
+<li>
+<p><strong>Vultr</strong>
+    Official website: www.vultr.com
+    <strong>Main Business:</strong> High-performance cloud servers and bare metal servers.</p>
+<ul>
+<li><strong>Coverage Area</strong>: 32 data center nodes worldwide.</li>
+<li><strong>Target Audience:</strong> Developers who need to deploy across multiple nodes.
+<strong>Detailed Introduction:</strong> Vultr is characterized by its extensive network of data center nodes. Its infrastructure covers many second-tier cities, allowing users to deploy distributed nodes globally at extremely low cost.</li>
+</ul>
+</li>
+<li>
+<p><strong>Oracle Cloud (OCI)</strong>
+    <strong>Official Website:</strong> www.oracle.com/cloud/
+    <strong>Main Business</strong>: Enterprise database cloud, high-performance bare metal.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Heavy database users and large enterprises.</li>
+<li><strong>Detailed Introduction</strong>: In recent years, Oracle Cloud has returned to the pinnacle of infrastructure by building large-scale bare-metal data centers. Its infrastructure avoids virtualization overhead, providing performance closest to physical hardware for large-scale model training and large-scale ERP systems.</li>
+</ul>
+</li>
+<li>
+<p><strong>IBM Cloud</strong>
+    Official website: www.ibm.com/cloud
+    <strong>Main Business</strong>: Hybrid Cloud, Red Hat OpenShift.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Banks, insurance companies, and very large compliant enterprises.</li>
+<li><strong>Detailed Introduction</strong>: IBM Cloud focuses on "sovereign cloud" and "secure cloud." Its infrastructure includes a large-scale cloudification of Z-series mainframes, providing the financial industry with a level of data security that is difficult for other cloud providers to match.</li>
+</ul>
+</li>
+<li>
+<p><strong>Hetner Online</strong>
+    Official website: www.hetzner.com
+    <strong>Main Business:</strong> High-performance, cost-effective dedicated servers.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Primarily Europe (Germany, Finland), USA.</li>
+<li><strong>Target Audience:</strong> Developers who require large-capacity hard drives and extreme performance.
+<strong>Detailed Introduction:</strong> Hetzner is a representative of European infrastructure. It provides extremely high-performance physical machines at very low prices. It is a haven for internet projects that need to handle massive amounts of data but have limited budgets.</li>
+</ul>
+</li>
+<li>
+<p><strong>OVHcloud</strong>
+    Official website: www.ovhcloud.com</p>
+<ul>
+<li><strong>Main Business</strong>: Europe's largest cloud service provider and liquid-cooled data center provider.</li>
+<li><strong>Coverage Scope</strong>: Global, with a focus on Europe.</li>
+<li><strong>Target Audience:</strong> European companies that value data autonomy.</li>
+<li><strong>Detailed Introduction</strong>: OVH is renowned for its self-developed data center equipment and liquid cooling technology, and its infrastructure places great emphasis on environmental protection and energy efficiency. It is a source of pride for European internet infrastructure, providing a reliable alternative to American manufacturers.</li>
+</ul>
+</li>
+<li>
+<p><strong>Baidu AI Cloud</strong>
+    Official website: cloud.baidu.com
+    <strong>Main Business:</strong> AI native infrastructure and large-scale model computing power.</p>
+<ul>
+<li><strong>Coverage Area</strong>: China.</li>
+<li><strong>Target Audience:</strong> AI developers and smart manufacturing professionals.</li>
+<li><strong>Detailed Introduction</strong>: Baidu Cloud's infrastructure is entirely built for AI. Its Kunlun chips, Kunlun Wanxin chips, and AI computing centers across the country constitute one of the most important infrastructure platforms for China's large-scale computing era.</li>
+</ul>
+</li>
+<li>
+<p><strong>JD Cloud</strong>
+    Official website: www.jdcloud.com
+    <strong>Main Business:</strong> E-commerce infrastructure and logistics cloud.</p>
+<ul>
+<li><strong>Coverage Area</strong>: China.</li>
+<li><strong>Target Audience:</strong> Retail and supply chain companies.</li>
+<li><strong>Detailed Introduction</strong>: JD Cloud's infrastructure has withstood the rigorous tests of JD.com's annual major sales events. It has extensive experience in hybrid cloud and supply chain finance infrastructure, making it a typical representative of the industrial internet.</li>
+</ul>
+</li>
+<li>
+<p>​​<strong>Volcano Engine (BytePlus / Volcengine)</strong>
+    Official website: www.volcengine.com</p>
+<ul>
+<li><strong>Main Business</strong>: ByteDance's same technology, video middleware platform.</li>
+<li><strong>Coverage</strong>: Global (via BytePlus).</li>
+<li><strong>Target Audience:</strong> Video applications and next-generation internet products.</li>
+<li><strong>Detailed Introduction</strong>: ByteDance's infrastructure platform. It provides the industry with the incredibly robust data processing and recommendation algorithm infrastructure behind Douyin (TikTok). It represents the pinnacle of "high concurrency and high real-time" capabilities in internet infrastructure.</li>
+</ul>
+</li>
+<li>
+<p><strong>Kingsoft Cloud</strong>
+    Official website: www.ksyun.com
+    <strong>Main Business</strong>: Video cloud, medical cloud, government cloud.</p>
+<ul>
+<li><strong>Coverage Area</strong>: China and Southeast Asia.</li>
+<li><strong>Target Audience:</strong> Video industry, government agencies.</li>
+<li><strong>Detailed Introduction</strong>: Kingsoft Cloud is one of the earliest cloud providers in China to focus on the video and gaming sectors. Its infrastructure boasts unique expertise in streaming media encoding and transmission, and it has long served the Xiaomi ecosystem and major domestic video websites.</li>
+</ul>
+</li>
+<li>
+<p><strong>eCloud</strong>
+    Official website: www.ctyun.cn</p>
+<ul>
+<li><strong>Main Business</strong>: China Telecom's basic network and cloud-network convergence.</li>
+<li><strong>Coverage Area</strong>: The entire territory of China (down to the county level).</li>
+<li><strong>Target Audience:</strong> Government and enterprises, small and medium-sized enterprises.</li>
+<li><strong>Detailed Introduction</strong>: China Telecom's cloud brand boasts the most robust basic network infrastructure in China. Its "cloud-network convergence" strategy deploys computing nodes on Telecom's fiber optic backbone network hubs, providing extremely low access latency.</li>
+</ul>
+</li>
+<li>
+<p><strong>China Mobile Cloud</strong>
+    Official website: cloud.10086.cn</p>
+<ul>
+<li><strong>Main Business</strong>: Carrier-grade computing capabilities.</li>
+<li><strong>Coverage Area</strong>: The entire territory of China.</li>
+<li><strong>Target Audience:</strong> Government and Enterprises, Mobile Ecosystem.</li>
+<li><strong>Detailed Introduction</strong>: Relying on China Mobile's ubiquitous 5G base stations and IDC data centers, Mobile Cloud has invested heavily in infrastructure in recent years and is an important builder of domestic computing power networks.</li>
+</ul>
+</li>
+<li>
+<p><strong>Unicom Cloud</strong>
+    Official website: www.cucloud.cn
+    <strong>Main Business:</strong> Digital transformation and network integration.</p>
+<ul>
+<li><strong>Coverage Area</strong>: The entire territory of China.</li>
+<li><strong>Target Audience:</strong> China Unicom's large clients and industrial internet companies.</li>
+<li><strong>Detailed Introduction</strong>: The infrastructure arm of China Unicom. It has extensive experience in IoT and industrial internet infrastructure, providing integrated facilities from network connectivity to computing processing.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h3 id="part-two-the-blood-vessels-and-heart-of-the-internet">Part Two: The Blood Vessels and Heart of the Internet</h3>
+<h4 id="v-top-global-backbone-networks-and-telecom-carriers">V. Top Global Backbone Networks and Telecom Carriers</h4>
+<ol>
+<li>
+<p><strong>Lumen (formerly CenturyLink)</strong>
+    Official website: www.lumen.com
+    <strong>Main Business</strong>: Global backbone network, wavelength division multiplexing (WDM) transmission, enterprise-grade leased lines.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global, with particularly high fiber optic density in North America and Europe.</li>
+<li><strong>Target Audience:</strong> Large multinational corporations, ISPs, and government agencies.
+<strong>Detailed Introduction:</strong> Lumen manages one of the world's most powerful internet backbones. As a top-tier Tier 1 provider, it engages in unsettled peering with other major players. Its infrastructure forms the "arteries" of internet traffic, boasting over 450,000 miles of fiber optic routes. Lumen not only provides basic bit transmission but also significantly reduces latency in global data flow by deploying computing power directly on backbone nodes through its distributed edge computing platform. This makes it the underlying pillar supporting modern video conferencing and real-time financial transactions.</li>
+</ul>
+</li>
+<li>
+<p><strong>NTT Global IP Network (NTT GIN)</strong>
+    Official website: www.gin.ntt.net</p>
+<ul>
+<li><strong>Main Business</strong>: Global IP Transit, submarine optical cables.</li>
+<li><strong>Coverage</strong>: Global, with a dominant presence in the Asia-Pacific region.</li>
+<li><strong>Target Audience:</strong> Top-tier Internet Service Providers (ISPs) and content distributors.</li>
+<li><strong>Detailed Introduction</strong>: NTT (Japan Telegraph and Telephone Corporation)'s global IP network is currently one of the top three backbone networks in the world. Its core infrastructure lies in the massive AS2914 autonomous system. It has invested heavily in transoceanic submarine fiber optic cables connecting Asia with North America and Europe, such as the PC-1 fiber optic cable system. NTT's data centers meet extremely high standards, not only carrying a large portion of Japan's domestic traffic but also serving as a crucial gateway for Asian internet access to the world. Its network is renowned for its extremely high stability and extremely low jitter rate, making it one of the most reliable "pipelines" in the global internet architecture.</li>
+</ul>
+</li>
+<li>
+<p><strong>AT&amp;T Business</strong>
+    Official website: www.business.att.com
+    <strong>Main Business</strong>: 5G networks, global MPLS, and fiber optic backbone.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global coverage, including the entire continental United States.</li>
+<li><strong>Target Audience:</strong> Fortune 500 companies and mobile communication users.
+<strong>Detailed Introduction:</strong> AT&amp;T is not only a telecommunications company, but also a key driver of the development of the Internet Protocol (TCP/IP). Its backbone network (Global Network Operations Center) monitors traffic fluctuations globally in real time. AT&amp;T's infrastructure extends beyond fiber optics; its leading 5G technology and satellite communications complement the "last mile" of internet infrastructure. For multinational corporations, AT&amp;T's global software-defined network (SD-WAN) greatly simplifies the complexity of internet access infrastructure for branch offices.</li>
+</ul>
+</li>
+<li>
+<p><strong>Verizon Enterprise</strong>
+    <strong>Official Website:</strong> www.verizon.com/business/
+    <strong>Main Business</strong>: Submarine optical cable operation, edge computing, and backbone network services.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Large financial institutions, government agencies, and the healthcare industry.
+<strong>Detailed Introduction:</strong> Verizon's assets, including XO Communications, form its robust terrestrial fiber optic infrastructure. It operates multiple submarine fiber optic cables spanning the Atlantic and Pacific Oceans, serving as a vital carrier for global data exchange. In terms of infrastructure innovation, Verizon strongly promotes MEC (Mobile Edge Computing), pushing data center capabilities down to the base station side, providing an ultra-low latency infrastructure environment for autonomous driving and the Industrial Internet. Its infrastructure security is among the best in the industry, consistently providing network security for top-tier government systems.</li>
+</ul>
+</li>
+<li>
+<p><strong>Telia Carrier (now renamed Arelion)</strong>
+    Official website: www.arelion.com
+    <strong>Main Business</strong>: IP Transit, Ethernet Services, Cloud Connectivity.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Europe, North America, Asia.</li>
+<li><strong>Target Audience:</strong> Internet service providers and online game companies.
+<strong>Detailed Introduction:</strong> Arelion (formerly Telia, a Swedish telecommunications company) owns the world's number one autonomous AS1299 system. It is the cornerstone of Europe's internet infrastructure, with almost all European internet traffic passing through its network. The core of its network design is "high resilience," ensuring extremely high uptime through redundant paths and fully owned fiber optic equipment. For online game developers and high-frequency trading platforms that prioritize network quality, Arelion is the preferred underlying network provider.</li>
+</ul>
+</li>
+<li>
+<p><strong>PCCW Global (Telecom Corporation Limited)</strong>
+    Official website: www.pccwglobal.com</p>
+<ul>
+<li><strong>Main Business</strong>: International voice and data services, Console Connect platform.</li>
+<li><strong>Coverage Area</strong>: Covers more than 160 countries worldwide.</li>
+<li><strong>Target Audience:</strong> Multinational corporations and OTT content providers.</li>
+<li><strong>Detailed Introduction</strong>: Headquartered in Hong Kong, PCCW Global is a hub-level operator connecting the Asia-Pacific region to the world. Its self-developed Console Connect software-defined interconnect platform represents a major innovation in the infrastructure sector, allowing businesses to instantly activate cross-border leased lines online, much like purchasing cloud servers. It possesses unique advantages in connecting mainland China with overseas networks (such as via the Shenzhen-Hong Kong leased line and the China-Hong Kong submarine cable), making it a crucial network infrastructure partner for Chinese companies going global.</li>
+</ul>
+</li>
+<li>
+<p><strong>China Telecom Global</strong>
+    Official website: www.chinatelecomglobal.com
+    <strong>Main Business</strong>: CN2 GIA leased lines, IDC centers.</p>
+<ul>
+<li><strong>Coverage Scope</strong>: Global, with strong coverage of Chinese overseas destinations.</li>
+<li><strong>Target Audience:</strong> Companies expanding overseas and overseas game operators.</li>
+<li><strong>Detailed Introduction</strong>: China Telecom International operates the renowned CN2 (AS4809) premium network, currently the highest quality network line connecting mainland China to the world. Its infrastructure includes numerous data centers deployed in Southeast Asia, Africa, and other regions. For any business looking to enter the Chinese market or for Chinese companies expanding globally, its CN2 GIA lines (featuring multiple redundancies and low latency) are a scarce and high-quality resource in current internet infrastructure, effectively solving the pain points of packet loss and latency in cross-border access.</li>
+</ul>
+</li>
+<li>
+<p><strong>Tata Communications</strong>
+    Official website: www.tatacommunications.com
+    <strong>Main Business:</strong> Global submarine optical cables and mobile roaming interoperability.</p>
+<ul>
+<li><strong>Coverage</strong>: Global, especially in India, the Middle East and emerging markets.</li>
+<li><strong>Target Audience:</strong> Global mobile operators and media companies.
+<strong>Detailed Introduction:</strong> Tata Communications operates the world's largest wholly owned submarine fiber optic cable network, stretching over 500,000 kilometers around the globe. It provides 30% of the world's internet lines. Its infrastructure holds a monopolistic position in South Asia and the Middle East. Furthermore, it provides signaling switching services to mobile operators worldwide, serving as an indispensable switching hub at the foundation of mobile internet communications.</li>
+</ul>
+</li>
+<li>
+<p><strong>GTT Communications</strong>
+    Official website: www.gtt.net
+    <strong>Main Business</strong>: Tier 1 IP network and managed network services.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Enterprises with distributed work environments.</li>
+<li><strong>Detailed Introduction</strong>: GTT has built a globally covering Tier 1 network through acquisitions of established operators such as Interoute and Hibernia. Its assets include the highly valuable Hibernia Express transatlantic low-latency fiber optic cable system, specifically designed for high-frequency trading between Wall Street and the City of London. GTT emphasizes "agility" in its infrastructure, providing flexible SD-WAN solutions that allow businesses to quickly expand their internet reach.</li>
+</ul>
+</li>
+<li>
+<p><strong>Cogent Communications</strong>
+    Official website: www.cogentco.com
+    <strong>Main Business</strong>: Low-cost IP Transit, Data Center Connectivity.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Primarily in North America and Europe.</li>
+<li><strong>Target Audience:</strong> Video websites and small to medium-sized ISPs with extremely high bandwidth requirements.
+<strong>Detailed Introduction:</strong> Cogent is a "price killer" in the internet infrastructure industry. Its business model relies on extremely high-density urban fiber optic cabling and extreme cost control. While its Service Level Agreements (SLAs) may not be as refined as giants like NTT, it provides the world's most cost-effective high-bandwidth access. It is a major driving force behind the decentralization and democratization of internet traffic, providing an inexpensive physical foundation for massive data transmission.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<p>VI. Internet Exchange Points (IXP)</p>
+<ol>
+<li>
+<p><strong>DE-CIX</strong>
+    Official website: www.de-cix.net
+    <strong>Main Business:</strong> Internet peer-to-peer interconnection and exchange services.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Headquartered in Frankfurt, with nodes located around the world.</li>
+<li><strong>Target Audience:</strong> ISPs, cloud providers, and content service providers (Google, Netflix, etc.).</li>
+<li><strong>Detailed Introduction</strong>: DE-CIX Frankfurt is the world's largest internet exchange hub in terms of peak traffic. IXPs act as an "interchange" for the internet, allowing different networks to connect directly without expensive, paid relays. DE-CIX's infrastructure includes a high-performance core switch cluster. Through DE-CIX interconnection, thousands of ASs (Autonomous Systems) can achieve localized traffic exchange, significantly improving the operational efficiency of the internet throughout Europe and globally.</li>
+</ul>
+</li>
+<li>
+<p><strong>AMS-IX (Amsterdam Internet Exchange)</strong>
+    Official website: www.ams-ix.net</p>
+<ul>
+<li><strong>Main Business</strong>: Non-profit traffic exchange.</li>
+<li><strong>Coverage Area</strong>: Amsterdam, with global reach.</li>
+<li><strong>Target Audience:</strong> All autonomous systems connected to the Internet.
+<strong>Detailed Introduction:</strong> Amsterdam is one of the world's physical hubs for the internet, and AMS-IX is its heart. As a non-profit organization, it promotes the spirit of open peer-to-peer internet. Its infrastructure is extremely reliable, capable of handling tens of thousands of gigabits per second of concurrent traffic. It is the cornerstone of Europe's digital economy, ensuring that data transfer costs between European countries are virtually zero.</li>
+</ul>
+</li>
+<li>
+<p><strong>LINX (London Internet Exchange)</strong>
+    Official website: www.linx.net
+    <strong>Main Business:</strong> Traffic peer-to-peer exchange.</p>
+<ul>
+<li><strong>Coverage Area</strong>: London and Manchester, UK.</li>
+<li><strong>Target Audience:</strong> Internet professionals in the UK and Europe.
+<strong>Detailed Introduction:</strong> LINX is one of the world's oldest Internet Container Registry (IXP). Through its distributed architecture spread across multiple data centers in London, it ensures uninterrupted internet access in the UK even if a physical location fails. LINX is not only a technology exchange platform but also a policy-making center, playing a crucial role in maintaining the openness and neutrality of the internet.</li>
+</ul>
+</li>
+<li>
+<p><strong>Equinix IX</strong>
+    <strong>Official Website:</strong> www.equinix.com/interconnection-services/ix/</p>
+<ul>
+<li><strong>Main Business</strong>: Commercial Internet exchange.</li>
+<li><strong>Coverage Area</strong>: More than 40 cities worldwide.</li>
+<li><strong>Target Audience:</strong> Customers who rent Equinix data centers.</li>
+<li><strong>Detailed Introduction</strong>: Unlike non-profit IXPs like DE-CIX, Equinix IX is currently the world's largest commercial interconnection platform. As Equinix itself is the world's largest data center provider, its IX services enjoy inherent geographical convenience. Users only need to run a single fiber optic cable (cross-connect) within the same building to directly connect to the world's major networks. It is the preferred interconnection point for global public clouds and content providers for global distribution.</li>
+</ul>
+</li>
+<li>
+<p><strong>HKIX (Hong Kong Internet eXchange)</strong>
+    Official website: www.hkix.net</p>
+<ul>
+<li><strong>Main Business</strong>: Asia's traffic exchange hub.</li>
+<li><strong>Coverage Area</strong>: Hong Kong, China.</li>
+<li><strong>Target Audience:</strong> Operators and content providers in the Asia-Pacific region.</li>
+<li><strong>Detailed Introduction</strong>: Operated by the Chinese University of Hong Kong, HKIX is one of the most important exchange hubs in Asia. It not only connects to the three major telecom operators in mainland China but also aggregates a large amount of traffic from Southeast Asia, South Korea, and Japan. It serves as a crucial transit point for mainland China's internet access to overseas resources, and the stability of its infrastructure directly impacts internet speeds across the entire Asia-Pacific region.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h4 id="vii-data-centers-and-colocation">VII. Data Centers and Colocation</h4>
+<ol>
+<li>
+<p><strong>Equinix</strong>
+    Official website: www.equinix.com
+    <strong>Main Business</strong>: Data center retail and interconnection.</p>
+<ul>
+<li><strong>Coverage Area</strong>: More than 240 data centers worldwide.</li>
+<li><strong>Target Audience:</strong> Financial institutions, cloud service providers, and large multinational corporations.
+<strong>Detailed Introduction:</strong> Equinix is ​​a global leader in the data center industry. It doesn't just sell server racks; it sells an "ecosystem." Its IBX data centers house over 1,000 network operators and thousands of cloud service providers worldwide. Its infrastructure meets Tier 4 (the highest level) standards, boasting extreme power redundancy and physical security. Equinix Fabric technology also allows users to connect to different clouds and networks with a single click via software, serving as the physical core of modern hybrid cloud architectures.</li>
+</ul>
+</li>
+<li>
+<p><strong>Digital Realty</strong>
+    Official website: www.digitalrealty.com</p>
+<ul>
+<li><strong>Main Business</strong>: Hyperscale data centers and wholesale hosting.</li>
+<li><strong>Coverage Area</strong>: Key cities worldwide.</li>
+<li><strong>Target Audience:</strong> Cloud computing giants (such as AWS and Microsoft) and very large enterprises.
+<strong>Detailed Introduction:</strong> If Equinix is ​​a retail store, then Digital Realty is a real estate wholesaler. It specializes in building massive data center buildings spanning tens of thousands of square meters and leasing them to giants that require tens of thousands of racks. Its infrastructure places great emphasis on energy efficiency (PUE value control), reducing energy consumption through innovative cooling technologies. It is the underlying "landlord" of global cloud infrastructure, supporting the majority of the physical assets of the global public cloud.</li>
+</ul>
+</li>
+<li>
+<p><strong>GDS (Global Data Services)</strong>
+    Official website: www.gds-services.com
+    <strong>Main Business</strong>: High-performance data centers and hybrid cloud connectivity.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Major economic zones in China and Southeast Asia.</li>
+<li><strong>Target Audience:</strong> Top Chinese internet companies (Alibaba, Tencent) and financial institutions.
+<strong>Detailed Introduction:</strong> GDS Holdings is a leading high-performance data center operator in China. Its data centers are mostly located in prime locations in first-tier cities such as Beijing, Shanghai, Guangzhou, and Shenzhen, enjoying extremely high network scarcity. GDS's infrastructure is known for its high power density, capable of supporting high computing power demands such as AI training. It is the preferred third-party IDC for major domestic internet companies, representing the highest level of compliance, stability, and network access capabilities among private IDC providers in China.</li>
+</ul>
+</li>
+<li>
+<p><strong>VNET (21Vianet)</strong>
+    Official website: www.vnet.com
+    <strong>Main Business</strong>: Hosting and cloud computing (Azure/Office 365 management services).</p>
+<ul>
+<li><strong>Coverage Area</strong>: The entire territory of China.</li>
+<li><strong>Target Audience:</strong> Multinational corporations operating in China and large domestic government and enterprise entities.
+<strong>Detailed Introduction:</strong> As the first Chinese IDC provider to be listed in the US, 21Vianet holds a unique position in the infrastructure sector. It is the compliant operator for Microsoft Azure and Office 365 in China. With a strong background in telecommunications, 21Vianet offers an extremely rich selection of network access options (BGP bandwidth). Its infrastructure extends beyond traditional data centers to edge computing nodes, serving as a crucial bridge connecting China's cloud ecosystem with the international cloud ecosystem.</li>
+</ul>
+</li>
+<li>
+<p><strong>Iron Mountain Company</strong>
+    Official website: www.ironmountain.com</p>
+<ul>
+<li><strong>Main Business</strong>: Physical storage and secure data centers.</li>
+<li><strong>Coverage Area</strong>: North America, Europe, and Asia.</li>
+<li><strong>Target Groups:</strong> Government, financial, and medical sectors with the highest security requirements.
+<strong>Detailed Introduction:</strong> IronStone initially gained fame for storing physical documents and film, but has since transformed into a top-tier internet infrastructure provider. Its data centers are often built in abandoned mines or underground bunkers, possessing natural defenses against nuclear attacks and electromagnetic interference. For storing extremely critical backup data and financial transaction records, IronStone's infrastructure provides the highest level of physical protection.</li>
+</ul>
+</li>
+<li>
+<p><strong>CyrusOne</strong>
+    Official website: www.cyrusone.com</p>
+<ul>
+<li><strong>Main Business:</strong> Rapidly deployable data centers.</li>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Fortune 1000 companies.
+<strong>Detailed Introduction:</strong> CyrusOne is renowned for its rapid construction speed. Its unique "Massively Modular" construction method allows for the delivery of usable data center space in an extremely short time when large-scale demand arises. This is a highly competitive advantage in today's explosive growth of internet services.</li>
+</ul>
+</li>
+<li>
+<p><strong>Global Switch</strong>
+    Official website: www.globalswitch.com</p>
+<ul>
+<li><strong>Main Business</strong>: Large-scale retail and wholesale data centers.</li>
+<li><strong>Coverage Area</strong>: Europe and Asia Pacific.</li>
+<li><strong>Target Audience:</strong> Financial centers and telecommunications operators.</li>
+<li><strong>Detailed Introduction</strong>: Global Switch operates the largest multi-customer data centers in Europe and the Asia-Pacific region. Its London and Singapore nodes are key access points for global financial transactions. Its data centers are renowned for their extremely high asset density and connectivity, forming a top-tier "hardware foundation" in the global internet architecture.</li>
+</ul>
+</li>
+<li>
+<p><strong>Telehouse (an IDC under KDDI)</strong>
+    Official website: www.telehouse.com
+    <strong>Main Business: Carrier-neutral data centers.</strong></p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> ISPs, Financial Institutions.</li>
+<li><strong>Detailed Introduction</strong>: Telehouse's London Docklands is one of the most densely populated areas of network connectivity in Europe. As a branch of the Japanese telecommunications giant KDDI, it adheres to the rigorous standards of Japanese infrastructure management and is a crucial aggregation point for global internet backbone lines.</li>
+</ul>
+</li>
+<li>
+<p><strong>Coresite</strong>
+    Official website: www.coresite.com</p>
+<ul>
+<li><strong>Main Business</strong>: High-performance connectivity data centers.</li>
+<li><strong>Coverage Area</strong>: Major core cities in the United States.</li>
+<li><strong>Target Audience:</strong> Internet services requiring high-concurrency network switching.
+<strong>Detailed Introduction:</strong> Coresite focuses on the US domestic market, with its data centers located directly on the switching nodes of major backbone networks. Its "Any2Exchange" service is one of the most powerful peer-to-peer interconnection platforms in North America, providing high-speed routing for North American internet traffic.</li>
+</ul>
+</li>
+<li>
+<p><strong>AirTrunk</strong>
+    Official website: www.airtrunk.com</p>
+<ul>
+<li><strong>Main Business</strong>: Hyperscale data centers.</li>
+<li><strong>Coverage Area</strong>: Asia Pacific region.</li>
+<li><strong>Target Audience:</strong> Public cloud giants.</li>
+<li><strong>Detailed Introduction</strong>: AirTrunk is one of the fastest-growing infrastructure providers in the Asia-Pacific region, specializing in building ultra-large data centers tailored for cloud service providers. Its projects often span hundreds of megawatts, and through innovative design, they have significantly reduced construction and operating costs, supporting the explosive growth of internet applications in Asia.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h4 id="viii-network-security-infrastructure-ddos-protection-waf-secure-routing">VIII. Network Security Infrastructure (DDoS Protection, WAF, Secure Routing)</h4>
+<ol>
+<li>
+<p><strong>Akamai (Security Division)</strong>
+    Official website: www.akamai.com
+    <strong>Main Business</strong>: Kona Site Defender (WAF), Prolexic (DDoS protection).</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global Edge.</li>
+<li><strong>Target Audience:</strong> Banks, e-commerce companies, and government agencies.
+<strong>Detailed Introduction:</strong> Akamai is not only a CDN giant but also a global leader in security infrastructure. After acquiring Prolexic, it established a defense system capable of filtering attack traffic at the Tbps level. Its defense is achieved at the "edge," meaning that attack traffic is intercepted at thousands of nodes worldwide before it even reaches the user's origin server. This is the most robust shield against hackers and cyber warfare on the modern internet.</li>
+</ul>
+</li>
+<li>
+<p><strong>Radware</strong>
+    Official website: www.radware.com
+    <strong>Main Business</strong>: Load balancing, anti-DDoS equipment and services.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Large enterprises and telecom operators.
+<strong>Detailed Introduction:</strong> Radware is renowned for its outstanding hardware performance in the infrastructure field. Its Defense Pro series is standard equipment in many large data center (IDC) facilities. It offers a hybrid cloud defense solution, combining on-premises hardware blocking with cloud-based high-volume scrubbing, serving as a "security system" for the stable operation of internet applications.</li>
+</ul>
+</li>
+<li>
+<p><strong>Netscout (Arbor Networks)</strong>
+    Official website: www.netscout.com
+    <strong>Main Business</strong>: Network traffic monitoring and DDoS protection.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> The vast majority of ISPs worldwide.</li>
+<li><strong>Detailed Introduction</strong>: Arbor Networks (now part of Netscout) is the standard for internet traffic monitoring. Almost all backbone network operators worldwide use Arbor's system to monitor traffic. In the event of a global cyberattack, Arbor's visibility serves as a "compass" for all infrastructure maintainers to troubleshoot problems.</li>
+</ul>
+</li>
+<li>
+<p><strong>Cloudflare (Security Services)</strong>
+    Official website: www.cloudflare.com
+    <strong>Main Business</strong>: Free and paid WAF, zero-trust architecture.</p>
+<ul>
+<li><strong>Coverage Scope</strong>: Global edge nodes.</li>
+<li><strong>Target Audience:</strong> All internet users.
+<strong>Detailed Introduction:</strong> Cloudflare transforms security defense into an "infrastructure layer" of the internet through its distributed Anycast network. It allows even small websites to gain free protection against large-scale DDoS attacks. Its Magic Transit service directly protects enterprise IP address ranges, making it a driving force for the democratization of modern internet security infrastructure.</li>
+</ul>
+</li>
+<li>
+<p><strong>Imperva</strong>
+    Official website: www.imperva.com
+    <strong>Main Business</strong>: Application security (WAF), API security, and data security.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Online payment and high-value data companies.
+<strong>Detailed Introduction:</strong> Imperva specializes in application-layer security. Its infrastructure can accurately identify malicious web crawlers and sophisticated SQL injection attacks. It is a global leader in protecting internet infrastructure from "logic-layer attacks."</li>
+</ul>
+</li>
+<li>
+<p><strong>F5 (Nginx)</strong>
+    Official website: www.f5.com
+    <strong>Main Business</strong>: Application Delivery Controller (ADC), Network Load Balancing.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> All enterprises requiring a high-availability architecture.
+<strong>Detailed Introduction:</strong> F5 hardware and Nginx software together form the "traffic command center" for internet applications. In the infrastructure, F5 handles the most demanding encryption/decryption and traffic distribution tasks, ensuring that backend servers are not overwhelmed by sudden surges in traffic. It is the core gateway ensuring high availability for internet services.</li>
+</ul>
+</li>
+<li>
+<p><strong>Palo Alto Networks</strong>
+    Official website: www.paloaltonetworks.com
+    <strong>Main Business</strong>: Next-generation firewalls and cloud-native security.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Modern IT companies.</li>
+<li><strong>Detailed Introduction</strong>: It defines a "next-generation firewall," elevating security from simple port filtering to application-layer identification. Its Prisma Access infrastructure provides a secure internet access channel for the era of remote work, representing the evolution of modern network infrastructure towards Sase (Secure Access Edge Service).</li>
+</ul>
+</li>
+<li>
+<p><strong>Fortinet</strong>
+    Official website: www.fortinet.com
+    <strong>Main Business</strong>: FortiGate firewalls, SD-WAN security.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Distributed institutions, retail chains, and financial institutions.</li>
+<li><strong>Detailed Introduction</strong>: Fortinet enhances firewall performance with its self-developed ASIC chips, enabling deep packet inspection (DPI) without impacting network bandwidth. Its infrastructure products achieve an excellent balance between cost-effectiveness and performance, serving as a bulwark protecting the internet boundaries of small and medium-sized enterprises worldwide.</li>
+</ul>
+</li>
+<li>
+<p><strong>Check Point</strong>
+    Official website: www.checkpoint.com
+    <strong>Main Business:</strong> Comprehensive network security defense.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Large organizations, governments, and critical infrastructure.</li>
+<li><strong>Detailed Introduction</strong>: As the inventor of stateful inspection firewalls, Check Point holds an extremely high position in the history of security infrastructure. Its unified security management architecture can control tens of thousands of nodes, serving as the "brain" for maintaining the security of complex internet architectures.</li>
+</ul>
+</li>
+<li>
+<p><strong>Zscaler</strong>
+    Official website: www.zscaler.com
+    <strong>Main Business</strong>: Cloud Security Gateway (SWG), Zero Trust Access.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global cloud nodes.</li>
+<li><strong>Target Audience:</strong> Modern enterprises transitioning to the cloud.</li>
+<li><strong>Detailed Introduction</strong>: Zscaler completely abandons the hardware firewall model, building its entire security infrastructure in the cloud. It not only protects an enterprise's internet exit points but also reshapes the security logic of "the internet is the enterprise's internal network," making it one of the highest-valued and most technologically advanced giants in the security infrastructure field.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h4 id="ix-certificate-issuance-and-digital-trust-ssltls-trust-services">IX. Certificate Issuance and Digital Trust (SSL/TLS &amp; Trust Services)</h4>
+<ol>
+<li>
+<p><strong>DigiCert</strong>
+    Official website: www.digicert.com
+    <strong>Main Business</strong>: SSL certificates and PKI management.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target audience:</strong> All websites that have enabled HTTPS.
+<strong>Detailed Introduction:</strong> DigiCert is the foundation of global digital trust. It is currently the leading issuer of the highest-level (EV) SSL certificates. Without its infrastructure support, encrypted communication (HTTPS) on the internet would lack a foundation of trust. It manages an extremely rigorous CA (root certificate) system and is the core "trust authority" ensuring the security and privacy of internet transactions.</li>
+</ul>
+</li>
+<li>
+<p><strong>Sectigo (formerly Comodo CA)</strong>
+    Official website: sectigo.com
+    <strong>Main Business:</strong> Digital certificates and network security protection.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Small and medium-sized enterprises, individual developers.
+<strong>Detailed Introduction:</strong> Sectigo is one of the world's largest commercial certificate authorities. Its infrastructure, through an automated SSL issuance system, has helped billions of websites transition from plaintext to encrypted transmission. With an extremely comprehensive product line, it has been a major contributor to the widespread adoption of internet security.</li>
+</ul>
+</li>
+<li>
+<p><strong>Let's Encrypt</strong>
+    Official website: letsencrypt.org
+    <strong>Main Business:</strong> Free SSL Certificates.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Personal bloggers, small projects, and general website owners.</li>
+<li><strong>Detailed Introduction</strong>: Let's Encrypt is a miracle of internet infrastructure built on public benefit. Operated by ISRG, it has revolutionized the history of expensive SSL certificates and promoted the global adoption of HTTPS for all websites. Its infrastructure operates entirely automatically via API, significantly enhancing the overall security of the global network.</li>
+</ul>
+</li>
+<li>
+<p><strong>GlobalSign</strong>
+    Official website: www.globalsign.com
+    <strong>Main Business</strong>: Enterprise-level identity verification, IoT certificates.</p>
+<ul>
+<li><strong>Coverage</strong>: Global (with extremely strong coverage in Asia Pacific and Japan).</li>
+<li><strong>Target Audience:</strong> Large manufacturing enterprises and IoT service providers.</li>
+<li><strong>Detailed Introduction</strong>: GlobalSign excels in the Internet of Things (IoT) infrastructure sector. Its certificates are used for the authentication of hundreds of millions of devices. Its high-performance OCSP (Online Certificate State Protocol) nodes are deployed globally, ensuring fast handshakes for encrypted connections.</li>
+</ul>
+</li>
+<li>
+<p><strong>Entrust</strong>
+    Official website: www.entrust.com
+    <strong>Main Business:</strong> Identity verification and secure digital payment.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Government agencies, banks, and high-security institutions.</li>
+<li><strong>Detailed Introduction</strong>: Entrust provides extremely advanced identity authentication infrastructure, including electronic passports and bank card issuance systems. In the internet sector, its digital signature and certificate services are used to protect the most sensitive national-level data exchanges.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h4 id="x-infrastructure-hardware-and-support">X. Infrastructure Hardware and Support</h4>
+<ol>
+<li>
+<p><strong>Cisco</strong>
+    Official website: www.cisco.com
+    <strong>Main Business</strong>: Core routers, switches, and collaboration devices.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> All businesses that build networks.
+<strong>Detailed Introduction:</strong> Cisco is the cornerstone of internet hardware. Its core routers (such as the CRS series) once supported the vast majority of traffic on the internet backbone. Although facing competition from domestic manufacturers, Cisco's infrastructure strength in network protocols, standards development, and global technical service networks remains world-class.</li>
+</ul>
+</li>
+<li>
+<p><strong>Juniper Networks</strong>
+    Official website: www.juniper.net
+    <strong>Main Business</strong>: High-performance routers, Junos operating system.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Telecom operators and large cloud providers.
+<strong>Detailed Introduction:</strong> Juniper is renowned for its high performance and excellent software architecture. Its Junos system is widely recognized as the most suitable network operating system for automated management. Juniper routers are the preferred underlying packet forwarding engine in many top-tier IXPs and backbone network nodes worldwide.</li>
+</ul>
+</li>
+<li>
+<p><strong>Arista Networks</strong>
+    Official website: www.arista.com</p>
+<ul>
+<li><strong>Main Business</strong>: Cloud network switches, low-latency networks.</li>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> High-frequency trading firms and data centers.
+<strong>Detailed Introduction:</strong> Arista is a disruptor in modern data center networking. Focusing on Software-Defined Networking (SDN), it has rapidly captured the data centers of public cloud giants and financial institutions through its ultra-low latency hardware architecture. It is synonymous with "high-performance forwarding" in modern cloud infrastructure.</li>
+</ul>
+</li>
+<li>
+<p><strong>Intel (Networking Division)</strong>
+    Official website: www.intel.com
+    <strong>Main Business</strong>: Ethernet controllers, optical communication chips, and SmartNICs.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Server manufacturers and cloud service providers.</li>
+<li><strong>Detailed Introduction</strong>: Intel not only makes CPUs, but its network interface cards (NICs) and processing chips form the "microscopic foundation" of internet infrastructure. Its DPDK and other technologies greatly enhance the ability of general-purpose servers to process network packets, and are a core driving force for software-defined infrastructure.</li>
+</ul>
+</li>
+<li>
+<p><strong>Broadcom</strong>
+    Official website: www.broadcom.com
+    <strong>Main Business: Switching chips (Tomahawk/Trident)</strong></p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> All network hardware manufacturers.
+<strong>Detailed Introduction:</strong> Broadcom is the "hidden king" of internet infrastructure. Almost all mainstream switches (including self-developed cloud vendor switches) run its chips. It determines the upper limit of the physical speed of internet data exchange.</li>
+</ul>
+</li>
+<li>
+<p><strong>Nvidia (Mellanox)</strong>
+    Official website: www.nvidia.com</p>
+<ul>
+<li><strong>Main Business</strong>: InfiniBand network, high-performance DPU.</li>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Supercomputers, AI Data Centers.</li>
+<li><strong>Detailed Introduction:</strong> Following its acquisition of Mellanox, Nvidia gained control of a key global AI computing network. Its InfiniBand technology is irreplaceable in high-speed data center interconnection, serving as the "breathing system" of the global internet infrastructure for large-scale model training.</li>
+</ul>
+</li>
+<li>
+<p><strong>Equinix Metal (formerly Packet)</strong>
+    Official website: metal.equinix.com
+    <strong>Main Business</strong>: Bare metal cloud, API control hardware.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Software developers who require extreme performance.</li>
+<li><strong>Detailed Introduction:</strong> It transforms physical servers into programmable resources, much like the cloud. In internet infrastructure, it provides a robust, underlying control, allowing developers to fully customize their hardware stack.</li>
+</ul>
+</li>
+<li>
+<p><strong>A10 Networks</strong>
+    Official website: www.a10networks.com
+    <strong>Main Business</strong>: Application delivery, IPv4-v6 translation (CGNAT).</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Telecom operators and large enterprises.
+<strong>Detailed Introduction:</strong> A10 Networks is a leading authority in the field of "address translation" for internet infrastructure. Through its high-performance CGNAT technology, it helps global operators maintain internet connectivity even when IPv4 is depleted.</li>
+</ul>
+</li>
+<li>
+<p><strong>Zayo Group</strong>
+    Official website: www.zayo.com
+    <strong>Main Business</strong>: Dark Fiber and Wavelength Leasing.</p>
+<ul>
+<li><strong>Coverage Area</strong>: North America, Europe.</li>
+<li><strong>Target Audience:</strong> Tech giants that need to build their own private backbone networks.</li>
+<li><strong>Detailed Introduction</strong>: Zayo provides the most fundamental asset of the internet—dark fiber. It allows customers to lease unlit fiber optic cables and install their own equipment. For companies like Google and Facebook that need to build global intranets, Zayo is the physical optical support provider.</li>
+</ul>
+</li>
+<li>
+<p><strong>Nokia (IP Networks)</strong>
+    Official website: www.nokia.com
+    <strong>Main Business:</strong> Optical transmission, 7750 SR core router.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Telecommunications service providers worldwide.
+<strong>Detailed Introduction:</strong> After acquiring Alcatel-Lucent, Nokia became a world-leading IP routing provider. Its equipment is renowned for its massive capacity and powerful MPLS features, making it one of the most commonly used core nodes in global mobile internet backbone networks.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<p>Part Three: Physical Boundaries and Future Evolution</p>
+<h4 id="xi-satellite-internet-and-space-to-air-connection">XI. Satellite Internet and Space-to-Air Connection</h4>
+<ol>
+<li>
+<p><strong>SpaceX - Starlink</strong>
+    Official website: www.starlink.com
+    <strong>Main Business</strong>: Low Earth Orbit (LEO) satellite broadband, global roaming, and enterprise leased lines.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global (except for a very few restricted areas), especially in oceans, deserts, and mountainous regions.</li>
+<li><strong>Target Audience:</strong> Residents in remote areas, maritime, aviation, and government emergency communications.
+<strong>Detailed Introduction:</strong> Starlink is a pioneer in low-Earth orbit satellite communication. Its core infrastructure consists of thousands of low-Earth orbit satellites operating at an altitude of 550 kilometers. Compared to traditional geostationary orbit satellites, Starlink achieves extremely low latency (20-40ms) through space-based laser links, enabling satellite internet to support real-time applications such as online gaming and high-definition video calls for the first time. Its independently developed electronic phased array antenna has completely transformed the complexity of ground stations. Starlink's role in internet infrastructure is to fill the last 10% of the space where fiber optic cables cannot reach, providing the strongest foundation for achieving "global physical connectivity without dead zones."</li>
+</ul>
+</li>
+<li>
+<p><strong>OneWeb (now part of Eutelsat Group)</strong>
+    Official website: www.oneweb.net</p>
+<ul>
+<li><strong>Main Business</strong>: Enterprise-level low-Earth orbit satellite connectivity.</li>
+<li><strong>Coverage Area</strong>: Global (with a focus on high-latitude regions of the Northern Hemisphere).</li>
+<li><strong>Target Audience:</strong> Telecommunications operators, corporate branches, mining, and oil and gas.</li>
+<li><strong>Detailed Introduction:</strong> Unlike Starlink, OneWeb does not directly target individual consumers but positions itself as an "operator's operator." Its infrastructure is designed to provide wholesale-level network backhaul services. By connecting satellite signals to terrestrial mobile base stations, OneWeb helps ISPs in remote areas quickly achieve 4G/5G signal coverage. Its infrastructure system exhibits exceptional stability in extreme geographical environments such as Antarctica and the Arctic Circle. It is a key component in extending the global internet backbone to vertical industries and extreme geographical environments.</li>
+</ul>
+</li>
+<li>
+<p><strong>Viasat</strong>
+    Official website: www.viasat.com</p>
+<ul>
+<li><strong>Main Business</strong>: High-throughput geostationary orbit (GEO) satellites and airborne Wi-Fi.</li>
+<li><strong>Coverage Area</strong>: Global (primarily through its GEO satellite constellation).</li>
+<li><strong>Target Audience:</strong> Air passengers, US military personnel, and large commercial vessels.
+<strong>Detailed Introduction:</strong> Viasat is a leading traditional satellite giant, and its ViaSat-3 series satellites are among the most powerful communication satellites in human history. Its infrastructure single-satellite throughput exceeds 1Tbps, capable of providing high-speed internet to hundreds of aircraft simultaneously along an entire transoceanic route. Although its latency is relatively high due to its orbital altitude (36,000 km), it remains highly competitive in terms of unit cost and coverage. It is the de facto controller of modern in-flight internet infrastructure, ensuring a digital lifestyle at 10,000 meters altitude.</li>
+</ul>
+</li>
+<li>
+<p><strong>Amazon - Project Kuiper</strong></p>
+<ul>
+<li><strong>Official website</strong>: www.aboutamazon.com/what-we-do/devices-services/project-kuiper</li>
+<li><strong>Main Business</strong>: Large-scale low-Earth orbit satellite constellations.</li>
+<li><strong>Coverage Area</strong>: Under construction (target: global coverage).</li>
+<li><strong>Target Audience:</strong> AWS enterprise users, Amazon retail ecosystem, and rural households.</li>
+<li><strong>Detailed Introduction:</strong> Kuiper is Amazon's ambitious foray into the underlying infrastructure of the internet. Its infrastructure logic is deeply integrated with AWS, aiming to deliver cloud computing power directly to users' doorsteps via satellite. Kuiper is not only building satellites but also developing its own compact terminal chips. For internet infrastructure, Kuiper's value lies in breaking the monopoly of a single vendor (SpaceX) in the LEO field. Through large-scale mass production and a low-cost strategy, it has the potential to reduce the price of satellite broadband to a level accessible to the general public.</li>
+</ul>
+</li>
+<li>
+<p><strong>SES (O3b mPOWER)</strong>
+    Official website: www.ses.com
+    <strong>Main Business:</strong> Medium Earth Orbit (MEO) and High Earth Orbit hybrid satellite networks.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Large government agencies, telecommunications giants, and cruise lines.
+<strong>Detailed Introduction:</strong> SES's O3b system is currently the world's only medium-Earth orbit broadband system. Its infrastructure altitude falls between LEO and GEO, balancing low latency and wide coverage. For island nations or large luxury cruise ships that require "fiber-level latency" but cannot lay fiber optic cables, SES's infrastructure is a lifeline. Its mPOWER architecture, through software-defined satellite technology, can dynamically adjust satellite power flow based on peak ground traffic.</li>
+</ul>
+</li>
+<li>
+<p><strong>Iridium Communications</strong>
+    Official website: www.iridium.com
+    <strong>Main Business:</strong> Global voice and narrowband IoT data exchange.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Truly 100% global coverage (including the North and South Poles).</li>
+<li><strong>Target Audience:</strong> Maritime explorers, emergency rescue teams, and remote IoT monitoring devices.
+<strong>Detailed Introduction:</strong> Iridium is an irreplaceable "nerve ending" in internet infrastructure. While it doesn't provide ultra-high-speed bandwidth, its mesh-like structure among satellites ensures perpetual connectivity as long as it's in the sky. Its infrastructure is central to global emergency search and rescue (SOS) and tracking. In recent years, Iridium has enhanced its bandwidth through Certus technology, becoming a digital foundation connecting various small sensors and smart devices worldwide.</li>
+</ul>
+</li>
+<li>
+<p><strong>Telesat (Lightspeed)</strong>
+    Official website: www.telesat.com</p>
+<ul>
+<li><strong>Main Business</strong>: Enterprise-level LEO constellation construction.</li>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Large organizations that require highly secure, private network connections.</li>
+<li><strong>Detailed Introduction</strong>: Telesat is a long-established Canadian satellite operator whose Lightspeed project focuses on providing "space-based leased lines" for businesses and governments. A key feature of its infrastructure is its support for extremely high levels of physical encryption and anti-jamming capabilities. It serves as an alternative backup solution for the global internet backbone in space.</li>
+</ul>
+</li>
+<li>
+<p><strong>Globalstar</strong>
+    Official website: www.globalstar.com</p>
+<ul>
+<li><strong>Main Business</strong>: Low-Earth orbit voice and IoT communication, Apple satellite direct connection support provider.</li>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Smartphone users (Apple SOS), fleet management.</li>
+<li><strong>Detailed Introduction</strong>: Globalstar gained widespread recognition as the infrastructure provider for Apple's iPhone satellite emergency distress feature. Its infrastructure focuses on short messages and emergency location, representing the first step in extending the internet to consumer mobile devices in offline environments. The value of its infrastructure lies in its "simplicity," achieving direct air-to-ground connectivity without the need for massive antennas.</li>
+</ul>
+</li>
+<li>
+<p><strong>Inmarsat (Maritime Satellite, now part of Viasat)</strong>
+    Official website: www.inmarsat.com</p>
+<ul>
+<li><strong>Main Business:</strong> Global maritime safety and broadband communications.</li>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Ocean-going freighters, commercial airlines, and oil platforms.</li>
+<li><strong>Detailed Introduction</strong>: As a product of the United Nations' Maritime Safety Communications Initiative, its infrastructure possesses strong public welfare and industry standard attributes. The GMDSS (Global Maritime Distress and Safety System) runs on its network. It serves as the legal and technical benchmark for the internet in the high seas.</li>
+</ul>
+</li>
+<li>
+<p><strong>GalaxySpace</strong>
+    Official website: www.yinhehangtian.com</p>
+<ul>
+<li><strong>Main Business</strong>: 5G satellites, flat-panel stacked satellites.</li>
+<li><strong>Coverage Area</strong>: China and Asia-Pacific (under trial).</li>
+<li><strong>Target Audience:</strong> Builders of new computing power networks and the China Space Internet.</li>
+<li><strong>Detailed Introduction</strong>: As a representative of private satellite internet companies in China, its Q/V band satellites rival Starlink in bandwidth. It is a vital force in China's "StarNet" project, and its infrastructure capabilities showcase the technological prototype of a future integrated air-ground 6G network.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h4 id="xii-subsea-cable-epc">XII. Subsea Cable &amp; EPC</h4>
+<ol>
+<li>
+<p><strong>SubCom (formerly TE SubCom)</strong>
+    Official website: www.subcom.com
+    <strong>Main Business:</strong> Design, manufacturing, and laying of transoceanic submarine optical cables.</p>
+<ul>
+<li><strong>Coverage Area</strong>: The bottom of the world's oceans.</li>
+<li><strong>Target Audience:</strong> Google, Meta, and telecommunications conglomerates.
+<strong>Detailed Introduction:</strong> SubCom is the leading company among the world's three major submarine fiber optic cable construction companies. It is not only a manufacturing facility but also possesses a vast fleet of cable-laying vessels. 99% of intercontinental internet data is transmitted via submarine fiber optic cables, and SubCom is the creator of these "internet arteries." It has completed numerous ultra-high-capacity systems connecting North America with Europe and Asia. Its core technologies lie in its loudspeakers capable of withstanding high pressure thousands of meters underwater and its high-purity optical fiber materials, providing the most robust support for the internet's physical layer.</li>
+</ul>
+</li>
+<li>
+<p><strong>ASN (Alcatel Submarine Networks)</strong>
+    Official website: www.asn.com</p>
+<ul>
+<li><strong>Main Business</strong>: Turnkey submarine communication solutions.</li>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Global carrier alliances and cloud giants.</li>
+<li><strong>Detailed Introduction</strong>: Belonging to Nokia, ASN boasts impeccable technological foundation. It is responsible for the operation and maintenance of a large portion of the world's long-distance submarine cables. ASN holds leading patents in submarine digitization and sensor monitoring. It is a major builder connecting Europe with Africa and the Middle East. Its infrastructure capabilities determine the resilience of the global network topology.</li>
+</ul>
+</li>
+<li>
+<p><strong>NEC Corporation (Submarine Network)</strong>
+    <strong>Official Website:</strong> www.nec.com/en/global/prod/nw/submarine/
+    <strong>Main Business:</strong> Submarine optical cable system integration and trans-Pacific submarine cables.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Asia Pacific, North America, and Latin America.</li>
+<li><strong>Target Audience:</strong> Operators and multinational data transmission organizations in Japan and the Asia-Pacific region.</li>
+<li><strong>Detailed Introduction</strong>: NEC is the king of submarine infrastructure in Asia. It has led the construction of several ultra-large systems (such as SJC2) connecting China, Japan, the United States, and Southeast Asia. Its infrastructure is characterized by extremely high optical transmission efficiency and extremely low failure rate, providing a physical guarantee for internet access speeds in the Asia-Pacific region.</li>
+</ul>
+</li>
+<li>
+<p><strong>Hengtong Optic-Electric (Hengtong Group)</strong>
+    Official website: www.hengtonggroup.com
+    <strong>Main Business</strong>: Fiber optic cable manufacturing, submarine cable operation and maintenance, PEACE submarine cable system.</p>
+<ul>
+<li><strong>Coverage Scope</strong>: Global, with a focus on connecting Asia, Europe, and Africa.</li>
+<li><strong>Target Audience:</strong> Chinese companies expanding overseas and global telecom operators.
+<strong>Detailed Introduction:</strong> Hengtong is one of China's largest telecommunications infrastructure equipment manufacturers. Through its acquisition of Huawei Marine, Hengtong has become one of the world's top four submarine cable manufacturers. Its self-invested PEACE submarine cable connects China, Africa, and Europe, significantly improving network connectivity along the Belt and Road Initiative. It is a core force in China's efforts to break the international monopoly on telecommunications lines and gain control over the underlying infrastructure of the internet.</li>
+</ul>
+</li>
+<li>
+<p><strong>Global Marine Group</strong>
+    Official website: www.globalmarine.group
+    <strong>Main Business</strong>: Submarine cable repair and seabed surveying.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global sea areas.</li>
+<li><strong>Target Audience:</strong> All submarine cable owners and wind power developers.</li>
+<li><strong>Detailed Introduction</strong>: If SubCom is the road builder, then Global Marine is both the "road builder" and the "surveyor." The most vulnerable moment for internet infrastructure is when submarine cables break. Global Marine, through its maintenance ships and ROVs (remotely operated vehicles) located in ports around the world, ensures the internet's survivability in the face of sudden global disasters.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h4 id="xiii-internet-of-things-infrastructure-and-gateways">XIII. Internet of Things Infrastructure and Gateways</h4>
+<ol>
+<li>
+<p><strong>Advantech</strong>
+    Official website: www.advantech.com</p>
+<ul>
+<li><strong>Main Business</strong>: Industrial gateways, embedded edge computing, WISE-PaaS platform.</li>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Intelligent manufacturing, transportation, and smart cities.
+<strong>Detailed Introduction:</strong> Advantech is synonymous with IoT hardware infrastructure. Its various industrial control computers and edge gateways act as "translators" connecting physical devices in factories to the internet. Its infrastructure logic is "edge-cloud collaboration," performing initial data processing at the point of data generation, significantly reducing uplink bandwidth pressure. It forms the underlying foundation for Industry 4.0 and the integration of the internet into the real economy.</li>
+</ul>
+</li>
+<li>
+<p><strong>Digi International</strong>
+    Official website: www.digi.com
+    <strong>Main Business</strong>: Industrial wireless routers, SOM modules, and console servers.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Automation engineers, distributed asset managers.</li>
+<li><strong>Detailed Introduction</strong>: Digi excels at providing extremely stable industrial-grade wireless connectivity. Its products are often deployed in remote wind farms or vending machines. Acting as the "glue" of internet infrastructure, it connects remote terminals lacking traditional network access.</li>
+</ul>
+</li>
+<li>
+<p><strong>Semtech (LoRa)</strong>
+    Official website: www.semtech.com
+    <strong>Main Business:</strong> LoRa chip design and long-distance low-power communication base.</p>
+<ul>
+<li><strong>Coverage Scope</strong>: Global LoRaWAN ecosystem.</li>
+<li><strong>Target Audience:</strong> IoT developers and smart city builders.</li>
+<li><strong>Detailed Introduction</strong>: Semtech owns LoRa technology, the global benchmark for Low Power Wide Area Networks (LPWAN). Its defined physical layer protocol allows a sensor to operate for ten years on battery power, covering a range of ten kilometers. It is a key chip manufacturer in the internet's transition to the "Internet of Everything" era, building a low-frequency infrastructure system independent of WiFi and cellular networks.</li>
+</ul>
+</li>
+<li>
+<p><strong>Quectel (Quectel Communications)</strong>
+    Official website: www.quectel.com</p>
+<ul>
+<li><strong>Main Business</strong>: 5G/LTE/Cat-M wireless communication modules.</li>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Connected vehicles, POS machines, mobile healthcare.
+<strong>Detailed Introduction:</strong> Quectel is the world's largest cellular module manufacturer by shipment volume. It is the "heart" of all physical devices connecting to the internet. Whether it's shared bicycles or smart cars, most of them run on Quectel modules. Its infrastructure contribution lies in encapsulating complex mobile communication protocols into standardized industrial components, greatly accelerating the popularization of internet-connected devices.</li>
+</ul>
+</li>
+<li>
+<p><strong>Actility</strong>
+    Official website: www.actility.com</p>
+<ul>
+<li><strong>Main Business</strong>: ThingPark IoT management platform and core network.</li>
+<li><strong>Coverage</strong>: Global Industrial Internet of Things (IIoT).</li>
+<li><strong>Target Audience:</strong> Smart industry, large-scale logistics.</li>
+<li><strong>Detailed Introduction</strong>: Actility provides the "operating system" and core network layer for the Internet of Things (IoT). It helps enterprise customers manage thousands of LoRaWAN or NB-IoT base stations and terminals, serving as the control plane in IoT infrastructure.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h4 id="xiv-network-observation-bgp-optimization-and-link-measurement-observability-traffic-engineering">XIV. Network Observation, BGP Optimization, and Link Measurement (Observability &amp; Traffic Engineering)</h4>
+<ol>
+<li>
+<p><strong>SolarWinds</strong>
+    Official website: www.solarwinds.com
+    <strong>Main Business:</strong> Full-stack IT performance monitoring, Orion platform.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Network administrators, system maintenance personnel, and government IT staff.
+<strong>Detailed Introduction:</strong> SolarWinds is a "stethoscope" for monitoring the health of internet infrastructure. It can display network topology in real time and monitor traffic jitter on each router. Although it has experienced major security supply chain incidents, its observation capabilities in complex internal networks and large network architectures remain the industry standard. It makes internet operations visible and quantifiable.</li>
+</ul>
+</li>
+<li>
+<p><strong>Paessler (PRTG)</strong>
+    Official website: www.paessler.com
+    <strong>Main Business:</strong> All-in-one network monitoring.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> IT teams of medium to large enterprises.
+<strong>Detailed Introduction:</strong> PRTG is renowned for its "monitoring of everything" capabilities. Its infrastructure monitoring encompasses all dimensions, from traffic protocol analysis to temperature and humidity sensing. For maintaining the stability of Internet Data Centers (IDCs), PRTG provides an extremely sophisticated real-time alerting mechanism.</li>
+</ul>
+</li>
+<li>
+<p><strong>Kentik</strong>
+    Official website: www.kentik.com
+    <strong>Main Business</strong>: Network observability, cloud network diagnostics.</p>
+<ul>
+<li><strong>Coverage</strong>: Global cloud and hybrid architectures.</li>
+<li><strong>Target Audience:</strong> Network architects and CDN engineers.
+<strong>Detailed Introduction:</strong> Kentik is a favorite for modern high-performance network operations and maintenance. It can handle massive amounts of streaming data, helping engineers figure out why data packets are being lost from New York to Shanghai. Its infrastructure value lies in its ability to observe internet path congestion from a global perspective and provide optimization solutions.</li>
+</ul>
+</li>
+<li>
+<p><strong>ThousandEyes (a Cisco subsidiary)</strong>
+    Official website: www.thousandeyes.com</p>
+<ul>
+<li><strong>Main Business</strong>: End-to-end path observation, Internet mapping.</li>
+<li><strong>Coverage Area</strong>: Thousands of nodes worldwide.</li>
+<li><strong>Target Audience:</strong> SaaS companies (such as Salesforce) and large cloud customers.</li>
+<li><strong>Detailed Introduction:</strong> ThousandEyes has built an "Internet weather forecast map" by deploying numerous detection points globally. It is typically the first system to report an emergency when a cross-border fiber optic cable breaks or a DNS service fails. It serves as a digital guarantee for the high availability of modern internet services.</li>
+</ul>
+</li>
+<li>
+<p><strong>Noction</strong>
+    Official website: www.noction.com
+    <strong>Main Business</strong>: IRP (Intelligent Routing Platform) and BGP Automated Optimization.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global backbone network exchange point.</li>
+<li><strong>Target Audience:</strong> Large ISPs and game developers with multi-exit BGP networks.
+<strong>Detailed Introduction:</strong> The BGP protocol is inherently based on the "shortest path" rather than the "fastest path." Noction's infrastructure logic breaks this mediocrity. By detecting the link quality of different operators in real time, it automatically modifies its BGP policy to ensure that traffic always takes the smoothest route. It is the ultimate optimizer for internet transmission efficiency.</li>
+</ul>
+</li>
+<li>
+<p><strong>Zabbix</strong>
+    Official website: www.zabbix.com</p>
+<ul>
+<li><strong>Main Business:</strong> Open source enterprise-level monitoring.</li>
+<li><strong>Coverage</strong>: Global open source community.</li>
+<li><strong>Target Audience:</strong> IT managers who value autonomy and control.</li>
+<li><strong>Detailed Introduction</strong>: As the world's most successful open-source infrastructure monitoring software, Zabbix has supported the initial development of countless small and medium-sized internet companies. Its extremely high flexibility allows developers to customize any monitoring logic, making it one of the most democratic and widely covered infrastructures in the field of internet infrastructure monitoring.</li>
+</ul>
+</li>
+<li>
+<p><strong>Catchpoint</strong>
+    Official website: www.catchpoint.com</p>
+<ul>
+<li><strong>Main Business</strong>: User Experience Monitoring (DEM) and Edge Monitoring.</li>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Businesses that are extremely sensitive to latency (such as advertising bidding).</li>
+<li><strong>Detailed Introduction</strong>: Catchpoint measures the internet from the user's perspective. Its probe nodes are not only in data centers, but also in real-world home broadband and mobile networks. The real-world link data it provides is a crucial basis for internet companies to make global point-of-presence (PoP) deployment decisions.</li>
+</ul>
+</li>
+<li>
+<p><strong>Splunk (part of Cisco)</strong>
+    Official website: www.splunk.com
+    <strong>Main Business</strong>: Machine data analysis, log auditing, and security operations.</p>
+<ul>
+<li><strong>Coverage Scope</strong>: Large and medium-sized enterprises worldwide.</li>
+<li><strong>Target Audience:</strong> Security executives, data analysts.
+<strong>Detailed Introduction:</strong> Splunk is the "black box" of internet infrastructure. It can devour massive amounts of logs from firewalls, routers, and servers, and uncover the root causes of failures. Its infrastructure value lies in transforming disordered underlying data into actionable security decisions.</li>
+</ul>
+</li>
+<li>
+<p><strong>Nagios</strong>
+    Official website: www.nagios.org</p>
+<ul>
+<li><strong>Main Business</strong>: Basic monitoring of IT infrastructure.</li>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Experienced system administrators and traditional data center managers.
+<strong>Detailed Introduction:</strong> Nagios is the pioneer in the monitoring industry. Its architecture is extremely rigorous, and its support for various low-level protocols is unparalleled. Although its UI is traditional, its authority in ensuring the survival of server and network hardware is beyond question.</li>
+</ul>
+</li>
+<li>
+<p><strong>Grafana Labs</strong>
+    Official website: grafana.com</p>
+<ul>
+<li><strong>Main Business</strong>: Data visualization dashboards, Prometheus integration.</li>
+<li><strong>Coverage Scope</strong>: Global cloud-native ecosystem.</li>
+<li><strong>Target Audience:</strong> DevOps engineers and full-stack developers.
+<strong>Detailed Introduction:</strong> Grafana is the "dashboard" of modern internet infrastructure. It transforms dry, low-level performance metrics into cool, easy-to-understand charts. Through its integration with infrastructure components such as Prometheus and Loki, it defines the monitoring aesthetics and standards for the cloud-native era.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h4 id="xv-web3-and-decentralized-internet-infrastructure">XV. Web3 and Decentralized Internet Infrastructure</h4>
+<ol>
+<li>
+<p><strong>Alchemy</strong>
+    Official website: www.alchemy.com
+    <strong>Main Business</strong>: Blockchain node infrastructure and API platform.</p>
+<ul>
+<li><strong>Coverage</strong>: Global blockchain network.</li>
+<li><strong>Target Audience:</strong> Web3 developers, blockchain game companies, and NFT platforms.
+<strong>Detailed Introduction:</strong> Alchemy is often referred to as the "AWS of the blockchain world." Building Web3 applications requires connecting to blockchain nodes, but maintaining these nodes is extremely expensive and unstable. Alchemy provides a high-performance, highly available, fully managed node API, allowing developers to create decentralized applications without managing the underlying hardware. Its infrastructure supports the operation of giants like OpenSea, serving as an efficient bridge connecting the traditional internet and blockchain networks.</li>
+</ul>
+</li>
+<li>
+<p><strong>Infura (part of ConsenSys)</strong></p>
+<ul>
+<li><strong>Official website</strong>: www.infura.io
+<strong>Main Business: Ethereum/IPFS Node Access</strong></li>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Ethereum ecosystem developers and MetaMask users.
+<strong>Detailed Introduction:</strong> Infura is a pioneer in Web3 infrastructure. Most users' MetaMask wallets actually send data requests to Infura's data centers. It is the lifeline of the Ethereum ecosystem. Although its centralized operation is controversial within the community, its actual traffic handling and stability make it an indispensable foundation for the Web3 world.</li>
+</ul>
+</li>
+<li>
+<p><strong>QuickNode</strong>
+    Official website: www.quicknode.com</p>
+<ul>
+<li><strong>Main Business</strong>: Multi-chain high-performance node services.</li>
+<li><strong>Coverage Area</strong>: More than 10 public blockchain networks worldwide.</li>
+<li><strong>Target Audience:</strong> Web3 projects that prioritize extreme speed.
+<strong>Detailed Introduction:</strong> QuickNode excels in speed. Through its globally distributed network of accelerators, it enables on-chain queries several times faster than standard nodes. At the internet infrastructure level, it proves that even on top of decentralized protocols, a commercial-grade experience can still be achieved through excellent network layer optimization.</li>
+</ul>
+</li>
+<li>
+<p><strong>Protocol Labs (IPFS/Filecoin)</strong>
+    Official website: protocol.ai
+    <strong>Main Business</strong>: Decentralized storage protocols and peer-to-peer network infrastructure.</p>
+<ul>
+<li><strong>Coverage Scope</strong>: Global nodes.</li>
+<li><strong>Target Audience:</strong> Organizations that prioritize the sustainable storage of content.</li>
+<li><strong>Detailed Introduction</strong>: IPFS aims to replace the HTTP protocol. It doesn't locate content by IP address, but rather by the content's "hash value." This infrastructure model fundamentally changes the logic of data storage and distribution. Its associated project, Filecoin, provides an incentivized storage market and serves as the physical foundation for building a "never-ending internet."</li>
+</ul>
+</li>
+<li>
+<p><strong>The Graph</strong>
+    Official website: thegraph.com
+    <strong>Main Business:</strong> Decentralized indexing protocol.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> All Web3 applications that need to query on-chain data.
+<strong>Detailed Introduction:</strong> If blockchain is a database, then The Graph is the Google of Web3. Through distributed indexer nodes, it establishes a fast-querying API for messy on-chain data. It is a crucial "data middleware layer" in Web3 infrastructure.</li>
+</ul>
+</li>
+<li>
+<p><strong>Arweave</strong>
+    Official website: www.arweave.org
+    <strong>Main Business:</strong> Permanent decentralized storage.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Those who store historical archives and publish content resistant to censorship.
+<strong>Detailed Introduction:</strong> Arweave introduces the concept of a one-time payment for storage for a century. Its infrastructure employs a "woven network" structure, using unique algorithms to ensure data is continuously copied and preserved. It forms the physical foundation of the internet's "digital library."</li>
+</ul>
+</li>
+<li>
+<p><strong>Chainlink</strong>
+    Official website: chain.link
+    <strong>Main Business:</strong> Decentralized Oracle Network.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> DeFi, Smart Contracts, Insurance, Gaming.
+<strong>Detailed Introduction:</strong> Blockchain is a closed system, unable to access external information (such as oil prices or weather). Chainlink, through its vast network of validators, securely and reliably feeds real-world data into the chain. It acts as a "trusted gateway" between Web3 infrastructure and traditional real-world data.</li>
+</ul>
+</li>
+<li>
+<p><strong>Pocket Network (POKT)</strong>
+    Official website: www.pokt.network
+    <strong>Main Business:</strong> Decentralized RPC node market.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Tens of thousands of independent nodes worldwide.</li>
+<li><strong>Target Audience:</strong> Project teams that pursue ultimate decentralization.</li>
+<li><strong>Detailed Introduction</strong>: Unlike Alchemy, Pocket uses a DAO (Data Access Organization) model to allow tens of thousands of independent data center owners to provide node services. Its infrastructure eliminates dependence on a single cloud vendor, making it the ultimate solution for building an "attack-resistant and censorship-resistant" internet architecture.</li>
+</ul>
+</li>
+<li>
+<p><strong>Circle (USDC)</strong>
+    Official website: www.circle.com
+    <strong>Main Business:</strong> Digital currency financial infrastructure and payment systems.</p>
+<ul>
+<li><strong>Coverage Scope</strong>: Global Internet finance ecosystem.</li>
+<li><strong>Target Audience:</strong> Internet finance and multinational trading companies.
+<strong>Detailed Introduction:</strong> USDC, issued by Circle, serves as the "anchor" for native internet value exchange. Through blockchain technology, it reshapes clearing and settlement infrastructure, making global fund transfers as instant and low-cost as sending an email. It acts as a "compliant settlement layer" connecting the modern internet with the global financial system.</li>
+</ul>
+</li>
+<li>
+<p><strong>Ankr</strong>
+    Official website: www.ankr.com
+    <strong>Main Business</strong>: Cross-chain node hosting and staking infrastructure.</p>
+<ul>
+<li><strong>Coverage Area</strong>: Global.</li>
+<li><strong>Target Audience:</strong> Node operators and general investors.</li>
+<li><strong>Detailed Introduction</strong>: Ankr utilizes idle IDC computing power to provide inexpensive blockchain node services. It is a model of "resource reuse" in internet infrastructure, providing extremely low-threshold hardware support for the rapid popularization of Web3.</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h4 id="xvi-special-infrastructure-and-future-pillars-supplement">XVI. Special Infrastructure and Future Pillars (Supplement)</h4>
+<ol>
+<li>
+<p><strong>Cloudflare (Workers &amp; R2)</strong> - <em>As introduced in Part 1, this section supplements its object storage infrastructure.</em></p>
+<ul>
+<li><strong>Detailed Introduction</strong>: Cloudflare's R2 storage does not charge outbound traffic fees, challenging Amazon's S3 infrastructure dominance. Its Workers edge computing further liberates internet applications from the concept of "servers," representing the pinnacle of serverless infrastructure.</li>
+</ul>
+</li>
+<li>
+<p><strong>HashiCorp (Terraform)</strong>
+    Official website: www.hashicorp.com
+    <strong>Main Business: Infrastructure as Code (IaC)</strong></p>
+<ul>
+<li><strong>Detailed Introduction</strong>: Without Terraform, building the facilities of these 150 companies would have been extremely slow. It defines a language for managing hardware with code and serves as a "manual" for automating the construction of modern internet infrastructure.</li>
+</ul>
+</li>
+<li>
+<p><strong>Docker / Mirantis</strong>
+    Official website: www.docker.com</p>
+<ul>
+<li><strong>Main Business: Containerization Standards</strong></li>
+<li><strong>Detailed Introduction</strong>: Docker packages software into standard "containers." It allows internet applications to run in any data center, regardless of underlying hardware differences, and is the biggest contributor to infrastructure efficiency improvements over the past decade.</li>
+</ul>
+</li>
+<li>
+<p><strong>Red Hat (OpenShift)</strong>
+    Official website: www.redhat.com</p>
+<ul>
+<li><strong>Main Business</strong>: Enterprise-grade Linux and Kubernetes.</li>
+<li><strong>Detailed Introduction</strong>: As a guardian of open-source infrastructure, Red Hat ensures the security and compliance of the underlying operating system of the Internet. OpenShift is currently the world's most robust hybrid cloud container platform.</li>
+</ul>
+</li>
+<li>
+<p><strong>Figma (Infrastructure Design)</strong>
+    Official website: www.figma.com
+    <strong>Detailed Introduction:</strong> The "blueprint" for internet products is right here. As a collaborative tool, it's not just software, but the infrastructure for collaboration and creative processes across the entire internet industry.</p>
+</li>
+<li>
+<p><strong>Stripe (Payment Infrastructure)</strong>
+    Official website: www.stripe.com</p>
+<ul>
+<li><strong>Detailed Introduction</strong>: The "Cashier" of the Internet. Stripe solves the complexities of global tax and payment interfaces with just a few lines of code, serving as the digital lifeblood of the commercial internet.</li>
+</ul>
+</li>
+<li>
+<p><strong>Twillio (Communication API)</strong>
+    Official website: www.twilio.com</p>
+<ul>
+<li><strong>Detailed Introduction</strong>: It transforms traditional telecommunications networks into lines of APIs. Behind every SMS verification code on the internet, there may be a global communication relay station running by Twillio.</li>
+</ul>
+</li>
+<li>
+<p><strong>OpenAI (Computing Infrastructure)</strong>
+    Official website: openai.com
+    <strong>Detailed Introduction:</strong> Through massive GPU clusters, OpenAI is defining "AI as Infrastructure." Future internet traffic may no longer be generated by humans, but rather by their inference infrastructure.</p>
+</li>
+<li>
+<p><strong>NVIDIA (DGX Cloud)</strong>
+    Official website: www.nvidia.com</p>
+<ul>
+<li><strong>Detailed Introduction:</strong> NVIDIA not only provides chips, but now also directly provides cloud computing power data centers. It is the ultimate driving force behind the internet's shift from mere connectivity to computing.</li>
+</ul>
+</li>
+<li>
+<p><strong>ICANN (Internet Corporation for Assigned Names and Numbers)</strong>
+    Official website: www.icann.org
+    <strong>Main Business</strong>: Global Domain Name System and IP Address Management.
+    <strong>Detailed Introduction:</strong> It is the "ultimate coordinator" of all internet infrastructure. Although it is a non-profit organization, it manages the root servers and allocates all AS numbers and IP addresses. Without ICANN, these 150 companies would be isolated. It represents the highest consensus of human internet civilization.</p>
+</li>
+</ol>
+<hr />
+<p><strong>Summary of the entire article:</strong>
+These 150 companies range from fiber optic cables buried deep in the seabed to satellites soaring in space; from tiny sensor chips to massive supercomputing centers; from traditional primary backbone networks to emerging decentralized networks. Together, they weave together the greatest engineering feat in human history—the Internet.</p>
+<p>Thank you for reading! This summary aims to provide you with a comprehensive roadmap for your exploration in the internet infrastructure industry.</p>
+                </div>
+                
+                <div class="btn-wrapper">
+                    <a href="/" class="back-btn">RETURN_TERMINAL</a>
+                </div>
+            </article>
+        </main>
+        
+        <aside>
+            <section class="widget" style="text-align: center;">
+                <img src="https://cnfte.top/attachments/696b4d5b58c71_1768639835.webp" style="width: 80px; border-radius: 50%; border: 3px solid var(--accent); padding: 4px; margin-bottom: 10px;">
+                <h3 style="color:#fff; font-family:'ZCOOL KuaiLe';">Cnfte</h3>
+                <p style="font-size:0.8rem; color:#fff; opacity:0.6; margin-top:5px;">"滚滚长江东逝水，浪花淘尽英雄。"</p>
+                <div class="social-links">
+                    <a href="https://github.com/cnfte" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="https://t.me/cnfte1" target="_blank"><i class="fab fa-telegram"></i></a>
+                </div>
+            </section>
+            
+            
+            <section class="widget">
+                <h3 style="color:var(--accent); font-size:1.1rem; margin-bottom:15px; font-family:'ZCOOL KuaiLe';">CONTENTS</h3>
+                <div style="font-size:0.9rem; max-height: 50vh; overflow-y: auto; color:#fff;"><div class="toc">
+<ul>
+<li><a href="#part-one-the-cornerstone-of-the-global-internet">Part One: The Cornerstone of the Global Internet</a><ul>
+<li><a href="#i-domain-registration-and-management">I. Domain Registration and Management</a></li>
+<li><a href="#ii-authoritative-dns-resolution-services-dns-providers">II. Authoritative DNS Resolution Services (DNS Providers)</a></li>
+<li><a href="#iii-cdn-and-edge-computing-cdn-edge-services">III. CDN and Edge Computing (CDN &amp; Edge Services)</a></li>
+<li><a href="#iv-basic-cloud-architecture-cloud-iaas-infrastructure">IV. Basic Cloud Architecture (Cloud IaaS / Infrastructure)</a></li>
+</ul>
+</li>
+<li><a href="#part-two-the-blood-vessels-and-heart-of-the-internet">Part Two: The Blood Vessels and Heart of the Internet</a><ul>
+<li><a href="#v-top-global-backbone-networks-and-telecom-carriers">V. Top Global Backbone Networks and Telecom Carriers</a></li>
+<li><a href="#vii-data-centers-and-colocation">VII. Data Centers and Colocation</a></li>
+<li><a href="#viii-network-security-infrastructure-ddos-protection-waf-secure-routing">VIII. Network Security Infrastructure (DDoS Protection, WAF, Secure Routing)</a></li>
+<li><a href="#ix-certificate-issuance-and-digital-trust-ssltls-trust-services">IX. Certificate Issuance and Digital Trust (SSL/TLS &amp; Trust Services)</a></li>
+<li><a href="#x-infrastructure-hardware-and-support">X. Infrastructure Hardware and Support</a></li>
+<li><a href="#xi-satellite-internet-and-space-to-air-connection">XI. Satellite Internet and Space-to-Air Connection</a></li>
+<li><a href="#xii-subsea-cable-epc">XII. Subsea Cable &amp; EPC</a></li>
+<li><a href="#xiii-internet-of-things-infrastructure-and-gateways">XIII. Internet of Things Infrastructure and Gateways</a></li>
+<li><a href="#xiv-network-observation-bgp-optimization-and-link-measurement-observability-traffic-engineering">XIV. Network Observation, BGP Optimization, and Link Measurement (Observability &amp; Traffic Engineering)</a></li>
+<li><a href="#xv-web3-and-decentralized-internet-infrastructure">XV. Web3 and Decentralized Internet Infrastructure</a></li>
+<li><a href="#xvi-special-infrastructure-and-future-pillars-supplement">XVI. Special Infrastructure and Future Pillars (Supplement)</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+            </section>
+            
+
+            <section class="widget" style="background: rgba(0,0,0,0.4); border-color: rgba(255,153,204,0.2);">
+                <div style="font-family: 'Fira Code'; font-size: 0.75rem; color: #00ffcc; line-height: 2.2;">
+                    <div>[SYS] NODE: STABLE</div>
+                    <div>[SYS] ID: 06851bc6</div>
+                    <div>[SYS] TIME: <span id="live-clock">00:00:00</span></div>
+                </div>
+            </section>
+        </aside>
+    </div>
+
+    <footer>
+        <div style="margin-bottom: 15px; font-weight: bold; color: var(--accent);">本站由Cloudflare和Github强力驱动
+Powered by：<img src="https://cnfte.top/attachments/gh.svg" alt="GitHub">
+Analyzed by：<img src="https://cnfte.top/attachments/cf.svg" alt="Cloudflare Analysis">
+Served by：<img src="https://cnfte.top/attachments/cf2.svg" alt="Cloudflare CDN">
+商业投广通道(仅支持支付宝与微信付款)：QQ 3793945630
+TG：<a src=https://t.me/cnfte1>https://t.me/cnfte1</a>
+如何联系Cnfte与bug反馈？>>>QQ群聊：887378676
+TG群组：<a src=https://t.me/+pCnCBiCsyOhhMWU9>https://t.me/+pCnCBiCsyOhhMWU9</a>
+状态监控：<a src=https://probe.cnfte.top>https://probe.cnfte.top</a></div>
+        © 2026 Cnfte // CNFTE MOE PANEL
+    </footer>
+    
+    <script>
+        window.onscroll = () => { document.getElementById("progress-bar").style.width = ((document.body.scrollTop || document.documentElement.scrollTop) / (document.documentElement.scrollHeight - document.documentElement.clientHeight) * 100) + "%"; };
+        setInterval(() => { document.getElementById('live-clock').innerText = new Date().toLocaleTimeString(); }, 1000);
+
+        let searchData = null;
+        function toggleSearch() {
+            const box = document.getElementById('search-box');
+            box.classList.toggle('active');
+            if(box.classList.contains('active')) document.getElementById('search-input').focus();
+        }
+        document.getElementById('search-input').addEventListener('input', async (e) => {
+            if(!searchData) {
+                const sp = window.location.pathname.includes('/en/') ? '/en/search.json' : '/search.json';
+                searchData = await (await fetch(sp)).json();
+            }
+            const val = e.target.value.toLowerCase().trim();
+            const resDiv = document.getElementById('search-results');
+            resDiv.innerHTML = '';
+            if(val.length < 1) { resDiv.style.display='none'; return; }
+            searchData.filter(i => i.title.toLowerCase().includes(val)).forEach(i => {
+                resDiv.innerHTML += `<a href="${i.url}" class="search-item" style="color:#fff !important;display:block;"><b>${i.title}</b></a>`;
+            });
+            resDiv.style.display = 'flex';
+        });
+        document.addEventListener('click', (e) => { if(!e.target.closest('#search-box')) { document.getElementById('search-box').classList.remove('active'); document.getElementById('search-results').style.display='none'; } });
+    </script>
+</body>
+</html>
