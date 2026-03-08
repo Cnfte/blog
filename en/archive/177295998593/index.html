@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO & Metadata -->
+    <title>NetCarry Installation and Usage Tutorial and Practical Experience - Cnfteの博客</title>
+    <meta name="description" content="As a selfdeveloped, highperformance, multiprotocol network stress testing tool, NetCarry Ultimate V6.0 is specifically designed for Linux systems. It ...">
+    <link rel="icon" href="/favicon.ico">
+    
+    <!-- 引入艺术字体与图标库 -->
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-heavy: rgba(15, 15, 20, 0.98);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --accent: #ff99cc; 
+            --accent-gradient: linear-gradient(135deg, #ff99cc 0%, #ffcc99 100%);
+            --bezier: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --shadow: 0 15px 45px rgba(0, 0, 0, 0.6);
+        }
+
+        /* --- 🛡️ 物理抗溢出规则 --- */
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+            max-width: 100% !important; 
+            overflow-wrap: anywhere !important; 
+            word-break: break-all !important; 
+        }
+
+        a { color: var(--accent) !important; text-decoration: none !important; transition: 0.3s var(--bezier); }
+        a:hover { filter: brightness(1.2); opacity: 0.8; }
+        ul { list-style: none; }
+
+        body { 
+            font-family: 'Inter', sans-serif; background: #000; color: #fff; 
+            line-height: 1.8; overflow-x: hidden; width: 100%; min-height: 100vh;
+            display: flex; flex-direction: column;
+        }
+
+        .bg-fixed { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://cnfte.top/attachments/bj.webp') no-repeat center center fixed; background-size: cover; z-index: -2; }
+        .bg-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(5px); z-index: -1; }
+        
+        #progress-bar { position: fixed; top: 0; left: 0; width: 0%; height: 4px; background: var(--accent-gradient); z-index: 2000; transition: width 0.1s; }
+
+        @keyframes cardIn { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
+
+        /* 导航栏 */
+        nav { 
+            position: sticky; top: 10px; z-index: 1000; margin: 0 auto 20px; width: 95%; max-width: 1300px;
+            background: var(--glass); backdrop-filter: blur(25px); border-radius: 50px; border: 1px solid var(--glass-border);
+            padding: 8px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .logo { font-family: 'ZCOOL KuaiLe'; font-size: 1.3rem; color: var(--accent) !important; flex-shrink: 0; margin-right: 15px; }
+        
+        .nav-right { display: flex; align-items: center; gap: 15px; flex: 1; justify-content: flex-end; overflow: hidden; min-width: 0; }
+        .nav-links { display: flex; gap: 15px; overflow-x: auto; white-space: nowrap; scrollbar-width: none; }
+        .nav-links::-webkit-scrollbar { display: none; }
+        .nav-links a { font-weight: 700; font-size: 0.85rem; color: #fff !important; opacity: 0.8; }
+
+        /* 搜索框 */
+        .search-container { position: relative; display: flex; align-items: center; flex-shrink: 0; }
+        #search-input { width: 0; opacity: 0; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); border-radius: 20px; padding: 5px 0; color: white; transition: 0.5s var(--bezier); outline: none; font-size: 0.8rem; }
+        .search-container.active #search-input { width: 140px; opacity: 1; padding: 5px 12px; margin-right: 8px; }
+        #search-results { position: absolute; top: 140%; right: 0; width: 280px; background: var(--glass-heavy); border-radius: 20px; border: 1px solid var(--glass-border); max-height: 350px; overflow-y: auto; display: none; flex-direction: column; z-index: 1100; box-shadow: 0 15px 30px #000; }
+
+        /* 文章大头图 */
+        .post-hero { height: 45vh; min-height: 350px; width: 100%; position: relative; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; }
+        .post-hero-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.6); z-index: -1; animation: heroZoom 20s infinite alternate; }
+        @keyframes heroZoom { from { transform: scale(1); } to { transform: scale(1.1); } }
+        .post-header-content { z-index: 1; padding: 0 30px; animation: cardIn 0.8s var(--bezier); }
+        .post-header-content h1 { font-family: 'ZCOOL KuaiLe'; font-size: clamp(1.8rem, 5vw, 3.5rem); text-shadow: 0 10px 30px #000; color: #fff; margin-bottom: 10px; line-height: 1.2; }
+
+        /* 布局网格 */
+        .main-grid { max-width: 1400px; margin: -60px auto 60px; display: grid; grid-template-columns: 1fr 340px; gap: 30px; padding: 0 2.5%; position: relative; z-index: 10; flex: 1; width: 100%; }
+        
+        /* 胶囊广告位排版 */
+        .post-ads { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 30px; width: 100%; }
+        .ad-capsule { height: 65px; background: var(--glass); border: 1px solid var(--glass-border); border-radius: 50px; display: flex; align-items: center; padding: 6px; overflow: hidden; }
+        .ad-capsule img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; margin-right: 12px; flex-shrink: 0; border: 2px solid var(--accent); }
+        .ad-info b { display: block; color: var(--accent); font-size: 0.8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .ad-info span { font-size: 0.7rem; color: #fff; opacity: 0.6; white-space: nowrap; }
+
+        /* 文章主体 */
+        article.post-container { 
+            background: var(--glass-heavy); backdrop-filter: blur(40px); border-radius: 40px; border: 1px solid var(--glass-border);
+            padding: 50px 40px; box-shadow: var(--shadow); width: 100% !important; 
+            display: grid !important; grid-template-columns: minmax(0, 1fr) !important;
+            overflow: hidden !important; 
+            animation: cardIn 0.8s var(--bezier) both;
+        }
+
+        .post-body { font-size: 1.12rem; color: #f0f0f0; min-width: 0; }
+        .post-body h1, .post-body h2 { font-family: 'ZCOOL KuaiLe'; color: var(--accent); margin: 2em 0 1em; border-bottom: none !important; }
+        .post-body p { margin-bottom: 1.5rem; text-align: justify; }
+        .post-body img { border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin: 20px 0; }
+        
+        /* 代码与表格锁定 */
+        .post-body pre, .codehilite { 
+            width: 100% !important; max-width: 100% !important; overflow-x: auto !important; 
+            display: block !important; background: rgba(0,0,0,0.5) !important; 
+            padding: 25px; border-radius: 20px; border: 1px solid var(--glass-border); 
+            margin: 25px 0; white-space: pre !important;
+        }
+        .post-body table { display: block !important; width: 100% !important; overflow-x: auto !important; border-collapse: collapse; margin: 25px 0; }
+        .post-body th, .post-body td { border: 1px solid rgba(255,255,255,0.1); padding: 12px 20px; min-width: 120px; }
+        .post-body th { background: rgba(255,153,204,0.15); color: var(--accent); }
+
+        .btn-wrapper { margin-top: 60px; padding-top: 30px; border-top: 1px solid var(--glass-border); text-align: center; width: 100%; }
+        .back-btn { 
+            display: inline-block !important; background: var(--accent-gradient); color: #000 !important; 
+            padding: 15px 45px; border-radius: 50px; font-weight: 900; font-size: 1rem; 
+            box-shadow: 0 10px 25px rgba(255, 153, 204, 0.4); transition: 0.3s;
+        }
+
+        aside { position: sticky; top: 90px; height: fit-content; }
+        .widget { background: var(--glass); border-radius: 35px; padding: 25px; border: 1px solid var(--glass-border); margin-bottom: 25px; }
+        .social-links { display: flex; justify-content: center; gap: 20px; margin-top: 15px; font-size: 1.5rem; }
+
+        @media (max-width: 1000px) {
+            .main-grid { grid-template-columns: 1fr; margin-top: -30px; }
+            article.post-container { padding: 35px 20px; border-radius: 30px; }
+            aside { display: none; }
+            .post-hero { height: 40vh; }
+        }
+
+        footer { text-align: center; padding: 60px 20px; background: rgba(0,0,0,0.9); border-top: 1px solid var(--glass-border); margin-top: auto; font-size: 0.8rem; }
+    </style>
+
+    <!-- 🔥 MONETAG ADS 自动注入 -->
+    
+    <script src="https://quge5.com/88/tag.min.js" data-zone="213982" async data-cfasync="false"></script>
+    
+
+</head>
+<body>
+    <div id="progress-bar"></div>
+    <div class="bg-fixed"></div><div class="bg-overlay"></div>
+    
+    <nav>
+        <a href="/" class="logo">CNFTE</a>
+        <div class="nav-right">
+            <div class="nav-links">
+                <a href="/en/Link Exchange.html">Link Exchange</a><a href="/en/Privacy Policy.html">Privacy Policy</a><a href="/en/about.html">about</a><a href="/en/公益服务项.html">service</a>
+                <a href="/">HOME</a>
+            </div>
+            <div class="search-container" id="search-box">
+                <input type="text" id="search-input" placeholder="SEARCH...">
+                <i class="fas fa-search" onclick="toggleSearch()" style="cursor:pointer;color:var(--accent);font-size:1.2rem;"></i>
+                <div id="search-results"></div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="post-hero">
+        <img src="https://www.dmoe.cc/random.php?seed=177295998593&r=205409" class="post-hero-img">
+        <div class="post-header-content">
+            <p style="color:var(--accent); font-family:monospace; font-size:0.9rem; letter-spacing: 2px;">2026-03-08 // READ: 16 MIN</p>
+            <h1>NetCarry Installation and Usage Tutorial and Practical Experience</h1>
+        </div>
+    </header>
+
+    <div class="main-grid">
+        <main>
+            <!-- 胶囊广告位 -->
+            <div class="post-ads">
+                
+                <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="ad-capsule" target="_blank">
+                    <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" loading="lazy">
+                    <div class="ad-info">
+                        <b>广告招租价格好商量</b>
+                        <span>广告招租价格好商量</span>
+                    </div>
+                </a>
+                
+                <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="ad-capsule" target="_blank">
+                    <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" loading="lazy">
+                    <div class="ad-info">
+                        <b>广告招租价格好商量</b>
+                        <span>广告招租价格好商量</span>
+                    </div>
+                </a>
+                
+                <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="ad-capsule" target="_blank">
+                    <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" loading="lazy">
+                    <div class="ad-info">
+                        <b>广告招租价格好商量</b>
+                        <span>广告招租价格好商量</span>
+                    </div>
+                </a>
+                
+                <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="ad-capsule" target="_blank">
+                    <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" loading="lazy">
+                    <div class="ad-info">
+                        <b>广告招租价格好商量</b>
+                        <span>广告招租价格好商量</span>
+                    </div>
+                </a>
+                
+            </div>
+
+            <article class="post-container">
+                <div class="post-body">
+                    <p>As a self-developed, high-performance, multi-protocol network stress testing tool, <strong>NetCarry Ultimate V6.0</strong> is specifically designed for Linux systems. It integrates both transport-layer and application-layer testing capabilities, enabling efficient execution of network architecture evaluations, CDN load testing, and firewall performance verification. </p>
+<p>Recently, I completed the full workflow of using this tool for actual stress testing. Below is a detailed guide on installation, usage tips, and performance insights to serve as a reference for developers with similar testing needs.</p>
+<hr />
+<h2 id="i-core-highlights">I. Core Highlights</h2>
+<p>Compared to traditional network stress testing tools, NetCarry Ultimate V6.0’s self-developed nature offers superior practicality and adaptability. Its core features focus on these six points:</p>
+<ol>
+<li><strong>Full Multi-Protocol Coverage</strong>: Supports <strong>UDP, TCP, CC, and BRUSH</strong> (domain stream brushing) modes simultaneously, catering to both transport-layer and application-layer needs in a single tool.</li>
+<li><strong>Intelligent DNS Resolution</strong>: No manual IP mapping required. The tool automatically handles DNS resolution, allowing you to launch tests directly against domain names.</li>
+<li><strong>High Concurrency Performance</strong>: Built on multi-threaded asynchronous logic, it maximizes Linux hardware resources to support high-concurrency stress scenarios.</li>
+<li><strong>Realistic Access Simulation</strong>: The CC mode features built-in random User-Agents and dynamic parameters. It supports HTTPS/SSL handshakes to perfectly simulate real user behavior.</li>
+<li><strong>Real-Time Visual Monitoring</strong>: Includes a dynamic in-terminal dashboard to monitor sent data, real-time bandwidth, and request success rates during the test.</li>
+<li><strong>Zero-Barrier Deployment</strong>: Provides a one-click automated installation script that configures environments and system variables. It is also compatible with Windows and Android Termux via Python.</li>
+</ol>
+<hr />
+<h2 id="ii-environment-setup-installation">II. Environment Setup &amp; Installation</h2>
+<p>NetCarry Ultimate V6.0 offers different installation methods for various systems. Linux supports one-click deployment, while Windows and Android Termux can run the source code via Python.</p>
+<h3 id="linux-systems-recommended">Linux Systems (Recommended)</h3>
+<p>Suitable for mainstream distributions (Ubuntu, CentOS, Debian, etc.). Ensure <code>wget</code> or <code>curl</code> is installed, then run one of the following:</p>
+<h4 id="option-1-using-wget">Option 1: Using wget</h4>
+<div class="codehilite"><pre><span></span><code>wget<span class="w"> </span>-qO<span class="w"> </span>install.sh<span class="w"> </span>http://fhdh.cnfte.top/installer.sh<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>bash<span class="w"> </span>install.sh
+</code></pre></div>
+
+<h4 id="option-2-using-curl">Option 2: Using curl</h4>
+<div class="codehilite"><pre><span></span><code>curl<span class="w"> </span>-sL<span class="w"> </span>http://fhdh.cnfte.top/installer.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>bash
+</code></pre></div>
+
+<p>The script automates <strong>permission checks, Python3 dependency installation, file downloads, and global command configuration</strong>. Once finished, simply type <code>netcarry</code> in any directory to launch.</p>
+<h3 id="windows-android-termux-python-source">Windows / Android Termux (Python Source)</h3>
+<ol>
+<li>Download the core source file <code>netcarry.py</code>.</li>
+<li>Ensure <strong>Python 3.x</strong> is installed.</li>
+<li>Open CMD (Windows) or Termux (Android), navigate to the file directory, and run:</li>
+</ol>
+<div class="codehilite"><pre><span></span><code>python<span class="w"> </span>netcarry.py<span class="w"> </span>&lt;Target_IP_or_Domain&gt;<span class="w"> </span><span class="o">[</span>Parameters<span class="o">]</span>
+</code></pre></div>
+
+<hr />
+<h2 id="iii-basic-usage-guide">III. Basic Usage Guide</h2>
+<p>NetCarry Ultimate V6.0 is driven by command-line parameters. The logic is simple: combine different parameters to suit your specific testing scenario.</p>
+<h3 id="command-format">Command Format</h3>
+<p><strong>Linux (Global):</strong></p>
+<div class="codehilite"><pre><span></span><code>netcarry<span class="w"> </span>&lt;Target_IP_or_Domain&gt;<span class="w"> </span><span class="o">[</span>Parameters<span class="o">]</span>
+</code></pre></div>
+
+<h3 id="core-parameter-breakdown">Core Parameter Breakdown</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Parameter</th>
+<th style="text-align: left;">Long Command</th>
+<th style="text-align: left;">Description</th>
+<th style="text-align: left;">Default</th>
+<th style="text-align: left;">Restrictions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">-p</td>
+<td style="text-align: left;">--port</td>
+<td style="text-align: left;">Target port</td>
+<td style="text-align: left;">80</td>
+<td style="text-align: left;">None</td>
+</tr>
+<tr>
+<td style="text-align: left;">-t</td>
+<td style="text-align: left;">--threads</td>
+<td style="text-align: left;">Concurrent threads</td>
+<td style="text-align: left;">128</td>
+<td style="text-align: left;">None</td>
+</tr>
+<tr>
+<td style="text-align: left;">-m</td>
+<td style="text-align: left;">--mode</td>
+<td style="text-align: left;">Stress mode</td>
+<td style="text-align: left;">UDP</td>
+<td style="text-align: left;">UDP/TCP/CC/BRUSH</td>
+</tr>
+<tr>
+<td style="text-align: left;">-s</td>
+<td style="text-align: left;">--size</td>
+<td style="text-align: left;">Payload size</td>
+<td style="text-align: left;">1.0 MiB</td>
+<td style="text-align: left;">UDP/TCP only</td>
+</tr>
+<tr>
+<td style="text-align: left;">-d</td>
+<td style="text-align: left;">--duration</td>
+<td style="text-align: left;">Duration (seconds)</td>
+<td style="text-align: left;">60s</td>
+<td style="text-align: left;">None</td>
+</tr>
+<tr>
+<td style="text-align: left;">-h</td>
+<td style="text-align: left;">--help</td>
+<td style="text-align: left;">Show help info</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-four-stress-modes">The Four Stress Modes</h3>
+<ol>
+<li><strong>CC Mode (L7 Application Layer)</strong>: Consumes target Web server CPU/RAM by sending frequent HTTP/HTTPS requests with random parameters. Supports SSL/HTTPS.</li>
+<li><strong>BRUSH Mode (L7 Domain Brushing)</strong>: Utilizes Keep-Alive persistent connections to generate massive downstream traffic. Ideal for testing CDN bandwidth limits and billing system stability. (Domain only).</li>
+<li><strong>UDP Mode (L4 Transport Layer)</strong>: Sends raw UDP packets. Best for testing network throughput and the limits of hardware like routers and switches.</li>
+<li><strong>TCP Mode (L4 Transport Layer)</strong>: Establices long connections and sends large data streams. Used for testing firewall state tables and port listener performance.</li>
+</ol>
+<h3 id="typical-usage-examples">Typical Usage Examples</h3>
+<ul>
+<li><strong>Web Server Concurrency (CC):</strong> 500 threads, 5 minutes.
+    <code>netcarry www.example.com -m CC -t 500 -d 300</code></li>
+<li><strong>Network Bandwidth Limit (UDP):</strong> Target 1.1.1.1:53, 2MiB payload, 1000 threads.
+    <code>netcarry 1.1.1.1 -p 53 -m UDP -s 2.0 -t 1000</code></li>
+<li><strong>HTTPS CDN Throughput (BRUSH):</strong> 800 threads, 10 minutes.
+    <code>netcarry www.target.com -p 443 -m BRUSH -t 800 -d 600</code></li>
+</ul>
+<hr />
+<h2 id="iv-practical-test-experience-analysis">IV. Practical Test Experience &amp; Analysis</h2>
+<p>To verify performance, I conducted a 30-minute (1800s) stress test on a self-developed Web service using a Linux Ubuntu 20.04 environment.</p>
+<h3 id="test-metrics">Test Metrics</h3>
+<ul>
+<li><strong>Total Requests</strong>: 90,576,641</li>
+<li><strong>Successful Requests</strong>: 90,004,625</li>
+<li><strong>Failed Requests</strong>: 572,016</li>
+<li><strong>Total Traffic</strong>: 32,233.6 MB</li>
+<li><strong>Success Rate</strong>: 99.37%</li>
+<li><strong>Average QPS</strong>: 50,320 req/s</li>
+<li><strong>Bandwidth Usage</strong>: 143.26 Mbps</li>
+</ul>
+<h3 id="performance-summary">Performance Summary</h3>
+<ol>
+<li><strong>Excellent Stability</strong>: No crashes or resource leaks during high-concurrency, long-duration tests.</li>
+<li><strong>Precise Metrics</strong>: Real-time monitoring matched final statistics, providing accurate data for performance bottlenecks.</li>
+<li><strong>High Resource Efficiency</strong>: At 128 threads, the tool achieved over 50k QPS, outperforming many lightweight alternatives.</li>
+<li><strong>User-Friendly</strong>: The dynamic dashboard eliminates the need for external monitoring plugins.</li>
+</ol>
+<hr />
+<h2 id="v-important-precautions">V. Important Precautions</h2>
+<ol>
+<li><strong>Legal Authorization is Mandatory</strong>: This tool is for testing <strong>your own</strong> networks and servers. Unauthorized use against third-party systems is illegal.</li>
+<li><strong>Incremental Scaling</strong>: Start with low thread counts and scale up. Avoid crashing the target immediately to better identify the "bottleneck" point.</li>
+<li><strong>Monitor the Source</strong>: Watch the CPU/Bandwidth of the machine running NetCarry. If the source is maxed out, your test results will be inaccurate.</li>
+<li><strong>HTTPS Specifics</strong>: When testing HTTPS sites, ensure you specify <code>-p 443</code>.</li>
+</ol>
+<hr />
+<h2 id="vi-conclusion-future-roadmap">VI. Conclusion &amp; Future Roadmap</h2>
+<p>NetCarry Ultimate V6.0 achieves its goal of being "easy to install, simple to operate, and stable in performance." It effectively bridges the gap between transport and application layer testing.</p>
+<p><strong>Future Optimization Goals:</strong>
+*   <strong>Exportable Reports</strong>: Adding support for TXT/CSV data exports.
+*   <strong>Custom Headers</strong>: Allowing user-defined UA pools and request headers for better simulation.
+*   <strong>Low-Bandwidth Optimization</strong>: Adjusting packet strategies for constrained network environments.</p>
+<p>For developers looking for a reliable, multi-purpose stress testing utility, NetCarry Ultimate V6.0 is a highly recommended choice.</p>
+<p><strong>Project Link</strong>: <a href="https://github.com/cnfte/netcarry">https://github.com/cnfte/netcarry</a></p>
+                </div>
+                
+                <div class="btn-wrapper">
+                    <a href="/" class="back-btn">RETURN_TERMINAL</a>
+                </div>
+            </article>
+        </main>
+        
+        <aside>
+            <section class="widget" style="text-align: center;">
+                <img src="https://cnfte.top/attachments/696b4d5b58c71_1768639835.webp" style="width: 80px; border-radius: 50%; border: 3px solid var(--accent); padding: 4px; margin-bottom: 10px;">
+                <h3 style="color:#fff; font-family:'ZCOOL KuaiLe';">Cnfte</h3>
+                <p style="font-size:0.8rem; color:#fff; opacity:0.6; margin-top:5px;">"滚滚长江东逝水，浪花淘尽英雄。"</p>
+                <div class="social-links">
+                    <a href="https://github.com/cnfte" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="https://t.me/cnfte1" target="_blank"><i class="fab fa-telegram"></i></a>
+                </div>
+            </section>
+            
+            
+            <section class="widget">
+                <h3 style="color:var(--accent); font-size:1.1rem; margin-bottom:15px; font-family:'ZCOOL KuaiLe';">CONTENTS</h3>
+                <div style="font-size:0.9rem; max-height: 50vh; overflow-y: auto; color:#fff;"><div class="toc">
+<ul>
+<li><a href="#i-core-highlights">I. Core Highlights</a></li>
+<li><a href="#ii-environment-setup-installation">II. Environment Setup &amp; Installation</a><ul>
+<li><a href="#linux-systems-recommended">Linux Systems (Recommended)</a><ul>
+<li><a href="#option-1-using-wget">Option 1: Using wget</a></li>
+<li><a href="#option-2-using-curl">Option 2: Using curl</a></li>
+</ul>
+</li>
+<li><a href="#windows-android-termux-python-source">Windows / Android Termux (Python Source)</a></li>
+</ul>
+</li>
+<li><a href="#iii-basic-usage-guide">III. Basic Usage Guide</a><ul>
+<li><a href="#command-format">Command Format</a></li>
+<li><a href="#core-parameter-breakdown">Core Parameter Breakdown</a></li>
+<li><a href="#the-four-stress-modes">The Four Stress Modes</a></li>
+<li><a href="#typical-usage-examples">Typical Usage Examples</a></li>
+</ul>
+</li>
+<li><a href="#iv-practical-test-experience-analysis">IV. Practical Test Experience &amp; Analysis</a><ul>
+<li><a href="#test-metrics">Test Metrics</a></li>
+<li><a href="#performance-summary">Performance Summary</a></li>
+</ul>
+</li>
+<li><a href="#v-important-precautions">V. Important Precautions</a></li>
+<li><a href="#vi-conclusion-future-roadmap">VI. Conclusion &amp; Future Roadmap</a></li>
+</ul>
+</div>
+</div>
+            </section>
+            
+
+            <section class="widget" style="background: rgba(0,0,0,0.4); border-color: rgba(255,153,204,0.2);">
+                <div style="font-family: 'Fira Code'; font-size: 0.75rem; color: #00ffcc; line-height: 2.2;">
+                    <div>[SYS] NODE: STABLE</div>
+                    <div>[SYS] ID: 177295998593</div>
+                    <div>[SYS] TIME: <span id="live-clock">00:00:00</span></div>
+                </div>
+            </section>
+        </aside>
+    </div>
+
+    <footer>
+        <div style="margin-bottom: 15px; font-weight: bold; color: var(--accent);">本站由Cloudflare和Github强力驱动
+Powered by：<img src="https://cnfte.top/attachments/gh.svg" alt="GitHub">
+Analyzed by：<img src="https://cnfte.top/attachments/cf.svg" alt="Cloudflare Analysis">
+Served by：<img src="https://cnfte.top/attachments/cf2.svg" alt="Cloudflare CDN">
+商业投广通道(仅支持支付宝与微信付款)：QQ 3793945630
+TG：<a src=https://t.me/cnfte1>https://t.me/cnfte1</a>
+如何联系Cnfte与bug反馈？>>>QQ群聊：887378676
+TG群组：<a src=https://t.me/+pCnCBiCsyOhhMWU9>https://t.me/+pCnCBiCsyOhhMWU9</a>
+状态监控：<a src=https://probe.cnfte.top>https://probe.cnfte.top</a></div>
+        © 2026 Cnfte // CNFTE MOE PANEL
+    </footer>
+    
+    <script>
+        window.onscroll = () => { document.getElementById("progress-bar").style.width = ((document.body.scrollTop || document.documentElement.scrollTop) / (document.documentElement.scrollHeight - document.documentElement.clientHeight) * 100) + "%"; };
+        setInterval(() => { document.getElementById('live-clock').innerText = new Date().toLocaleTimeString(); }, 1000);
+
+        let searchData = null;
+        function toggleSearch() {
+            const box = document.getElementById('search-box');
+            box.classList.toggle('active');
+            if(box.classList.contains('active')) document.getElementById('search-input').focus();
+        }
+        document.getElementById('search-input').addEventListener('input', async (e) => {
+            if(!searchData) {
+                const sp = window.location.pathname.includes('/en/') ? '/en/search.json' : '/search.json';
+                searchData = await (await fetch(sp)).json();
+            }
+            const val = e.target.value.toLowerCase().trim();
+            const resDiv = document.getElementById('search-results');
+            resDiv.innerHTML = '';
+            if(val.length < 1) { resDiv.style.display='none'; return; }
+            searchData.filter(i => i.title.toLowerCase().includes(val)).forEach(i => {
+                resDiv.innerHTML += `<a href="${i.url}" class="search-item" style="color:#fff !important;display:block;"><b>${i.title}</b></a>`;
+            });
+            resDiv.style.display = 'flex';
+        });
+        document.addEventListener('click', (e) => { if(!e.target.closest('#search-box')) { document.getElementById('search-box').classList.remove('active'); document.getElementById('search-results').style.display='none'; } });
+    </script>
+</body>
+</html>

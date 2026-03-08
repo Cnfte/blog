@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cnfteの博客</title>
+    
+    <!-- 引入艺术字体与图标库 -->
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Fira+Code:wght@400;600&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-heavy: rgba(15, 15, 20, 0.95);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --accent: #ff99cc; 
+            --accent-gradient: linear-gradient(135deg, #ff99cc 0%, #ffcc99 100%);
+            --text: #ffffff;
+            --bezier: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --shadow: 0 15px 45px rgba(0, 0, 0, 0.5);
+        }
+
+        /* --- 🛡️ 暴力规则：禁止任何元素、图片、按钮溢出 --- */
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+            max-width: 100%; 
+            overflow-wrap: anywhere !important; 
+            word-break: break-all !important; 
+        }
+        
+        a { color: var(--accent) !important; text-decoration: none !important; transition: 0.3s var(--bezier); }
+        a:hover { filter: brightness(1.2); }
+        ul { list-style: none; }
+
+        body {
+            font-family: 'Inter', sans-serif; color: var(--text); background: #000;
+            line-height: 1.6; overflow-x: hidden; min-height: 100vh;
+            display: flex; flex-direction: column;
+        }
+
+        /* 极致固定背景 */
+        .bg-fixed { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://cnfte.top/attachments/bj.webp') no-repeat center center fixed; background-size: cover; z-index: -2; }
+        .bg-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(5px); z-index: -1; }
+
+        @keyframes cardIn { 0% { opacity: 0; transform: translateY(30px) scale(0.98); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+
+        /* 1. 响应式导航胶囊 */
+        nav {
+            position: sticky; top: 10px; z-index: 1000; margin: 0 auto 20px; width: 95%; max-width: 1300px;
+            background: var(--glass); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 50px;
+            padding: 10px 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow);
+        }
+        .logo { font-family: 'ZCOOL KuaiLe', cursive; font-size: 1.3rem; color: var(--accent) !important; flex-shrink: 0; margin-right: 15px; }
+        
+        .nav-right { display: flex; align-items: center; gap: 15px; flex: 1; justify-content: flex-end; overflow: hidden; min-width: 0; }
+        .nav-links { display: flex; gap: 15px; overflow-x: auto; white-space: nowrap; scrollbar-width: none; -ms-overflow-style: none; }
+        .nav-links::-webkit-scrollbar { display: none; }
+        .nav-links a { font-weight: 700; font-size: 0.85rem; color: #fff !important; opacity: 0.8; }
+
+        .search-container { position: relative; display: flex; align-items: center; flex-shrink: 0; }
+        #search-input {
+            width: 0; opacity: 0; background: rgba(0,0,0,0.4); border: 1px solid var(--glass-border); border-radius: 20px;
+            padding: 5px 0; color: white; transition: all 0.5s var(--bezier); outline: none; font-size: 0.8rem;
+        }
+        .search-container.active #search-input { width: 140px; opacity: 1; padding: 5px 12px; margin-right: 8px; }
+        #search-btn { cursor: pointer; color: var(--accent); font-size: 1.1rem; }
+
+        #search-results {
+            position: absolute; top: 140%; right: 0; width: 280px; background: var(--glass-heavy); 
+            border-radius: 20px; border: 1px solid var(--glass-border); max-height: 400px; overflow-y: auto; 
+            display: none; flex-direction: column; z-index: 1100; box-shadow: 0 20px 40px #000;
+        }
+        .search-item { padding: 12px 15px; font-size: 0.85rem; border-bottom: 1px solid rgba(255,255,255,0.05); color: #fff !important; }
+
+        /* 2. Hero 区域 */
+        .hero { height: 45vh; min-height: 380px; margin: 0 2.5% 25px; border-radius: 40px; overflow: hidden; position: relative; box-shadow: var(--shadow); display: flex; align-items: center; animation: cardIn 0.8s var(--bezier); }
+        .hero-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; filter: brightness(0.8); transition: 1.5s var(--bezier); }
+        .hero:hover .hero-img { transform: scale(1.05); }
+        .hero-layout { width: 100%; padding: 40px; display: flex; justify-content: space-between; align-items: flex-end; background: linear-gradient(transparent, rgba(0,0,0,0.85)); height: 100%; }
+        .hero-text h1 { font-family: 'ZCOOL KuaiLe'; font-size: clamp(2rem, 6vw, 3.8rem); margin-bottom: 5px; color: #fff; line-height: 1.1; }
+
+        .hero-widgets { display: flex; flex-direction: column; gap: 12px; width: 320px; }
+        .h-card { background: rgba(0, 0, 0, 0.45); backdrop-filter: blur(12px); border-radius: 18px; padding: 12px 15px; border: 1px solid rgba(255,255,255,0.1); }
+        .hitokoto-text { font-size: 0.85rem; font-style: italic; opacity: 0.9; color: #fff; line-height: 1.5; }
+
+        /* 3. 广告位胶囊位 */
+        .spot-zone { margin: 0 2.5% 30px; }
+        .spot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; width: 100%; }
+        .spot-item { height: 75px; border-radius: 50px; border: 1px solid var(--glass-border); transition: 0.4s var(--bezier); background: var(--glass); display: flex; align-items: center; padding: 6px; overflow: hidden; width: 100%; }
+        .spot-item:hover { transform: translateY(-5px); border-color: var(--accent); background: rgba(255,153,204,0.1); }
+        .spot-icon { width: 58px; height: 58px; border-radius: 50%; object-fit: cover; margin-right: 12px; flex-shrink: 0; border: 2px solid var(--accent); }
+        .spot-info { overflow: hidden; min-width: 0; flex: 1; }
+        .spot-info b { display: block; color: var(--accent); font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .spot-info span { color: #fff; opacity: 0.6; font-size: 0.7rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* 4. 主体布局 */
+        .main-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr) 350px; gap: 35px; padding: 0 2.5%; flex: 1; width: 100%; }
+
+        .post-card {
+            background: var(--glass); backdrop-filter: blur(20px); border-radius: 35px;
+            margin-bottom: 25px; border: 1px solid var(--glass-border);
+            transition: 0.5s var(--bezier); animation: cardIn 0.8s var(--bezier) both;
+            display: flex; overflow: hidden; height: 230px; width: 100%; min-width: 0;
+        }
+        .post-card:hover { transform: translateX(12px) scale(1.01); border-color: var(--accent); box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
+        .post-cover { width: 35%; height: 100%; overflow: hidden; flex-shrink: 0; }
+        .post-cover img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s; }
+        .post-card:hover .post-cover img { transform: scale(1.1); }
+        
+        .post-content { padding: 30px; display: flex; flex-direction: column; justify-content: center; overflow: hidden; flex: 1; min-width: 0; }
+        .post-title { 
+            font-size: 1.5rem; font-weight: 900; color: #fff !important; margin-bottom: 10px; 
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; 
+            overflow: hidden; word-break: break-all; line-height: 1.3;
+        }
+        .post-summary { font-size: 0.95rem; color: #ddd; opacity: 0.7; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+        /* 5. 侧边栏 */
+        .widget { background: var(--glass); border-radius: 35px; padding: 30px; margin-bottom: 25px; border: 1px solid var(--glass-border); }
+        .widget-title { font-family: 'ZCOOL KuaiLe'; color: var(--accent); margin-bottom: 15px; font-size: 1.2rem; }
+        .profile-avatar { width: 85px; height: 85px; border-radius: 50%; border: 3px solid var(--accent); padding: 4px; margin-bottom: 15px; transition: 0.6s var(--bezier); }
+        .profile-avatar:hover { transform: rotate(360deg); }
+        .social-links { display: flex; justify-content: center; gap: 20px; margin-top: 15px; }
+        .social-links a { font-size: 1.5rem; color: #fff !important; opacity: 0.8; transition: 0.3s; }
+        .social-links a:hover { color: var(--accent) !important; transform: translateY(-5px) scale(1.2); }
+
+        /* 6. 移动端适配 */
+        @media (max-width: 1000px) {
+            .main-grid { grid-template-columns: 1fr; }
+            .hero-widgets { display: none; }
+            .hero-layout { padding: 30px; }
+            .post-card { height: auto; flex-direction: column; }
+            .post-cover { width: 100%; height: 200px; }
+            .post-content { width: 100%; padding: 20px; }
+            .post-title { font-size: 1.3rem; }
+            nav { padding: 10px 15px; }
+            .logo { font-size: 1.1rem; }
+            .spot-grid { grid-template-columns: repeat(2, 1fr); }
+            aside { display: none; }
+        }
+
+        footer { text-align: center; padding: 60px 20px; background: rgba(0,0,0,0.9); border-top: 1px solid var(--glass-border); margin-top: auto; font-size: 0.8rem; }
+    </style>
+
+    <!-- 🔥 MONETAG ADS 自动注入 -->
+    
+    <script src="https://quge5.com/88/tag.min.js" data-zone="213982" async data-cfasync="false"></script>
+    
+
+</head>
+<body>
+    <div class="bg-fixed"></div>
+    <div class="bg-overlay"></div>
+
+    <!-- 导航栏 -->
+    <nav>
+        <a href="/" class="logo">CNFTE</a>
+        <div class="nav-right">
+            <div class="nav-links">
+                <a href="/about.html">关于</a><a href="/公益服务项.html">公益服务项</a><a href="/友链.html">友链</a><a href="/隐私政策.html">隐私政策</a>
+            </div>
+            <!-- 弹性伸缩搜索框 -->
+            <div class="search-container" id="search-box">
+                <input type="text" id="search-input" placeholder="输入关键词...">
+                <i class="fas fa-search" id="search-btn" onclick="toggleSearch()" style="cursor:pointer;color:var(--accent);"></i>
+                <div id="search-results"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero 封面区域 -->
+    <header class="hero">
+        <img src="https://www.dmoe.cc/random.php?seed=321234" class="hero-img">
+        <div class="hero-layout">
+            <div class="hero-text">
+                <h1>CNFTE</h1>
+                <p style="opacity: 0.6; font-size: 0.8rem; letter-spacing: 3px; color:#fff;">莫愁前路无知己，天下谁人不识君？</p>
+            </div>
+            <!-- 仪表盘 -->
+            <div class="hero-widgets">
+                <div class="h-card">
+                    <div style="font-size: 0.6rem; color: var(--accent); margin-bottom: 8px; font-weight: bold;"># HITOKOTO</div>
+                    <div id="hitokoto" class="hitokoto-text">正在同步次元语录...</div>
+                </div>
+                <div class="h-card">
+                    <div style="display: flex; justify-content: space-around; font-size: 0.75rem; font-family: 'Fira Code'; color: var(--accent);">
+                        <div style="text-align:center;"><b>UPTIME</b><br><span id="days">0</span>D</div>
+                        <div style="text-align:center;"><b>POSTS</b><br>20</div>
+                        <div style="text-align:center;"><b>NODE</b><br>STABLE</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 动态广告位 -->
+    <div class="spot-zone">
+        <div class="spot-grid">
+            
+            <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="spot-item" target="_blank">
+                <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" class="spot-icon">
+                <div class="spot-info">
+                    <b>广告招租价格好商量</b>
+                    <span>广告招租价格好商量</span>
+                </div>
+            </a>
+            
+            <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="spot-item" target="_blank">
+                <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" class="spot-icon">
+                <div class="spot-info">
+                    <b>广告招租价格好商量</b>
+                    <span>广告招租价格好商量</span>
+                </div>
+            </a>
+            
+            <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="spot-item" target="_blank">
+                <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" class="spot-icon">
+                <div class="spot-info">
+                    <b>广告招租价格好商量</b>
+                    <span>广告招租价格好商量</span>
+                </div>
+            </a>
+            
+            <a href="https://cnfte.top/attachments/697f27805fd7d_1769940864.webp" class="spot-item" target="_blank">
+                <img src="https://cnfte.top/attachments/697f261a67d98_1769940506.webp" class="spot-icon">
+                <div class="spot-info">
+                    <b>广告招租价格好商量</b>
+                    <span>广告招租价格好商量</span>
+                </div>
+            </a>
+            
+        </div>
+    </div>
+
+    <!-- 内容布局 -->
+    <div class="main-grid">
+        <main>
+            
+            <article class="post-card" style="animation-delay: 0.0s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=177295989056" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div style="font-family: 'Fira Code'; font-size: 0.75rem; color: var(--accent); margin-bottom: 10px;">2026-03-08 // 177295989056</div>
+                    <a href="/archive/177295989056/" class="post-title">NetCarry 安装使用教程与实测体验</a>
+                    <p class="post-summary">作为一款自研的高性能多协议网络压力测试工具，NetCarry Ultimate V6.0专为Linux系统打造，融合了传输层与应用层压测能力，能高效完成网络架构评估、CDN负载测试、防火墙性能验证等工作。近期我完成了这款工具的全流程使用与实际压测，现将详细的安装方法、使用技巧及实测体验分享出来，为有...</p>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 0.1s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=177173492473" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div style="font-family: 'Fira Code'; font-size: 0.75rem; color: var(--accent); margin-bottom: 10px;">2026-02-22 // 177173492473</div>
+                    <a href="/archive/177173492473/" class="post-title">已开通监控面板</a>
+                    <p class="post-summary">为了能够监控服务器的状态，为此开通了监控面板 链接：https://probe.cnfte.top</p>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 0.2s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=1771385391" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div style="font-family: 'Fira Code'; font-size: 0.75rem; color: var(--accent); margin-bottom: 10px;">2026-02-18 // 1771385391</div>
+                    <a href="/archive/1771385391/" class="post-title">ZeroTermux安装发行版Linux教程 - Cnfte</a>
+                    <p class="post-summary">🚀 配置要求 本教程仅适用于 arm64 设备与 安卓 6.0 以上的设备。 🪄 ZeroTermux 下载链接 ZeroTermux0.118.53release_arm64v8a.apk 📊 配置代码</p>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 0.30000000000000004s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=836999be" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div style="font-family: 'Fira Code'; font-size: 0.75rem; color: var(--accent); margin-bottom: 10px;">2026-02-10 // 836999be</div>
+                    <a href="/archive/836999be/" class="post-title">墙内信息环境下，如何尽量保持清醒并获取相对客观的新闻叙述</a>
+                    <p class="post-summary">在信息高度集中的互联网环境中，新闻并不仅仅是“事实的呈现”，也往往承担着立场表达、舆论引导等多重功能。 对于普通读者而言，与其追求“绝对客观”，不如学习如何在不同叙述中尽量接近事实本身。 本文尝试从可操作的方法论出发，总结一套在墙内信息环境下，普通人也可以长期使用的新闻判断思路。 一、先建立合理预期...</p>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 0.4s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=dbd16353" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div style="font-family: 'Fira Code'; font-size: 0.75rem; color: var(--accent); margin-bottom: 10px;">2026-02-09 // dbd16353</div>
+                    <a href="/archive/dbd16353/" class="post-title">数字世界的隐形骨架：全球互联网基建150家巨头全景图谱</a>
+                    <p class="post-summary">当我们每一次滑动屏幕、点击链接或加载高清视频时，眼前呈现的是绚烂的数字应用，但在“水面之下”，一个庞大且严密的物理帝国正以毫秒为单位运转着。从深埋大洋底部的万里光缆，到翱翔于近地轨道的星链卫星；从处理亿万次请求的权威DNS，到消解流量洪峰的边缘计算节点——这些“隐形”的基建设施，才是支撑现代文明运转...</p>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 0.5s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=1b0c0f44" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div style="font-family: 'Fira Code'; font-size: 0.75rem; color: var(--accent); margin-bottom: 10px;">2026-02-03 // 1b0c0f44</div>
+                    <a href="/archive/1b0c0f44/" class="post-title">【教程】零门槛：利用 Vercel 搭建属于你的 Gemini 专属 AI 助手（国内直连方案）</a>
+                    <p class="post-summary">前言 Gemini 是谷歌（Google）推出的新一代人工智能大模型。它不仅在代码理解与网页开发上表现出色，能帮助小白轻松实现轻量化工程，更重要的是，谷歌旗下的 AI Studio 提供了免费的 Gemini API 供开发者使用。 然而，受限于网络环境（GFW），国内用户直接访问 Gemini 存...</p>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 0.6000000000000001s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=6c9d0edf" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div style="font-family: 'Fira Code'; font-size: 0.75rem; color: var(--accent); margin-bottom: 10px;">2026-01-29 // 6c9d0edf</div>
+                    <a href="/archive/6c9d0edf/" class="post-title">社区自建cloudflare saas优选ip、优选域名汇总</a>
+                    <p class="post-summary">1. 前言 众所周知，Cloudflare 提供了强大的免费 CDN 服务及无限防御，但其免费版分配的通用节点在大陆地区的访问延迟一直饱受诟病。或许你早已听闻 Cloudflare SaaS (Custom Hostnames) 优选大名，但在激活功能后，如何选择稳定、高效的优选地址往往成了难题。 ...</p>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 0.7000000000000001s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=177139506168" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div style="font-family: 'Fira Code'; font-size: 0.75rem; color: var(--accent); margin-bottom: 10px;">2026-01-24 // 177139506168</div>
+                    <a href="/archive/177139506168/" class="post-title">互联网科普系列-什么是协议？怎么搭建一个带有加密协议的节点？</a>
+                    <p class="post-summary">我们需要先理清一个概念：现在我们常用的工具（如 Shadowsocks, V2Ray, Singbox）在技术分类上更多被称为“代理（Proxy）”而非传统意义上的“VPN”，但为了方便理解，下文统称为翻墙协议。 一、 常见的翻墙协议及其工作原理 传统的VPN协议（如 L2TP、PPTP、OpenV...</p>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 0.8s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=177139506064" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div style="font-family: 'Fira Code'; font-size: 0.75rem; color: var(--accent); margin-bottom: 10px;">2026-01-18 // 177139506064</div>
+                    <a href="/archive/177139506064/" class="post-title">互联网科普系列-什么是DNS</a>
+                    <p class="post-summary">DNS是什么？ 想象一下，互联网就像一个巨大的城市，里面住着无数的网站、服务器，它们都有自己的“门牌号”，这个门牌号就是一串数字，比如 192.168.1.1 这样的，我们称之为 IP地址。 但是，我们人类记不住这么多数字门牌号，我们更习惯记名字，比如 www.baidu.com、www.googl...</p>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 0.9s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=177139506028" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div style="font-family: 'Fira Code'; font-size: 0.75rem; color: var(--accent); margin-bottom: 10px;">2026-01-17 // 177139506028</div>
+                    <a href="/archive/177139506028/" class="post-title">12_22快手直播涉黄事件;中国互联网的至暗时刻</a>
+                    <p class="post-summary">一、事件背景 2025年12月22日晚，中国多家头部社交与内容平台几乎在同一时间段内出现异常状况。其中，快手直播系统受到的冲击最为严重，并迅速引发全网关注。与此同时，抖音、小红书、哔哩哔哩（B站）等平台也被大量用户反馈出现访问缓慢、功能异常或服务器不稳定等问题。多平台在同一夜间集中出现异常，使外界普...</p>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 1.0s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=177139506065" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div style="font-family: 'Fira Code'; font-size: 0.75rem; color: var(--accent); margin-bottom: 10px;">2026-01-17 // 177139506065</div>
+                    <a href="/archive/177139506065/" class="post-title">Gemini 反代脚本：无需Cloudflare_Deno，用Nginx轻松搭建稳定代理</a>
+                    <p class="post-summary">前言：绕过GFW，畅享Gemini API 对于国内用户而言，访问Gemini API一直面临着GFW的阻碍。过去常用的翻墙方式（如搭建梯子）不仅操作繁琐，还伴随着安全隐患。而曾经备受推崇的Cloudflare Pages/Workers和Deno，也因政策调整或滥用问题，不再是可靠的解决方案。Cl...</p>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 1.1s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=177139506017" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div style="font-family: 'Fira Code'; font-size: 0.75rem; color: var(--accent); margin-bottom: 10px;">2026-01-17 // 177139506017</div>
+                    <a href="/archive/177139506017/" class="post-title">JMcomic版本下载站已正式开通</a>
+                    <p class="post-summary">使用了精品土豆保证了基础下载速度 收录版本： JMComic2：1.6.51.8.0 JMComic3：2.0.1最新 下载站自行搭建供公众下载，请勿过度占用公共资源 我是下载站链接点我 开始下载速度较慢须耐心等待 峰值下载速度达36.8Mbps/4.6MB/s(到后面非常稳定)</p>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 1.2000000000000002s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=177139506120" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div style="font-family: 'Fira Code'; font-size: 0.75rem; color: var(--accent); margin-bottom: 10px;">2026-01-17 // 177139506120</div>
+                    <a href="/archive/177139506120/" class="post-title">互联网科普系列-什么是HTTP_HTTPS</a>
+                    <p class="post-summary">大家好！今天我们要聊聊咱们上网时经常会遇到的两个词：HTTP和HTTPS。听起来有点技术范儿，但其实它们就像我们生活中寄信和寄挂号信一样，一个普通，一个安全。别担心，今天我们就用最白话的方式，把它们讲清楚！ 1. 什么是传输协议？—— 网络世界的“邮递员” 想象一下，你想给远方的朋友寄一封信。这封信...</p>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 1.3s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=177139506169" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div style="font-family: 'Fira Code'; font-size: 0.75rem; color: var(--accent); margin-bottom: 10px;">2026-01-17 // 177139506169</div>
+                    <a href="/archive/177139506169/" class="post-title">互联网科普系列-什么是ICP备案_怎么拥有一个备案域名与替代方案</a>
+                    <p class="post-summary">一、什么是中华人民共和国域名备案？ 简单来说，中华人民共和国域名备案（简称“域名备案”或“ICP备案”）是指在中国大陆地区使用域名注册的网站，需要向国家相关部门（主要是工业和信息化部，简称工信部）提交相关信息进行登记和审核的过程。 核心目的： 确保在中国大陆地区提供互联网信息服务（也就是我们常说的“...</p>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 1.4000000000000001s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=177139506135" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div style="font-family: 'Fira Code'; font-size: 0.75rem; color: var(--accent); margin-bottom: 10px;">2026-01-17 // 177139506135</div>
+                    <a href="/archive/177139506135/" class="post-title">互联网科普系列-什么是IPv4_v6</a>
+                    <p class="post-summary">1. 什么是 IPv4 / IPv6？ 想象一下，互联网就像一个巨大的城市，而每一台连接到互联网的设备（电脑、手机、服务器等）都像是这个城市里的一个房子。为了让这些房子能够互相找到并通信，它们都需要一个地址。 IPv4 (Internet Protocol version 4)：这是互联网早期使用的...</p>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 1.5s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=177139506196" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div style="font-family: 'Fira Code'; font-size: 0.75rem; color: var(--accent); margin-bottom: 10px;">2026-01-17 // 177139506196</div>
+                    <a href="/archive/177139506196/" class="post-title">互联网科普系列-什么是中国国家长城防火墙</a>
+                    <p class="post-summary">什么是中国国家长城防火墙？ 简单来说，中国国家长城防火墙是中国政府用来控制和过滤互联网信息的一套系统和一系列政策的统称。它就像一道“数字长城”，用来“保护”中国境内的互联网用户，但同时也在很大程度上限制了他们访问境外信息和与境外进行自由交流。 它有什么用？ 长城防火墙的主要作用可以归纳为以下几点： ...</p>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 1.6s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=177139506154" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div style="font-family: 'Fira Code'; font-size: 0.75rem; color: var(--accent); margin-bottom: 10px;">2026-01-17 // 177139506154</div>
+                    <a href="/archive/177139506154/" class="post-title">互联网科普系列-什么是传输协议</a>
+                    <p class="post-summary">想象一下，我们生活在一个大城市里，每天都要通过各种各样的交通工具（汽车、火车、飞机）把货物（信息）从一个地方送到另一个地方。而传输协议，就像是这些交通工具在城市里运行必须遵守的交通规则。没有这些规则，交通会乱成一锅粥，货物也可能送不到或者送错了地方。 1. 什么是传输协议？ 简单来说，传输协议就是一...</p>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 1.7000000000000002s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=177139506168" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div style="font-family: 'Fira Code'; font-size: 0.75rem; color: var(--accent); margin-bottom: 10px;">2026-01-17 // 177139506168</div>
+                    <a href="/archive/177139506168/" class="post-title">互联网科普系列-什么是域名_怎么获得一个域名并解析</a>
+                    <p class="post-summary">什么是域名？ 想象一下，互联网就像一个巨大的城市，里面住着无数的网站、服务器（就是存放网站内容的地方）。每个服务器都有一个独一无二的“门牌号”，这个门牌号就是一串数字，叫做 IP地址。 比如，你家地址是“XX省XX市XX区XX街道XX号”，IP地址就是“192.168.1.1”或者“203.0.11...</p>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 1.8s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=177139506150" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div style="font-family: 'Fira Code'; font-size: 0.75rem; color: var(--accent); margin-bottom: 10px;">2026-01-17 // 177139506150</div>
+                    <a href="/archive/177139506150/" class="post-title">互联网科普系列-什么是服务器_怎么获得一个服务器</a>
+                    <p class="post-summary">什么是服务器？ 想象一下，你平时上网看视频、玩游戏、聊天，这些信息和内容都藏在哪里呢？它们不是凭空出现的，而是存储在一些特别厉害的电脑里，这些电脑就是服务器。 你可以把服务器理解成一个\\“超级大管家”或者“信息仓库”\\。它不像我们平时用的电脑那样，主要用来玩游戏、看电影、写文档。服务器的主要工作...</p>
+                </div>
+            </article>
+            
+            <article class="post-card" style="animation-delay: 1.9000000000000001s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=177139506151" loading="lazy">
+                </div>
+                <div class="post-content">
+                    <div style="font-family: 'Fira Code'; font-size: 0.75rem; color: var(--accent); margin-bottom: 10px;">2026-01-17 // 177139506151</div>
+                    <a href="/archive/177139506151/" class="post-title">对应近期Cloudflare对反代工具大规模封号事件的警告</a>
+                    <p class="post-summary">近期，Cloudflare大批封号事件在互联网领域掀起了轩然大波，众多用户的账号被强制暂停，涉及商用账号和个人免费账号。此次事件绝非个例，而是一场范围广泛、影响深远的风暴，给所有依赖Cloudflare服务的用户敲响了警钟。 从目前掌握的信息来看，此次大规模封禁高度疑似与Workers/Pages的...</p>
+                </div>
+            </article>
+            
+        </main>
+
+        <aside>
+            <!-- 博主信息 -->
+            <section class="widget" style="text-align: center;">
+                <img src="https://cnfte.top/attachments/696b4d5b58c71_1768639835.webp" class="profile-avatar">
+                <h2 style="font-family: 'ZCOOL KuaiLe'; color:#fff;">Cnfte</h2>
+                <p style="font-size: 0.85rem; opacity: 0.7; margin-top: 10px; color:#fff;">"滚滚长江东逝水，浪花淘尽英雄。"</p>
+                <div class="social-links">
+                    <a href="https://github.com/cnfte" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="https://t.me/cnfte1" target="_blank" title="Telegram"><i class="fab fa-telegram"></i></a>
+                    <a href="https://example.com/" target="_blank" title="RSS"><i class="fas fa-rss"></i></a>
+                </div>
+            </section>
+
+            <!-- 动态公告 -->
+            <section class="widget">
+                <h3 class="widget-title">NOTICE</h3>
+                <div style="font-size: 0.9rem; opacity: 0.8; white-space: pre-line; color:#fff;">欢迎到来，投广与反馈请看下方：
+商业投广通道(仅支持支付宝与微信付款)：QQ 3793945630
+TG：<a src=https://t.me/cnfte1>https://t.me/cnfte1</a>
+如何联系Cnfte与bug反馈？>>>QQ群聊：887378676
+TG群组：<a src=https://t.me/+pCnCBiCsyOhhMWU9>https://t.me/+pCnCBiCsyOhhMWU9</a>
+欢迎到来
+状态监控：<a src=https://probe.cnfte.top>https://probe.cnfte.top</a></div>
+            </section>
+
+            <!-- 运行日志 -->
+            <section class="widget" style="background: rgba(0,0,0,0.3); font-family: 'Fira Code'; font-size: 0.7rem; color: #00ffcc;">
+                <div>> NODE: ACTIVE</div>
+                <div>> TIME: <span id="clock">00:00:00</span></div>
+                <div style="margin-top: 10px; opacity: 0.4;">EOF // TERMINAL_READY</div>
+            </section>
+        </aside>
+    </div>
+
+    <footer>
+        <div style="margin-bottom: 15px; font-weight: bold; color: var(--accent);">本站由Cloudflare和Github强力驱动
+Powered by：<img src="https://cnfte.top/attachments/gh.svg" alt="GitHub">
+Analyzed by：<img src="https://cnfte.top/attachments/cf.svg" alt="Cloudflare Analysis">
+Served by：<img src="https://cnfte.top/attachments/cf2.svg" alt="Cloudflare CDN">
+商业投广通道(仅支持支付宝与微信付款)：QQ 3793945630
+TG：<a src=https://t.me/cnfte1>https://t.me/cnfte1</a>
+如何联系Cnfte与bug反馈？>>>QQ群聊：887378676
+TG群组：<a src=https://t.me/+pCnCBiCsyOhhMWU9>https://t.me/+pCnCBiCsyOhhMWU9</a>
+状态监控：<a src=https://probe.cnfte.top>https://probe.cnfte.top</a></div>
+        © 2026 Cnfte // DESIGNED BY MOE PANEL
+    </footer>
+
+    <script>
+        // 一言加载
+        fetch('https://v1.hitokoto.cn').then(res => res.json()).then(data => {
+            document.getElementById('hitokoto').innerText = data.hitokoto;
+        });
+
+        // 运行天数与时钟
+        const start = new Date("2025-05-01");
+        if(!isNaN(start)) document.getElementById('days').innerHTML = Math.floor((new Date() - start) / 86400000);
+        setInterval(() => document.getElementById('clock').innerText = new Date().toLocaleTimeString(), 1000);
+
+        // 搜索逻辑
+        let searchData = null;
+        function toggleSearch() {
+            const container = document.getElementById('search-box');
+            container.classList.toggle('active');
+            if(container.classList.contains('active')) document.getElementById('search-input').focus();
+        }
+
+        document.getElementById('search-input').addEventListener('input', async (e) => {
+            if(!searchData) {
+                const path = window.location.pathname.includes('/en/') ? '/en/search.json' : '/search.json';
+                searchData = await (await fetch(path)).json();
+            }
+            const val = e.target.value.toLowerCase().trim();
+            const resDiv = document.getElementById('search-results');
+            resDiv.innerHTML = '';
+            if(val.length < 1) { resDiv.style.display = 'none'; return; }
+            
+            const filtered = searchData.filter(i => i.title.toLowerCase().includes(val));
+            if(filtered.length > 0) {
+                filtered.forEach(item => {
+                    const a = document.createElement('a');
+                    a.href = item.url; a.className = 'search-item'; a.innerHTML = `<b>${item.title}</b>`;
+                    resDiv.appendChild(a);
+                });
+                resDiv.style.display = 'flex';
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if(!e.target.closest('#search-box')) {
+                document.getElementById('search-box').classList.remove('active');
+                document.getElementById('search-results').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
