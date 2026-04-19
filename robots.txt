@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /search.json
+Disallow: /config.json
+Sitemap: https://cnfte.top/sitemap.xml

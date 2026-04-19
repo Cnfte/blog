@@ -1,0 +1,1876 @@
+<!DOCTYPE html>
+<html lang="zh" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>互联网科普系列-什么是服务器_怎么获得一个服务器 - Cnfteの博客</title>
+    <meta name="description" content="什么是服务器？ 想象一下，你平时上网看视频、玩游戏、聊天，这些信息和内容都藏在哪里呢？它们不是凭空出现的，而是存储在一些特别厉害的电脑里，这些电脑就是服务器。 你可以把服务器理解成一个\\“超级大管家”或者“信息仓库”\\。它不像我们平时用的电脑那样，主要用来玩游戏、看电影、写文档。服务器的主要工作是： 存储…">
+    <link rel="canonical" href="https://cnfte.top/archive/177139506150/">    <link rel="icon" href="/favicon.ico">
+    <meta property="og:title" content="互联网科普系列-什么是服务器_怎么获得一个服务器">
+    <meta property="og:description" content="什么是服务器？ 想象一下，你平时上网看视频、玩游戏、聊天，这些信息和内容都藏在哪里呢？它们不是凭空出现的，而是存储在一些特别厉害的电脑里，这些电脑就是服务器。 你可以把服务器理解成一个\\“超级大管家”或者“信息仓库”\\。它不像我们平时用的电脑那样，主要用来玩游戏、看电影、写文档。服务器的主要工作是： 存储…">
+    <meta property="og:type" content="article">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Fira+Code:wght@400;600&family=Noto+Sans+SC:wght@400;700;900&display=swap"
+        rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript>
+        <link
+            href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Fira+Code:wght@400;600&family=Noto+Sans+SC:wght@400;700;900&display=swap"
+            rel="stylesheet">
+    </noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        crossorigin="anonymous" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+            crossorigin="anonymous">
+    </noscript>
+    <style>
+        :root {
+            --bg: #06060f;
+            --glass: rgba(255, 255, 255, 0.055);
+            --glass-md: rgba(255, 255, 255, 0.09);
+            --glass-heavy: rgba(8, 8, 18, 0.97);
+            --border: rgba(255, 255, 255, 0.10);
+            --border-accent: rgba(255, 153, 204, 0.45);
+            --accent: #ff99cc;
+            --accent2: #ffcc99;
+            --accent3: #99ccff;
+            --grad: linear-gradient(135deg, #ff99cc 0%, #ffcc99 100%);
+            --shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
+            --shadow-accent: 0 8px 32px rgba(255, 153, 204, 0.22);
+            --ease: cubic-bezier(.34, 1.56, .64, 1);
+            --ease-out: cubic-bezier(.22, 1, .36, 1);
+            --ease-std: cubic-bezier(.4, 0, .2, 1);
+            --r-sm: 16px;
+            --r-md: 24px;
+            --r-lg: 32px;
+            --sidebar-w: 300px;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        p,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        span,
+        a,
+        li,
+        td,
+        th {
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-family: inherit;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', 'Inter', sans-serif;
+            color: #f0f0f8;
+            background: var(--bg);
+            line-height: 1.7;
+            overflow-x: hidden;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bg-fixed {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background:url('https://cnfte.top/attachments/bj.webp') center/cover no-repeat;
+            will-change: transform;
+        }
+
+        .bg-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: rgba(0, 0, 0, .48);
+            backdrop-filter: blur(8px) saturate(120%);
+        }
+
+        #progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            width: 0%;
+            background: var(--grad);
+            z-index: 9999;
+            border-radius: 0 2px 2px 0;
+            box-shadow: 0 0 8px rgba(255, 153, 204, .6);
+        }
+
+        #page-transition {
+            position: fixed;
+            inset: 0;
+            z-index: 8000;
+            background: var(--glass-heavy);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .22s var(--ease-out);
+        }
+
+        #page-transition.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+
+        nav {
+            position: sticky;
+            top: 10px;
+            z-index: 1000;
+            margin: 10px auto;
+            width: calc(100% - 40px);
+            max-width: 1360px;
+            background: rgba(6, 6, 15, 0.72);
+            backdrop-filter: blur(32px) saturate(180%);
+            -webkit-backdrop-filter: blur(32px) saturate(180%);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            padding: 0 8px 0 22px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            height: 52px;
+            box-shadow: var(--shadow);
+        }
+
+        .logo {
+            font-family: 'ZCOOL KuaiLe';
+            font-size: 1.22rem;
+            background: var(--grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            flex-shrink: 0;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 4px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .nav-links::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-links a {
+            font-weight: 700;
+            font-size: .78rem;
+            color: rgba(255, 255, 255, .65);
+            letter-spacing: .8px;
+            padding: 6px 12px;
+            border-radius: 24px;
+            transition: background .2s, color .2s;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .nav-links a:hover {
+            background: var(--glass-md);
+            color: #fff;
+            filter: none;
+        }
+
+        .nav-lang {
+            font-size: .72rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, .4);
+            padding: 5px 10px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            transition: border-color .2s, color .2s;
+            flex-shrink: 0;
+            letter-spacing: .8px;
+        }
+
+        .nav-lang:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            filter: none;
+        }
+
+        .search-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        #search-toggle {
+            color: rgba(255, 255, 255, .55);
+            font-size: 1rem;
+            padding: 8px 10px;
+            border-radius: 50%;
+            transition: color .2s, background .2s;
+        }
+
+        #search-toggle:hover {
+            color: var(--accent);
+            background: var(--glass-md);
+        }
+
+        #search-input {
+            width: 0;
+            opacity: 0;
+            position: absolute;
+            right: 44px;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 7px 0;
+            background: rgba(6, 6, 15, .9);
+            color: #fff;
+            transition: width .35s var(--ease-out), opacity .25s, padding .25s;
+            outline: none;
+            font-size: .8rem;
+            font-family: inherit;
+        }
+
+        .search-wrap.open #search-input {
+            width: 180px;
+            opacity: 1;
+            padding: 7px 16px;
+        }
+
+        #search-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 320px;
+            background: var(--glass-heavy);
+            border: 1px solid var(--border);
+            border-radius: var(--r-md);
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            pointer-events: none;
+            transition: max-height .3s var(--ease-out), opacity .22s;
+            box-shadow: 0 24px 56px rgba(0, 0, 0, .7);
+            z-index: 1100;
+        }
+
+        #search-dropdown.open {
+            max-height: 380px;
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .s-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 18px;
+            font-size: .82rem;
+            border-bottom: 1px solid rgba(255, 255, 255, .04);
+            color: #ddd;
+            transition: background .12s;
+        }
+
+        .s-item::before {
+            content: '#';
+            color: var(--accent);
+            font-family: 'Fira Code';
+            font-size: .7rem;
+            flex-shrink: 0;
+        }
+
+        .s-item:hover {
+            background: rgba(255, 153, 204, .1);
+            color: var(--accent);
+        }
+
+        .s-item:last-child {
+            border-bottom: none;
+        }
+
+        .s-empty,
+        .s-loading {
+            padding: 18px;
+            text-align: center;
+            color: #444;
+            font-size: .8rem;
+            font-family: 'Fira Code';
+        }
+
+
+        @keyframes cardIn {
+            from {
+                opacity: 0;
+                transform: translateY(22px) scale(.988)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        @keyframes heroZoom {
+            from {
+                transform: scale(1)
+            }
+
+            to {
+                transform: scale(1.07)
+            }
+        }
+
+        .post-hero {
+            height: 44vh;
+            min-height: 320px;
+            width: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .post-hero-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(.55);
+            z-index: -1;
+            animation: heroZoom 22s ease-in-out infinite alternate;
+            will-change: transform;
+        }
+
+        .post-hero-gradient {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background: linear-gradient(to bottom, rgba(6, 6, 15, .08) 0%, rgba(6, 6, 15, .6) 100%);
+        }
+
+        .post-header-content {
+            position: relative;
+            z-index: 1;
+            padding: 0 40px;
+            animation: cardIn .7s var(--ease);
+            max-width: 860px;
+        }
+
+        .post-tagline {
+            color: var(--accent);
+            font-family: 'Fira Code';
+            font-size: .78rem;
+            letter-spacing: 3.5px;
+            margin-bottom: 14px;
+        }
+
+        .post-header-content h1 {
+            font-family: 'ZCOOL KuaiLe';
+            font-size: clamp(1.7rem, 5vw, 3rem);
+            color: #fff;
+            line-height: 1.2;
+            text-shadow: 0 6px 30px rgba(0, 0, 0, .75);
+        }
+
+
+        .layout-wrapper {
+            flex: 1;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2.5% 60px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) var(--sidebar-w);
+            gap: 26px;
+            align-items: start;
+        }
+
+        body[data-page="post"] .layout-wrapper {
+            margin-top: -52px;
+            position: relative;
+            z-index: 10;
+        }
+
+        body[data-page="index"] .layout-wrapper {
+            margin-top: 0;
+        }
+
+
+        .post-friends {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 26px;
+        }
+
+        .friend-card {
+            height: 64px;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            padding: 6px;
+            overflow: hidden;
+            min-width: 0;
+            transition: transform .3s var(--ease), border-color .2s;
+        }
+
+        .friend-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--border-accent);
+        }
+
+        .friend-card img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 2px solid var(--border-accent);
+        }
+
+        .friend-info {
+            overflow: hidden;
+            flex: 1;
+            padding: 0 10px;
+        }
+
+        .friend-info b {
+            display: block;
+            color: var(--accent);
+            font-size: .78rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .friend-info span {
+            font-size: .65rem;
+            color: rgba(255, 255, 255, .45);
+            white-space: nowrap;
+        }
+
+
+        main#main-content {
+            min-width: 0;
+        }
+
+        article.post-container {
+            background: var(--glass-heavy);
+            backdrop-filter: blur(40px) saturate(160%);
+            -webkit-backdrop-filter: blur(40px) saturate(160%);
+            border-radius: var(--r-lg);
+            border: 1px solid var(--border);
+            padding: 48px 44px;
+            box-shadow: var(--shadow);
+            min-width: 0;
+            animation: cardIn .7s var(--ease) both;
+        }
+
+        .post-body {
+            font-size: 1.06rem;
+            color: #eff0f5;
+            line-height: 1.92;
+        }
+
+        .post-body h1,
+        .post-body h2 {
+            font-family: 'ZCOOL KuaiLe';
+            color: var(--accent);
+            margin: 2.2em 0 .8em;
+            font-size: 1.55rem;
+            padding-bottom: .5em;
+            border-bottom: 1px solid rgba(255, 153, 204, .15);
+        }
+
+        .post-body h3 {
+            color: var(--accent2);
+            margin: 1.6em 0 .6em;
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .post-body h4 {
+            color: rgba(255, 255, 255, .8);
+            margin: 1.2em 0 .5em;
+            font-size: 1rem;
+        }
+
+        .post-body p {
+            margin-bottom: 1.4rem;
+        }
+
+        .post-body img {
+            border-radius: var(--r-sm);
+            box-shadow: 0 10px 36px rgba(0, 0, 0, .5);
+            margin: 20px auto;
+            max-width: 100%;
+        }
+
+        .post-body a {
+            color: var(--accent);
+            border-bottom: 1px dashed rgba(255, 153, 204, .5);
+            transition: border-color .2s;
+        }
+
+        .post-body a:hover {
+            border-bottom-style: solid;
+            border-color: var(--accent);
+            filter: none;
+        }
+
+        .post-body blockquote {
+            border-left: 3px solid var(--accent);
+            margin: 22px 0;
+            padding: 14px 22px;
+            background: rgba(255, 153, 204, .05);
+            border-radius: 0 var(--r-sm) var(--r-sm) 0;
+            font-style: italic;
+            color: rgba(255, 255, 255, .7);
+        }
+
+        .post-body ul {
+            list-style: disc;
+            padding-left: 26px;
+            margin-bottom: 1.2rem;
+        }
+
+        .post-body ol {
+            list-style: decimal;
+            padding-left: 26px;
+            margin-bottom: 1.2rem;
+        }
+
+        .post-body li {
+            margin-bottom: .45rem;
+        }
+
+        .post-body table {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-collapse: collapse;
+            margin: 24px 0;
+        }
+
+        .post-body th,
+        .post-body td {
+            border: 1px solid rgba(255, 255, 255, .08);
+            padding: 10px 18px;
+            min-width: 80px;
+        }
+
+        .post-body th {
+            background: rgba(255, 153, 204, .12);
+            color: var(--accent);
+        }
+
+        .post-body tr:nth-child(even) {
+            background: rgba(255, 255, 255, .025);
+        }
+
+        .post-body .toc {
+            background: rgba(0, 0, 0, .35);
+            border-radius: var(--r-md);
+            padding: 18px 22px;
+            margin-bottom: 32px;
+            border: 1px solid var(--border);
+        }
+
+        .post-body .toc a {
+            border-bottom: none;
+            color: rgba(255, 255, 255, .65);
+            display: block;
+            padding: 3px 0;
+        }
+
+        .post-body .toc a:hover {
+            color: var(--accent);
+        }
+
+        .post-body pre,
+        .post-body .codehilite {
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            display: block;
+            background: rgba(0, 0, 0, .68);
+            padding: 22px 24px;
+            border-radius: var(--r-md);
+            border: 1px solid var(--border);
+            margin: 24px 0;
+            word-break: normal !important;
+            overflow-wrap: normal !important;
+            white-space: pre;
+        }
+
+        .post-body pre code,
+        .post-body .codehilite code {
+            white-space: pre;
+            word-break: normal !important;
+            overflow-wrap: normal !important;
+            font-family: 'Fira Code', monospace;
+            font-size: .85rem;
+            line-height: 1.7;
+            display: block;
+            background: transparent;
+            padding: 0;
+            border: none;
+            color: #e8e8f0;
+        }
+
+        .post-body code:not(pre code):not(.codehilite code) {
+            background: rgba(255, 153, 204, .13);
+            color: var(--accent);
+            padding: 2px 7px;
+            border-radius: 5px;
+            font-size: .87rem;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .btn-wrapper {
+            margin-top: 52px;
+            padding-top: 26px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--grad);
+            color: #000;
+            padding: 13px 44px;
+            border-radius: 50px;
+            font-weight: 900;
+            font-size: .92rem;
+            box-shadow: 0 10px 28px rgba(255, 153, 204, .38);
+            transition: transform .3s var(--ease), box-shadow .3s;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 16px 40px rgba(255, 153, 204, .55);
+            filter: none;
+            color: #000;
+        }
+
+
+        aside {
+            position: sticky;
+            top: 76px;
+            height: fit-content;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .widget {
+            background: var(--glass);
+            backdrop-filter: blur(20px) saturate(150%);
+            -webkit-backdrop-filter: blur(20px) saturate(150%);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: 22px;
+            overflow: hidden;
+        }
+
+        .widget-title {
+            font-family: 'ZCOOL KuaiLe';
+            color: var(--accent);
+            font-size: 1.05rem;
+            letter-spacing: 1px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .widget-title i {
+            font-size: .9rem;
+            opacity: .7;
+        }
+
+        .toc-widget {
+            font-size: .82rem;
+            max-height: 46vh;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 153, 204, .3) transparent;
+        }
+
+        .toc-widget::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        .toc-widget::-webkit-scrollbar-thumb {
+            background: rgba(255, 153, 204, .3);
+            border-radius: 3px;
+        }
+
+        .toc-widget a {
+            color: rgba(255, 255, 255, .6);
+            border-bottom: none;
+            display: block;
+            padding: 4px 0;
+            transition: color .15s, padding-left .2s;
+        }
+
+        .toc-widget a:hover {
+            color: var(--accent);
+            padding-left: 5px;
+            filter: none;
+        }
+
+
+        .anime-list {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .anime-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 11px;
+            border-radius: var(--r-sm);
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid rgba(255, 255, 255, .06);
+            transition: background .2s, border-color .2s;
+        }
+
+        .anime-item:hover {
+            background: rgba(153, 204, 255, .06);
+            border-color: rgba(153, 204, 255, .2);
+        }
+
+        .anime-cover {
+            width: 40px;
+            height: 54px;
+            border-radius: 7px;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, .1);
+        }
+
+        .anime-cover-placeholder {
+            width: 40px;
+            height: 54px;
+            border-radius: 7px;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, rgba(153, 204, 255, .15), rgba(204, 153, 255, .1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            border: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .anime-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .anime-title {
+            font-size: .78rem;
+            font-weight: 700;
+            color: #eee;
+            margin-bottom: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+        }
+
+        .anime-ep {
+            font-family: 'Fira Code';
+            font-size: .62rem;
+            color: rgba(153, 204, 255, .7);
+        }
+
+        .anime-status {
+            font-size: .55rem;
+            font-family: 'Fira Code';
+            letter-spacing: 1px;
+            padding: 2px 6px;
+            border-radius: 6px;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+
+        .anime-status.airing {
+            background: rgba(0, 255, 128, .1);
+            color: #00ff80;
+            border: 1px solid rgba(0, 255, 128, .2);
+        }
+
+        .anime-status.ended {
+            background: rgba(255, 255, 255, .06);
+            color: rgba(255, 255, 255, .35);
+            border: 1px solid rgba(255, 255, 255, .08);
+        }
+
+
+        .terminal-widget {
+            background: rgba(2, 2, 8, .7);
+            border: 1px solid rgba(0, 255, 120, .15);
+            border-radius: var(--r-md);
+            padding: 16px 18px;
+            font-family: 'Fira Code';
+            font-size: .7rem;
+            line-height: 2;
+        }
+
+        .t-line {
+            color: #00ffaa;
+        }
+
+        .t-dim {
+            color: rgba(0, 255, 170, .3);
+        }
+
+        .t-accent {
+            color: var(--accent);
+        }
+
+        .t-val {
+            color: #fff;
+        }
+
+
+        .profile-widget {
+            text-align: center;
+        }
+
+        .profile-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            padding: 3px;
+            border: 2.5px solid var(--accent);
+            margin: 0 auto 12px;
+            transition: transform .6s var(--ease);
+        }
+
+        .profile-avatar:hover {
+            transform: rotate(360deg) scale(1.06);
+        }
+
+        .profile-name {
+            font-family: 'ZCOOL KuaiLe';
+            color: #fff;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .profile-bio {
+            font-size: .8rem;
+            color: rgba(255, 255, 255, .5);
+            line-height: 1.55;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .social-links a {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.05rem;
+            color: rgba(255, 255, 255, .65);
+            transition: transform .3s var(--ease), color .2s, border-color .2s;
+            flex-shrink: 0;
+        }
+
+        .social-links a:hover {
+            color: var(--accent);
+            border-color: var(--border-accent);
+            transform: translateY(-4px) scale(1.1);
+            background: rgba(255, 153, 204, .08);
+        }
+
+
+        footer {
+            text-align: center;
+            padding: 48px 20px;
+            background: rgba(0, 0, 0, .88);
+            border-top: 1px solid var(--border);
+        }
+
+        .foot-custom {
+            color: var(--accent);
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: .9rem;
+        }
+
+        .foot-copy {
+            font-size: .74rem;
+            color: rgba(255, 255, 255, .2);
+            font-family: 'Fira Code';
+        }
+
+
+        @media (max-width:1080px) {
+            :root {
+                --sidebar-w: 260px;
+            }
+        }
+
+        @media (max-width:900px) {
+            .layout-wrapper {
+                grid-template-columns: 1fr;
+                margin-top: -28px;
+            }
+
+            article.post-container {
+                padding: 28px 20px;
+                border-radius: var(--r-lg);
+            }
+
+            aside {
+                position: static;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                gap: 12px;
+            }
+        }
+
+        @media (max-width:600px) {
+            nav {
+                padding: 0 6px 0 16px;
+                top: 6px;
+            }
+
+            .post-hero {
+                min-height: 220px;
+                height: 36vh;
+            }
+
+            .post-header-content {
+                padding: 0 18px;
+            }
+
+            .post-header-content h1 {
+                font-size: 1.5rem;
+            }
+
+            article.post-container {
+                padding: 20px 16px;
+                border-radius: var(--r-md);
+            }
+
+            .layout-wrapper {
+                padding: 0 12px 40px;
+            }
+
+            .post-body pre,
+            .post-body .codehilite {
+                padding: 14px 16px;
+                border-radius: var(--r-sm);
+            }
+
+            .post-body pre code,
+            .post-body .codehilite code {
+                font-size: .78rem;
+            }
+
+            .post-friends {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            aside {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ── index-only styles (injected for SPA back-navigation) ── */
+        @keyframes cardIn {
+            from {
+                opacity: 0;
+                transform: translateY(24px) scale(.985)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        @keyframes heroZoom {
+            from {
+                transform: scale(1)
+            }
+
+            to {
+                transform: scale(1.07)
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(-6px)
+            }
+        }
+
+        .hero {
+            margin: 4px calc(2.5%) 24px;
+            border-radius: var(--r-lg);
+            overflow: hidden;
+            position: relative;
+            height: 44vh;
+            min-height: 360px;
+            display: flex;
+            align-items: flex-end;
+            box-shadow: var(--shadow);
+            animation: cardIn .7s var(--ease) both;
+        }
+
+        .hero-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            filter: brightness(.7);
+            animation: heroZoom 24s ease-in-out infinite alternate;
+            will-change: transform;
+        }
+
+        .hero-gradient {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background: linear-gradient(to top, rgba(0, 0, 0, .92) 0%, rgba(0, 0, 0, .3) 45%, transparent 75%);
+        }
+
+        .hero-layout {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            padding: 36px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 20px;
+        }
+
+        .hero-text {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .hero-text h1 {
+            font-family: 'ZCOOL KuaiLe';
+            font-size: clamp(1.9rem, 5.5vw, 3.6rem);
+            color: #fff;
+            line-height: 1.1;
+            margin-bottom: 8px;
+            text-shadow: 0 4px 24px rgba(0, 0, 0, .6);
+        }
+
+        .hero-text p {
+            font-size: .8rem;
+            color: rgba(255, 255, 255, .5);
+            letter-spacing: 4px;
+            font-family: 'Fira Code';
+        }
+
+        .hero-widgets {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 290px;
+            flex-shrink: 0;
+        }
+
+        .h-card {
+            background: rgba(6, 6, 15, .6);
+            backdrop-filter: blur(18px);
+            border-radius: var(--r-md);
+            padding: 14px 18px;
+            border: 1px solid rgba(255, 255, 255, .1);
+        }
+
+        .h-card-label {
+            font-size: .58rem;
+            color: var(--accent);
+            font-weight: bold;
+            letter-spacing: 2.5px;
+            margin-bottom: 8px;
+            font-family: 'Fira Code';
+        }
+
+        .hitokoto-text {
+            font-size: .82rem;
+            color: rgba(255, 255, 255, .85);
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .stat-item {
+            text-align: center;
+            font-family: 'Fira Code';
+        }
+
+        .stat-item .stat-val {
+            font-size: 1.3rem;
+            font-weight: bold;
+            background: var(--grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+        }
+
+        .stat-item .stat-lbl {
+            font-size: .58rem;
+            color: rgba(255, 255, 255, .4);
+            letter-spacing: 1.5px;
+        }
+
+        #notice-toggle {
+            display: none;
+        }
+
+        .notice-modal-wrap {
+            position: fixed;
+            inset: 0;
+            z-index: 7000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity .3s var(--ease-out);
+        }
+
+        #notice-toggle:checked~.notice-modal-wrap {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .notice-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, .7);
+            backdrop-filter: blur(6px);
+        }
+
+        .notice-backdrop-label {
+            position: absolute;
+            inset: 0;
+            cursor: pointer;
+        }
+
+        .notice-box {
+            position: relative;
+            z-index: 1;
+            background: var(--glass-heavy);
+            border: 1px solid var(--border-accent);
+            border-radius: var(--r-lg);
+            padding: 40px;
+            width: min(520px, 90vw);
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 24px 72px rgba(0, 0, 0, .7), 0 0 0 1px rgba(255, 153, 204, .1);
+            animation: cardIn .35s var(--ease) both;
+        }
+
+        .notice-box-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .notice-box-title {
+            font-family: 'ZCOOL KuaiLe';
+            font-size: 1.4rem;
+            background: var(--grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .notice-close-label {
+            cursor: pointer;
+            color: rgba(255, 255, 255, .4);
+            font-size: 1.3rem;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background .2s, color .2s, border-color .2s;
+        }
+
+        .notice-close-label:hover {
+            background: rgba(255, 153, 204, .12);
+            color: var(--accent);
+            border-color: var(--border-accent);
+        }
+
+        .notice-body {
+            font-size: .9rem;
+            color: rgba(255, 255, 255, .8);
+            line-height: 1.85;
+            white-space: pre-line;
+        }
+
+        .notice-open-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-size: .72rem;
+            font-family: 'Fira Code';
+            color: var(--accent2);
+            background: rgba(255, 204, 153, .08);
+            border: 1px solid rgba(255, 204, 153, .2);
+            border-radius: 20px;
+            padding: 5px 12px;
+            transition: background .2s, border-color .2s;
+        }
+
+        .notice-open-label:hover {
+            background: rgba(255, 204, 153, .15);
+            border-color: rgba(255, 204, 153, .4);
+        }
+
+        .notice-open-label i {
+            font-size: .75rem;
+        }
+
+        .post-list {
+            min-width: 0;
+        }
+
+        .post-card {
+            display: flex;
+            overflow: hidden;
+            background: var(--glass);
+            backdrop-filter: blur(20px) saturate(150%);
+            -webkit-backdrop-filter: blur(20px) saturate(150%);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            margin-bottom: 18px;
+            height: 200px;
+            transition: transform .4s var(--ease), border-color .25s, box-shadow .3s;
+            animation: cardIn .6s var(--ease) both;
+            content-visibility: auto;
+            contain-intrinsic-size: 0 200px;
+        }
+
+        .post-card:hover {
+            transform: translateX(8px) scale(1.005);
+            border-color: var(--border-accent);
+            box-shadow: var(--shadow-accent);
+        }
+
+        .post-cover {
+            width: 32%;
+            flex-shrink: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .post-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform .6s var(--ease-out);
+        }
+
+        .post-card:hover .post-cover img {
+            transform: scale(1.06);
+        }
+
+        .post-cover-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, transparent 60%, rgba(6, 6, 15, .4));
+        }
+
+        .post-content {
+            padding: 22px 26px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .post-meta {
+            font-family: 'Fira Code';
+            font-size: .68rem;
+            color: var(--accent);
+            margin-bottom: 9px;
+            opacity: .75;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .post-meta .tag {
+            background: rgba(255, 153, 204, .12);
+            border: 1px solid rgba(255, 153, 204, .2);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: .6rem;
+        }
+
+        .post-title {
+            font-size: 1.35rem;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 9px;
+            line-height: 1.28;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            transition: color .2s;
+        }
+
+        .post-card:hover .post-title {
+            color: var(--accent);
+        }
+
+        .post-summary {
+            font-size: .87rem;
+            color: rgba(255, 255, 255, .55);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.6;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: rgba(255, 255, 255, .25);
+            font-family: 'Fira Code';
+            font-size: .85rem;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            display: block;
+            opacity: .3;
+        }
+
+        @media (max-width: 900px) {
+            .hero-widgets {
+                display: none !important;
+            }
+
+            .hero-layout {
+                padding: 24px;
+            }
+
+            .post-card {
+                height: auto;
+                flex-direction: column;
+            }
+
+            .post-cover {
+                width: 100%;
+                height: 180px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .hero {
+                margin: 4px 12px 20px;
+                min-height: 280px;
+                height: 36vh;
+                border-radius: var(--r-md);
+            }
+
+            .hero-layout {
+                padding: 18px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body data-page="post">
+
+    <div class="bg-fixed"></div>
+    <div class="bg-overlay"></div>
+    <div id="progress-bar"></div>
+    <div id="page-transition"></div>
+
+
+    <nav>
+        <a href="/" class="logo">CNFTE</a>
+        <div class="nav-links">
+            <a href="/" data-spa>首页</a>
+<a href="/公益服务项.html" data-spa>公益服务项</a><a href="/关于.html" data-spa>关于</a><a href="/友链.html" data-spa>友链</a><a href="/隐私政策.html" data-spa>隐私政策</a>        </div>
+        <a href="/en/" class="nav-lang">EN</a>
+        <div class="search-wrap" id="search-wrap">
+            <input type="text" id="search-input" placeholder="搜索..." autocomplete="off" aria-label="搜索">
+            <button id="search-toggle" aria-label="搜索"><i class="fas fa-search"></i></button>
+            <div id="search-dropdown" role="listbox"></div>
+        </div>
+    </nav>
+
+
+    <div id="hero-wrap">
+        <div class="post-hero">
+            <img src="https://www.dmoe.cc/random.php?v=177139506150" class="post-hero-img"
+                alt="互联网科普系列-什么是服务器_怎么获得一个服务器" fetchpriority="high">
+            <div class="post-hero-gradient"></div>
+            <div class="post-header-content">
+                <p class="post-tagline">2026-01-17 // 12 分钟 // 177139506150
+                </p>
+                <h1>互联网科普系列-什么是服务器_怎么获得一个服务器</h1>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="main-grid" class="layout-wrapper">
+        <main id="main-content">
+
+
+            <article class="post-container">
+                <div class="post-body"><h3 id="_1">什么是服务器？<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<p>想象一下，你平时上网看视频、玩游戏、聊天，这些信息和内容都藏在哪里呢？它们不是凭空出现的，而是存储在一些特别厉害的电脑里，这些电脑就是<strong>服务器</strong>。</p>
+<p>你可以把服务器理解成一个**“超级大管家”<strong>或者</strong>“信息仓库”**。它不像我们平时用的电脑那样，主要用来玩游戏、看电影、写文档。服务器的主要工作是：</p>
+<ul>
+<li><strong>存储信息：</strong> 就像一个巨大的仓库，里面存放着网站的数据、视频文件、游戏数据等等。</li>
+<li><strong>处理请求：</strong> 当你打开一个网站，或者玩一个在线游戏时，你的电脑会向服务器发出一个“请求”，服务器就像一个勤劳的管家，收到请求后，会立刻去仓库里找到你需要的信息，然后“送”回来给你看。</li>
+<li><strong>提供服务：</strong> 它24小时不间断地运行，随时准备响应来自世界各地用户的请求，提供各种各样的服务，比如网页浏览、邮件收发、文件存储、在线游戏等等。</li>
+</ul>
+<p>所以，简单来说，服务器就是一台<strong>专门用来提供各种网络服务的、性能强大的、一直开着的电脑</strong>。</p>
+<hr />
+<h3 id="_2">服务器有什么作用？<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h3>
+<p>服务器的作用非常广泛，几乎是我们现在互联网生活的基础。主要有以下几个方面：</p>
+<ol>
+<li><strong>托管网站（网站的家）：</strong></li>
+</ol>
+<ul>
+<li>你看到的每一个网站，比如淘宝、百度、新闻网站，它们的所有内容（文字、图片、视频）都存储在服务器上。当你输入网址时，你的电脑就会去服务器“取”这些内容回来显示给你。</li>
+<li>
+<p><strong>小白理解：</strong> 就像你开了一家小店，需要一个店面（服务器）来摆放你的商品（网站内容），让顾客（用户）能进来浏览和购买。<br />
+2. <strong>存储和分享文件（云盘、网盘）：</strong></p>
+</li>
+<li>
+<p>像百度网盘、阿里云盘、Dropbox 等，它们就是利用服务器来存储你的文件，并让你可以在任何设备上访问和分享。</p>
+</li>
+<li>
+<p><strong>小白理解：</strong> 就像你有一个超大的移动硬盘（服务器），可以把照片、视频、文件都存进去，然后通过网络随时随地拿出来用，或者分享给朋友。<br />
+3. <strong>运行应用程序和游戏（在线游戏、APP后台）：</strong></p>
+</li>
+<li>
+<p>你玩的大部分在线游戏，比如《王者荣耀》、《和平精英》，它们的游戏数据、玩家信息、游戏进程都需要服务器来统一管理和处理。</p>
+</li>
+<li>很多手机APP，比如微信、抖音，它们后台的数据处理、信息推送也都是由服务器完成的。</li>
+<li>
+<p><strong>小白理解：</strong> 就像玩一个大型多人在线游戏，所有玩家都在同一个虚拟世界里，这个世界就是由服务器来维护的，保证大家都能同步玩耍。<br />
+4. <strong>提供邮件服务（邮箱）：</strong></p>
+</li>
+<li>
+<p>你使用的QQ邮箱、Gmail、网易邮箱等，它们收发邮件、存储邮件的功能都是由邮件服务器提供的。</p>
+</li>
+<li>
+<p><strong>小白理解：</strong> 就像一个邮局（邮件服务器），负责接收、存储和投递你的邮件。<br />
+5. <strong>数据库服务（信息管理）：</strong></p>
+</li>
+<li>
+<p>很多应用需要存储大量结构化的数据，比如用户信息、订单信息等，这些数据就存放在数据库服务器里，方便快速查询和管理。</p>
+</li>
+<li><strong>小白理解：</strong> 就像一个超级详细的电话簿或者账本（数据库服务器），可以帮你快速找到某个人的联系方式或者记录。</li>
+</ul>
+<p>总而言之，服务器就是互联网世界的**“幕后英雄”**，没有它，我们就无法顺畅地浏览网页、使用APP、玩游戏、收发邮件。</p>
+<hr />
+<h3 id="_3">怎么获得一个云服务器（阿里云浙江杭州云服务器为例）<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h3>
+<p>现在我们知道了服务器这么重要，那怎么才能拥有一个呢？最方便快捷的方式就是租用<strong>云服务器</strong>。云服务器就像是把一台真实的服务器“搬”到了互联网上，你可以按需使用，非常灵活。</p>
+<p>我们以<strong>阿里云浙江杭州的云服务器</strong>为例，来简单讲讲怎么获得：</p>
+<ol>
+<li><strong>注册阿里云账号：</strong></li>
+</ol>
+<ul>
+<li>
+<p>首先，你需要去阿里云的官方网站（<a href="http://www.aliyun.com%EF%BC%89%E6%B3%A8%E5%86%8C%E4%B8%80%E4%B8%AA%E8%B4%A6%E5%8F%B7%E3%80%82%E8%BF%99%E4%B8%AA%E8%BF%87%E7%A8%8B%E5%B0%B1%E5%83%8F%E6%B3%A8%E5%86%8C%E4%B8%80%E4%B8%AA%E6%99%AE%E9%80%9A%E7%9A%84%E7%BD%91%E7%AB%99%E8%B4%A6%E5%8F%B7%E4%B8%80%E6%A0%B7%EF%BC%8C%E9%9C%80%E8%A6%81%E6%89%8B%E6%9C%BA%E5%8F%B7%E3%80%81%E9%82%AE%E7%AE%B1%E7%AD%89%E4%BF%A1%E6%81%AF%EF%BC%8C%E5%8F%AF%E8%83%BD%E8%BF%98%E9%9C%80%E8%A6%81%E5%AE%9E%E5%90%8D%E8%AE%A4%E8%AF%81%E3%80%82">www.aliyun.com）注册一个账号。这个过程就像注册一个普通的网站账号一样，需要手机号、邮箱等信息，可能还需要实名认证。</a><br />
+2. <strong>进入云服务器购买页面：</strong></p>
+</li>
+<li>
+<p>登录阿里云账号后，在网站上找到“产品”或者“计算”相关的分类，然后选择“云服务器ECS”（Elastic Compute Service，弹性计算服务）。<br />
+3. <strong>选择配置（就像选电脑配置）：</strong></p>
+</li>
+<li>
+<p><strong>地域和可用区：</strong> 这里你需要选择“中国内地”-&gt;“华东2（上海）”或者“华南1（深圳）”等，如果你想选择浙江杭州，通常会选择离你近的“华东2（上海）”或者“华北1（青岛）”等，因为阿里云的机房分布在全国各地，杭州地区通常会归类到华东区域。<strong>（注意：阿里云的地域选择是按大区划分的，杭州属于华东区域，所以你选择“华东2（上海）”或者“华东1（杭州）”都可以，具体看当时阿里云的地域划分策略，但通常会有一个离杭州近的选项。）</strong></p>
+</li>
+<li><strong>实例类型：</strong> 这决定了服务器的性能，比如CPU核心数、内存大小。就像你买电脑时选择i3、i5、i7，或者内存8G、16G一样。初学者可以先选择一些入门级的配置。</li>
+<li><strong>镜像（操作系统）：</strong> 你需要选择服务器上安装什么操作系统，最常见的是Windows Server或者Linux（比如CentOS、Ubuntu）。Linux更常用在网站托管和开发中，Windows更熟悉一些。</li>
+<li><strong>系统盘和数据盘：</strong> 就是服务器的硬盘，用来安装操作系统和存储数据。</li>
+<li><strong>网络：</strong> 配置服务器的网络，包括公网IP地址（让别人能访问到你的服务器）和带宽（数据传输的速度）。</li>
+<li>
+<p><strong>安全组：</strong> 设置防火墙规则，决定哪些网络端口是开放的，哪些是关闭的，用来保护服务器安全。<br />
+4. <strong>设置密码或密钥：</strong></p>
+</li>
+<li>
+<p>为了安全登录服务器，你需要设置一个登录密码，或者生成一个SSH密钥对（Linux常用）。<br />
+5. <strong>确认订单并支付：</strong></p>
+</li>
+<li>
+<p>检查你选择的配置和价格，然后进行支付。阿里云通常有新用户优惠，可以关注一下。<br />
+6. <strong>创建成功，获取服务器信息：</strong></p>
+</li>
+<li>
+<p>支付完成后，阿里云就会为你创建一台云服务器。几分钟后，你就可以在阿里云的控制台看到你的服务器，并获取到它的公网IP地址、登录用户名和密码（或密钥）。<br />
+7. <strong>登录服务器：</strong></p>
+</li>
+<li>
+<p>使用你选择的操作系统对应的远程登录工具（比如Windows自带的“远程桌面连接”，或者Linux的SSH客户端工具如PuTTY、Xshell），输入服务器的公网IP地址、用户名和密码，就可以登录到你的云服务器了。</p>
+</li>
+</ul>
+<p><strong>小白总结：</strong> 租用云服务器就像是去一个大型的“电脑租赁公司”，告诉他们你需要什么样的电脑（配置），放在哪个城市（地域），他们就给你准备好一台，你按月或按年付费使用。</p>
+<hr />
+<h3 id="_4">如果要自己搭建服务器需要哪些东西（简单流程）<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<p>如果你不想租用云服务器，而是想自己在家搭建一个服务器，那需要准备的东西就比较多了，而且需要一些技术知识。我们用最通俗易懂的方式来说：</p>
+<ol>
+<li><strong>一台“不睡觉”的电脑（硬件）：</strong></li>
+</ol>
+<ul>
+<li><strong>一台电脑主机：</strong> 这台电脑需要比你平时用的电脑更稳定、性能更好一些，因为它需要24小时不间断运行。可以是旧电脑，但最好是性能稳定、功耗不高的。</li>
+<li><strong>稳定的电源：</strong> 确保你的电脑有可靠的电源供应，最好有UPS（不间断电源），万一停电也能撑一段时间，避免数据丢失。</li>
+<li><strong>网络设备：</strong><ul>
+<li><strong>路由器：</strong> 你家里的路由器是必须的，它负责连接你的电脑和互联网。</li>
+<li><strong>稳定的宽带：</strong> 需要一个速度快、不限流量的宽带。而且，你的宽带需要支持<strong>公网IP地址</strong>，并且允许你<strong>端口转发</strong>（后面会讲到）。很多家庭宽带默认是不支持的，或者需要额外申请。</li>
+</ul>
+</li>
+<li>
+<p><strong>（可选）机箱和散热：</strong> 如果你用的是台式机，需要确保散热良好，因为服务器会长时间高负荷运行。<br />
+2. <strong>一个“永远在线”的家（网络环境）：</strong></p>
+</li>
+<li>
+<p><strong>公网IP地址：</strong> 这是最重要的！就像你家的门牌号一样，别人需要通过这个地址才能找到你的服务器。家庭宽带很多是动态IP（会变），最好能申请一个<strong>固定公网IP地址</strong>。</p>
+</li>
+<li><strong>端口转发（开门）：</strong> 你的路由器就像你家的门，服务器就像你家里的一个房间。别人要进来，你需要在路由器这个门上开个“小门”（端口转发），允许特定类型的访问（比如访问网站的80端口或443端口）能直接通到你的服务器房间。</li>
+<li>
+<p><strong>域名（好记的名字）：</strong> 如果你想让别人通过一个好记的名字（比如<a href="http://www.yourname.com%EF%BC%89%E6%9D%A5%E8%AE%BF%E9%97%AE%E4%BD%A0%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%99%A8%EF%BC%8C%E8%80%8C%E4%B8%8D%E6%98%AF%E4%B8%80%E4%B8%B2%E6%95%B0%E5%AD%97IP%E5%9C%B0%E5%9D%80%EF%BC%8C%E5%B0%B1%E9%9C%80%E8%A6%81%E6%B3%A8%E5%86%8C%E4%B8%80%E4%B8%AA%E5%9F%9F%E5%90%8D%EF%BC%8C%E7%84%B6%E5%90%8E%E6%8A%8A%E8%BF%99%E4%B8%AA%E5%9F%9F%E5%90%8D%E6%8C%87%E5%90%91%E4%BD%A0%E7%9A%84%E5%85%AC%E7%BD%91IP%E5%9C%B0%E5%9D%80%E3%80%82">www.yourname.com）来访问你的服务器，而不是一串数字IP地址，就需要注册一个域名，然后把这个域名指向你的公网IP地址。</a><br />
+3. <strong>一个“听话”的管家（操作系统和软件）：</strong></p>
+</li>
+<li>
+<p><strong>操作系统：</strong> 你需要在电脑上安装一个服务器操作系统，比如前面提到的Linux（CentOS、Ubuntu）或者Windows Server。Linux通常更适合做服务器，而且免费。</p>
+</li>
+<li>
+<p><strong>服务器软件：</strong> 根据你想让服务器做什么，安装相应的软件。</p>
+<ul>
+<li><strong>搭建网站：</strong> 需要安装Web服务器软件（如Apache、Nginx），数据库软件（如MySQL、PostgreSQL），以及编程语言环境（如PHP、Python）。</li>
+<li><strong>文件存储：</strong> 可以安装FTP服务器软件或者Samba服务器软件。</li>
+<li><strong>其他服务：</strong> 比如邮件服务器软件、游戏服务器软件等。<br />
+4. <strong>安全防护（防坏人）：</strong></li>
+</ul>
+</li>
+<li>
+<p><strong>防火墙：</strong> 服务器和路由器都需要配置防火墙，只允许必要的端口对外开放，阻止不必要的访问。</p>
+</li>
+<li><strong>安全更新：</strong> 及时更新操作系统和所有软件的补丁，防止被黑客利用漏洞攻击。</li>
+<li><strong>强密码：</strong> 使用复杂且不容易被猜到的密码。</li>
+</ul>
+<p><strong>小白总结：</strong> 自己搭建服务器，就像是你在家里开了一个“24小时便利店”。你需要：</p>
+<ul>
+<li>一台<strong>24小时不关机、性能还不错的电脑</strong>（硬件）。</li>
+<li>一个<strong>能让外面人找到你家地址的宽带</strong>（公网IP），并且要<strong>在门口（路由器）开个门</strong>（端口转发），允许特定的人进来。</li>
+<li>给电脑装上<strong>能干活的系统和工具</strong>（操作系统和软件）。</li>
+<li>做好<strong>防盗防坏</strong>的措施（安全防护）。</li>
+</ul>
+<p>自己搭建服务器的好处是成本低（如果用旧电脑），但缺点是技术门槛高，需要自己解决网络、安全、维护等一系列问题，而且家庭宽带的稳定性、速度可能不如专业机房。</p></div>
+                <div class="btn-wrapper">
+                    <a href="/" class="back-btn" data-spa><i class="fas fa-arrow-left"></i> 返回首页</a>
+                </div>
+            </article>
+        </main>
+
+        <aside>
+
+            <section class="widget profile-widget">
+                <img src="https://cnfte.top/attachments/696b4d5b58c71_1768639835.webp" class="profile-avatar" alt="Cnfte" loading="lazy">
+                <div class="profile-name">Cnfte</div>
+                <p class="profile-bio">&#34;滚滚长江东逝水，浪花淘尽英雄。&#34;</p>
+                <div class="social-links">
+<a href="https://github.com/cnfte" target="_blank" rel="noopener"
+                        title="GitHub"><i class="fab fa-github"></i></a><a href="https://t.me/cnfte1" target="_blank" rel="noopener"
+                        title="Telegram"><i class="fab fa-telegram"></i></a><a href="https://space.bilibili.com/3546774635547595" target="_blank" rel="noopener"
+                        title="Bilibili"><i class="fab fa-bilibili"></i></a>                    <a href="https://x.com/wangwei960523" target="_blank" rel="noopener" title="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+<a href="https://example.com/" target="_blank" rel="noopener" title="RSS"><i
+                            class="fas fa-rss"></i></a><a href="mailto:cnfte.2@gmail.com" title="Email"><i
+                            class="fas fa-envelope"></i></a>                </div>
+            </section>
+
+
+            <section class="widget">
+                <h3 class="widget-title"><i class="fas fa-list"></i> 目录</h3>
+                <div class="toc-widget"><div class="toc">
+<ul>
+<li><a href="#_1">什么是服务器？</a></li>
+<li><a href="#_2">服务器有什么作用？</a></li>
+<li><a href="#_3">怎么获得一个云服务器（阿里云浙江杭州云服务器为例）</a></li>
+<li><a href="#_4">如果要自己搭建服务器需要哪些东西（简单流程）</a></li>
+</ul>
+</div>
+</div>
+            </section>
+
+
+            <section class="widget">
+                <h3 class="widget-title"><i class="fas fa-tv"></i> 正在追番</h3>
+                <div class="anime-list">
+                    <div class="anime-item">
+                        <img src="https://cnfte.top/attachments/bbbb.webp" class="anime-cover" alt="轻音少女 第二季" loading="lazy">
+                        <div class="anime-info">
+                            <span class="anime-title">轻音少女 第二季</span>
+                            <div class="anime-ep">
+EP 1/27 · 伟大无需多言                            </div>
+                        </div>
+                        <span class="anime-status ended">
+                            完结
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+
+            <section class="terminal-widget">
+                <div class="t-line">&gt; <span class="t-accent">UID</span>: <span class="t-val">177139506150</span>
+                </div>
+                <div class="t-line">&gt; <span class="t-accent">TIME</span>: <span id="live-clock"
+                        class="t-val">—</span></div>
+                <div class="t-line">&gt; <span class="t-accent">READ</span>: <span class="t-val">~12分钟</span></div>
+                <div class="t-dim">&gt; EOF</div>
+            </section>
+        </aside>
+    </div>
+
+    <footer>
+        <div class="foot-custom">本站由Cloudflare和Github强力驱动<br>
+欢迎到来，反馈问题和吹水请看下方：<br>
+如何联系Cnfte与bug反馈？>>>QQ群聊：887378676<br>
+TG群组：<a src=https://t.me/+pCnCBiCsyOhhMWU9>https://t.me/+pCnCBiCsyOhhMWU9</a><br>
+欢迎到来<br>
+状态监控：<a src=https://probe.cnfte.top>https://probe.cnfte.top</a><br>
+如果对本博客的面板有兴趣可以联系CNFTE请求开源管理面板</div>
+        <div class="foot-copy">© 2026 Cnfte // CNFTE MOE PANEL</div>
+    </footer>
+
+    <script>
+        'use strict';
+        const bar = document.getElementById('progress-bar');
+        window._progressHandler = () => {
+            if (!bar) return;
+            const el = document.documentElement;
+            bar.style.width = Math.min((el.scrollTop || document.body.scrollTop) / (el.scrollHeight - el.clientHeight) * 100, 100) + '%';
+        };
+        window.addEventListener('scroll', window._progressHandler, { passive: true });
+
+        function initClock() {
+            // 文章页侧边栏时钟
+            const el = document.getElementById('live-clock');
+            if (el) {
+                const tick = () => el.textContent = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                tick(); clearInterval(window._liveClockTimer);
+                window._liveClockTimer = setInterval(tick, 1000);
+            }
+            // 主页 hero/sidebar 时钟（SPA换页到index时需要）
+            const cl = document.getElementById('clock'), hc = document.getElementById('hero-clock');
+            if (cl || hc) {
+                const tick2 = () => {
+                    const t = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                    if (cl) cl.textContent = t;
+                    if (hc) hc.textContent = t.slice(0, 5);
+                };
+                tick2(); clearInterval(window._clockTimer);
+                window._clockTimer = setInterval(tick2, 1000);
+            }
+        }
+        function initDays() {
+            const d1 = document.getElementById('days'), d2 = document.getElementById('sidebar-days');
+            if (!d1 && !d2) return;
+            try {
+                const s = new Date("2025-05-01");
+                if (isNaN(s)) return;
+                const n = Math.floor((Date.now() - s) / 86400000);
+                if (d1) d1.textContent = n;
+                if (d2) d2.textContent = n;
+            } catch (_) { }
+        }
+        function initHitokoto() {
+            const el = document.getElementById('hitokoto');
+            if (!el || el._loaded) return;
+            el._loaded = true;
+            (async () => {
+                try {
+                    const d = await (await fetch('https://v1.hitokoto.cn', { signal: AbortSignal.timeout(5000) })).json();
+                    el.textContent = (d.hitokoto || '— 次元语录加载失败 —');
+                } catch { el.textContent = '— 网络异常，语录休眠中 —'; }
+            })();
+        }
+        initClock();
+
+        const overlay = document.getElementById('page-transition');
+        const CACHE = window._spaCache || (window._spaCache = new Map());
+        let barTick;
+        function barStart() { if (!bar) return; bar.style.opacity = '1'; bar.style.width = '0%'; clearInterval(barTick); let p = 0; barTick = setInterval(() => { p = Math.min(p + (90 - p) * .09, 87); bar.style.width = p + '%'; }, 45); }
+        function barDone() { clearInterval(barTick); if (!bar) return; bar.style.width = '100%'; setTimeout(() => { bar.style.opacity = '0'; setTimeout(() => bar.style.width = '0%', 280); }, 180); }
+        async function fadeOut() { overlay.classList.add('active'); return new Promise(r => setTimeout(r, 210)); }
+        function fadeIn() { overlay.classList.remove('active'); }
+
+        function isSpaLink(href) {
+            if (!href || href.startsWith('#') || href.endsWith('.json') || href.startsWith('mailto:') || href.startsWith('tel:')) return false;
+            try { return new URL(href, location.origin).origin === location.origin; } catch { return false; }
+        }
+        async function navigate(url, push = true) {
+            // push=true 时才做重复判断，popstate 时跳过，避免返回键失效
+            if (push && url === location.href) return;
+            barStart(); await fadeOut();
+            try {
+                let html = CACHE.get(url);
+                if (!html) { const res = await fetch(url, { headers: { 'X-SPA': '1' } }); if (!res.ok) throw new Error('HTTP ' + res.status); html = await res.text(); CACHE.set(url, html); }
+                const doc = new DOMParser().parseFromString(html, 'text/html');
+                document.title = doc.title;
+                document.body.dataset.page = doc.body.dataset.page || 'index';
+
+                // style（同步CSS，彻底消除SPA换页后样式不一致）
+                const nStyle = doc.querySelector('style'), cStyle = document.querySelector('style');
+                if (nStyle && cStyle) cStyle.textContent = nStyle.textContent;
+
+                // nav（修复换页后搜索/链接绑定残留问题）
+                const nNav = doc.querySelector('nav'), cNav = document.querySelector('nav');
+                if (nNav && cNav) { cNav.className = nNav.className; cNav.innerHTML = nNav.innerHTML; }
+
+                // hero整体替换（避免<header>/<div>标签类型不同导致残留）
+                const nHW = doc.getElementById('hero-wrap'), cHW = document.getElementById('hero-wrap');
+                if (nHW && cHW) cHW.outerHTML = nHW.outerHTML;
+                const nG = doc.querySelector('#main-grid,.layout-wrapper'), cG = document.querySelector('#main-grid,.layout-wrapper');
+                if (nG && cG) { cG.className = nG.className; cG.innerHTML = nG.innerHTML; }
+                const nF = doc.querySelector('footer'), cF = document.querySelector('footer');
+                if (nF && cF) cF.innerHTML = nF.innerHTML;
+                if (push) history.pushState({ url }, '', url);
+                reinitPage(); bindSpaLinks();
+                window.scrollTo({ top: 0, behavior: 'instant' });
+                barDone(); fadeIn();
+                searchReady = false; searchData = null;
+            } catch (e) { console.warn('[SPA] fallback:', e); barDone(); fadeIn(); location.href = url; }
+        }
+        function reinitPage() {
+            initClock(); initDays(); initHitokoto();
+            // 重置搜索绑定标记，确保换页后搜索可重新绑定
+            const si = document.getElementById('search-input');
+            if (si) si._bound = false;
+            const sb = document.getElementById('search-toggle');
+            if (sb) sb._bound = false;
+            window.removeEventListener('scroll', window._progressHandler);
+            if (document.querySelector('.post-body')) {
+                window._progressHandler = () => { if (!bar) return; const el = document.documentElement; bar.style.width = Math.min((el.scrollTop || document.body.scrollTop) / (el.scrollHeight - el.clientHeight) * 100, 100) + '%'; };
+            } else { window._progressHandler = () => { }; if (bar) bar.style.width = '0%'; }
+            window.addEventListener('scroll', window._progressHandler, { passive: true });
+            bindSearch();
+        }
+        function bindSpaLinks() {
+            document.querySelectorAll('a[data-spa],a[href]').forEach(a => {
+                if (a._spaBound) return; a._spaBound = true;
+                const href = a.getAttribute('href'); if (!isSpaLink(href)) return;
+                a.addEventListener('click', e => { if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return; e.preventDefault(); navigate(new URL(href, location.origin).href); });
+            });
+        }
+        // 修复返回键：popstate 触发时 location 已变，不能用相等判断拦截
+        window.addEventListener('popstate', e => {
+            const target = e.state?.url || location.href;
+            navigate(target, false);
+        });
+        history.replaceState({ url: location.href }, '', location.href);
+        bindSpaLinks();
+
+        let searchData = null, searchReady = false, searchLoading = false, dTimer;
+        function getSearchPath() { return location.pathname.startsWith('/en/') ? '/en/search.json' : '/search.json'; }
+        function getSearchEls() { return { wrap: document.getElementById('search-wrap'), input: document.getElementById('search-input'), btn: document.getElementById('search-toggle'), drop: document.getElementById('search-dropdown') }; }
+        function toggleSearch(open) { const { wrap, input, drop } = getSearchEls(); if (!wrap) return; const o = open !== undefined ? open : !wrap.classList.contains('open'); wrap.classList.toggle('open', o); if (o) { input?.focus(); if (!searchReady && !searchLoading) loadSearchData(); } else if (drop) { drop.classList.remove('open'); drop.innerHTML = ''; } }
+        async function loadSearchData() { searchLoading = true; try { const r = await fetch(getSearchPath(), { cache: 'no-cache' }); if (!r.ok) throw 0; searchData = await r.json(); searchReady = true; } catch (e) { console.warn('[Search]', e); } finally { searchLoading = false; } }
+        function renderResults(q) { const { drop } = getSearchEls(); if (!drop) return; q = q.trim().toLowerCase(); drop.innerHTML = ''; if (!q) { drop.classList.remove('open'); return; } if (!searchReady) { drop.innerHTML = '<div class="s-loading">加载中...</div>'; drop.classList.add('open'); if (!searchLoading) loadSearchData().then(() => { const { input } = getSearchEls(); renderResults(input?.value || ''); }); return; } const hits = (searchData || []).filter(i => i.title?.toLowerCase().includes(q)).slice(0, 10); if (!hits.length) { drop.innerHTML = '<div class="s-empty">无匹配结果</div>'; } else { const frag = document.createDocumentFragment(); const esc = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); hits.forEach(item => { const a = document.createElement('a'); a.className = 's-item'; a.href = item.url; a.innerHTML = item.title.replace(new RegExp(esc, 'gi'), m => `<mark style="background:var(--accent);color:#000;border-radius:3px;padding:0 2px">${m}</mark>`); a.addEventListener('click', () => toggleSearch(false)); frag.appendChild(a); }); drop.appendChild(frag); } drop.classList.add('open'); }
+        function bindSearch() { const { input, btn } = getSearchEls(); if (input && !input._bound) { input._bound = true; input.addEventListener('input', e => { clearTimeout(dTimer); dTimer = setTimeout(() => renderResults(e.target.value), 160); }); input.addEventListener('keydown', e => { if (e.key === 'Escape') toggleSearch(false); }); } if (btn && !btn._bound) { btn._bound = true; btn.addEventListener('click', e => { e.stopPropagation(); toggleSearch(); }); } }
+        document.addEventListener('click', e => { const { wrap } = getSearchEls(); if (wrap && !wrap.contains(e.target)) toggleSearch(false); }, { capture: true });
+        bindSearch();
+    </script>
+</body>
+
+</html>
