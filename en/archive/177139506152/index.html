@@ -1,0 +1,1905 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internet Science Popularization Series - What is DNS? - Cnfteの博客</title>
+    <meta name="description" content="What is DNS? Imagine the internet as a vast city, home to countless websites and servers, each with its own &#34;address,&#34; which is a string of numbers like . …">
+
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+
+    <link rel="canonical" href="https://cnfte.top/en/archive/177139506152/">
+    <link rel="alternate" hreflang="en" href="https://cnfte.top/en/archive/177139506152/">
+    <link rel="alternate" hreflang="x-default" href="https://cnfte.top/archive/177139506152/">
+
+    <link rel="icon" href="/favicon.ico">
+
+    <meta property="og:title" content="Internet Science Popularization Series - What is DNS?">
+    <meta property="og:description" content="What is DNS? Imagine the internet as a vast city, home to countless websites and servers, each with its own &#34;address,&#34; which is a string of numbers like . …">
+    <meta property="og:type" content="article">
+<meta property="og:url" content="https://cnfte.top/en/archive/177139506152/">    <meta property="og:site_name" content="Cnfteの博客">
+    <meta property="article:published_time" content="2026-01-24">
+    <meta property="article:author" content="Cnfte">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Internet Science Popularization Series - What is DNS?">
+    <meta name="twitter:description" content="What is DNS? Imagine the internet as a vast city, home to countless websites and servers, each with its own &#34;address,&#34; which is a string of numbers like . …">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "Internet Science Popularization Series - What is DNS?",
+      "description": "What is DNS? Imagine the internet as a vast city, home to countless websites and servers, each with its own \&#34;address,\&#34; which is a string of numbers like . …",
+      "url": "https://cnfte.top/en/archive/177139506152/",
+      "inLanguage": "en",
+      "datePublished": "2026-01-24",
+      "dateModified": "2026-01-24",
+      "author": {
+        "@type": "Person",
+        "name": "Cnfte"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Cnfteの博客",
+        "url": "https://cnfte.top"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://cnfte.top/en/archive/177139506152/"
+      }
+    }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Fira+Code:wght@400;600&family=Noto+Sans+SC:wght@400;700;900&display=swap"
+        rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript>
+        <link
+            href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Fira+Code:wght@400;600&family=Noto+Sans+SC:wght@400;700;900&display=swap"
+            rel="stylesheet">
+    </noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        crossorigin="anonymous" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+            crossorigin="anonymous">
+    </noscript>
+    <style>
+        :root {
+            --bg: #06060f;
+            --glass: rgba(255, 255, 255, 0.055);
+            --glass-md: rgba(255, 255, 255, 0.09);
+            --glass-heavy: rgba(8, 8, 18, 0.97);
+            --border: rgba(255, 255, 255, 0.10);
+            --border-accent: rgba(255, 153, 204, 0.45);
+            --accent: #ff99cc;
+            --accent2: #ffcc99;
+            --accent3: #99ccff;
+            --grad: linear-gradient(135deg, #ff99cc 0%, #ffcc99 100%);
+            --shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
+            --shadow-accent: 0 8px 32px rgba(255, 153, 204, 0.22);
+            --ease: cubic-bezier(.34, 1.56, .64, 1);
+            --ease-out: cubic-bezier(.22, 1, .36, 1);
+            --ease-std: cubic-bezier(.4, 0, .2, 1);
+            --r-sm: 16px;
+            --r-md: 24px;
+            --r-lg: 32px;
+            --sidebar-w: 300px;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        p,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        span,
+        a,
+        li,
+        td,
+        th {
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-family: inherit;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', 'Inter', sans-serif;
+            color: #f0f0f8;
+            background: var(--bg);
+            line-height: 1.7;
+            overflow-x: hidden;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bg-fixed {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background:url('https://cnfte.top/attachments/bj.webp') center/cover no-repeat;
+            will-change: transform;
+            transform: translateZ(0);
+        }
+
+        .bg-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: rgba(0, 0, 0, .48);
+            backdrop-filter: blur(8px) saturate(120%);
+            -webkit-backdrop-filter: blur(8px) saturate(120%);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .bg-overlay { backdrop-filter: none; -webkit-backdrop-filter: none; }
+        }
+
+        #progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            width: 0%;
+            background: var(--grad);
+            z-index: 9999;
+            border-radius: 0 2px 2px 0;
+            box-shadow: 0 0 8px rgba(255, 153, 204, .6);
+        }
+
+        #page-transition {
+            position: fixed;
+            inset: 0;
+            z-index: 8000;
+            background: var(--glass-heavy);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .22s var(--ease-out);
+        }
+
+        #page-transition.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+
+        nav {
+            position: sticky;
+            top: 10px;
+            z-index: 1000;
+            margin: 10px auto;
+            width: calc(100% - 40px);
+            max-width: 1360px;
+            background: rgba(6, 6, 15, 0.72);
+            backdrop-filter: blur(32px) saturate(180%);
+            -webkit-backdrop-filter: blur(32px) saturate(180%);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            padding: 0 8px 0 22px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            height: 52px;
+            box-shadow: var(--shadow);
+        }
+
+        .logo {
+            font-family: 'ZCOOL KuaiLe';
+            font-size: 1.22rem;
+            background: var(--grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            flex-shrink: 0;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 4px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .nav-links::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-links a {
+            font-weight: 700;
+            font-size: .78rem;
+            color: rgba(255, 255, 255, .65);
+            letter-spacing: .8px;
+            padding: 6px 12px;
+            border-radius: 24px;
+            transition: background .2s, color .2s;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .nav-links a:hover {
+            background: var(--glass-md);
+            color: #fff;
+            filter: none;
+        }
+
+        .nav-lang {
+            font-size: .72rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, .4);
+            padding: 5px 10px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            transition: border-color .2s, color .2s;
+            flex-shrink: 0;
+            letter-spacing: .8px;
+        }
+
+        .nav-lang:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            filter: none;
+        }
+
+        .search-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        #search-toggle {
+            color: rgba(255, 255, 255, .55);
+            font-size: 1rem;
+            padding: 8px 10px;
+            border-radius: 50%;
+            transition: color .2s, background .2s;
+        }
+
+        #search-toggle:hover {
+            color: var(--accent);
+            background: var(--glass-md);
+        }
+
+        #search-input {
+            width: 0;
+            opacity: 0;
+            position: absolute;
+            right: 44px;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 7px 0;
+            background: rgba(6, 6, 15, .9);
+            color: #fff;
+            transition: width .35s var(--ease-out), opacity .25s, padding .25s;
+            outline: none;
+            font-size: .8rem;
+            font-family: inherit;
+        }
+
+        .search-wrap.open #search-input {
+            width: 180px;
+            opacity: 1;
+            padding: 7px 16px;
+        }
+
+        #search-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 320px;
+            background: var(--glass-heavy);
+            border: 1px solid var(--border);
+            border-radius: var(--r-md);
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            pointer-events: none;
+            transition: max-height .3s var(--ease-out), opacity .22s;
+            box-shadow: 0 24px 56px rgba(0, 0, 0, .7);
+            z-index: 1100;
+        }
+
+        #search-dropdown.open {
+            max-height: 380px;
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .s-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 18px;
+            font-size: .82rem;
+            border-bottom: 1px solid rgba(255, 255, 255, .04);
+            color: #ddd;
+            transition: background .12s;
+        }
+
+        .s-item::before {
+            content: '#';
+            color: var(--accent);
+            font-family: 'Fira Code';
+            font-size: .7rem;
+            flex-shrink: 0;
+        }
+
+        .s-item:hover {
+            background: rgba(255, 153, 204, .1);
+            color: var(--accent);
+        }
+
+        .s-item:last-child {
+            border-bottom: none;
+        }
+
+        .s-empty,
+        .s-loading {
+            padding: 18px;
+            text-align: center;
+            color: #444;
+            font-size: .8rem;
+            font-family: 'Fira Code';
+        }
+
+
+        @keyframes cardIn {
+            from {
+                opacity: 0;
+                transform: translateY(22px) scale(.988)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        @keyframes heroZoom {
+            from {
+                transform: scale(1)
+            }
+
+            to {
+                transform: scale(1.07)
+            }
+        }
+
+        .post-hero {
+            height: 44vh;
+            min-height: 320px;
+            width: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .post-hero-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(.55);
+            z-index: -1;
+            animation: heroZoom 22s ease-in-out infinite alternate;
+            will-change: transform;
+        }
+
+        .post-hero-gradient {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background: linear-gradient(to bottom, rgba(6, 6, 15, .08) 0%, rgba(6, 6, 15, .6) 100%);
+        }
+
+        .post-header-content {
+            position: relative;
+            z-index: 1;
+            padding: 0 40px;
+            animation: cardIn .7s var(--ease);
+            max-width: 860px;
+        }
+
+        .post-tagline {
+            color: var(--accent);
+            font-family: 'Fira Code';
+            font-size: .78rem;
+            letter-spacing: 3.5px;
+            margin-bottom: 14px;
+        }
+
+        .post-header-content h1 {
+            font-family: 'ZCOOL KuaiLe';
+            font-size: clamp(1.7rem, 5vw, 3rem);
+            color: #fff;
+            line-height: 1.2;
+            text-shadow: 0 6px 30px rgba(0, 0, 0, .75);
+        }
+
+
+        .layout-wrapper {
+            flex: 1;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2.5% 60px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) var(--sidebar-w);
+            gap: 26px;
+            align-items: start;
+        }
+
+        body[data-page="post"] .layout-wrapper {
+            margin-top: -52px;
+            position: relative;
+            z-index: 10;
+        }
+
+        body[data-page="index"] .layout-wrapper {
+            margin-top: 0;
+        }
+
+
+        .post-friends {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 26px;
+        }
+
+        .friend-card {
+            height: 64px;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            padding: 6px;
+            overflow: hidden;
+            min-width: 0;
+            transition: transform .3s var(--ease), border-color .2s;
+        }
+
+        .friend-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--border-accent);
+        }
+
+        .friend-card img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 2px solid var(--border-accent);
+        }
+
+        .friend-info {
+            overflow: hidden;
+            flex: 1;
+            padding: 0 10px;
+        }
+
+        .friend-info b {
+            display: block;
+            color: var(--accent);
+            font-size: .78rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .friend-info span {
+            font-size: .65rem;
+            color: rgba(255, 255, 255, .45);
+            white-space: nowrap;
+        }
+
+
+        main#main-content {
+            min-width: 0;
+        }
+
+        article.post-container {
+            background: var(--glass-heavy);
+            backdrop-filter: blur(40px) saturate(160%);
+            -webkit-backdrop-filter: blur(40px) saturate(160%);
+            border-radius: var(--r-lg);
+            border: 1px solid var(--border);
+            padding: 48px 44px;
+            box-shadow: var(--shadow);
+            min-width: 0;
+            animation: cardIn .7s var(--ease) both;
+        }
+
+        .post-body {
+            font-size: 1.06rem;
+            color: #eff0f5;
+            line-height: 1.92;
+        }
+
+        .post-body h1,
+        .post-body h2 {
+            font-family: 'ZCOOL KuaiLe';
+            color: var(--accent);
+            margin: 2.2em 0 .8em;
+            font-size: 1.55rem;
+            padding-bottom: .5em;
+            border-bottom: 1px solid rgba(255, 153, 204, .15);
+        }
+
+        .post-body h3 {
+            color: var(--accent2);
+            margin: 1.6em 0 .6em;
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .post-body h4 {
+            color: rgba(255, 255, 255, .8);
+            margin: 1.2em 0 .5em;
+            font-size: 1rem;
+        }
+
+        .post-body p {
+            margin-bottom: 1.4rem;
+        }
+
+        .post-body img {
+            border-radius: var(--r-sm);
+            box-shadow: 0 10px 36px rgba(0, 0, 0, .5);
+            margin: 20px auto;
+            max-width: 100%;
+        }
+
+        .post-body a {
+            color: var(--accent);
+            border-bottom: 1px dashed rgba(255, 153, 204, .5);
+            transition: border-color .2s;
+        }
+
+        .post-body a:hover {
+            border-bottom-style: solid;
+            border-color: var(--accent);
+            filter: none;
+        }
+
+        .post-body blockquote {
+            border-left: 3px solid var(--accent);
+            margin: 22px 0;
+            padding: 14px 22px;
+            background: rgba(255, 153, 204, .05);
+            border-radius: 0 var(--r-sm) var(--r-sm) 0;
+            font-style: italic;
+            color: rgba(255, 255, 255, .7);
+        }
+
+        .post-body ul {
+            list-style: disc;
+            padding-left: 26px;
+            margin-bottom: 1.2rem;
+        }
+
+        .post-body ol {
+            list-style: decimal;
+            padding-left: 26px;
+            margin-bottom: 1.2rem;
+        }
+
+        .post-body li {
+            margin-bottom: .45rem;
+        }
+
+        .post-body table {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-collapse: collapse;
+            margin: 24px 0;
+        }
+
+        .post-body th,
+        .post-body td {
+            border: 1px solid rgba(255, 255, 255, .08);
+            padding: 10px 18px;
+            min-width: 80px;
+        }
+
+        .post-body th {
+            background: rgba(255, 153, 204, .12);
+            color: var(--accent);
+        }
+
+        .post-body tr:nth-child(even) {
+            background: rgba(255, 255, 255, .025);
+        }
+
+        .post-body .toc {
+            background: rgba(0, 0, 0, .35);
+            border-radius: var(--r-md);
+            padding: 18px 22px;
+            margin-bottom: 32px;
+            border: 1px solid var(--border);
+        }
+
+        .post-body .toc a {
+            border-bottom: none;
+            color: rgba(255, 255, 255, .65);
+            display: block;
+            padding: 3px 0;
+        }
+
+        .post-body .toc a:hover {
+            color: var(--accent);
+        }
+
+        .post-body pre,
+        .post-body .codehilite {
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            display: block;
+            background: rgba(0, 0, 0, .68);
+            padding: 22px 24px;
+            border-radius: var(--r-md);
+            border: 1px solid var(--border);
+            margin: 24px 0;
+            word-break: normal !important;
+            overflow-wrap: normal !important;
+            white-space: pre;
+        }
+
+        .post-body pre code,
+        .post-body .codehilite code {
+            white-space: pre;
+            word-break: normal !important;
+            overflow-wrap: normal !important;
+            font-family: 'Fira Code', monospace;
+            font-size: .85rem;
+            line-height: 1.7;
+            display: block;
+            background: transparent;
+            padding: 0;
+            border: none;
+            color: #e8e8f0;
+        }
+
+        .post-body code:not(pre code):not(.codehilite code) {
+            background: rgba(255, 153, 204, .13);
+            color: var(--accent);
+            padding: 2px 7px;
+            border-radius: 5px;
+            font-size: .87rem;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .btn-wrapper {
+            margin-top: 52px;
+            padding-top: 26px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--grad);
+            color: #000;
+            padding: 13px 44px;
+            border-radius: 50px;
+            font-weight: 900;
+            font-size: .92rem;
+            box-shadow: 0 10px 28px rgba(255, 153, 204, .38);
+            transition: transform .3s var(--ease), box-shadow .3s;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 16px 40px rgba(255, 153, 204, .55);
+            filter: none;
+            color: #000;
+        }
+
+
+        aside {
+            position: sticky;
+            top: 76px;
+            height: fit-content;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .widget {
+            background: var(--glass);
+            backdrop-filter: blur(20px) saturate(150%);
+            -webkit-backdrop-filter: blur(20px) saturate(150%);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: 22px;
+            overflow: hidden;
+        }
+
+        .widget-title {
+            font-family: 'ZCOOL KuaiLe';
+            color: var(--accent);
+            font-size: 1.05rem;
+            letter-spacing: 1px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .widget-title i {
+            font-size: .9rem;
+            opacity: .7;
+        }
+
+        .toc-widget {
+            font-size: .82rem;
+            max-height: 46vh;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 153, 204, .3) transparent;
+        }
+
+        .toc-widget::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        .toc-widget::-webkit-scrollbar-thumb {
+            background: rgba(255, 153, 204, .3);
+            border-radius: 3px;
+        }
+
+        .toc-widget a {
+            color: rgba(255, 255, 255, .6);
+            border-bottom: none;
+            display: block;
+            padding: 4px 0;
+            transition: color .15s, padding-left .2s;
+        }
+
+        .toc-widget a:hover {
+            color: var(--accent);
+            padding-left: 5px;
+            filter: none;
+        }
+
+
+        .anime-list {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .anime-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 11px;
+            border-radius: var(--r-sm);
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid rgba(255, 255, 255, .06);
+            transition: background .2s, border-color .2s;
+        }
+
+        .anime-item:hover {
+            background: rgba(153, 204, 255, .06);
+            border-color: rgba(153, 204, 255, .2);
+        }
+
+        .anime-cover {
+            width: 40px;
+            height: 54px;
+            border-radius: 7px;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, .1);
+        }
+
+        .anime-cover-placeholder {
+            width: 40px;
+            height: 54px;
+            border-radius: 7px;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, rgba(153, 204, 255, .15), rgba(204, 153, 255, .1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            border: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .anime-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .anime-title {
+            font-size: .78rem;
+            font-weight: 700;
+            color: #eee;
+            margin-bottom: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+        }
+
+        .anime-ep {
+            font-family: 'Fira Code';
+            font-size: .62rem;
+            color: rgba(153, 204, 255, .7);
+        }
+
+        .anime-status {
+            font-size: .55rem;
+            font-family: 'Fira Code';
+            letter-spacing: 1px;
+            padding: 2px 6px;
+            border-radius: 6px;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+
+        .anime-status.airing {
+            background: rgba(0, 255, 128, .1);
+            color: #00ff80;
+            border: 1px solid rgba(0, 255, 128, .2);
+        }
+
+        .anime-status.ended {
+            background: rgba(255, 255, 255, .06);
+            color: rgba(255, 255, 255, .35);
+            border: 1px solid rgba(255, 255, 255, .08);
+        }
+
+
+        .terminal-widget {
+            background: rgba(2, 2, 8, .7);
+            border: 1px solid rgba(0, 255, 120, .15);
+            border-radius: var(--r-md);
+            padding: 16px 18px;
+            font-family: 'Fira Code';
+            font-size: .7rem;
+            line-height: 2;
+        }
+
+        .t-line {
+            color: #00ffaa;
+        }
+
+        .t-dim {
+            color: rgba(0, 255, 170, .3);
+        }
+
+        .t-accent {
+            color: var(--accent);
+        }
+
+        .t-val {
+            color: #fff;
+        }
+
+
+        .profile-widget {
+            text-align: center;
+        }
+
+        .profile-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            padding: 3px;
+            border: 2.5px solid var(--accent);
+            margin: 0 auto 12px;
+            transition: transform .6s var(--ease);
+        }
+
+        .profile-avatar:hover {
+            transform: rotate(360deg) scale(1.06);
+        }
+
+        .profile-name {
+            font-family: 'ZCOOL KuaiLe';
+            color: #fff;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .profile-bio {
+            font-size: .8rem;
+            color: rgba(255, 255, 255, .5);
+            line-height: 1.55;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .social-links a {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.05rem;
+            color: rgba(255, 255, 255, .65);
+            transition: transform .3s var(--ease), color .2s, border-color .2s;
+            flex-shrink: 0;
+        }
+
+        .social-links a:hover {
+            color: var(--accent);
+            border-color: var(--border-accent);
+            transform: translateY(-4px) scale(1.1);
+            background: rgba(255, 153, 204, .08);
+        }
+
+
+        footer {
+            text-align: center;
+            padding: 48px 20px;
+            background: rgba(0, 0, 0, .88);
+            border-top: 1px solid var(--border);
+        }
+
+        .foot-custom {
+            color: var(--accent);
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: .9rem;
+        }
+
+        .foot-copy {
+            font-size: .74rem;
+            color: rgba(255, 255, 255, .2);
+            font-family: 'Fira Code';
+        }
+
+
+        @media (max-width:1080px) {
+            :root {
+                --sidebar-w: 260px;
+            }
+        }
+
+        @media (max-width:900px) {
+            .layout-wrapper {
+                grid-template-columns: 1fr;
+                margin-top: -28px;
+            }
+
+            article.post-container {
+                padding: 28px 20px;
+                border-radius: var(--r-lg);
+            }
+
+            aside {
+                position: static;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                gap: 12px;
+            }
+        }
+
+        @media (max-width:600px) {
+            nav {
+                padding: 0 6px 0 16px;
+                top: 6px;
+            }
+
+            .post-hero {
+                min-height: 220px;
+                height: 36vh;
+            }
+
+            .post-header-content {
+                padding: 0 18px;
+            }
+
+            .post-header-content h1 {
+                font-size: 1.5rem;
+            }
+
+            article.post-container {
+                padding: 20px 16px;
+                border-radius: var(--r-md);
+            }
+
+            .layout-wrapper {
+                padding: 0 12px 40px;
+            }
+
+            .post-body pre,
+            .post-body .codehilite {
+                padding: 14px 16px;
+                border-radius: var(--r-sm);
+            }
+
+            .post-body pre code,
+            .post-body .codehilite code {
+                font-size: .78rem;
+            }
+
+            .post-friends {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            aside {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ── index-only styles (injected for SPA back-navigation) ── */
+        @keyframes cardIn {
+            from {
+                opacity: 0;
+                transform: translateY(24px) scale(.985)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        @keyframes heroZoom {
+            from {
+                transform: scale(1)
+            }
+
+            to {
+                transform: scale(1.07)
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(-6px)
+            }
+        }
+
+        .hero {
+            margin: 4px calc(2.5%) 24px;
+            border-radius: var(--r-lg);
+            overflow: hidden;
+            position: relative;
+            height: 44vh;
+            min-height: 360px;
+            display: flex;
+            align-items: flex-end;
+            box-shadow: var(--shadow);
+            animation: cardIn .7s var(--ease) both;
+        }
+
+        .hero-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            filter: brightness(.7);
+            animation: heroZoom 24s ease-in-out infinite alternate;
+            will-change: transform;
+        }
+
+        .hero-gradient {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background: linear-gradient(to top, rgba(0, 0, 0, .92) 0%, rgba(0, 0, 0, .3) 45%, transparent 75%);
+        }
+
+        .hero-layout {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            padding: 36px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 20px;
+        }
+
+        .hero-text {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .hero-text h1 {
+            font-family: 'ZCOOL KuaiLe';
+            font-size: clamp(1.9rem, 5.5vw, 3.6rem);
+            color: #fff;
+            line-height: 1.1;
+            margin-bottom: 8px;
+            text-shadow: 0 4px 24px rgba(0, 0, 0, .6);
+        }
+
+        .hero-text p {
+            font-size: .8rem;
+            color: rgba(255, 255, 255, .5);
+            letter-spacing: 4px;
+            font-family: 'Fira Code';
+        }
+
+        .hero-widgets {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 290px;
+            flex-shrink: 0;
+        }
+
+        .h-card {
+            background: rgba(6, 6, 15, .6);
+            backdrop-filter: blur(18px);
+            border-radius: var(--r-md);
+            padding: 14px 18px;
+            border: 1px solid rgba(255, 255, 255, .1);
+        }
+
+        .h-card-label {
+            font-size: .58rem;
+            color: var(--accent);
+            font-weight: bold;
+            letter-spacing: 2.5px;
+            margin-bottom: 8px;
+            font-family: 'Fira Code';
+        }
+
+        .hitokoto-text {
+            font-size: .82rem;
+            color: rgba(255, 255, 255, .85);
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .stat-item {
+            text-align: center;
+            font-family: 'Fira Code';
+        }
+
+        .stat-item .stat-val {
+            font-size: 1.3rem;
+            font-weight: bold;
+            background: var(--grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+        }
+
+        .stat-item .stat-lbl {
+            font-size: .58rem;
+            color: rgba(255, 255, 255, .4);
+            letter-spacing: 1.5px;
+        }
+
+        #notice-toggle {
+            display: none;
+        }
+
+        .notice-modal-wrap {
+            position: fixed;
+            inset: 0;
+            z-index: 7000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity .3s var(--ease-out);
+        }
+
+        #notice-toggle:checked~.notice-modal-wrap {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .notice-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, .7);
+            backdrop-filter: blur(6px);
+        }
+
+        .notice-backdrop-label {
+            position: absolute;
+            inset: 0;
+            cursor: pointer;
+        }
+
+        .notice-box {
+            position: relative;
+            z-index: 1;
+            background: var(--glass-heavy);
+            border: 1px solid var(--border-accent);
+            border-radius: var(--r-lg);
+            padding: 40px;
+            width: min(520px, 90vw);
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 24px 72px rgba(0, 0, 0, .7), 0 0 0 1px rgba(255, 153, 204, .1);
+            animation: cardIn .35s var(--ease) both;
+        }
+
+        .notice-box-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .notice-box-title {
+            font-family: 'ZCOOL KuaiLe';
+            font-size: 1.4rem;
+            background: var(--grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .notice-close-label {
+            cursor: pointer;
+            color: rgba(255, 255, 255, .4);
+            font-size: 1.3rem;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background .2s, color .2s, border-color .2s;
+        }
+
+        .notice-close-label:hover {
+            background: rgba(255, 153, 204, .12);
+            color: var(--accent);
+            border-color: var(--border-accent);
+        }
+
+        .notice-body {
+            font-size: .9rem;
+            color: rgba(255, 255, 255, .8);
+            line-height: 1.85;
+            white-space: pre-line;
+        }
+
+        .notice-open-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-size: .72rem;
+            font-family: 'Fira Code';
+            color: var(--accent2);
+            background: rgba(255, 204, 153, .08);
+            border: 1px solid rgba(255, 204, 153, .2);
+            border-radius: 20px;
+            padding: 5px 12px;
+            transition: background .2s, border-color .2s;
+        }
+
+        .notice-open-label:hover {
+            background: rgba(255, 204, 153, .15);
+            border-color: rgba(255, 204, 153, .4);
+        }
+
+        .notice-open-label i {
+            font-size: .75rem;
+        }
+
+        .post-list {
+            min-width: 0;
+        }
+
+        .post-card {
+            display: flex;
+            overflow: hidden;
+            background: var(--glass);
+            backdrop-filter: blur(20px) saturate(150%);
+            -webkit-backdrop-filter: blur(20px) saturate(150%);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            margin-bottom: 18px;
+            height: 200px;
+            transition: transform .4s var(--ease), border-color .25s, box-shadow .3s;
+            animation: cardIn .6s var(--ease) both;
+            content-visibility: auto;
+            contain-intrinsic-size: 0 200px;
+        }
+
+        .post-card:hover {
+            transform: translateX(8px) scale(1.005);
+            border-color: var(--border-accent);
+            box-shadow: var(--shadow-accent);
+        }
+
+        .post-cover {
+            width: 32%;
+            flex-shrink: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .post-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform .6s var(--ease-out);
+        }
+
+        .post-card:hover .post-cover img {
+            transform: scale(1.06);
+        }
+
+        .post-cover-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, transparent 60%, rgba(6, 6, 15, .4));
+        }
+
+        .post-content {
+            padding: 22px 26px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .post-meta {
+            font-family: 'Fira Code';
+            font-size: .68rem;
+            color: var(--accent);
+            margin-bottom: 9px;
+            opacity: .75;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .post-meta .tag {
+            background: rgba(255, 153, 204, .12);
+            border: 1px solid rgba(255, 153, 204, .2);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: .6rem;
+        }
+
+        .post-title {
+            font-size: 1.35rem;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 9px;
+            line-height: 1.28;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            transition: color .2s;
+        }
+
+        .post-card:hover .post-title {
+            color: var(--accent);
+        }
+
+        .post-summary {
+            font-size: .87rem;
+            color: rgba(255, 255, 255, .55);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.6;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: rgba(255, 255, 255, .25);
+            font-family: 'Fira Code';
+            font-size: .85rem;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            display: block;
+            opacity: .3;
+        }
+
+        @media (max-width: 900px) {
+            .hero-widgets {
+                display: none !important;
+            }
+
+            .hero-layout {
+                padding: 24px;
+            }
+
+            .post-card {
+                height: auto;
+                flex-direction: column;
+            }
+
+            .post-cover {
+                width: 100%;
+                height: 180px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .hero {
+                margin: 4px 12px 20px;
+                min-height: 280px;
+                height: 36vh;
+                border-radius: var(--r-md);
+            }
+
+            .hero-layout {
+                padding: 18px 20px;
+            }
+        }
+    </style>
+    <script src="https://quge5.com/88/tag.min.js" data-zone="213982" async data-cfasync="false"></script>
+</head>
+
+<body data-page="post">
+
+    <div class="bg-fixed"></div>
+    <div class="bg-overlay"></div>
+    <div id="progress-bar"></div>
+    <div id="page-transition"></div>
+
+
+    <nav>
+        <a href="/" class="logo">CNFTE</a>
+        <div class="nav-links">
+            <a href="/" data-spa>HOME</a>
+<a href="/en/Privacy Policy.html" data-spa>Privacy Policy</a><a href="/en/about.html" data-spa>about</a><a href="/en/公益服务项.html" data-spa>service</a>        </div>
+        <a href="/" class="nav-lang">ZH</a>
+        <div class="search-wrap" id="search-wrap">
+            <input type="text" id="search-input" placeholder="搜索..." autocomplete="off" aria-label="搜索">
+            <button id="search-toggle" aria-label="搜索"><i class="fas fa-search"></i></button>
+            <div id="search-dropdown" role="listbox"></div>
+        </div>
+    </nav>
+
+
+    <div id="hero-wrap">
+        <div class="post-hero">
+            <img src="https://www.dmoe.cc/random.php?v=177139506152" class="post-hero-img"
+                alt="Internet Science Popularization Series - What is DNS?" fetchpriority="high">
+            <div class="post-hero-gradient"></div>
+            <div class="post-header-content">
+                <p class="post-tagline">2026-01-24 // 17 min // 177139506152
+                </p>
+                <h1>Internet Science Popularization Series - What is DNS?</h1>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="main-grid" class="layout-wrapper">
+        <main id="main-content">
+
+
+            <article class="post-container">
+                <div class="post-body"><h3 id="what-is-dns">What is DNS?<a class="headerlink" href="#what-is-dns" title="Permanent link">&para;</a></h3>
+<p>Imagine the internet as a vast city, home to countless websites and servers, each with its own "address," which is a string of numbers like <code>192.168.1.1</code>. We call this an <strong>IP address</strong>.</p>
+<p>However, humans can't easily remember so many numerical addresses; we're more accustomed to remembering names, such as <code>www.baidu.com</code> or <code>www.google.com</code>.</p>
+<p><strong>DNS (Domain Name System)</strong> is like a <strong>telephone book</strong> or <strong>address book</strong> for this city. Its main job is to translate the website names we're familiar with (domain names) into their corresponding numerical addresses (IP addresses).</p>
+<p>So, simply put, <strong>DNS is a translator on the internet, specifically responsible for translating website names into IP addresses.</strong></p>
+<hr />
+<h3 id="what-is-dns-used-for">What is DNS used for?<a class="headerlink" href="#what-is-dns-used-for" title="Permanent link">&para;</a></h3>
+<p>With this DNS translator, we can conveniently access various services on the internet.</p>
+<ol>
+<li><strong>Convenient memory and access:</strong> Without DNS, every time we wanted to access Baidu, we would have to remember Baidu's server IP address – that would be incredibly inconvenient! With DNS, we only need to enter <code>www.baidu.com</code>, and DNS will help us find it.</li>
+<li><strong>Website migration and IP address changes:</strong> Website servers may move (IP addresses change) or be upgraded. If we had to update the IP addresses we remembered every time, it would be a disaster. But with DNS, only the IP address in the DNS record needs to be updated, and users won't even notice, still able to access the website normally. DNS acts as an intermediary, hiding the complex changes behind the scenes.</li>
+<li><strong>Load balancing:</strong> A large website may have several servers providing services to distribute the load. DNS can direct access requests to different servers depending on the situation, preventing any single server from becoming overloaded and causing website slowdowns.</li>
+</ol>
+<hr />
+<h3 id="what-is-the-role-of-dns-on-the-internet">What is the role of DNS on the internet?<a class="headerlink" href="#what-is-the-role-of-dns-on-the-internet" title="Permanent link">&para;</a></h3>
+<p>DNS holds a very important position on the internet; it is arguably <strong>one of the cornerstones of the internet</strong>.</p>
+<p>You can think of it as the <strong>internet's navigation system</strong>. Without navigation, you might not be able to find where you want to go. DNS is the guide, telling your computer where the website you want to visit "lives" (its IP address). If DNS fails, access to the entire internet will be severely affected, just like a navigation system malfunctioning – people won't be able to find their way.</p>
+<hr />
+<h3 id="everyday-uses-of-dns">Everyday Uses of DNS<a class="headerlink" href="#everyday-uses-of-dns" title="Permanent link">&para;</a></h3>
+<p>In fact, you use DNS every day without even realizing it:</p>
+<ul>
+<li><strong>Browsing the web:</strong> When you type a website address into your browser or click a link, your computer uses DNS to look up the corresponding IP address before connecting to the website server.</li>
+<li><strong>Using apps:</strong> Many mobile apps also need to connect to servers on the internet, such as WeChat, Weibo, and TikTok. They also use DNS in the background to find the servers.</li>
+<li><strong>Sending and receiving emails:</strong> Sending and receiving emails also requires DNS to find the email server address.</li>
+<li><strong>Online gaming:</strong> When playing online games, DNS helps your game client find the game server.</li>
+</ul>
+<p><strong>In short, whenever your device needs to connect to a service on the internet, DNS is silently working for you.</strong></p>
+<hr />
+<h3 id="the-dangers-of-dns-poisoning-and-the-specific-process-of-dns-poisoning">The Dangers of DNS Poisoning and the Specific Process of DNS Poisoning<a class="headerlink" href="#the-dangers-of-dns-poisoning-and-the-specific-process-of-dns-poisoning" title="Permanent link">&para;</a></h3>
+<h4 id="the-dangers-of-dns-poisoning">The Dangers of DNS Poisoning<a class="headerlink" href="#the-dangers-of-dns-poisoning" title="Permanent link">&para;</a></h4>
+<p>DNS poisoning is like someone tampering with that "address book," changing the correct addresses to incorrect ones.</p>
+<p><strong>The dangers mainly include:</strong></p>
+<ol>
+<li><strong>Inability to access legitimate websites:</strong> For example, if you type <code>www.baidu.com</code>, DNS might redirect you to a fake, unrelated server, preventing you from accessing Baidu.</li>
+<li><strong>Being redirected to phishing or malicious websites:</strong> Even worse, scammers might poison the domain name of a bank website to point to a fake phishing website. You think you're accessing the bank, but in reality, all your account numbers and passwords will be stolen by the scammers.</li>
+<li><strong>Network security risks:</strong> Viruses, Trojans, and other malicious software can also use DNS poisoning to redirect users to websites that download malicious programs.</li>
+<li><strong>Impact on normal business operations:</strong> For businesses, DNS poisoning can prevent customers from accessing their official website or services, causing economic losses and reputational damage.</li>
+</ol>
+<h4 id="specific-process-of-dns-poisoning-simplified-version">Specific Process of DNS Poisoning (Simplified Version)<a class="headerlink" href="#specific-process-of-dns-poisoning-simplified-version" title="Permanent link">&para;</a></h4>
+<p>Scammers who want to poison your DNS usually use some technical means to make the DNS server used by your computer or home router return incorrect IP addresses.</p>
+<p><strong>A common scenario is this:</strong></p>
+<ol>
+<li><strong>The scammer controls a DNS server:</strong> The scammer may control one or more DNS servers through various means. 2. <strong>Modifying DNS Records:</strong> On the compromised DNS server, the scammers change the domain name of a commonly used website (such as the bank's official website <code>www.bank.com</code>) to point to a fake IP address. This fake IP address points to a phishing website set up by the scammers.</li>
+<li><strong>Inducing your device to use this compromised DNS:</strong><br />
+* <strong>Method 1 (Router):</strong> If your home router is configured to use this compromised DNS server, all devices connected to your router will receive the wrong IP address when querying <code>www.bank.com</code>. <br />
+* <strong>Method 2 (Local hosts file):</strong> Some viruses or malware directly modify your computer's local <code>hosts</code> file. This file acts like a "small address book" on your computer, with a higher priority than external DNS servers. If it contains an entry for <code>www.bank.com</code> pointing to a wrong IP address, the computer will prioritize using this incorrect address. <br />
+* <strong>Method 3 (DNS Hijacking):</strong> In some network environments (such as insecure public Wi-Fi), scammers may use technical means to "hijack" your DNS query requests, unknowingly redirecting your requests to the compromised DNS server.</li>
+<li><strong>Accessing the website, being redirected to the wrong address:</strong> When you type <code>www.bank.com</code>, your computer will connect to the fake website set up by the scammers based on the compromised DNS information.</li>
+<li><strong>Stealing information:</strong> This fake website looks exactly like the real one. When you enter your account, password, and bank card information, this information will be easily obtained by the scammers.</li>
+</ol>
+<p><strong>In short, DNS poisoning is when someone secretly modifies the internet's "address book," changing the "good place" you intended to go to into a "bad place," leading you to be scammed.</strong></p>
+<hr />
+<h3 id="common-dns-resolution-addresses">Common DNS Resolution Addresses<a class="headerlink" href="#common-dns-resolution-addresses" title="Permanent link">&para;</a></h3>
+<p>These are the server addresses that provide DNS resolution services. You can think of them as different "address book administrators." Different service providers may offer different resolution speeds, stability, and security. * <strong>Baidu DNS:</strong><br />
++ Primary DNS Server: <code>180.76.76.76</code><br />
++ Secondary DNS Server: <code>~.~.~.~</code><br />
+* <strong>Alibaba Cloud DNS:</strong><br />
++ Primary DNS Server: <code>223.5.5.5</code><br />
++ Secondary DNS Server: <code>223.6.6.6</code><br />
+* <strong>Tencent Cloud DNS:</strong><br />
++ Primary DNS Server: <code>119.29.29.29</code><br />
++ Secondary DNS Server: <code>119.28.28.28</code><br />
+* <strong>China Telecom DNS:</strong><br />
++ Primary DNS Server: <code>114.114.114.114</code><br />
++ Secondary DNS Server: <code>114.114.115.115</code><br />
+* <strong>Google Public DNS:</strong><br />
++ Primary DNS Server: <code>8.8.8.8</code><br />
++ Secondary DNS Server: <code>8.8.4.4</code><br />
+* <strong>Cloudflare DNS:</strong><br />
++ Primary DNS Server: <code>1.1.1.1</code><br />
++ Secondary DNS Server: <code>1.0.0.1</code></p>
+<p><strong>You can manually change the DNS server address in your computer or router's network settings based on your network conditions and preferences. This can sometimes improve access speed or resolve some network issues.</strong></p></div>
+                <div class="btn-wrapper">
+                    <a href="/" class="back-btn" data-spa><i class="fas fa-arrow-left"></i> 返回首页</a>
+                </div>
+            </article>
+        </main>
+
+        <aside>
+
+            <section class="widget profile-widget">
+                <img src="https://cnfte.top/attachments/696b4d5b58c71_1768639835.webp" class="profile-avatar" alt="Cnfte" loading="lazy">
+                <div class="profile-name">Cnfte</div>
+                <p class="profile-bio">&#34;滚滚长江东逝水，浪花淘尽英雄。&#34;</p>
+                <div class="social-links">
+<a href="https://github.com/cnfte" target="_blank" rel="noopener"
+                        title="GitHub"><i class="fab fa-github"></i></a><a href="https://t.me/cnfte1" target="_blank" rel="noopener"
+                        title="Telegram"><i class="fab fa-telegram"></i></a><a href="https://space.bilibili.com/3546774635547595" target="_blank" rel="noopener"
+                        title="Bilibili"><i class="fab fa-bilibili"></i></a>                    <a href="https://x.com/wangwei960523" target="_blank" rel="noopener" title="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+<a href="https://example.com/" target="_blank" rel="noopener" title="RSS"><i
+                            class="fas fa-rss"></i></a><a href="mailto:cnfte.2@gmail.com" title="Email"><i
+                            class="fas fa-envelope"></i></a>                </div>
+            </section>
+
+
+            <section class="widget">
+                <h3 class="widget-title"><i class="fas fa-list"></i> 目录</h3>
+                <div class="toc-widget"><div class="toc">
+<ul>
+<li><a href="#what-is-dns">What is DNS?</a></li>
+<li><a href="#what-is-dns-used-for">What is DNS used for?</a></li>
+<li><a href="#what-is-the-role-of-dns-on-the-internet">What is the role of DNS on the internet?</a></li>
+<li><a href="#everyday-uses-of-dns">Everyday Uses of DNS</a></li>
+<li><a href="#the-dangers-of-dns-poisoning-and-the-specific-process-of-dns-poisoning">The Dangers of DNS Poisoning and the Specific Process of DNS Poisoning</a><ul>
+<li><a href="#the-dangers-of-dns-poisoning">The Dangers of DNS Poisoning</a></li>
+<li><a href="#specific-process-of-dns-poisoning-simplified-version">Specific Process of DNS Poisoning (Simplified Version)</a></li>
+</ul>
+</li>
+<li><a href="#common-dns-resolution-addresses">Common DNS Resolution Addresses</a></li>
+</ul>
+</div>
+</div>
+            </section>
+
+
+            <section class="widget">
+                <h3 class="widget-title"><i class="fas fa-tv"></i> 正在追番</h3>
+                <div class="anime-list">
+                    <div class="anime-item">
+                        <img src="https://cnfte.top/attachments/cccc.webp" class="anime-cover" alt="幸运星(动漫)" loading="lazy">
+                        <div class="anime-info">
+                            <span class="anime-title">幸运星(动漫)</span>
+                            <div class="anime-ep">
+EP 4/25 · 萌妹子闲聊吐槽，ACG梗密集，轻松治愈的日常动画。                            </div>
+                        </div>
+                        <span class="anime-status ended">
+                            完结
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+
+            <section class="terminal-widget">
+                <div class="t-line">&gt; <span class="t-accent">UID</span>: <span class="t-val">177139506152</span>
+                </div>
+                <div class="t-line">&gt; <span class="t-accent">TIME</span>: <span id="live-clock"
+                        class="t-val">—</span></div>
+                <div class="t-line">&gt; <span class="t-accent">READ</span>: <span class="t-val">~17min</span></div>
+                <div class="t-dim">&gt; EOF</div>
+            </section>
+        </aside>
+    </div>
+
+    <footer>
+        <div class="foot-custom">本站由Cloudflare和Github强力驱动<br>
+欢迎到来，反馈问题和吹水请看下方：<br>
+如何联系Cnfte与bug反馈？>>>QQ群聊：887378676<br>
+TG群组：<a src=https://t.me/+pCnCBiCsyOhhMWU9>https://t.me/+pCnCBiCsyOhhMWU9</a><br>
+欢迎到来<br>
+状态监控：<a src=https://probe.cnfte.top>https://probe.cnfte.top</a><br>
+如果对本博客的面板有兴趣可以联系CNFTE请求开源管理面板</div>
+        <div class="foot-copy">© 2026 Cnfte // CNFTE MOE PANEL</div>
+    </footer>
+
+    <script>
+        'use strict';
+        const bar = document.getElementById('progress-bar');
+        window._progressHandler = () => {
+            if (!bar) return;
+            const el = document.documentElement;
+            bar.style.width = Math.min((el.scrollTop || document.body.scrollTop) / (el.scrollHeight - el.clientHeight) * 100, 100) + '%';
+        };
+        window.addEventListener('scroll', window._progressHandler, { passive: true });
+
+        function initClock() {
+            // 文章页侧边栏时钟
+            const el = document.getElementById('live-clock');
+            if (el) {
+                const tick = () => el.textContent = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                tick(); clearInterval(window._liveClockTimer);
+                window._liveClockTimer = setInterval(tick, 1000);
+            }
+            // 主页 hero/sidebar 时钟（SPA换页到index时需要）
+            const cl = document.getElementById('clock'), hc = document.getElementById('hero-clock');
+            if (cl || hc) {
+                const tick2 = () => {
+                    const t = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                    if (cl) cl.textContent = t;
+                    if (hc) hc.textContent = t.slice(0, 5);
+                };
+                tick2(); clearInterval(window._clockTimer);
+                window._clockTimer = setInterval(tick2, 1000);
+            }
+        }
+        function initDays() {
+            const d1 = document.getElementById('days'), d2 = document.getElementById('sidebar-days');
+            if (!d1 && !d2) return;
+            try {
+                const s = new Date("2025-05-01");
+                if (isNaN(s)) return;
+                const n = Math.floor((Date.now() - s) / 86400000);
+                if (d1) d1.textContent = n;
+                if (d2) d2.textContent = n;
+            } catch (_) { }
+        }
+        function initHitokoto() {
+            const el = document.getElementById('hitokoto');
+            if (!el || el._loaded) return;
+            el._loaded = true;
+            (async () => {
+                try {
+                    const d = await (await fetch('https://v1.hitokoto.cn', { signal: AbortSignal.timeout(5000) })).json();
+                    el.textContent = (d.hitokoto || '— 次元语录加载失败 —');
+                } catch { el.textContent = '— 网络异常，语录休眠中 —'; }
+            })();
+        }
+        initClock();
+
+        const overlay = document.getElementById('page-transition');
+        const CACHE = window._spaCache || (window._spaCache = new Map());
+        const CACHE_MAX = 30;
+        let barTick;
+        function barStart() { if (!bar) return; bar.style.opacity = '1'; bar.style.width = '0%'; clearInterval(barTick); let p = 0; barTick = setInterval(() => { p = Math.min(p + (90 - p) * .09, 87); bar.style.width = p + '%'; }, 45); }
+        function barDone() { clearInterval(barTick); if (!bar) return; bar.style.width = '100%'; setTimeout(() => { bar.style.opacity = '0'; setTimeout(() => bar.style.width = '0%', 280); }, 180); }
+        async function fadeOut() { overlay.classList.add('active'); return new Promise(r => setTimeout(r, 210)); }
+        function fadeIn() { overlay.classList.remove('active'); }
+
+        function isSpaLink(href) {
+            if (!href || href.startsWith('#') || href.endsWith('.json') || href.startsWith('mailto:') || href.startsWith('tel:')) return false;
+            try { return new URL(href, location.origin).origin === location.origin; } catch { return false; }
+        }
+        async function navigate(url, push = true) {
+            // push=true 时才做重复判断，popstate 时跳过，避免返回键失效
+            if (push && url === location.href) return;
+            barStart(); await fadeOut();
+            try {
+                let html = CACHE.get(url);
+                if (!html) { const res = await fetch(url, { headers: { 'X-SPA': '1' } }); if (!res.ok) throw new Error('HTTP ' + res.status); html = await res.text(); if (CACHE.size >= CACHE_MAX) CACHE.delete(CACHE.keys().next().value); CACHE.set(url, html); }
+                const doc = new DOMParser().parseFromString(html, 'text/html');
+                document.title = doc.title;
+                document.body.dataset.page = doc.body.dataset.page || 'index';
+
+                // style（同步CSS，彻底消除SPA换页后样式不一致）
+                const nStyle = doc.querySelector('style'), cStyle = document.querySelector('style');
+                if (nStyle && cStyle) cStyle.textContent = nStyle.textContent;
+
+                // nav（修复换页后搜索/链接绑定残留问题）
+                const nNav = doc.querySelector('nav'), cNav = document.querySelector('nav');
+                if (nNav && cNav) { cNav.className = nNav.className; cNav.innerHTML = nNav.innerHTML; }
+
+                // hero整体替换（避免<header>/<div>标签类型不同导致残留）
+                const nHW = doc.getElementById('hero-wrap'), cHW = document.getElementById('hero-wrap');
+                if (nHW && cHW) cHW.outerHTML = nHW.outerHTML;
+                const nG = doc.querySelector('#main-grid,.layout-wrapper'), cG = document.querySelector('#main-grid,.layout-wrapper');
+                if (nG && cG) { cG.className = nG.className; cG.innerHTML = nG.innerHTML; }
+                const nF = doc.querySelector('footer'), cF = document.querySelector('footer');
+                if (nF && cF) cF.innerHTML = nF.innerHTML;
+                if (push) history.pushState({ url }, '', url);
+                reinitPage(); bindSpaLinks();
+                window.scrollTo({ top: 0, behavior: 'instant' });
+                barDone(); fadeIn();
+                searchReady = false; searchData = null;
+            } catch (e) { console.warn('[SPA] fallback:', e); barDone(); fadeIn(); location.href = url; }
+        }
+        function reinitPage() {
+            initClock(); initDays(); initHitokoto();
+            // 重置搜索绑定标记，确保换页后搜索可重新绑定
+            const si = document.getElementById('search-input');
+            if (si) si._bound = false;
+            const sb = document.getElementById('search-toggle');
+            if (sb) sb._bound = false;
+            window.removeEventListener('scroll', window._progressHandler);
+            if (document.querySelector('.post-body')) {
+                window._progressHandler = () => { if (!bar) return; const el = document.documentElement; bar.style.width = Math.min((el.scrollTop || document.body.scrollTop) / (el.scrollHeight - el.clientHeight) * 100, 100) + '%'; };
+            } else { window._progressHandler = () => { }; if (bar) bar.style.width = '0%'; }
+            window.addEventListener('scroll', window._progressHandler, { passive: true });
+            bindSearch();
+        }
+        function bindSpaLinks() {
+            document.querySelectorAll('a[data-spa],a[href]').forEach(a => {
+                if (a._spaBound) return; a._spaBound = true;
+                const href = a.getAttribute('href'); if (!isSpaLink(href)) return;
+                a.addEventListener('click', e => { if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return; e.preventDefault(); navigate(new URL(href, location.origin).href); });
+            });
+        }
+        // 修复返回键：popstate 触发时 location 已变，不能用相等判断拦截
+        window.addEventListener('popstate', e => {
+            const target = e.state?.url || location.href;
+            navigate(target, false);
+        });
+        history.replaceState({ url: location.href }, '', location.href);
+        bindSpaLinks();
+
+        let searchData = null, searchReady = false, searchLoading = false, dTimer;
+        function getSearchPath() { return location.pathname.startsWith('/en/') ? '/en/search.json' : '/search.json'; }
+        function getSearchEls() { return { wrap: document.getElementById('search-wrap'), input: document.getElementById('search-input'), btn: document.getElementById('search-toggle'), drop: document.getElementById('search-dropdown') }; }
+        function toggleSearch(open) { const { wrap, input, drop } = getSearchEls(); if (!wrap) return; const o = open !== undefined ? open : !wrap.classList.contains('open'); wrap.classList.toggle('open', o); if (o) { input?.focus(); if (!searchReady && !searchLoading) loadSearchData(); } else if (drop) { drop.classList.remove('open'); drop.innerHTML = ''; } }
+        async function loadSearchData() { searchLoading = true; try { const r = await fetch(getSearchPath(), { cache: 'no-cache' }); if (!r.ok) throw 0; searchData = await r.json(); searchReady = true; } catch (e) { console.warn('[Search]', e); } finally { searchLoading = false; } }
+        function renderResults(q) { const { drop } = getSearchEls(); if (!drop) return; q = q.trim().toLowerCase(); drop.innerHTML = ''; if (!q) { drop.classList.remove('open'); return; } if (!searchReady) { drop.innerHTML = '<div class="s-loading">加载中...</div>'; drop.classList.add('open'); if (!searchLoading) loadSearchData().then(() => { const { input } = getSearchEls(); renderResults(input?.value || ''); }); return; } const hits = (searchData || []).filter(i => i.title?.toLowerCase().includes(q)).slice(0, 10); if (!hits.length) { drop.innerHTML = '<div class="s-empty">无匹配结果</div>'; } else { const frag = document.createDocumentFragment(); const esc = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); hits.forEach(item => { const a = document.createElement('a'); a.className = 's-item'; a.href = item.url; a.innerHTML = item.title.replace(new RegExp(esc, 'gi'), m => `<mark style="background:var(--accent);color:#000;border-radius:3px;padding:0 2px">${m}</mark>`); a.addEventListener('click', () => toggleSearch(false)); frag.appendChild(a); }); drop.appendChild(frag); } drop.classList.add('open'); }
+        function bindSearch() { const { input, btn } = getSearchEls(); if (input && !input._bound) { input._bound = true; input.addEventListener('input', e => { clearTimeout(dTimer); dTimer = setTimeout(() => renderResults(e.target.value), 160); }); input.addEventListener('keydown', e => { if (e.key === 'Escape') toggleSearch(false); }); } if (btn && !btn._bound) { btn._bound = true; btn.addEventListener('click', e => { e.stopPropagation(); toggleSearch(); }); } }
+        document.addEventListener('click', e => { const { wrap } = getSearchEls(); if (wrap && !wrap.contains(e.target)) toggleSearch(false); }, { capture: true });
+        bindSearch();
+    </script>
+</body>
+
+</html>               if (push) history.pushState({ url }, '', url);
+                reinitPage(); bindSpaLinks();
+                window.scrollTo({ top: 0, behavior: 'instant' });
+                barDone(); fadeIn();
+                searchReady = false; searchData = null;
+            } catch (e) { console.warn('[SPA] fallback:', e); barDone(); fadeIn(); location.href = url; }
+        }
+        function reinitPage() {
+            initClock(); initDays(); initHitokoto();
+            // 重置搜索绑定标记，确保换页后搜索可重新绑定
+            const si = document.getElementById('search-input');
+            if (si) si._bound = false;
+            const sb = document.getElementById('search-toggle');
+            if (sb) sb._bound = false;
+            window.removeEventListener('scroll', window._progressHandler);
+            if (document.querySelector('.post-body')) {
+                window._progressHandler = () => { if (!bar) return; const el = document.documentElement; bar.style.width = Math.min((el.scrollTop || document.body.scrollTop) / (el.scrollHeight - el.clientHeight) * 100, 100) + '%'; };
+            } else { window._progressHandler = () => { }; if (bar) bar.style.width = '0%'; }
+            window.addEventListener('scroll', window._progressHandler, { passive: true });
+            bindSearch();
+        }
+        function bindSpaLinks() {
+            document.querySelectorAll('a[data-spa],a[href]').forEach(a => {
+                if (a._spaBound) return; a._spaBound = true;
+                const href = a.getAttribute('href'); if (!isSpaLink(href)) return;
+                a.addEventListener('click', e => { if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return; e.preventDefault(); navigate(new URL(href, location.origin).href); });
+            });
+        }
+        // 修复返回键：popstate 触发时 location 已变，不能用相等判断拦截
+        window.addEventListener('popstate', e => {
+            const target = e.state?.url || location.href;
+            navigate(target, false);
+        });
+        history.replaceState({ url: location.href }, '', location.href);
+        bindSpaLinks();
+
+        let searchData = null, searchReady = false, searchLoading = false, dTimer;
+        function getSearchPath() { return location.pathname.startsWith('/en/') ? '/en/search.json' : '/search.json'; }
+        function getSearchEls() { return { wrap: document.getElementById('search-wrap'), input: document.getElementById('search-input'), btn: document.getElementById('search-toggle'), drop: document.getElementById('search-dropdown') }; }
+        function toggleSearch(open) { const { wrap, input, drop } = getSearchEls(); if (!wrap) return; const o = open !== undefined ? open : !wrap.classList.contains('open'); wrap.classList.toggle('open', o); if (o) { input?.focus(); if (!searchReady && !searchLoading) loadSearchData(); } else if (drop) { drop.classList.remove('open'); drop.innerHTML = ''; } }
+        async function loadSearchData() { searchLoading = true; try { const r = await fetch(getSearchPath(), { cache: 'no-cache' }); if (!r.ok) throw 0; searchData = await r.json(); searchReady = true; } catch (e) { console.warn('[Search]', e); } finally { searchLoading = false; } }
+        function renderResults(q) { const { drop } = getSearchEls(); if (!drop) return; q = q.trim().toLowerCase(); drop.innerHTML = ''; if (!q) { drop.classList.remove('open'); return; } if (!searchReady) { drop.innerHTML = '<div class="s-loading">加载中...</div>'; drop.classList.add('open'); if (!searchLoading) loadSearchData().then(() => { const { input } = getSearchEls(); renderResults(input?.value || ''); }); return; } const hits = (searchData || []).filter(i => i.title?.toLowerCase().includes(q)).slice(0, 10); if (!hits.length) { drop.innerHTML = '<div class="s-empty">无匹配结果</div>'; } else { const frag = document.createDocumentFragment(); const esc = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); hits.forEach(item => { const a = document.createElement('a'); a.className = 's-item'; a.href = item.url; a.innerHTML = item.title.replace(new RegExp(esc, 'gi'), m => `<mark style="background:var(--accent);color:#000;border-radius:3px;padding:0 2px">${m}</mark>`); a.addEventListener('click', () => toggleSearch(false)); frag.appendChild(a); }); drop.appendChild(frag); } drop.classList.add('open'); }
+        function bindSearch() { const { input, btn } = getSearchEls(); if (input && !input._bound) { input._bound = true; input.addEventListener('input', e => { clearTimeout(dTimer); dTimer = setTimeout(() => renderResults(e.target.value), 160); }); input.addEventListener('keydown', e => { if (e.key === 'Escape') toggleSearch(false); }); } if (btn && !btn._bound) { btn._bound = true; btn.addEventListener('click', e => { e.stopPropagation(); toggleSearch(); }); } }
+        document.addEventListener('click', e => { const { wrap } = getSearchEls(); if (wrap && !wrap.contains(e.target)) toggleSearch(false); }, { capture: true });
+        bindSearch();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /search.json
+Disallow: /en/search.json
+Disallow: /config.json
+# API subdomain should add X-Robots-Tag: noindex in server config
+Sitemap: https://cnfte.top/sitemap.xml

@@ -1,0 +1,1982 @@
+<!DOCTYPE html>
+<html lang="zh" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetCarry 安装使用教程与实测体验 - Cnfteの博客</title>
+    <meta name="description" content="作为一款自研的高性能多协议网络压力测试工具，NetCarry Ultimate V6.0专为Linux系统打造，融合了传输层与应用层压测能力，能高效完成网络架构评估、CDN负载测试、防火墙性能验证等工作。近期我完成了这款工具的全流程使用与实际压测，现将详细的安装方法、使用技巧及实测体验分享出来，为有同类压测需…">
+
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+
+    <link rel="canonical" href="https://cnfte.top/archive/177295989056/">
+    <link rel="alternate" hreflang="zh" href="https://cnfte.top/archive/177295989056/">
+    <link rel="alternate" hreflang="x-default" href="https://cnfte.top/archive/177295989056/">
+
+    <link rel="icon" href="/favicon.ico">
+
+    <meta property="og:title" content="NetCarry 安装使用教程与实测体验">
+    <meta property="og:description" content="作为一款自研的高性能多协议网络压力测试工具，NetCarry Ultimate V6.0专为Linux系统打造，融合了传输层与应用层压测能力，能高效完成网络架构评估、CDN负载测试、防火墙性能验证等工作。近期我完成了这款工具的全流程使用与实际压测，现将详细的安装方法、使用技巧及实测体验分享出来，为有同类压测需…">
+    <meta property="og:type" content="article">
+<meta property="og:url" content="https://cnfte.top/archive/177295989056/">    <meta property="og:site_name" content="Cnfteの博客">
+    <meta property="article:published_time" content="2026-03-08">
+    <meta property="article:author" content="Cnfte">
+<meta property="article:tag" content="NetCarry教程">
+<meta property="article:tag" content="NetCarry Ultimate">
+<meta property="article:tag" content="Linux压测工具">
+<meta property="article:tag" content="网络压力测试">
+<meta property="article:tag" content="CC攻击测试">
+<meta property="article:tag" content="UDP TCP压测">
+<meta property="article:tag" content="BRUSH模式">
+<meta property="article:tag" content="网络架构评估">
+<meta property="article:tag" content="CDN负载测试">
+<meta property="article:tag" content="NetCarry安装">
+<meta property="article:tag" content="防火墙性能验证">
+<meta property="article:tag" content="高并发压测">
+<meta property="article:tag" content="netcarry命令">
+<meta property="article:tag" content="Linux网络工具">
+<meta property="article:tag" content="压测工具实测">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="NetCarry 安装使用教程与实测体验">
+    <meta name="twitter:description" content="作为一款自研的高性能多协议网络压力测试工具，NetCarry Ultimate V6.0专为Linux系统打造，融合了传输层与应用层压测能力，能高效完成网络架构评估、CDN负载测试、防火墙性能验证等工作。近期我完成了这款工具的全流程使用与实际压测，现将详细的安装方法、使用技巧及实测体验分享出来，为有同类压测需…">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "NetCarry 安装使用教程与实测体验",
+      "description": "作为一款自研的高性能多协议网络压力测试工具，NetCarry Ultimate V6.0专为Linux系统打造，融合了传输层与应用层压测能力，能高效完成网络架构评估、CDN负载测试、防火墙性能验证等工作。近期我完成了这款工具的全流程使用与实际压测，现将详细的安装方法、使用技巧及实测体验分享出来，为有同类压测需…",
+      "url": "https://cnfte.top/archive/177295989056/",
+      "inLanguage": "zh-CN",
+      "datePublished": "2026-03-08",
+      "dateModified": "2026-03-08",
+      "author": {
+        "@type": "Person",
+        "name": "Cnfte"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Cnfteの博客",
+        "url": "https://cnfte.top"
+      },
+      "keywords": "NetCarry教程, NetCarry Ultimate, Linux压测工具, 网络压力测试, CC攻击测试, UDP TCP压测, BRUSH模式, 网络架构评估, CDN负载测试, NetCarry安装, 防火墙性能验证, 高并发压测, netcarry命令, Linux网络工具, 压测工具实测",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://cnfte.top/archive/177295989056/"
+      }
+    }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Fira+Code:wght@400;600&family=Noto+Sans+SC:wght@400;700;900&display=swap"
+        rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript>
+        <link
+            href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Fira+Code:wght@400;600&family=Noto+Sans+SC:wght@400;700;900&display=swap"
+            rel="stylesheet">
+    </noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        crossorigin="anonymous" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+            crossorigin="anonymous">
+    </noscript>
+    <style>
+        :root {
+            --bg: #06060f;
+            --glass: rgba(255, 255, 255, 0.055);
+            --glass-md: rgba(255, 255, 255, 0.09);
+            --glass-heavy: rgba(8, 8, 18, 0.97);
+            --border: rgba(255, 255, 255, 0.10);
+            --border-accent: rgba(255, 153, 204, 0.45);
+            --accent: #ff99cc;
+            --accent2: #ffcc99;
+            --accent3: #99ccff;
+            --grad: linear-gradient(135deg, #ff99cc 0%, #ffcc99 100%);
+            --shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
+            --shadow-accent: 0 8px 32px rgba(255, 153, 204, 0.22);
+            --ease: cubic-bezier(.34, 1.56, .64, 1);
+            --ease-out: cubic-bezier(.22, 1, .36, 1);
+            --ease-std: cubic-bezier(.4, 0, .2, 1);
+            --r-sm: 16px;
+            --r-md: 24px;
+            --r-lg: 32px;
+            --sidebar-w: 300px;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        p,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        span,
+        a,
+        li,
+        td,
+        th {
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-family: inherit;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', 'Inter', sans-serif;
+            color: #f0f0f8;
+            background: var(--bg);
+            line-height: 1.7;
+            overflow-x: hidden;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bg-fixed {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background:url('https://cnfte.top/attachments/bj.webp') center/cover no-repeat;
+            will-change: transform;
+            transform: translateZ(0);
+        }
+
+        .bg-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: rgba(0, 0, 0, .48);
+            backdrop-filter: blur(8px) saturate(120%);
+            -webkit-backdrop-filter: blur(8px) saturate(120%);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .bg-overlay { backdrop-filter: none; -webkit-backdrop-filter: none; }
+        }
+
+        #progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            width: 0%;
+            background: var(--grad);
+            z-index: 9999;
+            border-radius: 0 2px 2px 0;
+            box-shadow: 0 0 8px rgba(255, 153, 204, .6);
+        }
+
+        #page-transition {
+            position: fixed;
+            inset: 0;
+            z-index: 8000;
+            background: var(--glass-heavy);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .22s var(--ease-out);
+        }
+
+        #page-transition.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+
+        nav {
+            position: sticky;
+            top: 10px;
+            z-index: 1000;
+            margin: 10px auto;
+            width: calc(100% - 40px);
+            max-width: 1360px;
+            background: rgba(6, 6, 15, 0.72);
+            backdrop-filter: blur(32px) saturate(180%);
+            -webkit-backdrop-filter: blur(32px) saturate(180%);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            padding: 0 8px 0 22px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            height: 52px;
+            box-shadow: var(--shadow);
+        }
+
+        .logo {
+            font-family: 'ZCOOL KuaiLe';
+            font-size: 1.22rem;
+            background: var(--grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            flex-shrink: 0;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 4px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .nav-links::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-links a {
+            font-weight: 700;
+            font-size: .78rem;
+            color: rgba(255, 255, 255, .65);
+            letter-spacing: .8px;
+            padding: 6px 12px;
+            border-radius: 24px;
+            transition: background .2s, color .2s;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .nav-links a:hover {
+            background: var(--glass-md);
+            color: #fff;
+            filter: none;
+        }
+
+        .nav-lang {
+            font-size: .72rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, .4);
+            padding: 5px 10px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            transition: border-color .2s, color .2s;
+            flex-shrink: 0;
+            letter-spacing: .8px;
+        }
+
+        .nav-lang:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            filter: none;
+        }
+
+        .search-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        #search-toggle {
+            color: rgba(255, 255, 255, .55);
+            font-size: 1rem;
+            padding: 8px 10px;
+            border-radius: 50%;
+            transition: color .2s, background .2s;
+        }
+
+        #search-toggle:hover {
+            color: var(--accent);
+            background: var(--glass-md);
+        }
+
+        #search-input {
+            width: 0;
+            opacity: 0;
+            position: absolute;
+            right: 44px;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 7px 0;
+            background: rgba(6, 6, 15, .9);
+            color: #fff;
+            transition: width .35s var(--ease-out), opacity .25s, padding .25s;
+            outline: none;
+            font-size: .8rem;
+            font-family: inherit;
+        }
+
+        .search-wrap.open #search-input {
+            width: 180px;
+            opacity: 1;
+            padding: 7px 16px;
+        }
+
+        #search-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 320px;
+            background: var(--glass-heavy);
+            border: 1px solid var(--border);
+            border-radius: var(--r-md);
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            pointer-events: none;
+            transition: max-height .3s var(--ease-out), opacity .22s;
+            box-shadow: 0 24px 56px rgba(0, 0, 0, .7);
+            z-index: 1100;
+        }
+
+        #search-dropdown.open {
+            max-height: 380px;
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .s-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 18px;
+            font-size: .82rem;
+            border-bottom: 1px solid rgba(255, 255, 255, .04);
+            color: #ddd;
+            transition: background .12s;
+        }
+
+        .s-item::before {
+            content: '#';
+            color: var(--accent);
+            font-family: 'Fira Code';
+            font-size: .7rem;
+            flex-shrink: 0;
+        }
+
+        .s-item:hover {
+            background: rgba(255, 153, 204, .1);
+            color: var(--accent);
+        }
+
+        .s-item:last-child {
+            border-bottom: none;
+        }
+
+        .s-empty,
+        .s-loading {
+            padding: 18px;
+            text-align: center;
+            color: #444;
+            font-size: .8rem;
+            font-family: 'Fira Code';
+        }
+
+
+        @keyframes cardIn {
+            from {
+                opacity: 0;
+                transform: translateY(22px) scale(.988)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        @keyframes heroZoom {
+            from {
+                transform: scale(1)
+            }
+
+            to {
+                transform: scale(1.07)
+            }
+        }
+
+        .post-hero {
+            height: 44vh;
+            min-height: 320px;
+            width: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .post-hero-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(.55);
+            z-index: -1;
+            animation: heroZoom 22s ease-in-out infinite alternate;
+            will-change: transform;
+        }
+
+        .post-hero-gradient {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background: linear-gradient(to bottom, rgba(6, 6, 15, .08) 0%, rgba(6, 6, 15, .6) 100%);
+        }
+
+        .post-header-content {
+            position: relative;
+            z-index: 1;
+            padding: 0 40px;
+            animation: cardIn .7s var(--ease);
+            max-width: 860px;
+        }
+
+        .post-tagline {
+            color: var(--accent);
+            font-family: 'Fira Code';
+            font-size: .78rem;
+            letter-spacing: 3.5px;
+            margin-bottom: 14px;
+        }
+
+        .post-header-content h1 {
+            font-family: 'ZCOOL KuaiLe';
+            font-size: clamp(1.7rem, 5vw, 3rem);
+            color: #fff;
+            line-height: 1.2;
+            text-shadow: 0 6px 30px rgba(0, 0, 0, .75);
+        }
+
+
+        .layout-wrapper {
+            flex: 1;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2.5% 60px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) var(--sidebar-w);
+            gap: 26px;
+            align-items: start;
+        }
+
+        body[data-page="post"] .layout-wrapper {
+            margin-top: -52px;
+            position: relative;
+            z-index: 10;
+        }
+
+        body[data-page="index"] .layout-wrapper {
+            margin-top: 0;
+        }
+
+
+        .post-friends {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 26px;
+        }
+
+        .friend-card {
+            height: 64px;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            padding: 6px;
+            overflow: hidden;
+            min-width: 0;
+            transition: transform .3s var(--ease), border-color .2s;
+        }
+
+        .friend-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--border-accent);
+        }
+
+        .friend-card img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 2px solid var(--border-accent);
+        }
+
+        .friend-info {
+            overflow: hidden;
+            flex: 1;
+            padding: 0 10px;
+        }
+
+        .friend-info b {
+            display: block;
+            color: var(--accent);
+            font-size: .78rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .friend-info span {
+            font-size: .65rem;
+            color: rgba(255, 255, 255, .45);
+            white-space: nowrap;
+        }
+
+
+        main#main-content {
+            min-width: 0;
+        }
+
+        article.post-container {
+            background: var(--glass-heavy);
+            backdrop-filter: blur(40px) saturate(160%);
+            -webkit-backdrop-filter: blur(40px) saturate(160%);
+            border-radius: var(--r-lg);
+            border: 1px solid var(--border);
+            padding: 48px 44px;
+            box-shadow: var(--shadow);
+            min-width: 0;
+            animation: cardIn .7s var(--ease) both;
+        }
+
+        .post-body {
+            font-size: 1.06rem;
+            color: #eff0f5;
+            line-height: 1.92;
+        }
+
+        .post-body h1,
+        .post-body h2 {
+            font-family: 'ZCOOL KuaiLe';
+            color: var(--accent);
+            margin: 2.2em 0 .8em;
+            font-size: 1.55rem;
+            padding-bottom: .5em;
+            border-bottom: 1px solid rgba(255, 153, 204, .15);
+        }
+
+        .post-body h3 {
+            color: var(--accent2);
+            margin: 1.6em 0 .6em;
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .post-body h4 {
+            color: rgba(255, 255, 255, .8);
+            margin: 1.2em 0 .5em;
+            font-size: 1rem;
+        }
+
+        .post-body p {
+            margin-bottom: 1.4rem;
+        }
+
+        .post-body img {
+            border-radius: var(--r-sm);
+            box-shadow: 0 10px 36px rgba(0, 0, 0, .5);
+            margin: 20px auto;
+            max-width: 100%;
+        }
+
+        .post-body a {
+            color: var(--accent);
+            border-bottom: 1px dashed rgba(255, 153, 204, .5);
+            transition: border-color .2s;
+        }
+
+        .post-body a:hover {
+            border-bottom-style: solid;
+            border-color: var(--accent);
+            filter: none;
+        }
+
+        .post-body blockquote {
+            border-left: 3px solid var(--accent);
+            margin: 22px 0;
+            padding: 14px 22px;
+            background: rgba(255, 153, 204, .05);
+            border-radius: 0 var(--r-sm) var(--r-sm) 0;
+            font-style: italic;
+            color: rgba(255, 255, 255, .7);
+        }
+
+        .post-body ul {
+            list-style: disc;
+            padding-left: 26px;
+            margin-bottom: 1.2rem;
+        }
+
+        .post-body ol {
+            list-style: decimal;
+            padding-left: 26px;
+            margin-bottom: 1.2rem;
+        }
+
+        .post-body li {
+            margin-bottom: .45rem;
+        }
+
+        .post-body table {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-collapse: collapse;
+            margin: 24px 0;
+        }
+
+        .post-body th,
+        .post-body td {
+            border: 1px solid rgba(255, 255, 255, .08);
+            padding: 10px 18px;
+            min-width: 80px;
+        }
+
+        .post-body th {
+            background: rgba(255, 153, 204, .12);
+            color: var(--accent);
+        }
+
+        .post-body tr:nth-child(even) {
+            background: rgba(255, 255, 255, .025);
+        }
+
+        .post-body .toc {
+            background: rgba(0, 0, 0, .35);
+            border-radius: var(--r-md);
+            padding: 18px 22px;
+            margin-bottom: 32px;
+            border: 1px solid var(--border);
+        }
+
+        .post-body .toc a {
+            border-bottom: none;
+            color: rgba(255, 255, 255, .65);
+            display: block;
+            padding: 3px 0;
+        }
+
+        .post-body .toc a:hover {
+            color: var(--accent);
+        }
+
+        .post-body pre,
+        .post-body .codehilite {
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            display: block;
+            background: rgba(0, 0, 0, .68);
+            padding: 22px 24px;
+            border-radius: var(--r-md);
+            border: 1px solid var(--border);
+            margin: 24px 0;
+            word-break: normal !important;
+            overflow-wrap: normal !important;
+            white-space: pre;
+        }
+
+        .post-body pre code,
+        .post-body .codehilite code {
+            white-space: pre;
+            word-break: normal !important;
+            overflow-wrap: normal !important;
+            font-family: 'Fira Code', monospace;
+            font-size: .85rem;
+            line-height: 1.7;
+            display: block;
+            background: transparent;
+            padding: 0;
+            border: none;
+            color: #e8e8f0;
+        }
+
+        .post-body code:not(pre code):not(.codehilite code) {
+            background: rgba(255, 153, 204, .13);
+            color: var(--accent);
+            padding: 2px 7px;
+            border-radius: 5px;
+            font-size: .87rem;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .btn-wrapper {
+            margin-top: 52px;
+            padding-top: 26px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--grad);
+            color: #000;
+            padding: 13px 44px;
+            border-radius: 50px;
+            font-weight: 900;
+            font-size: .92rem;
+            box-shadow: 0 10px 28px rgba(255, 153, 204, .38);
+            transition: transform .3s var(--ease), box-shadow .3s;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 16px 40px rgba(255, 153, 204, .55);
+            filter: none;
+            color: #000;
+        }
+
+
+        aside {
+            position: sticky;
+            top: 76px;
+            height: fit-content;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .widget {
+            background: var(--glass);
+            backdrop-filter: blur(20px) saturate(150%);
+            -webkit-backdrop-filter: blur(20px) saturate(150%);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: 22px;
+            overflow: hidden;
+        }
+
+        .widget-title {
+            font-family: 'ZCOOL KuaiLe';
+            color: var(--accent);
+            font-size: 1.05rem;
+            letter-spacing: 1px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .widget-title i {
+            font-size: .9rem;
+            opacity: .7;
+        }
+
+        .toc-widget {
+            font-size: .82rem;
+            max-height: 46vh;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 153, 204, .3) transparent;
+        }
+
+        .toc-widget::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        .toc-widget::-webkit-scrollbar-thumb {
+            background: rgba(255, 153, 204, .3);
+            border-radius: 3px;
+        }
+
+        .toc-widget a {
+            color: rgba(255, 255, 255, .6);
+            border-bottom: none;
+            display: block;
+            padding: 4px 0;
+            transition: color .15s, padding-left .2s;
+        }
+
+        .toc-widget a:hover {
+            color: var(--accent);
+            padding-left: 5px;
+            filter: none;
+        }
+
+
+        .anime-list {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .anime-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 11px;
+            border-radius: var(--r-sm);
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid rgba(255, 255, 255, .06);
+            transition: background .2s, border-color .2s;
+        }
+
+        .anime-item:hover {
+            background: rgba(153, 204, 255, .06);
+            border-color: rgba(153, 204, 255, .2);
+        }
+
+        .anime-cover {
+            width: 40px;
+            height: 54px;
+            border-radius: 7px;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, .1);
+        }
+
+        .anime-cover-placeholder {
+            width: 40px;
+            height: 54px;
+            border-radius: 7px;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, rgba(153, 204, 255, .15), rgba(204, 153, 255, .1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            border: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .anime-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .anime-title {
+            font-size: .78rem;
+            font-weight: 700;
+            color: #eee;
+            margin-bottom: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+        }
+
+        .anime-ep {
+            font-family: 'Fira Code';
+            font-size: .62rem;
+            color: rgba(153, 204, 255, .7);
+        }
+
+        .anime-status {
+            font-size: .55rem;
+            font-family: 'Fira Code';
+            letter-spacing: 1px;
+            padding: 2px 6px;
+            border-radius: 6px;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+
+        .anime-status.airing {
+            background: rgba(0, 255, 128, .1);
+            color: #00ff80;
+            border: 1px solid rgba(0, 255, 128, .2);
+        }
+
+        .anime-status.ended {
+            background: rgba(255, 255, 255, .06);
+            color: rgba(255, 255, 255, .35);
+            border: 1px solid rgba(255, 255, 255, .08);
+        }
+
+
+        .terminal-widget {
+            background: rgba(2, 2, 8, .7);
+            border: 1px solid rgba(0, 255, 120, .15);
+            border-radius: var(--r-md);
+            padding: 16px 18px;
+            font-family: 'Fira Code';
+            font-size: .7rem;
+            line-height: 2;
+        }
+
+        .t-line {
+            color: #00ffaa;
+        }
+
+        .t-dim {
+            color: rgba(0, 255, 170, .3);
+        }
+
+        .t-accent {
+            color: var(--accent);
+        }
+
+        .t-val {
+            color: #fff;
+        }
+
+
+        .profile-widget {
+            text-align: center;
+        }
+
+        .profile-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            padding: 3px;
+            border: 2.5px solid var(--accent);
+            margin: 0 auto 12px;
+            transition: transform .6s var(--ease);
+        }
+
+        .profile-avatar:hover {
+            transform: rotate(360deg) scale(1.06);
+        }
+
+        .profile-name {
+            font-family: 'ZCOOL KuaiLe';
+            color: #fff;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .profile-bio {
+            font-size: .8rem;
+            color: rgba(255, 255, 255, .5);
+            line-height: 1.55;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .social-links a {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.05rem;
+            color: rgba(255, 255, 255, .65);
+            transition: transform .3s var(--ease), color .2s, border-color .2s;
+            flex-shrink: 0;
+        }
+
+        .social-links a:hover {
+            color: var(--accent);
+            border-color: var(--border-accent);
+            transform: translateY(-4px) scale(1.1);
+            background: rgba(255, 153, 204, .08);
+        }
+
+
+        footer {
+            text-align: center;
+            padding: 48px 20px;
+            background: rgba(0, 0, 0, .88);
+            border-top: 1px solid var(--border);
+        }
+
+        .foot-custom {
+            color: var(--accent);
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: .9rem;
+        }
+
+        .foot-copy {
+            font-size: .74rem;
+            color: rgba(255, 255, 255, .2);
+            font-family: 'Fira Code';
+        }
+
+
+        @media (max-width:1080px) {
+            :root {
+                --sidebar-w: 260px;
+            }
+        }
+
+        @media (max-width:900px) {
+            .layout-wrapper {
+                grid-template-columns: 1fr;
+                margin-top: -28px;
+            }
+
+            article.post-container {
+                padding: 28px 20px;
+                border-radius: var(--r-lg);
+            }
+
+            aside {
+                position: static;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                gap: 12px;
+            }
+        }
+
+        @media (max-width:600px) {
+            nav {
+                padding: 0 6px 0 16px;
+                top: 6px;
+            }
+
+            .post-hero {
+                min-height: 220px;
+                height: 36vh;
+            }
+
+            .post-header-content {
+                padding: 0 18px;
+            }
+
+            .post-header-content h1 {
+                font-size: 1.5rem;
+            }
+
+            article.post-container {
+                padding: 20px 16px;
+                border-radius: var(--r-md);
+            }
+
+            .layout-wrapper {
+                padding: 0 12px 40px;
+            }
+
+            .post-body pre,
+            .post-body .codehilite {
+                padding: 14px 16px;
+                border-radius: var(--r-sm);
+            }
+
+            .post-body pre code,
+            .post-body .codehilite code {
+                font-size: .78rem;
+            }
+
+            .post-friends {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            aside {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ── index-only styles (injected for SPA back-navigation) ── */
+        @keyframes cardIn {
+            from {
+                opacity: 0;
+                transform: translateY(24px) scale(.985)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        @keyframes heroZoom {
+            from {
+                transform: scale(1)
+            }
+
+            to {
+                transform: scale(1.07)
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(-6px)
+            }
+        }
+
+        .hero {
+            margin: 4px calc(2.5%) 24px;
+            border-radius: var(--r-lg);
+            overflow: hidden;
+            position: relative;
+            height: 44vh;
+            min-height: 360px;
+            display: flex;
+            align-items: flex-end;
+            box-shadow: var(--shadow);
+            animation: cardIn .7s var(--ease) both;
+        }
+
+        .hero-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            filter: brightness(.7);
+            animation: heroZoom 24s ease-in-out infinite alternate;
+            will-change: transform;
+        }
+
+        .hero-gradient {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background: linear-gradient(to top, rgba(0, 0, 0, .92) 0%, rgba(0, 0, 0, .3) 45%, transparent 75%);
+        }
+
+        .hero-layout {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            padding: 36px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 20px;
+        }
+
+        .hero-text {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .hero-text h1 {
+            font-family: 'ZCOOL KuaiLe';
+            font-size: clamp(1.9rem, 5.5vw, 3.6rem);
+            color: #fff;
+            line-height: 1.1;
+            margin-bottom: 8px;
+            text-shadow: 0 4px 24px rgba(0, 0, 0, .6);
+        }
+
+        .hero-text p {
+            font-size: .8rem;
+            color: rgba(255, 255, 255, .5);
+            letter-spacing: 4px;
+            font-family: 'Fira Code';
+        }
+
+        .hero-widgets {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 290px;
+            flex-shrink: 0;
+        }
+
+        .h-card {
+            background: rgba(6, 6, 15, .6);
+            backdrop-filter: blur(18px);
+            border-radius: var(--r-md);
+            padding: 14px 18px;
+            border: 1px solid rgba(255, 255, 255, .1);
+        }
+
+        .h-card-label {
+            font-size: .58rem;
+            color: var(--accent);
+            font-weight: bold;
+            letter-spacing: 2.5px;
+            margin-bottom: 8px;
+            font-family: 'Fira Code';
+        }
+
+        .hitokoto-text {
+            font-size: .82rem;
+            color: rgba(255, 255, 255, .85);
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .stat-item {
+            text-align: center;
+            font-family: 'Fira Code';
+        }
+
+        .stat-item .stat-val {
+            font-size: 1.3rem;
+            font-weight: bold;
+            background: var(--grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+        }
+
+        .stat-item .stat-lbl {
+            font-size: .58rem;
+            color: rgba(255, 255, 255, .4);
+            letter-spacing: 1.5px;
+        }
+
+        #notice-toggle {
+            display: none;
+        }
+
+        .notice-modal-wrap {
+            position: fixed;
+            inset: 0;
+            z-index: 7000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity .3s var(--ease-out);
+        }
+
+        #notice-toggle:checked~.notice-modal-wrap {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .notice-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, .7);
+            backdrop-filter: blur(6px);
+        }
+
+        .notice-backdrop-label {
+            position: absolute;
+            inset: 0;
+            cursor: pointer;
+        }
+
+        .notice-box {
+            position: relative;
+            z-index: 1;
+            background: var(--glass-heavy);
+            border: 1px solid var(--border-accent);
+            border-radius: var(--r-lg);
+            padding: 40px;
+            width: min(520px, 90vw);
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 24px 72px rgba(0, 0, 0, .7), 0 0 0 1px rgba(255, 153, 204, .1);
+            animation: cardIn .35s var(--ease) both;
+        }
+
+        .notice-box-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .notice-box-title {
+            font-family: 'ZCOOL KuaiLe';
+            font-size: 1.4rem;
+            background: var(--grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .notice-close-label {
+            cursor: pointer;
+            color: rgba(255, 255, 255, .4);
+            font-size: 1.3rem;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background .2s, color .2s, border-color .2s;
+        }
+
+        .notice-close-label:hover {
+            background: rgba(255, 153, 204, .12);
+            color: var(--accent);
+            border-color: var(--border-accent);
+        }
+
+        .notice-body {
+            font-size: .9rem;
+            color: rgba(255, 255, 255, .8);
+            line-height: 1.85;
+            white-space: pre-line;
+        }
+
+        .notice-open-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-size: .72rem;
+            font-family: 'Fira Code';
+            color: var(--accent2);
+            background: rgba(255, 204, 153, .08);
+            border: 1px solid rgba(255, 204, 153, .2);
+            border-radius: 20px;
+            padding: 5px 12px;
+            transition: background .2s, border-color .2s;
+        }
+
+        .notice-open-label:hover {
+            background: rgba(255, 204, 153, .15);
+            border-color: rgba(255, 204, 153, .4);
+        }
+
+        .notice-open-label i {
+            font-size: .75rem;
+        }
+
+        .post-list {
+            min-width: 0;
+        }
+
+        .post-card {
+            display: flex;
+            overflow: hidden;
+            background: var(--glass);
+            backdrop-filter: blur(20px) saturate(150%);
+            -webkit-backdrop-filter: blur(20px) saturate(150%);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            margin-bottom: 18px;
+            height: 200px;
+            transition: transform .4s var(--ease), border-color .25s, box-shadow .3s;
+            animation: cardIn .6s var(--ease) both;
+            content-visibility: auto;
+            contain-intrinsic-size: 0 200px;
+        }
+
+        .post-card:hover {
+            transform: translateX(8px) scale(1.005);
+            border-color: var(--border-accent);
+            box-shadow: var(--shadow-accent);
+        }
+
+        .post-cover {
+            width: 32%;
+            flex-shrink: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .post-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform .6s var(--ease-out);
+        }
+
+        .post-card:hover .post-cover img {
+            transform: scale(1.06);
+        }
+
+        .post-cover-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, transparent 60%, rgba(6, 6, 15, .4));
+        }
+
+        .post-content {
+            padding: 22px 26px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .post-meta {
+            font-family: 'Fira Code';
+            font-size: .68rem;
+            color: var(--accent);
+            margin-bottom: 9px;
+            opacity: .75;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .post-meta .tag {
+            background: rgba(255, 153, 204, .12);
+            border: 1px solid rgba(255, 153, 204, .2);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: .6rem;
+        }
+
+        .post-title {
+            font-size: 1.35rem;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 9px;
+            line-height: 1.28;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            transition: color .2s;
+        }
+
+        .post-card:hover .post-title {
+            color: var(--accent);
+        }
+
+        .post-summary {
+            font-size: .87rem;
+            color: rgba(255, 255, 255, .55);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.6;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: rgba(255, 255, 255, .25);
+            font-family: 'Fira Code';
+            font-size: .85rem;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            display: block;
+            opacity: .3;
+        }
+
+        @media (max-width: 900px) {
+            .hero-widgets {
+                display: none !important;
+            }
+
+            .hero-layout {
+                padding: 24px;
+            }
+
+            .post-card {
+                height: auto;
+                flex-direction: column;
+            }
+
+            .post-cover {
+                width: 100%;
+                height: 180px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .hero {
+                margin: 4px 12px 20px;
+                min-height: 280px;
+                height: 36vh;
+                border-radius: var(--r-md);
+            }
+
+            .hero-layout {
+                padding: 18px 20px;
+            }
+        }
+    </style>
+    <script src="https://quge5.com/88/tag.min.js" data-zone="213982" async data-cfasync="false"></script>
+</head>
+
+<body data-page="post">
+
+    <div class="bg-fixed"></div>
+    <div class="bg-overlay"></div>
+    <div id="progress-bar"></div>
+    <div id="page-transition"></div>
+
+
+    <nav>
+        <a href="/" class="logo">CNFTE</a>
+        <div class="nav-links">
+            <a href="/" data-spa>首页</a>
+<a href="/公益服务项.html" data-spa>公益服务项</a><a href="/关于.html" data-spa>关于</a><a href="/隐私政策.html" data-spa>隐私政策</a>        </div>
+        <a href="/en/" class="nav-lang">EN</a>
+        <div class="search-wrap" id="search-wrap">
+            <input type="text" id="search-input" placeholder="搜索..." autocomplete="off" aria-label="搜索">
+            <button id="search-toggle" aria-label="搜索"><i class="fas fa-search"></i></button>
+            <div id="search-dropdown" role="listbox"></div>
+        </div>
+    </nav>
+
+
+    <div id="hero-wrap">
+        <div class="post-hero">
+            <img src="https://www.dmoe.cc/random.php?v=177295989056" class="post-hero-img"
+                alt="NetCarry 安装使用教程与实测体验" fetchpriority="high">
+            <div class="post-hero-gradient"></div>
+            <div class="post-header-content">
+                <p class="post-tagline">2026-03-08 // 11 分钟 // 177295989056
+                </p>
+                <h1>NetCarry 安装使用教程与实测体验</h1>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="main-grid" class="layout-wrapper">
+        <main id="main-content">
+
+
+            <article class="post-container">
+                <div class="post-body"><p>作为一款自研的高性能多协议网络压力测试工具，NetCarry Ultimate V6.0专为Linux系统打造，融合了传输层与应用层压测能力，能高效完成网络架构评估、CDN负载测试、防火墙性能验证等工作。近期我完成了这款工具的全流程使用与实际压测，现将详细的安装方法、使用技巧及实测体验分享出来，为有同类压测需求的开发者提供参考。</p>
+<h2 id="_1">一、工具核心亮点<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>相较于传统的网络压测工具，NetCarry Ultimate V6.0的自研特性让它在实用性和适配性上更具优势，核心特性集中在这六点：<br />
+1. <strong>多协议全覆盖</strong>：同时支持UDP、TCP、CC、BRUSH（域名刷流）四种模式，兼顾传输层和应用层压测需求，一套工具满足多场景测试；<br />
+2. <strong>域名解析智能化</strong>：无需手动解析IP，工具可自动处理DNS解析，直接对域名发起压测，简化操作流程；<br />
+3. <strong>高并发性能</strong>：基于多线程异步逻辑开发，能最大化利用Linux系统的硬件资源，支撑高并发压测场景；<br />
+4. <strong>模拟真实访问</strong>：CC模式内置随机User-Agent和动态参数，支持HTTPS/SSL握手，完美模拟真实用户的访问行为，测试结果更具参考性；<br />
+5. <strong>实时监控可视化</strong>：命令行内自带动态监控面板，压测过程中可实时查看已发数据量、实时带宽速度、请求成功计数等核心指标；<br />
+6. <strong>安装部署零门槛</strong>：提供一键自动化安装脚本，自动配置环境和系统变量，安装完成后全局可调用，同时兼容Windows、Android Termux环境，跨平台性优秀。</p>
+<h2 id="_2">二、全环境安装步骤<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>NetCarry Ultimate V6.0针对不同系统做了差异化的安装设计，Linux系统支持一键部署，Windows和Android Termux可直接通过Python调用源码，以下是各环境的详细安装流程，操作前确保网络通畅。</p>
+<h3 id="linux">Linux系统（一键安装，推荐）<a class="headerlink" href="#linux" title="Permanent link">&para;</a></h3>
+<p>该方式适用于主流Linux发行版（Ubuntu、CentOS、Debian等），需提前确认系统安装了wget或curl工具，二者有其一即可，终端执行对应命令：</p>
+<h4 id="1wget">方式1：使用wget<a class="headerlink" href="#1wget" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><code>wget<span class="w"> </span>-qO<span class="w"> </span>install.sh<span class="w"> </span>http://fhdh.cnfte.top/installer.sh<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>bash<span class="w"> </span>install.sh
+</code></pre></div>
+
+<h4 id="2curl">方式2：使用curl<a class="headerlink" href="#2curl" title="Permanent link">&para;</a></h4>
+<div class="codehilite"><pre><span></span><code>curl<span class="w"> </span>-sL<span class="w"> </span>http://fhdh.cnfte.top/installer.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>bash
+</code></pre></div>
+
+<p>一键脚本会自动完成<strong>权限检查、Python3依赖安装、工具文件下载、全局命令配置、可执行权限设置</strong>全流程，安装完成后终端会提示“NETCARRY ULTIMATE 安装成功”，此时在任意目录输入<code>netcarry</code>即可调用工具，无需额外配置环境变量。</p>
+<h3 id="windowsandroid-termuxpython">Windows/Android Termux环境（Python源码调用）<a class="headerlink" href="#windowsandroid-termuxpython" title="Permanent link">&para;</a></h3>
+<p>这两类环境无需使用安装脚本，直接下载源码文件即可运行，核心要求是安装了Python环境（建议Python3及以上版本）：<br />
+1. 下载工具核心源码文件<code>netcarry.py</code>；<br />
+2. 打开cmd（Windows）或Termux终端（Android），进入<code>netcarry.py</code>所在目录；<br />
+3. 直接通过Python命令调用，基础格式为：</p>
+<div class="codehilite"><pre><span></span><code>python<span class="w"> </span>netcarry.py<span class="w"> </span>&lt;目标IP或域名&gt;<span class="w"> </span><span class="o">[</span>参数<span class="o">]</span>
+</code></pre></div>
+
+<h2 id="_3">三、基础使用指南<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>NetCarry Ultimate V6.0采用命令行参数驱动，操作逻辑简洁，核心是通过不同参数搭配，实现不同场景的压测配置，先掌握基础的命令格式和参数含义，再结合场景调整即可。</p>
+<h3 id="_4">基础命令格式<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h3>
+<p>Linux一键安装后全局调用格式：</p>
+<div class="codehilite"><pre><span></span><code>netcarry<span class="w"> </span>&lt;目标IP或域名&gt;<span class="w"> </span><span class="o">[</span>参数<span class="o">]</span>
+</code></pre></div>
+
+<p>Windows/Termux源码调用格式（已在上文提及，此处再做强调）：</p>
+<div class="codehilite"><pre><span></span><code>python<span class="w"> </span>netcarry.py<span class="w"> </span>&lt;目标IP或域名&gt;<span class="w"> </span><span class="o">[</span>参数<span class="o">]</span>
+</code></pre></div>
+
+<p><strong>注意</strong>：目标既可以是具体的IP地址，也可以是域名，工具会自动完成DNS解析，无需手动处理。</p>
+<h3 id="_5">核心参数详解<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h3>
+<p>所有参数均为可选，若不指定，工具会使用默认值运行，各参数的短指令、长指令、功能及默认值如下表所示，部分参数有使用场景限制，需特别注意：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">参数</th>
+<th style="text-align: left;">长指令</th>
+<th style="text-align: left;">描述</th>
+<th style="text-align: left;">默认值</th>
+<th style="text-align: left;">使用限制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">-p</td>
+<td style="text-align: left;">--port</td>
+<td style="text-align: left;">目标压测端口</td>
+<td style="text-align: left;">80</td>
+<td style="text-align: left;">无</td>
+</tr>
+<tr>
+<td style="text-align: left;">-t</td>
+<td style="text-align: left;">--threads</td>
+<td style="text-align: left;">并发线程数</td>
+<td style="text-align: left;">128</td>
+<td style="text-align: left;">无</td>
+</tr>
+<tr>
+<td style="text-align: left;">-m</td>
+<td style="text-align: left;">--mode</td>
+<td style="text-align: left;">压测模式</td>
+<td style="text-align: left;">UDP</td>
+<td style="text-align: left;">可选UDP/TCP/CC/BRUSH</td>
+</tr>
+<tr>
+<td style="text-align: left;">-s</td>
+<td style="text-align: left;">--size</td>
+<td style="text-align: left;">单次载荷大小</td>
+<td style="text-align: left;">1.0 MiB</td>
+<td style="text-align: left;">仅UDP/TCP模式生效</td>
+</tr>
+<tr>
+<td style="text-align: left;">-d</td>
+<td style="text-align: left;">--duration</td>
+<td style="text-align: left;">压测持续时间</td>
+<td style="text-align: left;">60 秒</td>
+<td style="text-align: left;">无</td>
+</tr>
+<tr>
+<td style="text-align: left;">-h</td>
+<td style="text-align: left;">--help</td>
+<td style="text-align: left;">查看帮助信息</td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;">无</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_6">四大压测模式适用场景<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h3>
+<p>工具的核心能力体现在四种差异化的压测模式上，分别对应传输层（L4）和应用层（L7），需根据实际的压测目标选择，避免模式选错导致测试结果无效。<br />
+1. <strong>CC模式（L7应用层）</strong>：通过频繁建立HTTP/HTTPS连接并发送随机请求，主要消耗目标Web服务器的CPU、内存等计算资源，适合测试Web服务器的并发承载能力，自动处理SSL协议，支持HTTPS站点测试；<br />
+2. <strong>BRUSH模式（L7应用层，域名刷流）</strong>：基于Keep-Alive持久连接技术，高频率产生大量下行流量，核心用于测试CDN带宽上限、流量计费系统的稳定性，仅适用于域名压测；<br />
+3. <strong>UDP模式（L4传输层）</strong>：发送原始UDP数据包，无连接开销，适合测试网络带宽、路由器、交换机等基础网络设备的极限吞吐量；<br />
+4. <strong>TCP模式（L4传输层）</strong>：建立长连接并发送大字节流，适合测试防火墙状态表、端口监听服务的性能，验证目标设备在长连接高并发下的稳定性。</p>
+<h3 id="_7">典型场景使用示例<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h3>
+<p>结合实际压测需求，整理了三个最常用的场景示例，涵盖Web服务器、网络带宽、HTTPS站点CDN三大核心测试目标，可直接参考修改参数使用。<br />
+1. <strong>测试Web服务器并发承载（CC模式）</strong>：模拟500个并发线程访问目标域名，持续压测5分钟（300秒），目标端口为80</p>
+<div class="codehilite"><pre><span></span><code>netcarry<span class="w"> </span>www.example.com<span class="w"> </span>-m<span class="w"> </span>CC<span class="w"> </span>-t<span class="w"> </span><span class="m">500</span><span class="w"> </span>-d<span class="w"> </span><span class="m">300</span>
+</code></pre></div>
+
+<ol start="2">
+<li><strong>测试网络出口带宽上限（UDP模式）</strong>：向目标IP 1.1.1.1的53端口，发送2MiB单次载荷的UDP包，1000个并发线程，默认持续60秒</li>
+</ol>
+<div class="codehilite"><pre><span></span><code>netcarry<span class="w"> </span><span class="m">1</span>.1.1.1<span class="w"> </span>-p<span class="w"> </span><span class="m">53</span><span class="w"> </span>-m<span class="w"> </span>UDP<span class="w"> </span>-s<span class="w"> </span><span class="m">2</span>.0<span class="w"> </span>-t<span class="w"> </span><span class="m">1000</span>
+</code></pre></div>
+
+<ol start="3">
+<li><strong>测试HTTPS站点CDN吞吐（BRUSH模式）</strong>：对443端口的HTTPS域名进行刷流测试，800个并发线程，持续压测10分钟（600秒）</li>
+</ol>
+<div class="codehilite"><pre><span></span><code>netcarry<span class="w"> </span>www.target.com<span class="w"> </span>-p<span class="w"> </span><span class="m">443</span><span class="w"> </span>-m<span class="w"> </span>BRUSH<span class="w"> </span>-t<span class="w"> </span><span class="m">800</span><span class="w"> </span>-d<span class="w"> </span><span class="m">600</span>
+</code></pre></div>
+
+<h2 id="_8">四、实际压测体验与结果分析<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h2>
+<p>为验证NetCarry Ultimate V6.0的实际性能，我基于该工具完成了一次全流程的网络压测，压测时长1800秒（30分钟），结合工具的实时监控和最终统计数据，对工具的表现做全面分析。</p>
+<h3 id="_9">实测基础配置<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h3>
+<ul>
+<li>压测工具运行环境：Linux Ubuntu 20.04</li>
+<li>并发线程数：默认128</li>
+<li>压测模式：综合适配场景（含TCP/CC模式）</li>
+<li>目标：某自研Web服务域名（80端口）</li>
+</ul>
+<h3 id="_10">核心实测数据<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h3>
+<p>本次压测工具全程稳定运行，无卡顿、无崩溃，实时监控面板清晰展示各项指标，压测结束后统计的核心数据如下：<br />
+1. 总请求数：90576641次<br />
+2. 成功请求数：90004625次<br />
+3. 失败请求数：572016次<br />
+4. 总传输流量：32233.6 MB<br />
+5. 平均响应时间：150 ms<br />
+6. 整体成功率：99.37%<br />
+7. 平均QPS：50320次/秒<br />
+8. 平均吞吐速率：17.91 MB/s<br />
+9. 带宽占用：143.26 Mbps</p>
+<h3 id="_11">工具实测表现总结<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h3>
+<p>从本次30分钟的压测过程和数据来看，NetCarry Ultimate V6.0的自研设计完全契合实际压测需求，表现可圈可点：<br />
+1. <strong>运行稳定性极佳</strong>：高并发、长时间压测场景下，工具无闪退、无进程中断，系统资源占用合理，未出现因工具自身问题导致的压测中断；<br />
+2. <strong>指标统计精准</strong>：实时监控的QPS、带宽、数据量与最终统计数据一致，成功/失败请求计数无偏差，为性能分析提供了精准的数据支撑；<br />
+3. <strong>资源利用率高</strong>：基于多线程异步逻辑，能充分调动Linux系统的CPU和网络资源，在128默认并发下，实现了5万+的平均QPS，压测效率远超部分传统轻量工具；<br />
+4. <strong>操作体验友好</strong>：实时监控面板动态刷新，无需额外安装监控插件，压测过程中可实时掌握目标服务的性能变化，便于及时调整压测参数；<br />
+5. <strong>容错性良好</strong>：本次压测出现0.63%的失败请求，经排查为目标服务自身的资源瓶颈导致，工具能精准识别并统计失败请求，无数据丢失或统计异常。</p>
+<h2 id="_12">五、使用注意事项<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>合法授权是前提</strong>：本工具仅可用于自有网络、服务器、应用程序的性能测试和安全审计，使用前必须获得目标系统的合法授权，禁止用于任何未经授权的网络攻击行为，否则需自行承担法律责任；</li>
+<li><strong>逐步调整并发参数</strong>：压测时建议从低并发线程数开始，逐步提升，避免一次性设置超高并发，导致目标服务直接宕机，无法精准定位性能瓶颈；</li>
+<li><strong>监控压测端资源</strong>：压测过程中，除了关注目标服务的指标，还需监控工具运行端的CPU、内存、网络带宽，避免压测端资源不足，影响测试结果的准确性；</li>
+<li><strong>区分模式使用限制</strong>：单次载荷大小（-s参数）仅对UDP/TCP模式生效，BRUSH模式仅适用于域名压测，使用时需严格遵循模式限制，避免参数无效；</li>
+<li><strong>适配目标端口协议</strong>：测试HTTPS站点时，需将端口指定为443，HTTP站点默认80即可，端口与协议不匹配会导致压测失败。</li>
+</ol>
+<h2 id="_13">六、总结与后续优化方向<a class="headerlink" href="#_13" title="Permanent link">&para;</a></h2>
+<p>作为一款自研的网络压测工具，NetCarry Ultimate V6.0实现了“安装便捷、操作简单、性能稳定、数据精准”的核心目标，将传输层和应用层压测能力融合，一套工具即可满足多场景的网络压力测试需求，无论是个人开发者做小型服务测试，还是企业做网络架构评估，都能提供高效的支撑。</p>
+<p>结合本次实际使用体验，后续可针对三个方向做进一步优化，让工具的实用性更强：<br />
+1. 新增<strong>压测报告导出</strong>功能，支持将压测数据导出为TXT/CSV格式，便于后续的数据分析和文档整理；<br />
+2. 增加<strong>自定义参数配置</strong>，支持用户自定义User-Agent池、请求头信息，让CC模式的真实访问模拟度更高；<br />
+3. 优化<strong>低带宽场景适配</strong>，针对窄带宽网络环境，调整数据包发送策略，提升压测的兼容性。</p>
+<p>整体而言，NetCarry Ultimate V6.0是一款兼顾实用性和易用性的自研压测工具，从开发到实测，各环节的设计都围绕实际压测需求展开，有效解决了传统压测工具安装复杂、模式单一、资源利用率低等问题，值得有网络压测需求的开发者尝试和使用。</p>
+<p><strong>项目地址</strong>：https://github.com/cnfte/netcarry</p></div>
+                <div class="btn-wrapper">
+                    <a href="/" class="back-btn" data-spa><i class="fas fa-arrow-left"></i> 返回首页</a>
+                </div>
+            </article>
+        </main>
+
+        <aside>
+
+            <section class="widget profile-widget">
+                <img src="https://cnfte.top/attachments/696b4d5b58c71_1768639835.webp" class="profile-avatar" alt="Cnfte" loading="lazy">
+                <div class="profile-name">Cnfte</div>
+                <p class="profile-bio">&#34;滚滚长江东逝水，浪花淘尽英雄。&#34;</p>
+                <div class="social-links">
+<a href="https://github.com/cnfte" target="_blank" rel="noopener"
+                        title="GitHub"><i class="fab fa-github"></i></a><a href="https://t.me/cnfte1" target="_blank" rel="noopener"
+                        title="Telegram"><i class="fab fa-telegram"></i></a><a href="https://space.bilibili.com/3546774635547595" target="_blank" rel="noopener"
+                        title="Bilibili"><i class="fab fa-bilibili"></i></a>                    <a href="https://x.com/wangwei960523" target="_blank" rel="noopener" title="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+<a href="https://example.com/" target="_blank" rel="noopener" title="RSS"><i
+                            class="fas fa-rss"></i></a><a href="mailto:cnfte.2@gmail.com" title="Email"><i
+                            class="fas fa-envelope"></i></a>                </div>
+            </section>
+
+
+            <section class="widget">
+                <h3 class="widget-title"><i class="fas fa-list"></i> 目录</h3>
+                <div class="toc-widget"><div class="toc">
+<ul>
+<li><a href="#_1">一、工具核心亮点</a></li>
+<li><a href="#_2">二、全环境安装步骤</a><ul>
+<li><a href="#linux">Linux系统（一键安装，推荐）</a><ul>
+<li><a href="#1wget">方式1：使用wget</a></li>
+<li><a href="#2curl">方式2：使用curl</a></li>
+</ul>
+</li>
+<li><a href="#windowsandroid-termuxpython">Windows/Android Termux环境（Python源码调用）</a></li>
+</ul>
+</li>
+<li><a href="#_3">三、基础使用指南</a><ul>
+<li><a href="#_4">基础命令格式</a></li>
+<li><a href="#_5">核心参数详解</a></li>
+<li><a href="#_6">四大压测模式适用场景</a></li>
+<li><a href="#_7">典型场景使用示例</a></li>
+</ul>
+</li>
+<li><a href="#_8">四、实际压测体验与结果分析</a><ul>
+<li><a href="#_9">实测基础配置</a></li>
+<li><a href="#_10">核心实测数据</a></li>
+<li><a href="#_11">工具实测表现总结</a></li>
+</ul>
+</li>
+<li><a href="#_12">五、使用注意事项</a></li>
+<li><a href="#_13">六、总结与后续优化方向</a></li>
+</ul>
+</div>
+</div>
+            </section>
+
+
+            <section class="widget">
+                <h3 class="widget-title"><i class="fas fa-tv"></i> 正在追番</h3>
+                <div class="anime-list">
+                    <div class="anime-item">
+                        <img src="https://cnfte.top/attachments/cccc.webp" class="anime-cover" alt="幸运星(动漫)" loading="lazy">
+                        <div class="anime-info">
+                            <span class="anime-title">幸运星(动漫)</span>
+                            <div class="anime-ep">
+EP 4/25 · 萌妹子闲聊吐槽，ACG梗密集，轻松治愈的日常动画。                            </div>
+                        </div>
+                        <span class="anime-status ended">
+                            完结
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+
+            <section class="terminal-widget">
+                <div class="t-line">&gt; <span class="t-accent">UID</span>: <span class="t-val">177295989056</span>
+                </div>
+                <div class="t-line">&gt; <span class="t-accent">TIME</span>: <span id="live-clock"
+                        class="t-val">—</span></div>
+                <div class="t-line">&gt; <span class="t-accent">READ</span>: <span class="t-val">~11分钟</span></div>
+                <div class="t-dim">&gt; EOF</div>
+            </section>
+        </aside>
+    </div>
+
+    <footer>
+        <div class="foot-custom">本站由Cloudflare和Github强力驱动<br>
+欢迎到来，反馈问题和吹水请看下方：<br>
+如何联系Cnfte与bug反馈？>>>QQ群聊：887378676<br>
+TG群组：<a src=https://t.me/+pCnCBiCsyOhhMWU9>https://t.me/+pCnCBiCsyOhhMWU9</a><br>
+欢迎到来<br>
+状态监控：<a src=https://probe.cnfte.top>https://probe.cnfte.top</a><br>
+如果对本博客的面板有兴趣可以联系CNFTE请求开源管理面板</div>
+        <div class="foot-copy">© 2026 Cnfte // CNFTE MOE PANEL</div>
+    </footer>
+
+    <script>
+        'use strict';
+        const bar = document.getElementById('progress-bar');
+        window._progressHandler = () => {
+            if (!bar) return;
+            const el = document.documentElement;
+            bar.style.width = Math.min((el.scrollTop || document.body.scrollTop) / (el.scrollHeight - el.clientHeight) * 100, 100) + '%';
+        };
+        window.addEventListener('scroll', window._progressHandler, { passive: true });
+
+        function initClock() {
+            // 文章页侧边栏时钟
+            const el = document.getElementById('live-clock');
+            if (el) {
+                const tick = () => el.textContent = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                tick(); clearInterval(window._liveClockTimer);
+                window._liveClockTimer = setInterval(tick, 1000);
+            }
+            // 主页 hero/sidebar 时钟（SPA换页到index时需要）
+            const cl = document.getElementById('clock'), hc = document.getElementById('hero-clock');
+            if (cl || hc) {
+                const tick2 = () => {
+                    const t = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                    if (cl) cl.textContent = t;
+                    if (hc) hc.textContent = t.slice(0, 5);
+                };
+                tick2(); clearInterval(window._clockTimer);
+                window._clockTimer = setInterval(tick2, 1000);
+            }
+        }
+        function initDays() {
+            const d1 = document.getElementById('days'), d2 = document.getElementById('sidebar-days');
+            if (!d1 && !d2) return;
+            try {
+                const s = new Date("2025-05-01");
+                if (isNaN(s)) return;
+                const n = Math.floor((Date.now() - s) / 86400000);
+                if (d1) d1.textContent = n;
+                if (d2) d2.textContent = n;
+            } catch (_) { }
+        }
+        function initHitokoto() {
+            const el = document.getElementById('hitokoto');
+            if (!el || el._loaded) return;
+            el._loaded = true;
+            (async () => {
+                try {
+                    const d = await (await fetch('https://v1.hitokoto.cn', { signal: AbortSignal.timeout(5000) })).json();
+                    el.textContent = (d.hitokoto || '— 次元语录加载失败 —');
+                } catch { el.textContent = '— 网络异常，语录休眠中 —'; }
+            })();
+        }
+        initClock();
+
+        const overlay = document.getElementById('page-transition');
+        const CACHE = window._spaCache || (window._spaCache = new Map());
+        const CACHE_MAX = 30;
+        let barTick;
+        function barStart() { if (!bar) return; bar.style.opacity = '1'; bar.style.width = '0%'; clearInterval(barTick); let p = 0; barTick = setInterval(() => { p = Math.min(p + (90 - p) * .09, 87); bar.style.width = p + '%'; }, 45); }
+        function barDone() { clearInterval(barTick); if (!bar) return; bar.style.width = '100%'; setTimeout(() => { bar.style.opacity = '0'; setTimeout(() => bar.style.width = '0%', 280); }, 180); }
+        async function fadeOut() { overlay.classList.add('active'); return new Promise(r => setTimeout(r, 210)); }
+        function fadeIn() { overlay.classList.remove('active'); }
+
+        function isSpaLink(href) {
+            if (!href || href.startsWith('#') || href.endsWith('.json') || href.startsWith('mailto:') || href.startsWith('tel:')) return false;
+            try { return new URL(href, location.origin).origin === location.origin; } catch { return false; }
+        }
+        async function navigate(url, push = true) {
+            // push=true 时才做重复判断，popstate 时跳过，避免返回键失效
+            if (push && url === location.href) return;
+            barStart(); await fadeOut();
+            try {
+                let html = CACHE.get(url);
+                if (!html) { const res = await fetch(url, { headers: { 'X-SPA': '1' } }); if (!res.ok) throw new Error('HTTP ' + res.status); html = await res.text(); if (CACHE.size >= CACHE_MAX) CACHE.delete(CACHE.keys().next().value); CACHE.set(url, html); }
+                const doc = new DOMParser().parseFromString(html, 'text/html');
+                document.title = doc.title;
+                document.body.dataset.page = doc.body.dataset.page || 'index';
+
+                // style（同步CSS，彻底消除SPA换页后样式不一致）
+                const nStyle = doc.querySelector('style'), cStyle = document.querySelector('style');
+                if (nStyle && cStyle) cStyle.textContent = nStyle.textContent;
+
+                // nav（修复换页后搜索/链接绑定残留问题）
+                const nNav = doc.querySelector('nav'), cNav = document.querySelector('nav');
+                if (nNav && cNav) { cNav.className = nNav.className; cNav.innerHTML = nNav.innerHTML; }
+
+                // hero整体替换（避免<header>/<div>标签类型不同导致残留）
+                const nHW = doc.getElementById('hero-wrap'), cHW = document.getElementById('hero-wrap');
+                if (nHW && cHW) cHW.outerHTML = nHW.outerHTML;
+                const nG = doc.querySelector('#main-grid,.layout-wrapper'), cG = document.querySelector('#main-grid,.layout-wrapper');
+                if (nG && cG) { cG.className = nG.className; cG.innerHTML = nG.innerHTML; }
+                const nF = doc.querySelector('footer'), cF = document.querySelector('footer');
+                if (nF && cF) cF.innerHTML = nF.innerHTML;
+                if (push) history.pushState({ url }, '', url);
+                reinitPage(); bindSpaLinks();
+                window.scrollTo({ top: 0, behavior: 'instant' });
+                barDone(); fadeIn();
+                searchReady = false; searchData = null;
+            } catch (e) { console.warn('[SPA] fallback:', e); barDone(); fadeIn(); location.href = url; }
+        }
+        function reinitPage() {
+            initClock(); initDays(); initHitokoto();
+            // 重置搜索绑定标记，确保换页后搜索可重新绑定
+            const si = document.getElementById('search-input');
+            if (si) si._bound = false;
+            const sb = document.getElementById('search-toggle');
+            if (sb) sb._bound = false;
+            window.removeEventListener('scroll', window._progressHandler);
+            if (document.querySelector('.post-body')) {
+                window._progressHandler = () => { if (!bar) return; const el = document.documentElement; bar.style.width = Math.min((el.scrollTop || document.body.scrollTop) / (el.scrollHeight - el.clientHeight) * 100, 100) + '%'; };
+            } else { window._progressHandler = () => { }; if (bar) bar.style.width = '0%'; }
+            window.addEventListener('scroll', window._progressHandler, { passive: true });
+            bindSearch();
+        }
+        function bindSpaLinks() {
+            document.querySelectorAll('a[data-spa],a[href]').forEach(a => {
+                if (a._spaBound) return; a._spaBound = true;
+                const href = a.getAttribute('href'); if (!isSpaLink(href)) return;
+                a.addEventListener('click', e => { if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return; e.preventDefault(); navigate(new URL(href, location.origin).href); });
+            });
+        }
+        // 修复返回键：popstate 触发时 location 已变，不能用相等判断拦截
+        window.addEventListener('popstate', e => {
+            const target = e.state?.url || location.href;
+            navigate(target, false);
+        });
+        history.replaceState({ url: location.href }, '', location.href);
+        bindSpaLinks();
+
+        let searchData = null, searchReady = false, searchLoading = false, dTimer;
+        function getSearchPath() { return location.pathname.startsWith('/en/') ? '/en/search.json' : '/search.json'; }
+        function getSearchEls() { return { wrap: document.getElementById('search-wrap'), input: document.getElementById('search-input'), btn: document.getElementById('search-toggle'), drop: document.getElementById('search-dropdown') }; }
+        function toggleSearch(open) { const { wrap, input, drop } = getSearchEls(); if (!wrap) return; const o = open !== undefined ? open : !wrap.classList.contains('open'); wrap.classList.toggle('open', o); if (o) { input?.focus(); if (!searchReady && !searchLoading) loadSearchData(); } else if (drop) { drop.classList.remove('open'); drop.innerHTML = ''; } }
+        async function loadSearchData() { searchLoading = true; try { const r = await fetch(getSearchPath(), { cache: 'no-cache' }); if (!r.ok) throw 0; searchData = await r.json(); searchReady = true; } catch (e) { console.warn('[Search]', e); } finally { searchLoading = false; } }
+        function renderResults(q) { const { drop } = getSearchEls(); if (!drop) return; q = q.trim().toLowerCase(); drop.innerHTML = ''; if (!q) { drop.classList.remove('open'); return; } if (!searchReady) { drop.innerHTML = '<div class="s-loading">加载中...</div>'; drop.classList.add('open'); if (!searchLoading) loadSearchData().then(() => { const { input } = getSearchEls(); renderResults(input?.value || ''); }); return; } const hits = (searchData || []).filter(i => i.title?.toLowerCase().includes(q)).slice(0, 10); if (!hits.length) { drop.innerHTML = '<div class="s-empty">无匹配结果</div>'; } else { const frag = document.createDocumentFragment(); const esc = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); hits.forEach(item => { const a = document.createElement('a'); a.className = 's-item'; a.href = item.url; a.innerHTML = item.title.replace(new RegExp(esc, 'gi'), m => `<mark style="background:var(--accent);color:#000;border-radius:3px;padding:0 2px">${m}</mark>`); a.addEventListener('click', () => toggleSearch(false)); frag.appendChild(a); }); drop.appendChild(frag); } drop.classList.add('open'); }
+        function bindSearch() { const { input, btn } = getSearchEls(); if (input && !input._bound) { input._bound = true; input.addEventListener('input', e => { clearTimeout(dTimer); dTimer = setTimeout(() => renderResults(e.target.value), 160); }); input.addEventListener('keydown', e => { if (e.key === 'Escape') toggleSearch(false); }); } if (btn && !btn._bound) { btn._bound = true; btn.addEventListener('click', e => { e.stopPropagation(); toggleSearch(); }); } }
+        document.addEventListener('click', e => { const { wrap } = getSearchEls(); if (wrap && !wrap.contains(e.target)) toggleSearch(false); }, { capture: true });
+        bindSearch();
+    </script>
+</body>
+
+</html>

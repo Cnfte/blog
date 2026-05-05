@@ -1,0 +1,2175 @@
+<!DOCTYPE html>
+<html lang="zh" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cnfteの博客</title>
+    <meta name="description" content="Cnfteの博客 - 探索技术与美学的极简个人空间。专注于分享 GitHub 优质开发者资源、网络协议深度科普及 AI 接口应用教程。秉持极致简洁理念，记录技术成长与生活灵感。">
+    <meta name="keywords" content="Cnfte, Cnfteの博客, 个人博客, 技术博客, GitHub资源, 网络协议科普, Gemini API反代, 极简主义设计, 静态站点开发, 开发者资源分享">
+    <link rel="icon" href="/favicon.ico">
+
+    <link rel="canonical" href="https://cnfte.top/">
+    <link rel="alternate" hreflang="zh" href="https://cnfte.top/">
+    <link rel="alternate" hreflang="en" href="https://cnfte.top/en/">
+    <link rel="alternate" hreflang="x-default" href="https://cnfte.top/">
+
+    <meta property="og:title" content="Cnfteの博客">
+    <meta property="og:description" content="Cnfteの博客 - 探索技术与美学的极简个人空间。专注于分享 GitHub 优质开发者资源、网络协议深度科普及 AI 接口应用教程。秉持极致简洁理念，记录技术成长与生活灵感。">
+    <meta property="og:type" content="website">
+<meta property="og:url" content="https://cnfte.top/">    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Cnfteの博客">
+    <meta name="twitter:description" content="Cnfteの博客 - 探索技术与美学的极简个人空间。专注于分享 GitHub 优质开发者资源、网络协议深度科普及 AI 接口应用教程。秉持极致简洁理念，记录技术成长与生活灵感。">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Cnfteの博客",
+      "url": "https://cnfte.top/",
+      "description": "Cnfteの博客 - 探索技术与美学的极简个人空间。专注于分享 GitHub 优质开发者资源、网络协议深度科普及 AI 接口应用教程。秉持极致简洁理念，记录技术成长与生活灵感。",
+      "inLanguage": ["zh-CN", "en"],
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://cnfte.top/search.json?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Fira+Code:wght@400;600&family=Noto+Sans+SC:wght@400;700;900&display=swap"
+        rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript>
+        <link
+            href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Fira+Code:wght@400;600&family=Noto+Sans+SC:wght@400;700;900&display=swap"
+            rel="stylesheet">
+    </noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        crossorigin="anonymous" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+            crossorigin="anonymous">
+    </noscript>
+    <style>
+        :root {
+            --bg: #06060f;
+            --glass: rgba(255, 255, 255, 0.055);
+            --glass-md: rgba(255, 255, 255, 0.09);
+            --glass-heavy: rgba(8, 8, 18, 0.97);
+            --border: rgba(255, 255, 255, 0.10);
+            --border-accent: rgba(255, 153, 204, 0.45);
+            --accent: #ff99cc;
+            --accent2: #ffcc99;
+            --accent3: #99ccff;
+            --grad: linear-gradient(135deg, #ff99cc 0%, #ffcc99 100%);
+            --grad2: linear-gradient(135deg, #99ccff 0%, #cc99ff 100%);
+            --shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
+            --shadow-accent: 0 8px 32px rgba(255, 153, 204, 0.22);
+            --ease: cubic-bezier(.34, 1.56, .64, 1);
+            --ease-out: cubic-bezier(.22, 1, .36, 1);
+            --ease-std: cubic-bezier(.4, 0, .2, 1);
+            --r-sm: 16px;
+            --r-md: 24px;
+            --r-lg: 32px;
+            --sidebar-w: 320px;
+        }
+
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        p,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        span,
+        a,
+        li,
+        td,
+        th {
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-family: inherit;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', 'Inter', sans-serif;
+            color: #f0f0f8;
+            background: var(--bg);
+            line-height: 1.7;
+            overflow-x: hidden;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        .bg-fixed {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background:url('https://cnfte.top/attachments/bj.webp') center/cover no-repeat;
+            will-change: transform;
+            /* 提升合成层，避免重绘影响前景 */
+            transform: translateZ(0);
+        }
+
+        .bg-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: rgba(0, 0, 0, .48);
+            backdrop-filter: blur(8px) saturate(120%);
+            -webkit-backdrop-filter: blur(8px) saturate(120%);
+        }
+
+        /* 减少动效：尊重用户系统设置，降低 GPU 负载 */
+        @media (prefers-reduced-motion: reduce) {
+            .bg-overlay { backdrop-filter: none; -webkit-backdrop-filter: none; }
+            .hero-img { animation: none; }
+            .card { animation: none; opacity: 1; transform: none; }
+        }
+
+
+        #progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            width: 0%;
+            background: var(--grad);
+            z-index: 9999;
+            transition: width .1s linear;
+            border-radius: 0 2px 2px 0;
+            box-shadow: 0 0 8px rgba(255, 153, 204, .6);
+        }
+
+
+        #page-transition {
+            position: fixed;
+            inset: 0;
+            z-index: 8000;
+            background: var(--glass-heavy);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .22s var(--ease-out);
+        }
+
+        #page-transition.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+
+        nav {
+            position: sticky;
+            top: 10px;
+            z-index: 1000;
+            margin: 10px auto;
+            width: calc(100% - 40px);
+            max-width: 1360px;
+            background: rgba(6, 6, 15, 0.72);
+            backdrop-filter: blur(32px) saturate(180%);
+            -webkit-backdrop-filter: blur(32px) saturate(180%);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            padding: 0 8px 0 22px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            height: 52px;
+            box-shadow: var(--shadow);
+        }
+
+        .logo {
+            font-family: 'ZCOOL KuaiLe';
+            font-size: 1.22rem;
+            background: var(--grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            flex-shrink: 0;
+            letter-spacing: .5px;
+            transition: opacity .2s;
+        }
+
+        .logo:hover {
+            opacity: .8;
+            filter: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 4px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .nav-links::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-links a {
+            font-weight: 700;
+            font-size: .78rem;
+            color: rgba(255, 255, 255, .65);
+            letter-spacing: .8px;
+            padding: 6px 12px;
+            border-radius: 24px;
+            transition: background .2s, color .2s;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .nav-links a:hover {
+            background: var(--glass-md);
+            color: #fff;
+            filter: none;
+        }
+
+        .nav-lang {
+            font-size: .72rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, .4);
+            padding: 5px 10px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            transition: border-color .2s, color .2s;
+            flex-shrink: 0;
+            letter-spacing: .8px;
+        }
+
+        .nav-lang:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            filter: none;
+        }
+
+
+        .search-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        #search-toggle {
+            color: rgba(255, 255, 255, .55);
+            font-size: 1rem;
+            padding: 8px 10px;
+            border-radius: 50%;
+            transition: color .2s, background .2s;
+        }
+
+        #search-toggle:hover {
+            color: var(--accent);
+            background: var(--glass-md);
+        }
+
+        #search-input {
+            width: 0;
+            opacity: 0;
+            position: absolute;
+            right: 44px;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 7px 0;
+            background: rgba(6, 6, 15, .9);
+            color: #fff;
+            transition: width .35s var(--ease-out), opacity .25s, padding .25s;
+            outline: none;
+            font-size: .8rem;
+            font-family: inherit;
+            backdrop-filter: blur(20px);
+        }
+
+        .search-wrap.open #search-input {
+            width: 180px;
+            opacity: 1;
+            padding: 7px 16px;
+        }
+
+        #search-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 320px;
+            background: var(--glass-heavy);
+            border: 1px solid var(--border);
+            border-radius: var(--r-md);
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            pointer-events: none;
+            transition: max-height .3s var(--ease-out), opacity .22s;
+            box-shadow: 0 24px 56px rgba(0, 0, 0, .7);
+            z-index: 1100;
+        }
+
+        #search-dropdown.open {
+            max-height: 380px;
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .s-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 18px;
+            font-size: .82rem;
+            border-bottom: 1px solid rgba(255, 255, 255, .04);
+            color: #ddd;
+            transition: background .12s;
+        }
+
+        .s-item::before {
+            content: '#';
+            color: var(--accent);
+            font-family: 'Fira Code';
+            font-size: .7rem;
+            flex-shrink: 0;
+        }
+
+        .s-item:hover {
+            background: rgba(255, 153, 204, .1);
+            color: var(--accent);
+        }
+
+        .s-item:last-child {
+            border-bottom: none;
+        }
+
+        .s-empty,
+        .s-loading {
+            padding: 18px;
+            text-align: center;
+            color: #444;
+            font-size: .8rem;
+            font-family: 'Fira Code';
+        }
+
+
+        @keyframes cardIn {
+            from {
+                opacity: 0;
+                transform: translateY(24px) scale(.985)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        @keyframes heroZoom {
+            from {
+                transform: scale(1)
+            }
+
+            to {
+                transform: scale(1.07)
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(-6px)
+            }
+        }
+
+        .hero {
+            margin: 4px calc(2.5%) 24px;
+            border-radius: var(--r-lg);
+            overflow: hidden;
+            position: relative;
+            height: 44vh;
+            min-height: 360px;
+            display: flex;
+            align-items: flex-end;
+            box-shadow: var(--shadow);
+            animation: cardIn .7s var(--ease) both;
+        }
+
+        .hero-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            filter: brightness(.7);
+            animation: heroZoom 24s ease-in-out infinite alternate;
+            will-change: transform;
+        }
+
+        .hero-gradient {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background: linear-gradient(to top, rgba(0, 0, 0, .92) 0%, rgba(0, 0, 0, .3) 45%, transparent 75%);
+        }
+
+        .hero-layout {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            padding: 36px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 20px;
+        }
+
+        .hero-text {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .hero-text h1 {
+            font-family: 'ZCOOL KuaiLe';
+            font-size: clamp(1.9rem, 5.5vw, 3.6rem);
+            color: #fff;
+            line-height: 1.1;
+            margin-bottom: 8px;
+            text-shadow: 0 4px 24px rgba(0, 0, 0, .6);
+        }
+
+        .hero-text p {
+            font-size: .8rem;
+            color: rgba(255, 255, 255, .5);
+            letter-spacing: 4px;
+            font-family: 'Fira Code';
+        }
+
+        .hero-widgets {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 290px;
+            flex-shrink: 0;
+        }
+
+        .h-card {
+            background: rgba(6, 6, 15, .6);
+            backdrop-filter: blur(18px);
+            border-radius: var(--r-md);
+            padding: 14px 18px;
+            border: 1px solid rgba(255, 255, 255, .1);
+        }
+
+        .h-card-label {
+            font-size: .58rem;
+            color: var(--accent);
+            font-weight: bold;
+            letter-spacing: 2.5px;
+            margin-bottom: 8px;
+            font-family: 'Fira Code';
+        }
+
+        .hitokoto-text {
+            font-size: .82rem;
+            color: rgba(255, 255, 255, .85);
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .stat-item {
+            text-align: center;
+            font-family: 'Fira Code';
+        }
+
+        .stat-item .stat-val {
+            font-size: 1.3rem;
+            font-weight: bold;
+            background: var(--grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+        }
+
+        .stat-item .stat-lbl {
+            font-size: .58rem;
+            color: rgba(255, 255, 255, .4);
+            letter-spacing: 1.5px;
+        }
+
+
+
+        #notice-toggle {
+            display: none;
+        }
+
+        .notice-modal-wrap {
+            position: fixed;
+            inset: 0;
+            z-index: 7000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity .3s var(--ease-out);
+        }
+
+        #notice-toggle:checked~.notice-modal-wrap {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .notice-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, .7);
+            backdrop-filter: blur(6px);
+        }
+
+        .notice-backdrop-label {
+            position: absolute;
+            inset: 0;
+            cursor: pointer;
+        }
+
+        .notice-box {
+            position: relative;
+            z-index: 1;
+            background: var(--glass-heavy);
+            border: 1px solid var(--border-accent);
+            border-radius: var(--r-lg);
+            padding: 40px;
+            width: min(520px, 90vw);
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 24px 72px rgba(0, 0, 0, .7), 0 0 0 1px rgba(255, 153, 204, .1);
+            animation: cardIn .35s var(--ease) both;
+        }
+
+        .notice-box-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .notice-box-title {
+            font-family: 'ZCOOL KuaiLe';
+            font-size: 1.4rem;
+            background: var(--grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .notice-close-label {
+            cursor: pointer;
+            color: rgba(255, 255, 255, .4);
+            font-size: 1.3rem;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background .2s, color .2s, border-color .2s;
+        }
+
+        .notice-close-label:hover {
+            background: rgba(255, 153, 204, .12);
+            color: var(--accent);
+            border-color: var(--border-accent);
+        }
+
+        .notice-body {
+            font-size: .9rem;
+            color: rgba(255, 255, 255, .8);
+            line-height: 1.85;
+            white-space: pre-line;
+        }
+
+
+        .notice-open-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-size: .72rem;
+            font-family: 'Fira Code';
+            color: var(--accent2);
+            background: rgba(255, 204, 153, .08);
+            border: 1px solid rgba(255, 204, 153, .2);
+            border-radius: 20px;
+            padding: 5px 12px;
+            transition: background .2s, border-color .2s;
+        }
+
+        .notice-open-label:hover {
+            background: rgba(255, 204, 153, .15);
+            border-color: rgba(255, 204, 153, .4);
+        }
+
+        .notice-open-label i {
+            font-size: .75rem;
+        }
+
+
+        .layout-wrapper {
+            flex: 1;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2.5% 60px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) var(--sidebar-w);
+            gap: 26px;
+            align-items: start;
+        }
+
+
+        .post-list {
+            min-width: 0;
+        }
+
+        .post-card {
+            display: flex;
+            overflow: hidden;
+            background: var(--glass);
+            backdrop-filter: blur(20px) saturate(150%);
+            -webkit-backdrop-filter: blur(20px) saturate(150%);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            margin-bottom: 18px;
+            height: 200px;
+            transition: transform .4s var(--ease), border-color .25s, box-shadow .3s;
+            animation: cardIn .6s var(--ease) both;
+
+            content-visibility: auto;
+            contain-intrinsic-size: 0 200px;
+        }
+
+        .post-card:hover {
+            transform: translateX(8px) scale(1.005);
+            border-color: var(--border-accent);
+            box-shadow: var(--shadow-accent);
+        }
+
+        .post-cover {
+            width: 32%;
+            flex-shrink: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .post-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform .6s var(--ease-out);
+        }
+
+        .post-card:hover .post-cover img {
+            transform: scale(1.06);
+        }
+
+        .post-cover-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, transparent 60%, rgba(6, 6, 15, .4));
+        }
+
+        .post-content {
+            padding: 22px 26px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .post-meta {
+            font-family: 'Fira Code';
+            font-size: .68rem;
+            color: var(--accent);
+            margin-bottom: 9px;
+            opacity: .75;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .post-meta .tag {
+            background: rgba(255, 153, 204, .12);
+            border: 1px solid rgba(255, 153, 204, .2);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: .6rem;
+        }
+
+        .post-title {
+            font-size: 1.35rem;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 9px;
+            line-height: 1.28;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            transition: color .2s;
+        }
+
+        .post-card:hover .post-title {
+            color: var(--accent);
+        }
+
+        .post-summary {
+            font-size: .87rem;
+            color: rgba(255, 255, 255, .55);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.6;
+        }
+
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: rgba(255, 255, 255, .25);
+            font-family: 'Fira Code';
+            font-size: .85rem;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            display: block;
+            opacity: .3;
+        }
+
+
+        aside {
+            position: sticky;
+            top: 76px;
+            height: fit-content;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .widget {
+            background: var(--glass);
+            backdrop-filter: blur(20px) saturate(150%);
+            -webkit-backdrop-filter: blur(20px) saturate(150%);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: 24px;
+            overflow: hidden;
+
+        }
+
+        .widget-title {
+            font-family: 'ZCOOL KuaiLe';
+            color: var(--accent);
+            font-size: 1.05rem;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .widget-title i {
+            font-size: .9rem;
+            opacity: .7;
+        }
+
+
+        .profile-widget {
+            text-align: center;
+        }
+
+        .profile-avatar {
+            width: 78px;
+            height: 78px;
+            border-radius: 50%;
+            padding: 3px;
+            border: 2.5px solid var(--accent);
+            margin: 0 auto 14px;
+            transition: transform .6s var(--ease);
+        }
+
+        .profile-avatar:hover {
+            transform: rotate(360deg) scale(1.06);
+        }
+
+        .profile-name {
+            font-family: 'ZCOOL KuaiLe';
+            color: #fff;
+            font-size: 1.2rem;
+            margin-bottom: 6px;
+        }
+
+        .profile-bio {
+            font-size: .83rem;
+            color: rgba(255, 255, 255, .5);
+            line-height: 1.55;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .social-links a {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.05rem;
+            color: rgba(255, 255, 255, .65);
+            transition: transform .3s var(--ease), color .2s, border-color .2s;
+            flex-shrink: 0;
+        }
+
+        .social-links a:hover {
+            color: var(--accent);
+            border-color: var(--border-accent);
+            transform: translateY(-4px) scale(1.12);
+            background: rgba(255, 153, 204, .08);
+        }
+
+
+        .notice-widget-content {
+            font-size: .85rem;
+            color: rgba(255, 255, 255, .75);
+            white-space: pre-line;
+            line-height: 1.75;
+        }
+
+
+        .terminal-widget {
+            background: rgba(2, 2, 8, .7);
+            border: 1px solid rgba(0, 255, 120, .15);
+            border-radius: var(--r-md);
+            padding: 18px 20px;
+            font-family: 'Fira Code';
+            font-size: .72rem;
+            line-height: 2;
+        }
+
+        .terminal-widget .t-line {
+            color: #00ffaa;
+        }
+
+        .terminal-widget .t-dim {
+            color: rgba(0, 255, 170, .3);
+        }
+
+        .terminal-widget .t-accent {
+            color: var(--accent);
+        }
+
+        .terminal-widget .t-val {
+            color: #fff;
+        }
+
+
+        .anime-widget {
+            overflow: hidden;
+        }
+
+        .anime-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .anime-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: var(--r-sm);
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid rgba(255, 255, 255, .06);
+            transition: background .2s, border-color .2s, transform .2s var(--ease);
+        }
+
+        .anime-item:hover {
+            background: rgba(153, 204, 255, .06);
+            border-color: rgba(153, 204, 255, .2);
+            transform: translateX(4px);
+        }
+
+        .anime-cover {
+            width: 46px;
+            height: 62px;
+            border-radius: 8px;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, .1);
+        }
+
+        .anime-cover-placeholder {
+            width: 46px;
+            height: 62px;
+            border-radius: 8px;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, rgba(153, 204, 255, .15), rgba(204, 153, 255, .1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            border: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .anime-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .anime-title {
+            font-size: .82rem;
+            font-weight: 700;
+            color: #eee;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+        }
+
+        .anime-ep {
+            font-family: 'Fira Code';
+            font-size: .65rem;
+            color: rgba(153, 204, 255, .7);
+            letter-spacing: .5px;
+        }
+
+        .anime-status {
+            font-size: .58rem;
+            font-family: 'Fira Code';
+            letter-spacing: 1px;
+            padding: 3px 7px;
+            border-radius: 8px;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+
+        .anime-status.airing {
+            background: rgba(0, 255, 128, .1);
+            color: #00ff80;
+            border: 1px solid rgba(0, 255, 128, .2);
+        }
+
+        .anime-status.ended {
+            background: rgba(255, 255, 255, .06);
+            color: rgba(255, 255, 255, .35);
+            border: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .anime-empty {
+            text-align: center;
+            padding: 20px;
+            color: rgba(255, 255, 255, .25);
+            font-size: .8rem;
+            font-family: 'Fira Code';
+        }
+
+
+        footer {
+            text-align: center;
+            padding: 48px 20px;
+            background: rgba(0, 0, 0, .88);
+            border-top: 1px solid var(--border);
+        }
+
+        .foot-custom {
+            color: var(--accent);
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: .9rem;
+        }
+
+        .foot-copy {
+            font-size: .74rem;
+            color: rgba(255, 255, 255, .2);
+            font-family: 'Fira Code';
+        }
+
+
+        .post-hero {
+            height: 44vh;
+            min-height: 320px;
+            width: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .post-hero-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(.55);
+            z-index: -1;
+            animation: heroZoom 22s ease-in-out infinite alternate;
+            will-change: transform;
+        }
+
+        .post-hero-gradient {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background: linear-gradient(to bottom, rgba(6, 6, 15, .1) 0%, rgba(6, 6, 15, .55) 100%);
+        }
+
+        .post-header-content {
+            position: relative;
+            z-index: 1;
+            padding: 0 40px;
+            animation: cardIn .7s var(--ease);
+            max-width: 860px;
+        }
+
+        .post-header-content .post-tagline {
+            color: var(--accent);
+            font-family: 'Fira Code';
+            font-size: .78rem;
+            letter-spacing: 3.5px;
+            margin-bottom: 14px;
+        }
+
+        .post-header-content h1 {
+            font-family: 'ZCOOL KuaiLe';
+            font-size: clamp(1.7rem, 5vw, 3rem);
+            color: #fff;
+            line-height: 1.2;
+            text-shadow: 0 6px 30px rgba(0, 0, 0, .75);
+        }
+
+        body[data-page="post"] .layout-wrapper {
+            margin-top: -52px;
+            position: relative;
+            z-index: 10;
+        }
+
+        body[data-page="index"] .layout-wrapper {
+            margin-top: 0;
+        }
+
+        .post-friends {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 26px;
+        }
+
+        .friend-card {
+            height: 64px;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            padding: 6px;
+            overflow: hidden;
+            min-width: 0;
+            transition: transform .3s var(--ease), border-color .2s;
+        }
+
+        .friend-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--border-accent);
+        }
+
+        .friend-card img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 2px solid var(--border-accent);
+        }
+
+        .friend-info {
+            overflow: hidden;
+            flex: 1;
+            padding: 0 10px;
+        }
+
+        .friend-info b {
+            display: block;
+            color: var(--accent);
+            font-size: .78rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .friend-info span {
+            font-size: .65rem;
+            color: rgba(255, 255, 255, .45);
+            white-space: nowrap;
+        }
+
+        article.post-container {
+            background: var(--glass-heavy);
+            backdrop-filter: blur(40px) saturate(160%);
+            -webkit-backdrop-filter: blur(40px) saturate(160%);
+            border-radius: var(--r-lg);
+            border: 1px solid var(--border);
+            padding: 48px 44px;
+            box-shadow: var(--shadow);
+            min-width: 0;
+            animation: cardIn .7s var(--ease) both;
+        }
+
+        main#main-content {
+            min-width: 0;
+        }
+
+
+        .post-body {
+            font-size: 1.06rem;
+            color: #eff0f5;
+            line-height: 1.92;
+        }
+
+        .post-body h1,
+        .post-body h2 {
+            font-family: 'ZCOOL KuaiLe';
+            color: var(--accent);
+            margin: 2.2em 0 .8em;
+            font-size: 1.55rem;
+            padding-bottom: .5em;
+            border-bottom: 1px solid rgba(255, 153, 204, .15);
+        }
+
+        .post-body h3 {
+            color: var(--accent2);
+            margin: 1.6em 0 .6em;
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .post-body h4 {
+            color: rgba(255, 255, 255, .8);
+            margin: 1.2em 0 .5em;
+            font-size: 1rem;
+        }
+
+        .post-body p {
+            margin-bottom: 1.4rem;
+        }
+
+        .post-body img {
+            border-radius: var(--r-sm);
+            box-shadow: 0 10px 36px rgba(0, 0, 0, .5);
+            margin: 20px auto;
+            max-width: 100%;
+        }
+
+        .post-body a {
+            color: var(--accent);
+            border-bottom: 1px dashed rgba(255, 153, 204, .5);
+            transition: border-color .2s;
+        }
+
+        .post-body a:hover {
+            border-bottom-style: solid;
+            border-color: var(--accent);
+            filter: none;
+        }
+
+        .post-body blockquote {
+            border-left: 3px solid var(--accent);
+            margin: 22px 0;
+            padding: 14px 22px;
+            background: rgba(255, 153, 204, .05);
+            border-radius: 0 var(--r-sm) var(--r-sm) 0;
+            font-style: italic;
+            color: rgba(255, 255, 255, .7);
+        }
+
+        .post-body ul {
+            list-style: disc;
+            padding-left: 26px;
+            margin-bottom: 1.2rem;
+        }
+
+        .post-body ol {
+            list-style: decimal;
+            padding-left: 26px;
+            margin-bottom: 1.2rem;
+        }
+
+        .post-body li {
+            margin-bottom: .45rem;
+        }
+
+        .post-body table {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-collapse: collapse;
+            margin: 24px 0;
+        }
+
+        .post-body th,
+        .post-body td {
+            border: 1px solid rgba(255, 255, 255, .08);
+            padding: 10px 18px;
+            min-width: 80px;
+        }
+
+        .post-body th {
+            background: rgba(255, 153, 204, .12);
+            color: var(--accent);
+        }
+
+        .post-body tr:nth-child(even) {
+            background: rgba(255, 255, 255, .025);
+        }
+
+        .post-body .toc {
+            background: rgba(0, 0, 0, .35);
+            border-radius: var(--r-md);
+            padding: 18px 22px;
+            margin-bottom: 32px;
+            border: 1px solid var(--border);
+        }
+
+        .post-body .toc a {
+            border-bottom: none;
+            color: rgba(255, 255, 255, .65);
+            display: block;
+            padding: 3px 0;
+        }
+
+        .post-body .toc a:hover {
+            color: var(--accent);
+        }
+
+
+        .post-body pre,
+        .post-body .codehilite {
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            display: block;
+            background: rgba(0, 0, 0, .68);
+            padding: 22px 24px;
+            border-radius: var(--r-md);
+            border: 1px solid var(--border);
+            margin: 24px 0;
+            word-break: normal !important;
+            overflow-wrap: normal !important;
+            white-space: pre;
+        }
+
+        .post-body pre code,
+        .post-body .codehilite code {
+            white-space: pre;
+            word-break: normal !important;
+            overflow-wrap: normal !important;
+            font-family: 'Fira Code', monospace;
+            font-size: .85rem;
+            line-height: 1.7;
+            display: block;
+            background: transparent;
+            padding: 0;
+            border: none;
+            color: #e8e8f0;
+        }
+
+        .post-body code:not(pre code):not(.codehilite code) {
+            background: rgba(255, 153, 204, .13);
+            color: var(--accent);
+            padding: 2px 7px;
+            border-radius: 5px;
+            font-size: .87rem;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .btn-wrapper {
+            margin-top: 52px;
+            padding-top: 26px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--grad);
+            color: #000;
+            padding: 13px 44px;
+            border-radius: 50px;
+            font-weight: 900;
+            font-size: .92rem;
+            box-shadow: 0 10px 28px rgba(255, 153, 204, .38);
+            transition: transform .3s var(--ease), box-shadow .3s;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 16px 40px rgba(255, 153, 204, .55);
+            filter: none;
+            color: #000;
+        }
+
+
+        .toc-widget {
+            font-size: .83rem;
+            max-height: 46vh;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 153, 204, .3) transparent;
+        }
+
+        .toc-widget a {
+            color: rgba(255, 255, 255, .6);
+            border-bottom: none;
+            display: block;
+            padding: 4px 0;
+            transition: color .15s, padding-left .2s;
+        }
+
+        .toc-widget a:hover {
+            color: var(--accent);
+            padding-left: 6px;
+            filter: none;
+        }
+
+        .toc-widget::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        .toc-widget::-webkit-scrollbar-thumb {
+            background: rgba(255, 153, 204, .3);
+            border-radius: 3px;
+        }
+
+
+        @media (max-width:1080px) {
+            :root {
+                --sidebar-w: 280px;
+            }
+        }
+
+        @media (max-width:900px) {
+            .layout-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            aside {
+                position: static;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+                gap: 14px;
+            }
+
+            .hero-widgets {
+                display: none !important;
+            }
+
+            .hero-layout {
+                padding: 24px;
+            }
+
+            .post-card {
+                height: auto;
+                flex-direction: column;
+            }
+
+            .post-cover {
+                width: 100%;
+                height: 180px;
+            }
+
+            nav {
+                top: 6px;
+            }
+        }
+
+        @media (max-width:600px) {
+            .hero {
+                margin: 4px 12px 20px;
+                min-height: 280px;
+                height: 36vh;
+                border-radius: var(--r-md);
+            }
+
+            .hero-layout {
+                padding: 18px 20px;
+            }
+
+            .layout-wrapper {
+                padding: 0 12px 40px;
+            }
+
+            article.post-container {
+                padding: 24px 18px;
+                border-radius: var(--r-lg);
+            }
+
+            .post-header-content {
+                padding: 0 18px;
+            }
+
+            .post-header-content h1 {
+                font-size: 1.5rem;
+            }
+
+            .post-body pre,
+            .post-body .codehilite {
+                padding: 16px 18px;
+                border-radius: var(--r-sm);
+            }
+
+            .post-body pre code,
+            .post-body .codehilite code {
+                font-size: .8rem;
+            }
+
+            aside {
+                grid-template-columns: 1fr;
+            }
+
+            .post-friends {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            nav {
+                padding: 0 6px 0 16px;
+            }
+        }
+    </style>
+    <script src="https://quge5.com/88/tag.min.js" data-zone="213982" async data-cfasync="false"></script>
+</head>
+
+<body data-page="index">
+
+
+    <input type="checkbox" id="notice-toggle">
+    <div class="notice-modal-wrap">
+        <div class="notice-backdrop">
+            <label class="notice-backdrop-label" for="notice-toggle"></label>
+        </div>
+        <div class="notice-box">
+            <div class="notice-box-header">
+                <span class="notice-box-title">📢 NOTICE</span>
+                <label class="notice-close-label" for="notice-toggle">
+                    <i class="fas fa-times"></i>
+                </label>
+            </div>
+            <div class="notice-body">欢迎到来，反馈问题和吹水请看下方：
+如何联系Cnfte与bug反馈？>>>QQ群聊：887378676
+TG群组：<a src=https://t.me/+pCnCBiCsyOhhMWU9>https://t.me/+pCnCBiCsyOhhMWU9</a>
+欢迎到来
+状态监控：<a src=https://probe.cnfte.top>https://probe.cnfte.top</a></div>
+        </div>
+    </div>
+
+    <div class="bg-fixed"></div>
+    <div class="bg-overlay"></div>
+    <div id="progress-bar"></div>
+    <div id="page-transition"></div>
+
+
+    <nav>
+        <a href="/" class="logo">CNFTE</a>
+        <div class="nav-links">
+<a href="/公益服务项.html" data-spa>公益服务项</a><a href="/关于.html" data-spa>关于</a><a href="/隐私政策.html" data-spa>隐私政策</a>        </div>
+        <a href="/en/" class="nav-lang">EN</a>
+        <div class="search-wrap" id="search-wrap">
+            <input type="text" id="search-input" placeholder="搜索..." autocomplete="off" aria-label="搜索">
+            <button id="search-toggle" aria-label="搜索"><i class="fas fa-search"></i></button>
+            <div id="search-dropdown" role="listbox"></div>
+        </div>
+    </nav>
+
+
+    <div id="hero-wrap">
+        <header id="site-hero" class="hero">
+            <img src="https://cnfte.top/attachments/bj.webp" class="hero-img"
+                alt="hero" fetchpriority="high">
+            <div class="hero-gradient"></div>
+            <div class="hero-layout">
+                <div class="hero-text">
+                    <h1>CNFTE</h1>
+                    <p>莫愁前路无知己，天下谁人不识君？</p>
+                    <label class="notice-open-label" for="notice-toggle" style="margin-top:14px;">
+                        <i class="fas fa-bell"></i> 查看公告
+                    </label>
+                </div>
+                <div class="hero-widgets">
+                    <div class="h-card">
+                        <div class="h-card-label">◈ HITOKOTO</div>
+                        <div id="hitokoto" class="hitokoto-text">正在同步次元语录…</div>
+                    </div>
+                    <div class="h-card">
+                        <div class="stats-row">
+                            <div class="stat-item">
+                                <span class="stat-val" id="days">—</span>
+                                <span class="stat-lbl">DAYS</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-val">18</span>
+                                <span class="stat-lbl">POSTS</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-val" id="hero-clock">—</span>
+                                <span class="stat-lbl">LOCAL</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+    </div>
+
+
+    <div id="main-grid" class="layout-wrapper">
+
+
+        <main id="main-content" class="post-list">
+            <article class="post-card" style="animation-delay:0.0s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=177755912826" loading="lazy" alt="2026最新 | 个人稳定翻墙指南（sing-box + Cloudflare 自建）"
+                        decoding="async">
+                    <div class="post-cover-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span>2026-04-30</span>
+                        <span>5 分钟</span>
+<span class="tag">2026翻墙指南</span>                    </div>
+                    <a href="/archive/177755912826/" class="post-title" data-spa>2026最新 | 个人稳定翻墙指南（sing-box + Cloudflare 自建）</a>
+                    <p class="post-summary">这是一篇基于我超过两年翻墙经历总结的实用指南，希望能帮到正在准备出墙的你。 一、墙是什么？ “墙”是中国大陆网络跨境传输网关过滤系统的统称，它会过滤、阻断中国大陆政府认为违反相关法规的数据传输。 二、什么是翻墙？ 翻墙，就是使用合法或非法的出入口信道、软件或协议，绕过防火墙的审查，从而访问境外互联网。 翻墙之…</p>
+                </div>
+            </article>
+            <article class="post-card" style="animation-delay:0.07s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=177295989056" loading="lazy" alt="NetCarry 安装使用教程与实测体验"
+                        decoding="async">
+                    <div class="post-cover-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span>2026-03-08</span>
+                        <span>11 分钟</span>
+<span class="tag">NetCarry教程</span>                    </div>
+                    <a href="/archive/177295989056/" class="post-title" data-spa>NetCarry 安装使用教程与实测体验</a>
+                    <p class="post-summary">作为一款自研的高性能多协议网络压力测试工具，NetCarry Ultimate V6.0专为Linux系统打造，融合了传输层与应用层压测能力，能高效完成网络架构评估、CDN负载测试、防火墙性能验证等工作。近期我完成了这款工具的全流程使用与实际压测，现将详细的安装方法、使用技巧及实测体验分享出来，为有同类压测需…</p>
+                </div>
+            </article>
+            <article class="post-card" style="animation-delay:0.14s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=177173492473" loading="lazy" alt="已开通监控面板"
+                        decoding="async">
+                    <div class="post-cover-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span>2026-02-22</span>
+                        <span>1 分钟</span>
+<span class="tag">服务器监控面板</span>                    </div>
+                    <a href="/archive/177173492473/" class="post-title" data-spa>已开通监控面板</a>
+                    <p class="post-summary">为了能够监控服务器的状态，为此开通了监控面板 链接：https://probe.cnfte.top</p>
+                </div>
+            </article>
+            <article class="post-card" style="animation-delay:0.21000000000000002s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=1771385391" loading="lazy" alt="安卓 arm64 设备 ZeroTermux 安装与 CentOS 配置教程（2026最新）"
+                        decoding="async">
+                    <div class="post-cover-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span>2026-02-18</span>
+                        <span>5 分钟</span>
+<span class="tag">ZeroTermux教程</span>                    </div>
+                    <a href="/archive/1771385391/" class="post-title" data-spa>安卓 arm64 设备 ZeroTermux 安装与 CentOS 配置教程（2026最新）</a>
+                    <p class="post-summary">本教程专为 arm64 架构 的安卓设备（Android 6.0 及以上）编写，帮助你在手机/平板上快速搭建完整的 CentOS 环境，适合跑脚本、部署服务、学习 Linux 等场景。 📋 配置要求 设备架构：arm64（aarch64） 安卓版本：Android 6.0 或更高 存储空间：至少 2GB 可用…</p>
+                </div>
+            </article>
+            <article class="post-card" style="animation-delay:0.28s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=836999be" loading="lazy" alt="互联网信息过载时代：如何炼就“独立思考”的媒介素养？"
+                        decoding="async">
+                    <div class="post-cover-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span>2026-02-10</span>
+                        <span>4 分钟</span>
+<span class="tag">媒介素养</span>                    </div>
+                    <a href="/archive/836999be/" class="post-title" data-spa>互联网信息过载时代：如何炼就“独立思考”的媒介素养？</a>
+                    <p class="post-summary">在信息高度碎片化的今天，新闻早已不再仅仅是“事实的呈现”，它往往承载了传播者的视角、立场与议题设置。对于普通读者而言，盲目追求“绝对客观”不仅不现实，甚至可能让你陷入信息茧房。 与其寻找“唯一真理”，不如提升信息处理能力，学会如何在不同叙述的缝隙中还原事实真相。本文总结了一套实用的新闻判断与分析方法论，助你构…</p>
+                </div>
+            </article>
+            <article class="post-card" style="animation-delay:0.35000000000000003s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=dbd16353" loading="lazy" alt="数字世界的隐形骨架：全球互联网基建150家巨头全景图谱"
+                        decoding="async">
+                    <div class="post-cover-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span>2026-02-09</span>
+                        <span>92 分钟</span>
+<span class="tag">全球互联网基建</span>                    </div>
+                    <a href="/archive/dbd16353/" class="post-title" data-spa>数字世界的隐形骨架：全球互联网基建150家巨头全景图谱</a>
+                    <p class="post-summary">当我们每一次滑动屏幕、点击链接或加载高清视频时，眼前呈现的是绚烂的数字应用，但在“水面之下”，一个庞大且严密的物理帝国正以毫秒为单位运转着。从深埋大洋底部的万里光缆，到翱翔于近地轨道的星链卫星；从处理亿万次请求的权威DNS，到消解流量洪峰的边缘计算节点——这些“隐形”的基建设施，才是支撑现代文明运转的真正骨架…</p>
+                </div>
+            </article>
+            <article class="post-card" style="animation-delay:0.42000000000000004s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=1b0c0f44" loading="lazy" alt="【教程】零门槛：利用 Vercel 搭建属于你的 Gemini 专属 AI 助手（国内直连方案）"
+                        decoding="async">
+                    <div class="post-cover-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span>2026-02-03</span>
+                        <span>4 分钟</span>
+<span class="tag">Vercel Gemini</span>                    </div>
+                    <a href="/archive/1b0c0f44/" class="post-title" data-spa>【教程】零门槛：利用 Vercel 搭建属于你的 Gemini 专属 AI 助手（国内直连方案）</a>
+                    <p class="post-summary">前言 Gemini 是谷歌（Google）推出的新一代人工智能大模型。它不仅在代码理解与网页开发上表现出色，能帮助小白轻松实现轻量化工程，更重要的是，谷歌旗下的 AI Studio 提供了免费的 Gemini API 供开发者使用。 然而，受限于网络环境（GFW），国内用户直接访问 Gemini 存在一定门槛…</p>
+                </div>
+            </article>
+            <article class="post-card" style="animation-delay:0.49000000000000005s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=6c9d0edf" loading="lazy" alt="社区自建cloudflare saas优选ip、优选域名汇总"
+                        decoding="async">
+                    <div class="post-cover-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span>2026-01-29</span>
+                        <span>4 分钟</span>
+<span class="tag">Cloudflare SaaS优选IP</span>                    </div>
+                    <a href="/archive/6c9d0edf/" class="post-title" data-spa>社区自建cloudflare saas优选ip、优选域名汇总</a>
+                    <p class="post-summary">1. 前言 众所周知，Cloudflare 提供了强大的免费 CDN 服务及无限防御，但其免费版分配的通用节点在大陆地区的访问延迟一直饱受诟病。或许你早已听闻 Cloudflare SaaS (Custom Hostnames) 优选大名，但在激活功能后，如何选择稳定、高效的优选地址往往成了难题。 今天，我为…</p>
+                </div>
+            </article>
+            <article class="post-card" style="animation-delay:0.56s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=177139506168" loading="lazy" alt="互联网科普系列：常见的翻墙协议及使用指南"
+                        decoding="async">
+                    <div class="post-cover-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span>2026-01-24</span>
+                        <span>5 分钟</span>
+<span class="tag">翻墙协议</span>                    </div>
+                    <a href="/archive/177139506168/" class="post-title" data-spa>互联网科普系列：常见的翻墙协议及使用指南</a>
+                    <p class="post-summary">在使用 Shadowsocks、V2Ray、Singbox 等工具时，严格来说它们属于代理（Proxy） 技术，而非传统 VPN。但为方便理解，下文统称为翻墙协议。 一、常见翻墙协议及其工作原理 早期传统 VPN 协议（如 PPTP、L2TP、OpenVPN）特征明显，容易被长城防火墙识别并封锁。现代翻墙协议…</p>
+                </div>
+            </article>
+            <article class="post-card" style="animation-delay:0.6300000000000001s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=177139506064" loading="lazy" alt="互联网科普系列：什么是 DNS？（2026 最新详解）"
+                        decoding="async">
+                    <div class="post-cover-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span>2026-01-18</span>
+                        <span>4 分钟</span>
+<span class="tag">DNS是什么</span>                    </div>
+                    <a href="/archive/177139506064/" class="post-title" data-spa>互联网科普系列：什么是 DNS？（2026 最新详解）</a>
+                    <p class="post-summary">DNS 是互联网最基础的技术之一。本文用通俗语言帮你彻底理解 DNS 的工作原理、重要性和实际应用。 DNS 到底是什么？ 想象互联网是一个超级巨大的城市，每一个网站和服务器都有自己的“门牌号”，这个门牌号就是 IP 地址，例如 192.168.1.1 或 104.21.45.68 这样的数字串。 但人类很难…</p>
+                </div>
+            </article>
+            <article class="post-card" style="animation-delay:0.7000000000000001s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=177139506065" loading="lazy" alt="Gemini 反代脚本：无需Cloudflare_Deno，用Nginx轻松搭建稳定代理"
+                        decoding="async">
+                    <div class="post-cover-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span>2026-01-17</span>
+                        <span>4 分钟</span>
+<span class="tag">Gemini反代</span>                    </div>
+                    <a href="/archive/177139506065/" class="post-title" data-spa>Gemini 反代脚本：无需Cloudflare_Deno，用Nginx轻松搭建稳定代理</a>
+                    <p class="post-summary">前言：绕过GFW，畅享Gemini API 对于国内用户而言，访问Gemini API一直面临着GFW的阻碍。过去常用的翻墙方式（如搭建梯子）不仅操作繁琐，还伴随着安全隐患。而曾经备受推崇的Cloudflare Pages/Workers和Deno，也因政策调整或滥用问题，不再是可靠的解决方案。Cloudfl…</p>
+                </div>
+            </article>
+            <article class="post-card" style="animation-delay:0.77s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=177139506120" loading="lazy" alt="互联网科普系列：什么是 HTTP 和 HTTPS？（2026 最新详解）"
+                        decoding="async">
+                    <div class="post-cover-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span>2026-01-17</span>
+                        <span>5 分钟</span>
+<span class="tag">HTTP HTTPS区别</span>                    </div>
+                    <a href="/archive/177139506120/" class="post-title" data-spa>互联网科普系列：什么是 HTTP 和 HTTPS？（2026 最新详解）</a>
+                    <p class="post-summary">大家上网时经常会看到 HTTP 和 HTTPS 这两个词。它们是浏览器地址栏里最常见的协议前缀，一个不带 S，一个带 S。简单来说，HTTP 是普通传输协议，而 HTTPS 是安全的加密版本。本文用最通俗的方式帮你彻底搞清楚两者区别。 1. 什么是传输协议？ 想象你给远方的朋友寄信。这封信要经过邮局、邮递员、…</p>
+                </div>
+            </article>
+            <article class="post-card" style="animation-delay:0.8400000000000001s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=177139506169" loading="lazy" alt="互联网科普系列：什么是 ICP 备案？如何拥有一个可备案域名及替代方案（2026 最新指南）"
+                        decoding="async">
+                    <div class="post-cover-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span>2026-01-17</span>
+                        <span>5 分钟</span>
+<span class="tag">ICP备案</span>                    </div>
+                    <a href="/archive/177139506169/" class="post-title" data-spa>互联网科普系列：什么是 ICP 备案？如何拥有一个可备案域名及替代方案（2026 最新指南）</a>
+                    <p class="post-summary">在中国大陆运营网站，ICP 备案是一个绕不开的话题。本文详细解释什么是 ICP 备案、为什么要备案、如何办理，以及未成年人等无法备案情况下的合规替代方案。 一、什么是 ICP 备案？ ICP 备案全称“中华人民共和国域名备案”，是指在中国大陆地区使用域名提供互联网信息服务的网站，必须向工业和信息化部（工信部）…</p>
+                </div>
+            </article>
+            <article class="post-card" style="animation-delay:0.9100000000000001s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=177139506135" loading="lazy" alt="互联网科普系列：什么是 IPv4 和 IPv6？（2026 最新详解）"
+                        decoding="async">
+                    <div class="post-cover-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span>2026-01-17</span>
+                        <span>5 分钟</span>
+<span class="tag">IPv4 IPv6区别</span>                    </div>
+                    <a href="/archive/177139506135/" class="post-title" data-spa>互联网科普系列：什么是 IPv4 和 IPv6？（2026 最新详解）</a>
+                    <p class="post-summary">IPv4 和 IPv6 是互联网的核心地址协议。简单来说，它们就像每台联网设备的“门牌号”，决定了设备之间如何互相找到并通信。本文用通俗语言帮你彻底理解两者区别、意义以及实际应用。 1. 什么是 IPv4？ IPv4（Internet Protocol version 4）是目前互联网使用最广泛的地址协议。 …</p>
+                </div>
+            </article>
+            <article class="post-card" style="animation-delay:0.9800000000000001s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=177139506154" loading="lazy" alt="互联网科普系列-什么是UDP什么是TCP"
+                        decoding="async">
+                    <div class="post-cover-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span>2026-01-17</span>
+                        <span>5 分钟</span>
+<span class="tag">TCP UDP区别</span>                    </div>
+                    <a href="/archive/177139506154/" class="post-title" data-spa>互联网科普系列-什么是UDP什么是TCP</a>
+                    <p class="post-summary">在互联网中，数据就像货物，需要从一台设备运输到另一台设备。而传输协议就是这些货物运输必须遵守的“交通规则”。其中最核心、最常用的两种传输协议就是 TCP 和 UDP。 1. 什么是传输协议？ 传输协议是一套计算机之间约定好的通信规则。它规定了数据如何打包、如何发送、如何接收、如何确认以及如何处理错误等流程。 …</p>
+                </div>
+            </article>
+            <article class="post-card" style="animation-delay:1.05s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=177139506196" loading="lazy" alt="互联网科普系列：什么是中国国家长城防火墙？（2026 最新详解）"
+                        decoding="async">
+                    <div class="post-cover-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span>2026-01-17</span>
+                        <span>4 分钟</span>
+<span class="tag">长城防火墙</span>                    </div>
+                    <a href="/archive/177139506196/" class="post-title" data-spa>互联网科普系列：什么是中国国家长城防火墙？（2026 最新详解）</a>
+                    <p class="post-summary">长城防火墙（Great Firewall，简称 GFW）是中国用来管理和过滤互联网信息的一套综合技术系统与政策体系。它是中国互联网与全球互联网之间的一道重要屏障，对境内用户的网络访问行为进行实时监控和控制。 一、什么是长城防火墙？ 长城防火墙并非一道单纯的“墙”，而是由多种技术手段、设备部署、策略规则和法律法…</p>
+                </div>
+            </article>
+            <article class="post-card" style="animation-delay:1.12s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=177139506168" loading="lazy" alt="互联网科普系列：什么是域名？如何注册域名并进行解析"
+                        decoding="async">
+                    <div class="post-cover-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span>2026-01-17</span>
+                        <span>5 分钟</span>
+<span class="tag">域名是什么</span>                    </div>
+                    <a href="/archive/177139506168/" class="post-title" data-spa>互联网科普系列：什么是域名？如何注册域名并进行解析</a>
+                    <p class="post-summary">域名是互联网世界中一个网站最直观的标识。本文从基础概念开始，详细讲解什么是域名、如何注册域名以及如何进行域名解析。 一、什么是域名？ 想象互联网是一个巨大的城市，每台服务器（存放网站内容的地方）都有一个独一无二的“门牌号”——这就是 IP 地址（如 192.168.1.1 或 203.0.113.45）。 然…</p>
+                </div>
+            </article>
+            <article class="post-card" style="animation-delay:1.1900000000000002s">
+                <div class="post-cover">
+                    <img src="https://www.dmoe.cc/random.php?v=177139506150" loading="lazy" alt="互联网科普系列：什么是服务器？如何获得服务器"
+                        decoding="async">
+                    <div class="post-cover-overlay"></div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span>2026-01-17</span>
+                        <span>5 分钟</span>
+<span class="tag">服务器是什么</span>                    </div>
+                    <a href="/archive/177139506150/" class="post-title" data-spa>互联网科普系列：什么是服务器？如何获得服务器</a>
+                    <p class="post-summary">服务器是互联网运行的核心基础设施。我们日常浏览网页、看视频、聊天、玩游戏等，所有内容和数据的处理都离不开服务器。 一、什么是服务器？ 服务器是一台专门为网络提供服务的高性能电脑，它 24 小时不间断运行，主要任务是存储数据、处理请求并响应用户。 你可以把服务器理解为互联网世界的“超级仓库 + 管家”： 存储信…</p>
+                </div>
+            </article>
+        </main>
+
+
+        <aside id="site-aside">
+
+            <section class="widget profile-widget">
+                <img src="https://cnfte.top/attachments/696b4d5b58c71_1768639835.webp" class="profile-avatar" alt="Cnfte" loading="lazy">
+                <div class="profile-name">Cnfte</div>
+                <p class="profile-bio">&#34;滚滚长江东逝水，浪花淘尽英雄。&#34;</p>
+                <div class="social-links">
+<a href="https://github.com/cnfte" target="_blank" rel="noopener"
+                        title="GitHub"><i class="fab fa-github"></i></a><a href="https://t.me/cnfte1" target="_blank" rel="noopener"
+                        title="Telegram"><i class="fab fa-telegram"></i></a><a href="https://space.bilibili.com/3546774635547595" target="_blank" rel="noopener"
+                        title="Bilibili"><i class="fab fa-bilibili"></i></a>                    <a href="https://x.com/wangwei960523" target="_blank" rel="noopener" title="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+<a href="https://example.com/" target="_blank" rel="noopener" title="RSS"><i
+                            class="fas fa-rss"></i></a><a href="mailto:cnfte.2@gmail.com" title="Email"><i
+                            class="fas fa-envelope"></i></a>                </div>
+            </section>
+
+
+            <section class="widget anime-widget">
+                <h3 class="widget-title"><i class="fas fa-tv"></i> 正在追番</h3>
+                <div class="anime-list">
+                    <div class="anime-item">
+                        <img src="https://cnfte.top/attachments/cccc.webp" class="anime-cover" alt="幸运星(动漫)" loading="lazy">
+                        <div class="anime-info">
+                            <span class="anime-title">幸运星(动漫)</span>
+                            <div class="anime-ep">
+EP 4 / 25 · 萌妹子闲聊吐槽，ACG梗密集，轻松治愈的日常动画。                            </div>
+                        </div>
+                        <span class="anime-status ended">
+                            完结
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+
+            <section class="widget">
+                <h3 class="widget-title"><i class="fas fa-bullhorn"></i> NOTICE</h3>
+                <div class="notice-widget-content">欢迎到来，反馈问题和吹水请看下方：
+如何联系Cnfte与bug反馈？>>>QQ群聊：887378676
+TG群组：<a src=https://t.me/+pCnCBiCsyOhhMWU9>https://t.me/+pCnCBiCsyOhhMWU9</a>
+欢迎到来
+状态监控：<a src=https://probe.cnfte.top>https://probe.cnfte.top</a></div>
+            </section>
+
+
+            <section class="terminal-widget">
+                <div class="t-line">&gt; <span class="t-accent">NODE</span>: <span class="t-val">ACTIVE</span></div>
+                <div class="t-line">&gt; <span class="t-accent">UPTIME</span>: <span id="sidebar-days"
+                        class="t-val">—</span> DAYS</div>
+                <div class="t-line">&gt; <span class="t-accent">POSTS</span>: <span class="t-val">18</span></div>
+                <div class="t-line">&gt; <span class="t-accent">TIME</span>: <span id="clock" class="t-val">—</span>
+                </div>
+                <div class="t-dim">&gt; TERMINAL_READY // EOF</div>
+            </section>
+        </aside>
+    </div>
+
+    <footer>
+        <div class="foot-custom">本站由Cloudflare和Github强力驱动<br>
+欢迎到来，反馈问题和吹水请看下方：<br>
+如何联系Cnfte与bug反馈？>>>QQ群聊：887378676<br>
+TG群组：<a src=https://t.me/+pCnCBiCsyOhhMWU9>https://t.me/+pCnCBiCsyOhhMWU9</a><br>
+欢迎到来<br>
+状态监控：<a src=https://probe.cnfte.top>https://probe.cnfte.top</a><br>
+如果对本博客的面板有兴趣可以联系CNFTE请求开源管理面板</div>
+        <div class="foot-copy">© 2026 Cnfte // CNFTE MOE PANEL</div>
+    </footer>
+
+    <script>
+        /* ─── CNFTE MOE PANEL v4.0 — Runtime ─── */
+        'use strict';
+
+        // ── 进度条 ──
+        const bar = document.getElementById('progress-bar');
+        let barTick;
+        function barStart() {
+            if (!bar) return;
+            bar.style.width = '0%'; bar.style.opacity = '1';
+            let p = 0; clearInterval(barTick);
+            barTick = setInterval(() => { p = Math.min(p + (90 - p) * .09, 87); bar.style.width = p + '%'; }, 45);
+        }
+        function barDone() {
+            clearInterval(barTick); if (!bar) return;
+            bar.style.width = '100%';
+            setTimeout(() => { bar.style.opacity = '0'; setTimeout(() => bar.style.width = '0%', 280); }, 180);
+        }
+
+        // ── 时钟 & 天数 ──
+        function initClock() {
+            const cl = document.getElementById('clock'), hc = document.getElementById('hero-clock');
+            if (!cl && !hc) return;
+            const tick = () => {
+                const t = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                if (cl) cl.textContent = t;
+                if (hc) hc.textContent = t.slice(0, 5); // HH:MM in hero
+            };
+            tick(); clearInterval(window._clockTimer);
+            window._clockTimer = setInterval(tick, 1000);
+        }
+        function initDays() {
+            const d1 = document.getElementById('days'), d2 = document.getElementById('sidebar-days');
+            if (!d1 && !d2) return;
+            try {
+                const s = new Date("2025-05-01");
+                if (isNaN(s)) return;
+                const n = Math.floor((Date.now() - s) / 86400000);
+                if (d1) d1.textContent = n;
+                if (d2) d2.textContent = n;
+            } catch (_) { }
+        }
+        function initHitokoto() {
+            const el = document.getElementById('hitokoto');
+            if (!el || el._loaded) return;
+            el._loaded = true;
+            (async () => {
+                try {
+                    const d = await (await fetch('https://v1.hitokoto.cn', { signal: AbortSignal.timeout(5000) })).json();
+                    el.textContent = (d.hitokoto || '— 次元语录加载失败 —');
+                } catch { el.textContent = '— 网络异常，语录休眠中 —'; }
+            })();
+        }
+        initClock(); initDays(); initHitokoto();
+
+        // ── 搜索 ──
+        let searchData = null, searchReady = false, searchLoading = false, debounceTimer;
+        function getSearchPath() { return location.pathname.startsWith('/en/') ? '/en/search.json' : '/search.json'; }
+        function getSearchEls() {
+            return {
+                wrap: document.getElementById('search-wrap'),
+                input: document.getElementById('search-input'),
+                btn: document.getElementById('search-toggle'),
+                drop: document.getElementById('search-dropdown')
+            };
+        }
+        function toggleSearch(open) {
+            const { wrap, input, drop } = getSearchEls(); if (!wrap) return;
+            const o = open !== undefined ? open : !wrap.classList.contains('open');
+            wrap.classList.toggle('open', o);
+            if (o) { input?.focus(); if (!searchReady && !searchLoading) loadSearchData(); }
+            else if (drop) { drop.classList.remove('open'); drop.innerHTML = ''; }
+        }
+        async function loadSearchData() {
+            searchLoading = true;
+            try { const r = await fetch(getSearchPath(), { cache: 'no-cache' }); if (!r.ok) throw 0; searchData = await r.json(); searchReady = true; }
+            catch (e) { console.warn('[Search]', e); }
+            finally { searchLoading = false; }
+        }
+        function renderResults(q) {
+            const { drop } = getSearchEls(); if (!drop) return;
+            q = q.trim().toLowerCase(); drop.innerHTML = '';
+            if (!q) { drop.classList.remove('open'); return; }
+            if (!searchReady) {
+                drop.innerHTML = '<div class="s-loading">加载中...</div>'; drop.classList.add('open');
+                if (!searchLoading) loadSearchData().then(() => { const { input } = getSearchEls(); renderResults(input?.value || ''); });
+                return;
+            }
+            const hits = (searchData || []).filter(i => i.title?.toLowerCase().includes(q)).slice(0, 10);
+            if (!hits.length) { drop.innerHTML = '<div class="s-empty">无匹配结果</div>'; }
+            else {
+                const frag = document.createDocumentFragment();
+                const esc = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                hits.forEach(item => {
+                    const a = document.createElement('a'); a.className = 's-item'; a.href = item.url;
+                    a.setAttribute('data-spa', '');
+                    a.innerHTML = item.title.replace(new RegExp(esc, 'gi'), m => `<mark style="background:var(--accent);color:#000;border-radius:3px;padding:0 2px">${m}</mark>`);
+                    a.addEventListener('click', () => toggleSearch(false));
+                    frag.appendChild(a);
+                });
+                drop.appendChild(frag);
+            }
+            drop.classList.add('open');
+        }
+        function bindSearch() {
+            const { input, btn } = getSearchEls();
+            if (input && !input._bound) {
+                input._bound = true;
+                input.addEventListener('input', e => { clearTimeout(debounceTimer); debounceTimer = setTimeout(() => renderResults(e.target.value), 160); });
+                input.addEventListener('keydown', e => { if (e.key === 'Escape') toggleSearch(false); });
+            }
+            if (btn && !btn._bound) {
+                btn._bound = true;
+                btn.addEventListener('click', e => { e.stopPropagation(); toggleSearch(); });
+            }
+        }
+        document.addEventListener('click', e => { const { wrap } = getSearchEls(); if (wrap && !wrap.contains(e.target)) toggleSearch(false); }, { capture: true });
+        bindSearch();
+
+        // ── SPA 导航 v4.0 ──
+        const overlay = document.getElementById('page-transition');
+        // SPA 缓存限制 30 页，超出时按 LRU 顺序删除最旧条目
+        const CACHE_MAX = 30;
+        const CACHE = new Map();
+
+        function isSpaLink(href) {
+            if (!href || href.startsWith('#') || href.endsWith('.json') || href.startsWith('mailto:') || href.startsWith('tel:')) return false;
+            try { return new URL(href, location.origin).origin === location.origin; } catch { return false; }
+        }
+        async function fadeOut() { overlay.classList.add('active'); return new Promise(r => setTimeout(r, 210)); }
+        function fadeIn() { overlay.classList.remove('active'); }
+
+        async function navigate(url, push = true) {
+            // push=true 时才做重复判断，popstate 时跳过，避免返回键失效
+            if (push && url === location.href) return;
+            barStart(); await fadeOut();
+            try {
+                let html = CACHE.get(url);
+                if (!html) {
+                    const res = await fetch(url, { headers: { 'X-SPA': '1' } });
+                    if (!res.ok) throw new Error('HTTP ' + res.status);
+                    html = await res.text();
+                    if (CACHE.size >= CACHE_MAX) CACHE.delete(CACHE.keys().next().value);
+                    CACHE.set(url, html);
+                }
+                const doc = new DOMParser().parseFromString(html, 'text/html');
+                document.title = doc.title;
+                document.body.dataset.page = doc.body.dataset.page || 'index';
+
+                // style（同步CSS，彻底消除SPA换页后样式不一致）
+                const nStyle = doc.querySelector('style'), cStyle = document.querySelector('style');
+                if (nStyle && cStyle) cStyle.textContent = nStyle.textContent;
+
+                // nav（修复换页后搜索/链接绑定残留问题）
+                const nNav = doc.querySelector('nav'), cNav = document.querySelector('nav');
+                if (nNav && cNav) { cNav.className = nNav.className; cNav.innerHTML = nNav.innerHTML; }
+
+                // hero
+                // hero整体替换（避免<header>/<div>标签类型不同导致残留）
+                const nHW = doc.getElementById('hero-wrap'), cHW = document.getElementById('hero-wrap');
+                if (nHW && cHW) cHW.outerHTML = nHW.outerHTML;
+
+                // main grid
+                const nG = doc.querySelector('#main-grid,.layout-wrapper'), cG = document.querySelector('#main-grid,.layout-wrapper');
+                if (nG && cG) { cG.className = nG.className; cG.innerHTML = nG.innerHTML; }
+
+                // footer
+                const nF = doc.querySelector('footer'), cF = document.querySelector('footer');
+                if (nF && cF) cF.innerHTML = nF.innerHTML;
+
+                // notice checkbox state reset
+                const nt = document.getElementById('notice-toggle');
+                if (nt) nt.checked = false;
+
+                if (push) history.pushState({ url }, '', url);
+                reinitPage(); bindSpaLinks();
+                window.scrollTo({ top: 0, behavior: 'instant' });
+                barDone(); fadeIn();
+                searchReady = false; searchData = null;
+            } catch (e) { console.warn('[SPA] fallback:', e); barDone(); fadeIn(); location.href = url; }
+        }
+
+        function reinitPage() {
+            initClock(); initDays(); initHitokoto();
+            // 重置搜索绑定标记，确保换页后搜索可重新绑定
+            const si = document.getElementById('search-input');
+            if (si) si._bound = false;
+            const sb = document.getElementById('search-toggle');
+            if (sb) sb._bound = false;
+            bindSearch();
+            window.removeEventListener('scroll', window._progressHandler);
+            if (document.querySelector('.post-body')) {
+                window._progressHandler = () => {
+                    if (!bar) return;
+                    const el = document.documentElement;
+                    bar.style.width = Math.min((el.scrollTop || document.body.scrollTop) / (el.scrollHeight - el.clientHeight) * 100, 100) + '%';
+                };
+            } else {
+                window._progressHandler = () => { };
+                if (bar) bar.style.width = '0%';
+            }
+            window.addEventListener('scroll', window._progressHandler, { passive: true });
+        }
+        function bindSpaLinks() {
+            document.querySelectorAll('a[data-spa],a[href]').forEach(a => {
+                if (a._spaBound) return; a._spaBound = true;
+                const href = a.getAttribute('href'); if (!isSpaLink(href)) return;
+                a.addEventListener('click', e => {
+                    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+                    e.preventDefault(); navigate(new URL(href, location.origin).href);
+                });
+            });
+        }
+        // 修复返回键：popstate 触发时 location 已变，不能用相等判断拦截
+        window.addEventListener('popstate', e => {
+            const target = e.state?.url || location.href;
+            navigate(target, false);
+        });
+        history.replaceState({ url: location.href }, '', location.href);
+        bindSpaLinks();
+    </script>
+</body>
+
+</html>
