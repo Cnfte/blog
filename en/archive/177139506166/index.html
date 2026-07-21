@@ -1,0 +1,3159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internet Science Popularization Series - What is a Transmission Protocol? - Cnfteの博客</title>
+    <meta name="description" content="Imagine we live in a large city, and every day we need to transport goods (information) from one place to another using various means of transportation (ca…">
+
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+
+    <link rel="canonical" href="https://cnfte.top/en/archive/177139506166/">
+    <link rel="alternate" hreflang="en" href="https://cnfte.top/en/archive/177139506166/">
+    <link rel="alternate" hreflang="x-default" href="https://cnfte.top/archive/177139506166/">
+
+    <link rel="icon" href="/favicon.ico">
+
+    <meta property="og:title" content="Internet Science Popularization Series - What is a Transmission Protocol?">
+    <meta property="og:description" content="Imagine we live in a large city, and every day we need to transport goods (information) from one place to another using various means of transportation (ca…">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://cnfte.top/en/archive/177139506166/">    <meta property="og:image" content="https://cnfte.top/attachments/bj.webp">    <meta property="og:site_name" content="Cnfteの博客">
+    <meta property="article:published_time" content="2026-01-24">
+    <meta property="article:author" content="Cnfte">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Internet Science Popularization Series - What is a Transmission Protocol?">
+    <meta name="twitter:description" content="Imagine we live in a large city, and every day we need to transport goods (information) from one place to another using various means of transportation (ca…">
+    <meta name="twitter:image" content="https://cnfte.top/attachments/bj.webp">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "Internet Science Popularization Series - What is a Transmission Protocol?",
+      "description": "Imagine we live in a large city, and every day we need to transport goods (information) from one place to another using various means of transportation (ca…",
+      "url": "https://cnfte.top/en/archive/177139506166/",
+      "inLanguage": "en",
+      "datePublished": "2026-01-24",
+      "dateModified": "2026-01-24",
+      "author": {
+        "@type": "Person",
+        "name": "Cnfte"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Cnfteの博客",
+        "url": "https://cnfte.top"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://cnfte.top/en/archive/177139506166/"
+      }
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Fira+Code:wght@400;600&family=Noto+Sans+SC:wght@400;700;900&display=swap"
+        rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript>
+        <link
+            href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Fira+Code:wght@400;600&family=Noto+Sans+SC:wght@400;700;900&display=swap"
+            rel="stylesheet">
+    </noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        crossorigin="anonymous" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+            crossorigin="anonymous">
+    </noscript>
+    <style>
+        :root {
+            --bg: #06060f;
+            --glass: rgba(255, 255, 255, 0.055);
+            --glass-md: rgba(255, 255, 255, 0.09);
+            --glass-heavy: rgba(8, 8, 18, 0.97);
+            --border: rgba(255, 255, 255, 0.10);
+            --border-accent: #98ba9173;
+            --accent: #98ba91;
+            --accent2: #91ba9e;
+            --accent3: #ba91b3;
+            --grad: linear-gradient(135deg, #98ba91 0%, #91ba9e 100%);
+            --shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
+            --shadow-accent: 0 8px 32px rgba(255, 153, 204, 0.22);
+            --ease: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            --ease-out: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --ease-std: cubic-bezier(0.4, 0, 0.2, 1);
+            --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --ease-press: cubic-bezier(0.34, 1.2, 0.64, 1);
+            --r-sm: 16px;
+            --r-md: 24px;
+            --r-lg: 32px;
+            --sidebar-w: 300px;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        p,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        span,
+        a,
+        li,
+        td,
+        th {
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-family: inherit;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', 'Inter', sans-serif;
+            color: #f0f0f8;
+            background: var(--bg);
+            line-height: 1.7;
+            overflow-x: hidden;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .bg-fixed {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background: url('https://cnfte.top/attachments/bj.webp') center/cover no-repeat;
+            will-change: transform;
+            transform: translateZ(0);
+        }
+
+        .bg-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: rgba(0, 0, 0, .48);
+            backdrop-filter: blur(8px) saturate(120%);
+            -webkit-backdrop-filter: blur(8px) saturate(120%);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .bg-overlay {
+                backdrop-filter: none;
+                -webkit-backdrop-filter: none;
+            }
+        }
+
+        #progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            width: 0%;
+            background: var(--grad);
+            z-index: 9999;
+            border-radius: 0 2px 2px 0;
+            box-shadow: 0 0 8px rgba(255, 153, 204, .6);
+        }
+
+        /* v4.2：这层不再是"糊住整个 UI 等加载"的硬阻断幕，只做一个很轻、很快的
+           软过渡提示（防止 innerHTML 替换瞬间的白屏/闪烁），真正的"翻页感"交给
+           下面 navDrop / heroReveal / cardRise / asideSlideIn 这些针对各区块的
+           入场动效来表达。 */
+        #page-transition {
+            position: fixed;
+            inset: 0;
+            z-index: 8000;
+            background: rgba(10, 8, 18, 0.1);
+            backdrop-filter: blur(0px) saturate(100%);
+            -webkit-backdrop-filter: blur(0px) saturate(100%);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .16s var(--ease-out), backdrop-filter .16s var(--ease-out), -webkit-backdrop-filter .16s var(--ease-out);
+        }
+
+        #page-transition.active {
+            opacity: 1;
+            pointer-events: all;
+            backdrop-filter: blur(3px) saturate(120%);
+            -webkit-backdrop-filter: blur(3px) saturate(120%);
+        }
+
+        nav {
+            position: sticky;
+            top: 10px;
+            z-index: 1000;
+            margin: 10px auto;
+            width: calc(100% - 40px);
+            max-width: 1360px;
+            background: rgba(6, 6, 15, 0.72);
+            backdrop-filter: blur(32px) saturate(180%);
+            -webkit-backdrop-filter: blur(32px) saturate(180%);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            padding: 0 8px 0 22px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            height: 52px;
+            box-shadow: var(--shadow);
+        }
+
+        .logo {
+            font-family: 'ZCOOL KuaiLe';
+            font-size: 1.22rem;
+            background: var(--grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            flex-shrink: 0;
+            display: inline-block;
+            transition: transform .4s var(--ease-spring), opacity .2s;
+        }
+
+        .logo:hover {
+            transform: scale(1.06) rotate(-1.5deg);
+        }
+
+        .logo:active {
+            transform: scale(.93) rotate(1deg);
+            transition: transform .18s var(--ease-press);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 4px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .nav-links::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-links a {
+            font-weight: 700;
+            font-size: .78rem;
+            color: rgba(255, 255, 255, .65);
+            letter-spacing: .8px;
+            padding: 6px 12px;
+            border-radius: 24px;
+            transition: background .2s, color .2s, transform .4s var(--ease-spring);
+            white-space: nowrap;
+            flex-shrink: 0;
+            display: inline-block;
+        }
+
+        .nav-links a:hover {
+            background: var(--glass-md);
+            color: #fff;
+            filter: none;
+            transform: translateY(-2px) scale(1.04);
+        }
+
+        .nav-links a:active {
+            transform: scale(.92);
+            transition: transform .15s var(--ease-press);
+        }
+
+        /* FIX: nav-lang 对比度 */
+        .nav-lang {
+            font-size: .72rem;
+            font-weight: 700;
+            color: #aaa;
+            padding: 5px 10px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            transition: border-color .2s, color .2s, transform .4s var(--ease-spring);
+            flex-shrink: 0;
+            letter-spacing: .8px;
+            display: inline-block;
+        }
+
+        .nav-lang:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            filter: none;
+            transform: scale(1.08) rotate(-2deg);
+        }
+
+        .nav-lang:active {
+            transform: scale(.9);
+            transition: transform .15s var(--ease-press);
+        }
+
+        .search-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        #search-toggle {
+            color: rgba(255, 255, 255, .55);
+            font-size: 1rem;
+            padding: 8px 10px;
+            border-radius: 50%;
+            transition: color .2s, background .2s, transform .4s var(--ease-spring);
+        }
+
+        #search-toggle:hover {
+            color: var(--accent);
+            background: var(--glass-md);
+            transform: scale(1.12) rotate(-8deg);
+        }
+
+        #search-toggle:active {
+            transform: scale(.88) rotate(4deg);
+            transition: transform .15s var(--ease-press);
+        }
+
+        #search-input {
+            width: 0;
+            opacity: 0;
+            position: absolute;
+            right: 44px;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 7px 0;
+            background: rgba(6, 6, 15, .9);
+            color: #fff;
+            transition: width .35s var(--ease-out), opacity .25s, padding .25s, box-shadow .3s var(--ease-out);
+            outline: none;
+            font-size: .8rem;
+            font-family: inherit;
+        }
+
+        #search-input:focus {
+            box-shadow: 0 0 0 3px rgba(255, 153, 204, .18);
+            border-color: var(--border-accent);
+        }
+
+        .search-wrap.open #search-input {
+            width: 180px;
+            opacity: 1;
+            padding: 7px 16px;
+        }
+
+        #search-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 320px;
+            background: var(--glass-heavy);
+            border: 1px solid var(--border);
+            border-radius: var(--r-md);
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            pointer-events: none;
+            transition: max-height .3s var(--ease-out), opacity .22s;
+            box-shadow: 0 24px 56px rgba(0, 0, 0, .7);
+            z-index: 1100;
+        }
+
+        #search-dropdown.open {
+            max-height: 380px;
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .s-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 18px;
+            font-size: .82rem;
+            border-bottom: 1px solid rgba(255, 255, 255, .04);
+            color: #ddd;
+            transition: background .12s, transform .35s var(--ease-spring), padding-left .35s var(--ease-spring);
+        }
+
+        .s-item::before {
+            content: '#';
+            color: var(--accent);
+            font-family: 'Fira Code';
+            font-size: .7rem;
+            flex-shrink: 0;
+        }
+
+        .s-item:hover {
+            background: rgba(255, 153, 204, .1);
+            color: var(--accent);
+            padding-left: 24px;
+        }
+
+        .s-item:active {
+            transform: scale(.97);
+            transition: transform .12s var(--ease-press);
+        }
+
+        .s-item:last-child {
+            border-bottom: none;
+        }
+
+        .s-empty,
+        .s-loading {
+            padding: 18px;
+            text-align: center;
+            color: #aaa;
+            font-size: .8rem;
+            font-family: 'Fira Code';
+        }
+
+        @keyframes cardIn {
+            0% {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* ── v4.2 动效体系：不同区块用不同的"进场方式"，而不是全部复用 cardIn ── */
+        @keyframes navDrop {
+            0% {
+                opacity: 0;
+                transform: translateY(-16px) scale(.97);
+            }
+
+            60% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        nav.cnfte-enter {
+            animation: navDrop .55s var(--ease-out) both;
+        }
+
+        @keyframes heroReveal {
+            0% {
+                opacity: 0;
+                transform: scale(1.04);
+                filter: blur(10px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes cardRise {
+            0% {
+                opacity: 0;
+                transform: translateY(46px) scale(.93) rotate(-1.1deg);
+                filter: blur(4px);
+            }
+
+            55% {
+                filter: blur(0);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1) rotate(0deg);
+            }
+        }
+
+        @keyframes asideSlideIn {
+            0% {
+                opacity: 0;
+                transform: translateX(28px) scale(.97);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+
+        @keyframes heroZoom {
+            from {
+                transform: scale(1)
+            }
+
+            to {
+                transform: scale(1.07)
+            }
+        }
+
+        .post-hero {
+            height: 44vh;
+            min-height: 320px;
+            width: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        /* FIX: image-explicit-size — post-hero-img 指定 width/height */
+        .post-hero-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(.55);
+            z-index: -1;
+            animation: heroZoom 22s ease-in-out infinite alternate;
+            will-change: transform;
+        }
+
+        /* ── 无封面兜底：扁平化图标（不用 emoji，跨平台/跨字体表现一致） ── */
+        .post-hero-img.post-cover-default {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .02));
+            color: var(--accent3, rgba(255, 255, 255, .35));
+            animation: none;
+        }
+
+        .post-hero-gradient {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background: linear-gradient(to bottom, rgba(6, 6, 15, .08) 0%, rgba(6, 6, 15, .6) 100%);
+        }
+
+        .post-header-content {
+            position: relative;
+            z-index: 1;
+            padding: 0 40px;
+            animation: heroReveal .65s var(--ease-out) .05s both;
+            max-width: 860px;
+        }
+
+        .post-tagline {
+            color: var(--accent);
+            font-family: 'Fira Code';
+            font-size: .78rem;
+            letter-spacing: 3.5px;
+            margin-bottom: 14px;
+        }
+
+        .post-header-content h1 {
+            font-family: 'ZCOOL KuaiLe';
+            font-size: clamp(1.7rem, 5vw, 3rem);
+            color: #fff;
+            line-height: 1.2;
+            text-shadow: 0 6px 30px rgba(0, 0, 0, .75);
+        }
+
+        .layout-wrapper {
+            flex: 1;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2.5% 60px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) var(--sidebar-w);
+            gap: 26px;
+            align-items: start;
+        }
+
+        body[data-page="post"] .layout-wrapper {
+            margin-top: -52px;
+            position: relative;
+            z-index: 10;
+        }
+
+        body[data-page="index"] .layout-wrapper {
+            margin-top: 0;
+        }
+
+        .post-friends {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 26px;
+        }
+
+        .friend-card {
+            height: 64px;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            padding: 6px;
+            overflow: hidden;
+            min-width: 0;
+            transition: transform .3s var(--ease), border-color .2s;
+        }
+
+        .friend-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--border-accent);
+        }
+
+        .friend-card img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 2px solid var(--border-accent);
+        }
+
+        .friend-info {
+            overflow: hidden;
+            flex: 1;
+            padding: 0 10px;
+        }
+
+        .friend-info b {
+            display: block;
+            color: var(--accent);
+            font-size: .78rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .friend-info span {
+            font-size: .65rem;
+            color: rgba(255, 255, 255, .45);
+            white-space: nowrap;
+        }
+
+        main#main-content {
+            min-width: 0;
+        }
+
+        article.post-container {
+            background: var(--glass-heavy);
+            backdrop-filter: blur(40px) saturate(160%);
+            -webkit-backdrop-filter: blur(40px) saturate(160%);
+            border-radius: var(--r-lg);
+            border: 1px solid var(--border);
+            padding: 48px 44px;
+            box-shadow: var(--shadow);
+            min-width: 0;
+            animation: cardRise .65s var(--ease-out) .08s both;
+        }
+
+        .post-body {
+            font-size: 1.06rem;
+            color: #eff0f5;
+            line-height: 1.92;
+        }
+
+        .post-body h1,
+        .post-body h2 {
+            font-family: 'ZCOOL KuaiLe';
+            color: var(--accent);
+            margin: 2.2em 0 .8em;
+            font-size: 1.55rem;
+            padding-bottom: .5em;
+            border-bottom: 1px solid rgba(255, 153, 204, .15);
+        }
+
+        .post-body h3 {
+            color: var(--accent2);
+            margin: 1.6em 0 .6em;
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .post-body h4 {
+            color: rgba(255, 255, 255, .8);
+            margin: 1.2em 0 .5em;
+            font-size: 1rem;
+        }
+
+        .post-body p {
+            margin-bottom: 1.4rem;
+        }
+
+        .post-body img {
+            border-radius: var(--r-sm);
+            box-shadow: 0 10px 36px rgba(0, 0, 0, .5);
+            margin: 20px auto;
+            max-width: 100%;
+        }
+
+        .post-body a {
+            color: var(--accent);
+            border-bottom: 1px dashed rgba(255, 153, 204, .5);
+            transition: border-color .2s;
+        }
+
+        .post-body a:hover {
+            border-bottom-style: solid;
+            border-color: var(--accent);
+            filter: none;
+        }
+
+        .post-body blockquote {
+            border-left: 3px solid var(--accent);
+            margin: 22px 0;
+            padding: 14px 22px;
+            background: rgba(255, 153, 204, .05);
+            border-radius: 0 var(--r-sm) var(--r-sm) 0;
+            font-style: italic;
+            color: rgba(255, 255, 255, .7);
+        }
+
+        .post-body ul {
+            list-style: disc;
+            padding-left: 26px;
+            margin-bottom: 1.2rem;
+        }
+
+        .post-body ol {
+            list-style: decimal;
+            padding-left: 26px;
+            margin-bottom: 1.2rem;
+        }
+
+        .post-body li {
+            margin-bottom: .45rem;
+        }
+
+        .post-body table {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-collapse: collapse;
+            margin: 24px 0;
+        }
+
+        .post-body th,
+        .post-body td {
+            border: 1px solid rgba(255, 255, 255, .08);
+            padding: 10px 18px;
+            min-width: 80px;
+        }
+
+        .post-body th {
+            background: rgba(255, 153, 204, .12);
+            color: var(--accent);
+        }
+
+        .post-body tr:nth-child(even) {
+            background: rgba(255, 255, 255, .025);
+        }
+
+        .post-body .toc {
+            background: rgba(0, 0, 0, .35);
+            border-radius: var(--r-md);
+            padding: 18px 22px;
+            margin-bottom: 32px;
+            border: 1px solid var(--border);
+        }
+
+        .post-body .toc a {
+            border-bottom: none;
+            color: rgba(255, 255, 255, .65);
+            display: block;
+            padding: 3px 0;
+        }
+
+        .post-body .toc a:hover {
+            color: var(--accent);
+        }
+
+        .post-body pre,
+        .post-body .codehilite {
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            display: block;
+            background: rgba(0, 0, 0, .68);
+            padding: 22px 24px;
+            border-radius: var(--r-md);
+            border: 1px solid var(--border);
+            margin: 24px 0;
+            word-break: normal !important;
+            overflow-wrap: normal !important;
+            white-space: pre;
+        }
+
+        .post-body pre code,
+        .post-body .codehilite code {
+            white-space: pre;
+            word-break: normal !important;
+            overflow-wrap: normal !important;
+            font-family: 'Fira Code', monospace;
+            font-size: .85rem;
+            line-height: 1.7;
+            display: block;
+            background: transparent;
+            padding: 0;
+            border: none;
+            color: #e8e8f0;
+        }
+
+        .post-body code:not(pre code):not(.codehilite code) {
+            background: rgba(255, 153, 204, .13);
+            color: var(--accent);
+            padding: 2px 7px;
+            border-radius: 5px;
+            font-size: .87rem;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .btn-wrapper {
+            margin-top: 52px;
+            padding-top: 26px;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--grad);
+            color: #000;
+            padding: 13px 44px;
+            border-radius: 50px;
+            font-weight: 900;
+            font-size: .92rem;
+            box-shadow: 0 10px 28px rgba(255, 153, 204, .38);
+            transition: transform .3s var(--ease), box-shadow .3s;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 16px 40px rgba(255, 153, 204, .55);
+            filter: none;
+            color: #000;
+        }
+
+        .back-btn:active {
+            transform: translateY(-1px) scale(.95);
+            transition: transform .15s var(--ease-press);
+        }
+
+        aside {
+            position: sticky;
+            top: 76px;
+            height: fit-content;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .widget {
+            background: var(--glass);
+            backdrop-filter: blur(20px) saturate(150%);
+            -webkit-backdrop-filter: blur(20px) saturate(150%);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            padding: 22px;
+            overflow: hidden;
+            animation: asideSlideIn .55s var(--ease-out) both;
+        }
+
+        .widget:nth-child(1) {
+            animation-delay: .06s
+        }
+
+        .widget:nth-child(2) {
+            animation-delay: .12s
+        }
+
+        .widget:nth-child(3) {
+            animation-delay: .18s
+        }
+
+        .widget:nth-child(4) {
+            animation-delay: .24s
+        }
+
+        .widget:nth-child(n+5) {
+            animation-delay: .3s
+        }
+
+        /* FIX: heading-order — widget-title 由 h3 → h2 */
+        .widget-title {
+            font-family: 'ZCOOL KuaiLe';
+            color: var(--accent);
+            font-size: 1.05rem;
+            letter-spacing: 1px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .widget-title i {
+            font-size: .9rem;
+            opacity: .7;
+        }
+
+        .toc-widget {
+            font-size: .82rem;
+            max-height: 46vh;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 153, 204, .3) transparent;
+        }
+
+        .toc-widget::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        .toc-widget::-webkit-scrollbar-thumb {
+            background: rgba(255, 153, 204, .3);
+            border-radius: 3px;
+        }
+
+        .toc-widget a {
+            color: rgba(255, 255, 255, .6);
+            border-bottom: none;
+            display: block;
+            padding: 4px 0;
+            transition: color .15s, padding-left .35s var(--ease-spring);
+        }
+
+        .toc-widget a:hover {
+            color: var(--accent);
+            padding-left: 8px;
+            filter: none;
+        }
+
+        .toc-widget a:active {
+            padding-left: 4px;
+            transition: padding-left .12s var(--ease-press);
+        }
+
+        .anime-list {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .anime-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 11px;
+            border-radius: var(--r-sm);
+            background: rgba(255, 255, 255, .04);
+            border: 1px solid rgba(255, 255, 255, .06);
+            transition: background .2s, border-color .2s;
+        }
+
+        .anime-item:hover {
+            background: rgba(153, 204, 255, .06);
+            border-color: rgba(153, 204, 255, .2);
+        }
+
+        .anime-cover {
+            width: 40px;
+            height: 54px;
+            border-radius: 7px;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, .1);
+        }
+
+        .anime-cover-placeholder {
+            width: 40px;
+            height: 54px;
+            border-radius: 7px;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, rgba(153, 204, 255, .15), rgba(204, 153, 255, .1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            color: var(--accent3, rgba(255, 255, 255, .5));
+            border: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .anime-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .anime-title {
+            font-size: .78rem;
+            font-weight: 700;
+            color: #eee;
+            margin-bottom: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+        }
+
+        .anime-ep {
+            font-family: 'Fira Code';
+            font-size: .62rem;
+            color: rgba(153, 204, 255, .7);
+        }
+
+        .anime-status {
+            font-size: .55rem;
+            font-family: 'Fira Code';
+            letter-spacing: 1px;
+            padding: 2px 6px;
+            border-radius: 6px;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+
+        .anime-status.airing {
+            background: rgba(0, 255, 128, .1);
+            color: #00ff80;
+            border: 1px solid rgba(0, 255, 128, .2);
+        }
+
+        /* FIX: anime-status.ended 对比度 */
+        .anime-status.ended {
+            background: rgba(255, 255, 255, .06);
+            color: #aaa;
+            border: 1px solid rgba(255, 255, 255, .12);
+        }
+
+        .terminal-widget {
+            background: rgba(2, 2, 8, .7);
+            border: 1px solid rgba(0, 255, 120, .15);
+            border-radius: var(--r-md);
+            padding: 16px 18px;
+            font-family: 'Fira Code';
+            font-size: .7rem;
+            line-height: 2;
+        }
+
+        .t-line {
+            color: #00ffaa;
+        }
+
+        /* FIX: t-dim 对比度提升 */
+        .t-dim {
+            color: rgba(0, 255, 170, .55);
+        }
+
+        .t-accent {
+            color: var(--accent);
+        }
+
+        .t-val {
+            color: #fff;
+        }
+
+        .profile-widget {
+            text-align: center;
+        }
+
+        .profile-avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            padding: 3px;
+            border: 2.5px solid var(--accent);
+            margin: 0 auto 12px;
+            transition: transform .6s var(--ease);
+        }
+
+        .profile-avatar:hover {
+            transform: rotate(360deg) scale(1.06);
+        }
+
+        .profile-name {
+            font-family: 'ZCOOL KuaiLe';
+            color: #fff;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .profile-bio {
+            font-size: .8rem;
+            color: rgba(255, 255, 255, .5);
+            line-height: 1.55;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 14px;
+        }
+
+        .social-links a {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.05rem;
+            color: rgba(255, 255, 255, .65);
+            transition: transform .3s var(--ease), color .2s, border-color .2s;
+            flex-shrink: 0;
+        }
+
+        .social-links a:hover {
+            color: var(--accent);
+            border-color: var(--border-accent);
+            transform: translateY(-4px) scale(1.1);
+            background: rgba(255, 153, 204, .08);
+        }
+
+        /* ── 页脚毛玻璃卡片 ── */
+        footer {
+            margin: 40px auto 32px;
+            width: calc(100% - 48px);
+            max-width: 960px;
+            background: rgba(8, 8, 20, 0.55);
+            backdrop-filter: blur(24px) saturate(150%);
+            -webkit-backdrop-filter: blur(24px) saturate(150%);
+            border: 1px solid var(--border-accent, rgba(255, 153, 204, 0.15));
+            border-radius: 22px;
+            padding: 22px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, .45), 0 0 0 1px rgba(255, 255, 255, .04) inset;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity .6s var(--ease-out), transform .65s cubic-bezier(.22, 1, .36, 1);
+        }
+
+        footer.foot-revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .foot-left {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            min-width: 0;
+        }
+
+        .foot-text {
+            color: rgba(255, 255, 255, .75);
+            font-size: .82rem;
+            line-height: 1.65;
+        }
+
+        .foot-text a {
+            color: var(--accent3);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            transition: color .15s;
+        }
+
+        .foot-text a:hover {
+            color: #fff;
+        }
+
+        /* FIX: foot-copy 对比度 */
+        .foot-copy {
+            font-size: .68rem;
+            color: rgba(255, 255, 255, .35);
+            font-family: 'Fira Code';
+        }
+
+        .foot-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .foot-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 1px solid var(--border-accent, rgba(255, 255, 255, .12));
+            background: rgba(255, 255, 255, .06);
+            color: var(--accent3, rgba(255, 255, 255, .5));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .8rem;
+            transition: border-color .2s, color .2s, background .2s, transform .45s var(--ease-spring);
+        }
+
+        .foot-icon:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(255, 153, 204, .1);
+            background: color-mix(in srgb, var(--accent) 12%, transparent);
+            transform: translateY(-4px) scale(1.12) rotate(-6deg);
+        }
+
+        .foot-icon:active {
+            transform: scale(.88) rotate(4deg);
+            transition: transform .15s var(--ease-press);
+        }
+
+        @media(max-width:600px) {
+            footer {
+                padding: 18px 20px;
+                border-radius: 16px;
+                width: calc(100% - 24px);
+            }
+
+            .foot-right {
+                gap: 8px;
+            }
+
+            .foot-icon {
+                width: 30px;
+                height: 30px;
+                font-size: .75rem;
+            }
+        }
+
+        @media (max-width:1080px) {
+            :root {
+                --sidebar-w: 260px;
+            }
+        }
+
+        @media (max-width:900px) {
+            .layout-wrapper {
+                grid-template-columns: 1fr;
+                margin-top: -28px;
+            }
+
+            article.post-container {
+                padding: 28px 20px;
+                border-radius: var(--r-lg);
+            }
+
+            aside {
+                position: static;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                gap: 12px;
+            }
+        }
+
+        @media (max-width:600px) {
+            nav {
+                padding: 0 6px 0 16px;
+                top: 6px;
+            }
+
+            .post-hero {
+                min-height: 220px;
+                height: 36vh;
+            }
+
+            .post-header-content {
+                padding: 0 18px;
+            }
+
+            .post-header-content h1 {
+                font-size: 1.5rem;
+            }
+
+            article.post-container {
+                padding: 20px 16px;
+                border-radius: var(--r-md);
+            }
+
+            .layout-wrapper {
+                padding: 0 12px 40px;
+            }
+
+            .post-body pre,
+            .post-body .codehilite {
+                padding: 14px 16px;
+                border-radius: var(--r-sm);
+            }
+
+            .post-body pre code,
+            .post-body .codehilite code {
+                font-size: .78rem;
+            }
+
+            .post-friends {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            aside {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ── index-only styles (SPA back-nav) ── */
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(-6px)
+            }
+        }
+
+        .hero {
+            margin: 4px calc(2.5%) 24px;
+            border-radius: var(--r-lg);
+            overflow: hidden;
+            position: relative;
+            height: 44vh;
+            min-height: 360px;
+            display: flex;
+            align-items: flex-end;
+            box-shadow: var(--shadow);
+            animation: heroReveal .6s var(--ease-out) both;
+        }
+
+        .hero-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            filter: brightness(.7);
+            animation: heroZoom 24s ease-in-out infinite alternate;
+            will-change: transform;
+        }
+
+        .hero-gradient {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background: linear-gradient(to top, rgba(0, 0, 0, .92) 0%, rgba(0, 0, 0, .3) 45%, transparent 75%);
+        }
+
+        .hero-layout {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            padding: 36px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 20px;
+        }
+
+        .hero-text {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .hero-text h1 {
+            font-family: 'ZCOOL KuaiLe';
+            font-size: clamp(1.9rem, 5.5vw, 3.6rem);
+            color: #fff;
+            line-height: 1.1;
+            margin-bottom: 8px;
+            text-shadow: 0 4px 24px rgba(0, 0, 0, .6);
+        }
+
+        .hero-text p {
+            font-size: .8rem;
+            color: rgba(255, 255, 255, .5);
+            letter-spacing: 4px;
+            font-family: 'Fira Code';
+        }
+
+        .hero-widgets {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 290px;
+            flex-shrink: 0;
+        }
+
+        .h-card {
+            background: rgba(6, 6, 15, .6);
+            backdrop-filter: blur(18px);
+            border-radius: var(--r-md);
+            padding: 14px 18px;
+            border: 1px solid rgba(255, 255, 255, .1);
+        }
+
+        .h-card-label {
+            font-size: .58rem;
+            color: var(--accent);
+            font-weight: bold;
+            letter-spacing: 2.5px;
+            margin-bottom: 8px;
+            font-family: 'Fira Code';
+        }
+
+        .hitokoto-text {
+            font-size: .82rem;
+            color: rgba(255, 255, 255, .85);
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .stat-item {
+            text-align: center;
+            font-family: 'Fira Code';
+        }
+
+        .stat-item .stat-val {
+            font-size: 1.3rem;
+            font-weight: bold;
+            background: var(--grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+        }
+
+        .stat-item .stat-lbl {
+            font-size: .58rem;
+            color: #999;
+            letter-spacing: 1.5px;
+        }
+
+        #notice-toggle {
+            display: none;
+        }
+
+        .notice-modal-wrap {
+            position: fixed;
+            inset: 0;
+            z-index: 7000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity .3s var(--ease-out);
+        }
+
+        #notice-toggle:checked~.notice-modal-wrap {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .notice-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, .7);
+            backdrop-filter: blur(6px);
+        }
+
+        .notice-backdrop-label {
+            position: absolute;
+            inset: 0;
+            cursor: pointer;
+        }
+
+        .notice-box {
+            position: relative;
+            z-index: 1;
+            background: var(--glass-heavy);
+            border: 1px solid var(--border-accent);
+            border-radius: var(--r-lg);
+            padding: 40px;
+            width: min(520px, 90vw);
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 24px 72px rgba(0, 0, 0, .7);
+            animation: cardIn .35s var(--ease) both;
+        }
+
+        .notice-box-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .notice-box-title {
+            font-family: 'ZCOOL KuaiLe';
+            font-size: 1.4rem;
+            background: var(--grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .notice-close-label {
+            cursor: pointer;
+            color: rgba(255, 255, 255, .4);
+            font-size: 1.3rem;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background .2s, color .2s, border-color .2s;
+        }
+
+        .notice-close-label:hover {
+            background: rgba(255, 153, 204, .12);
+            color: var(--accent);
+            border-color: var(--border-accent);
+        }
+
+        .notice-body {
+            font-size: .9rem;
+            color: rgba(255, 255, 255, .8);
+            line-height: 1.85;
+            white-space: pre-line;
+        }
+
+        .notice-body a {
+            color: var(--accent);
+            text-decoration: underline;
+        }
+
+        .notice-open-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-size: .72rem;
+            font-family: 'Fira Code';
+            color: var(--accent2);
+            background: rgba(255, 204, 153, .08);
+            border: 1px solid rgba(255, 204, 153, .2);
+            border-radius: 20px;
+            padding: 5px 12px;
+            transition: background .2s, border-color .2s;
+        }
+
+        .notice-open-label:hover {
+            background: rgba(255, 204, 153, .15);
+            border-color: rgba(255, 204, 153, .4);
+        }
+
+        .post-list {
+            min-width: 0;
+        }
+
+        .post-card {
+            display: flex;
+            overflow: hidden;
+            background: var(--glass);
+            backdrop-filter: blur(20px) saturate(150%);
+            -webkit-backdrop-filter: blur(20px) saturate(150%);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            margin-bottom: 18px;
+            height: 200px;
+            transition: transform .4s var(--ease), border-color .25s, box-shadow .3s;
+            animation: cardRise .6s var(--ease-out) both;
+            content-visibility: auto;
+            contain-intrinsic-size: 0 200px;
+        }
+
+        .post-card:hover {
+            transform: translateX(8px) scale(1.005);
+            border-color: var(--border-accent);
+            box-shadow: var(--shadow-accent);
+        }
+
+        .post-cover {
+            width: 32%;
+            flex-shrink: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .post-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform .6s var(--ease-out);
+        }
+
+        .post-card:hover .post-cover img {
+            transform: scale(1.06);
+        }
+
+        .post-cover-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, transparent 60%, rgba(6, 6, 15, .4));
+        }
+
+        .post-content {
+            padding: 22px 26px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .post-meta {
+            font-family: 'Fira Code';
+            font-size: .68rem;
+            color: var(--accent);
+            margin-bottom: 9px;
+            opacity: .75;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .post-meta .tag {
+            background: rgba(255, 153, 204, .12);
+            border: 1px solid rgba(255, 153, 204, .2);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: .6rem;
+        }
+
+        .post-title {
+            font-size: 1.35rem;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 9px;
+            line-height: 1.28;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            transition: color .2s;
+        }
+
+        .post-card:hover .post-title {
+            color: var(--accent);
+        }
+
+        .post-summary {
+            font-size: .87rem;
+            color: rgba(255, 255, 255, .55);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.6;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: rgba(255, 255, 255, .25);
+            font-family: 'Fira Code';
+            font-size: .85rem;
+        }
+
+        @media (max-width:900px) {
+            .hero-widgets {
+                display: none !important;
+            }
+
+            .hero-layout {
+                padding: 24px;
+            }
+
+            .post-card {
+                height: auto;
+                flex-direction: column;
+            }
+
+            .post-cover {
+                width: 100%;
+                height: 180px;
+            }
+        }
+
+        @media (max-width:600px) {
+            .hero {
+                margin: 4px 12px 20px;
+                min-height: 280px;
+                height: 36vh;
+                border-radius: var(--r-md);
+            }
+
+            .hero-layout {
+                padding: 18px 20px;
+            }
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* ── 全局回弹动效的无障碍兜底：尊重「减少动态效果」系统设置 ── */
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.001ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+            }
+
+            .logo:hover,
+            .logo:active,
+            .nav-links a:hover,
+            .nav-links a:active,
+            .nav-lang:hover,
+            .nav-lang:active,
+            #search-toggle:hover,
+            #search-toggle:active,
+            .s-item:hover,
+            .s-item:active,
+            .back-btn:hover,
+            .back-btn:active,
+            .toc-widget a:hover,
+            .toc-widget a:active,
+            .foot-icon:hover,
+            .foot-icon:active,
+            .cnfte-chip:hover,
+            .cnfte-chip:active,
+            .cnfte-page-btn:hover,
+            .cnfte-page-btn:active,
+            .cnfte-archive-row:hover,
+            .cnfte-archive-row:active,
+            .cs-seg button:hover,
+            .cs-seg button:active,
+            #cnfte-top-btn:hover,
+            #cnfte-top-btn:active,
+            #cnfte-settings-btn:hover,
+            #cnfte-settings-btn:active {
+                transform: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body data-page="post">
+
+    <div class="bg-fixed" role="presentation"></div>
+    <div class="bg-overlay" role="presentation"></div>
+    <div id="progress-bar" role="progressbar" aria-hidden="true"></div>
+    <div id="page-transition" aria-hidden="true"></div>
+
+    <nav aria-label="主导航">
+        <a href="/" class="logo" aria-label="Cnfteの博客 首页">CNFTE</a>
+        <div class="nav-links">
+            <a href="/" data-spa>HOME</a>
+<a href="/en/Privacy Policy.html" data-spa>Privacy Policy</a><a href="/en/about.html" data-spa>about</a><a href="/en/公益服务项.html" data-spa>service</a>        </div>
+        <a href="/" class="nav-lang"
+            aria-label="切换语言为 ZH">ZH</a>
+        <div class="search-wrap" id="search-wrap">
+            <input type="text" id="search-input" placeholder="搜索..." autocomplete="off" aria-label="搜索文章"
+                aria-controls="search-dropdown" aria-expanded="false">
+            <button id="search-toggle" aria-label="打开搜索框" aria-expanded="false">
+                <i class="fas fa-search" aria-hidden="true"></i>
+            </button>
+            <div id="search-dropdown" role="listbox" aria-label="搜索结果"></div>
+        </div>
+    </nav>
+
+
+    <div id="hero-wrap">
+        <div class="post-hero">
+            <img src="https://api.elaina.cat/random/?v=177139506166" class="post-hero-img" alt="Internet Science Popularization Series - What is a Transmission Protocol? 封面" width="1920"
+                height="1080" fetchpriority="high" decoding="async">
+            <div class="post-hero-gradient" aria-hidden="true"></div>
+            <div class="post-header-content">
+                <p class="post-tagline">2026-01-24 // 15 min // 177139506166
+                </p>
+                <h1>Internet Science Popularization Series - What is a Transmission Protocol?</h1>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="main-grid" class="layout-wrapper">
+        <main id="main-content">
+
+
+            <article class="post-container">
+                <div class="post-body"><p>Imagine we live in a large city, and every day we need to transport goods (information) from one place to another using various means of transportation (cars, trains, airplanes). <strong>Transmission protocols</strong> are like the <strong>traffic rules</strong> that these transportation methods must follow to operate within the city. Without these rules, traffic would be chaotic, and goods might not be delivered or might be delivered to the wrong place.</p>
+<h4 id="h-1-what-is-a-transmission-protocol">1. What is a Transmission Protocol?<a class="headerlink" href="#h-1-what-is-a-transmission-protocol" title="Permanent link">&para;</a></h4>
+<p>Simply put, a transmission protocol is a set of <strong>agreed-upon communication rules</strong> that guide how two computers (or other network devices) <strong>send and receive data</strong>. It specifies how data should be packaged, sent, acknowledged, and how errors should be handled.</p>
+<p>Just like making a phone call requires dialing, the other party answering, and then communicating in a common language, communication between computers also requires a standardized process, and that's the role of transmission protocols.</p>
+<p>On the internet, the two most common transmission protocols are <strong>TCP</strong> and <strong>UDP</strong>. They are like two different types of transportation, each with its own characteristics and applicable scenarios.</p>
+<h4 id="h-2-the-uses-of-tcp-connections">2. The Uses of TCP Connections<a class="headerlink" href="#h-2-the-uses-of-tcp-connections" title="Permanent link">&para;</a></h4>
+<p><strong>TCP</strong> (Transmission Control Protocol) is like the <strong>"registered mail" service of a courier company</strong>. It places great emphasis on <strong>reliability</strong> and <strong>order</strong>.</p>
+<p><strong>Its main uses are:</strong></p>
+<ul>
+<li><strong>Guaranteed data delivery:</strong> TCP ensures that the data you send is received by the recipient. If it's not received, it will keep resending until the recipient confirms receipt.</li>
+<li><strong>Guaranteed data order:</strong> Data may be broken down into many small packets during transmission. TCP ensures that these packets are reassembled in the correct order, preventing out-of-order delivery.</li>
+<li><strong>Flow control:</strong> TCP adjusts the sending speed based on the recipient's receiving capacity, preventing packet loss due to the recipient being overwhelmed.</li>
+</ul>
+<p><strong>For example:</strong> If you send an important document to a friend, you want to ensure that the document is delivered completely and accurately, and in the correct page order. TCP is like that responsible courier who packages, labels, tracks, and confirms receipt, ensuring everything is foolproof.</p>
+<h4 id="h-3-characteristics-of-tcp-traffic">3. Characteristics of TCP Traffic<a class="headerlink" href="#h-3-characteristics-of-tcp-traffic" title="Permanent link">&para;</a></h4>
+<p>Since TCP is so reliable, what are the characteristics of its "traffic flow"? * <strong>Connection-oriented:</strong> Before formally transmitting data, TCP establishes a "connection." This is similar to a courier company confirming your address and contact information before shipping a package; there's a "handshake" process. This process is called a <strong>three-way handshake</strong>.<br />
+* <strong>Reliable transmission:</strong> As mentioned earlier, lost packets are retransmitted, and out-of-order packets are reordered.<br />
+* <strong>Flow control:</strong> TCP adjusts the sending speed based on the receiver's capacity, preventing it from overwhelming the receiver with data.<br />
+* <strong>Congestion control:</strong> If the network is congested (like traffic congestion in a city), TCP will also slow down to avoid exacerbating the congestion.<br />
+* <strong>Byte stream-oriented:</strong> TCP treats data as a continuous stream of bytes, not as individual data packets.</p>
+<p><strong>In summary, the characteristics of TCP traffic are:</strong> <strong>slow but stable, and highly reliable.</strong></p>
+<h4 id="h-4-tcp-vs-udp">4. TCP vs. UDP<a class="headerlink" href="#h-4-tcp-vs-udp" title="Permanent link">&para;</a></h4>
+<p>Now let's compare TCP and UDP, these two "good brothers." Features TCP (Registered Mail) UDP (Regular Mail/Postcard) <strong>Reliability</strong> <strong>High</strong> (Guaranteed delivery, no out-of-order) <strong>Low</strong> (No guaranteed delivery, possible out-of-order) <strong>Speed</strong> <strong>Slow</strong> (Because of confirmation, retransmission, etc.) <strong>Fast</strong> (Sent directly, no waiting for confirmation) <strong>Connection Method</strong> <strong>Connection-oriented</strong> (Establish a connection before communication) <strong>Connectionless</strong> (Sent directly, no connection needed) <strong>Header Overhead</strong> <strong>Large</strong> (Includes sequence number, acknowledgment number, etc.) <strong>Small</strong> (Simple information) <strong>Application Scenarios</strong> Web browsing (HTTP/HTTPS), file transfer (FTP), email (SMTP) Video/audio streaming, online games, DNS queries, VoIP calls</p>
+<p><strong>Simply put:</strong></p>
+<ul>
+<li><strong>TCP</strong> is like sending a very important contract; you want it delivered safely and accurately, even if it's a little slower.</li>
+<li><strong>UDP</strong> is like sending a postcard to a friend; you want it delivered as quickly as possible, and it doesn't matter much if one is occasionally lost or the order is slightly mixed up.</li>
+</ul>
+<h4 id="h-5-characteristics-of-udp-traffic">5. Characteristics of UDP Traffic<a class="headerlink" href="#h-5-characteristics-of-udp-traffic" title="Permanent link">&para;</a></h4>
+<p><strong>UDP</strong> (User Datagram Protocol) is like <strong>regular mail or a postcard</strong>. It prioritizes <strong>speed and efficiency</strong>, but <strong>does not guarantee reliability</strong>.</p>
+<p><strong>Its main characteristics are:</strong></p>
+<ul>
+<li><strong>Connectionless:</strong> No connection needs to be established before sending data; data packets are sent directly.</li>
+<li><strong>Fast:</strong> Because there's no need to establish a connection, no acknowledgment, and no retransmission, it's very fast.</li>
+<li><strong>Unreliable:</strong> Data packets may be lost, duplicated, or arrive out of order; UDP itself does not handle these issues.</li>
+<li><strong>Message-oriented:</strong> UDP sends data in units of "messages," and each message is independent.</li>
+</ul>
+<p><strong>For example:</strong> If you're watching a live stream, you might tolerate a few seconds of video stuttering or audio drops, because you're more concerned with overall smoothness. UDP is like a messenger who "sends it out regardless," highly efficient, but if something is lost, it's lost.</p>
+<h4 id="h-6-uses-of-udp-connections">6. Uses of UDP Connections<a class="headerlink" href="#h-6-uses-of-udp-connections" title="Permanent link">&para;</a></h4>
+<p>Although UDP is not very "reliable," it is very useful in many scenarios:</p>
+<ul>
+<li><strong>Applications requiring high real-time performance:</strong> Such as online video, audio streaming, and online games. These applications need to transmit data quickly, and even occasional data loss has less impact on user experience than stuttering.</li>
+<li><strong>Broadcasting and multicasting:</strong> UDP can easily send data to multiple recipients on the network.</li>
+<li><strong>DNS queries:</strong> Domain name resolution (translating URLs into IP addresses) usually uses UDP because the query requests are small, and if a response is not received the first time, the client can send another request.</li>
+</ul>
+<h4 id="h-7-summary">7. Summary<a class="headerlink" href="#h-7-summary" title="Permanent link">&para;</a></h4>
+<p>Okay, let's do a quick summary:</p>
+<ul>
+<li><strong>Transport protocols</strong> are the "traffic rules" of network communication.</li>
+<li><strong>TCP</strong> is like a <strong>reliable registered letter</strong>, guaranteeing data delivery and order, but relatively slow. Suitable for scenarios requiring high data integrity, such as web browsing and file downloads.</li>
+<li><strong>UDP</strong> is like a <strong>fast postcard</strong>, fast and low overhead, but does not guarantee reliability. Suitable for scenarios requiring high real-time performance, such as live streaming and games.</li>
+</ul></div>
+                <div class="btn-wrapper">
+                    <a href="/" class="back-btn" data-spa>
+                        <i class="fas fa-arrow-left" aria-hidden="true"></i> 返回首页
+                    </a>
+                </div>
+            </article>
+        </main>
+
+        <aside id="site-aside" aria-label="侧边栏">
+
+            <section class="widget profile-widget">
+                <h2 class="widget-title" style="display:none" aria-hidden="true">个人信息</h2>
+                <img src="https://cnfte.top/attachments/696b4d5b58c71_1768639835.webp" class="profile-avatar" alt="Cnfte 的头像" width="72"
+                    height="72" loading="lazy" decoding="async">
+                <div class="profile-name">Cnfte</div>
+                <p class="profile-bio">&#34;滚滚长江东逝水，浪花淘尽英雄。&#34;</p>
+                <div class="social-links">
+<a href="https://github.com/cnfte" target="_blank" rel="noopener"
+                        title="GitHub"><i class="fab fa-github" aria-hidden="true"></i><span
+                            class="sr-only">GitHub</span></a><a href="https://t.me/cnfte1" target="_blank" rel="noopener"
+                        title="Telegram"><i class="fab fa-telegram" aria-hidden="true"></i><span
+                            class="sr-only">Telegram</span></a><a href="https://space.bilibili.com/3546774635547595" target="_blank" rel="noopener"
+                        title="Bilibili"><i class="fab fa-bilibili" aria-hidden="true"></i><span
+                            class="sr-only">Bilibili</span></a><a href="https://x.com/wangwei960523" target="_blank" rel="noopener"
+                        title="Twitter"><i class="fab fa-twitter" aria-hidden="true"></i><span
+                            class="sr-only">Twitter</span></a><a href="https://example.com/" target="_blank" rel="noopener" title="RSS"><i
+                            class="fas fa-rss" aria-hidden="true"></i><span class="sr-only">RSS</span></a><a href="mailto:cnfte.2@gmail.com" title="Email"><i class="fas fa-envelope"
+                            aria-hidden="true"></i><span class="sr-only">Email</span></a>                </div>
+            </section>
+
+
+            <section class="widget">
+                <h2 class="widget-title"><i class="fas fa-list" aria-hidden="true"></i> 目录</h2>
+                <div class="toc-widget"><div class="toc">
+<ul>
+<li><a href="#h-1-what-is-a-transmission-protocol">1. What is a Transmission Protocol?</a></li>
+<li><a href="#h-2-the-uses-of-tcp-connections">2. The Uses of TCP Connections</a></li>
+<li><a href="#h-3-characteristics-of-tcp-traffic">3. Characteristics of TCP Traffic</a></li>
+<li><a href="#h-4-tcp-vs-udp">4. TCP vs. UDP</a></li>
+<li><a href="#h-5-characteristics-of-udp-traffic">5. Characteristics of UDP Traffic</a></li>
+<li><a href="#h-6-uses-of-udp-connections">6. Uses of UDP Connections</a></li>
+<li><a href="#h-7-summary">7. Summary</a></li>
+</ul>
+</div>
+</div>
+            </section>
+
+
+            <section class="widget">
+                <h2 class="widget-title"><i class="fas fa-tv" aria-hidden="true"></i> 正在追番</h2>
+                <div class="anime-list">
+                    <div class="anime-item">
+                        <img src="https://cnfte.top/attachments/Lycoris_Recoil.jpeg" class="anime-cover" alt="莉可丽丝 封面" width="40"
+                            height="54" loading="lazy" decoding="async">
+                        <div class="anime-info">
+                            <span class="anime-title">莉可丽丝</span>
+                            <div class="anime-ep">
+EP 13/13 · 安宁的日常——背后却暗藏秘密。 将犯罪防患于未然的秘密组织——“DA（Direct Attack）”，隶属于DA的少女特工——“Lycoris”。 理所当然的日常，都要归功于她们。 作为DA支部，咖啡厅“LycoReco”的员工中有号称史上最强Lycoris的精英锦木千束，以及优秀却暗藏隐情的Lycoris井上泷奈。 这里供应的不光是咖啡和甜品，还有照顾孩子、代为购物、教外国人日语等服务，全都不像是“Lycoris”会做的事。 自由随性又乐天的和平主义者千束和效率至上的泷奈，反差巨大的两人组成搭档，开始了忙忙碌碌的每一天。                            </div>
+                        </div>
+                        <span class="anime-status ended">
+                            完结
+                        </span>
+                    </div>
+                </div>
+            </section>
+
+
+            <section class="terminal-widget" aria-label="文章信息">
+                <div class="t-line">&gt; <span class="t-accent">UID</span>: <span class="t-val">177139506166</span>
+                </div>
+                <div class="t-line">&gt; <span class="t-accent">TIME</span>: <span id="live-clock"
+                        class="t-val">—</span></div>
+                <div class="t-line">&gt; <span class="t-accent">READ</span>: <span class="t-val">~15min</span></div>
+                <div class="t-dim">&gt; EOF</div>
+            </section>
+        </aside>
+    </div>
+
+    <footer id="site-footer">
+        <div class="foot-left">
+            <div class="foot-text">本站由Cloudflare和Github强力驱动
+<br>欢迎到来，反馈问题和吹水请看下方：
+<br>如何联系Cnfte与bug反馈？>>>QQ群聊：887378676
+<br>TG群组：<a href="https://t.me/+pCnCBiCsyOhhMWU9">https://t.me/+pCnCBiCsyOhhMWU9</a>
+<br欢迎到来
+<br>状态监控：<a href="https://probe.cnfte.top">https://probe.cnfte.top</a>
+<br>如果对本博客的面板有兴趣可以联系CNFTE请求开源管理面板</div>
+            <div class="foot-copy">© 2026 Cnfte // CNFTE MOE PANEL</div>
+        </div>
+        <div class="foot-right">
+<a class="foot-icon" href="https://github.com/cnfte" target="_blank" rel="noopener"
+                title="GitHub"><i class="fab fa-github"></i></a><a class="foot-icon" href="https://t.me/cnfte1" target="_blank"
+                rel="noopener" title="Telegram"><i class="fab fa-telegram"></i></a><a class="foot-icon" href="https://space.bilibili.com/3546774635547595" target="_blank"
+                rel="noopener" title="Bilibili"><i class="fab fa-bilibili"></i></a><a class="foot-icon" href="https://x.com/wangwei960523" target="_blank"
+                rel="noopener" title="Twitter/X"><i class="fab fa-twitter"></i></a><a class="foot-icon" href="mailto:cnfte.2@gmail.com" title="Email"><i
+                    class="fas fa-envelope"></i></a>        </div>
+    </footer>
+
+    <script>
+        'use strict';
+
+        /* ─── 页脚滑入动画 ─── */
+        (function () {
+            const footer = document.getElementById('site-footer');
+            if (!footer) return;
+            const io = new IntersectionObserver(([entry]) => {
+                if (entry.isIntersecting) {
+                    footer.classList.add('foot-revealed');
+                    io.disconnect();
+                }
+            }, { threshold: 0.15 });
+            io.observe(footer);
+        })();
+
+        const bar = document.getElementById('progress-bar');
+        window._progressHandler = () => {
+            if (!bar) return;
+            const el = document.documentElement;
+            bar.style.width = Math.min((el.scrollTop || document.body.scrollTop) / (el.scrollHeight - el.clientHeight) * 100, 100) + '%';
+        };
+        window.addEventListener('scroll', window._progressHandler, { passive: true });
+
+        function initClock() {
+            const el = document.getElementById('live-clock');
+            if (el) {
+                const tick = () => el.textContent = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                tick(); clearInterval(window._liveClockTimer);
+                window._liveClockTimer = setInterval(tick, 1000);
+            }
+            const cl = document.getElementById('clock'), hc = document.getElementById('hero-clock');
+            if (cl || hc) {
+                const tick2 = () => {
+                    const t = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                    if (cl) cl.textContent = t;
+                    if (hc) hc.textContent = t.slice(0, 5);
+                };
+                tick2(); clearInterval(window._clockTimer);
+                window._clockTimer = setInterval(tick2, 1000);
+            }
+        }
+        function initDays() {
+            const d1 = document.getElementById('days'), d2 = document.getElementById('sidebar-days');
+            if (!d1 && !d2) return;
+            try {
+                const s = new Date("2025-05-01");
+                if (isNaN(s)) return;
+                const n = Math.floor((Date.now() - s) / 86400000);
+                if (d1) d1.textContent = n;
+                if (d2) d2.textContent = n;
+            } catch (_) { }
+        }
+        function initHitokoto() {
+            const el = document.getElementById('hitokoto');
+            if (!el || el._loaded) return;
+            el._loaded = true;
+            (async () => {
+                try {
+                    const d = await (await fetch('https://v1.hitokoto.cn', { signal: AbortSignal.timeout(5000) })).json();
+                    el.textContent = (d.hitokoto || '— 次元语录加载失败 —');
+                } catch { el.textContent = '— 网络异常，语录休眠中 —'; }
+            })();
+        }
+        initClock();
+
+        const overlay = document.getElementById('page-transition');
+        const CACHE = window._spaCache || (window._spaCache = new Map());
+        const CACHE_MAX = 30;
+        let barTick;
+        function barStart() { if (!bar) return; bar.style.opacity = '1'; bar.style.width = '0%'; clearInterval(barTick); let p = 0; barTick = setInterval(() => { p = Math.min(p + (90 - p) * .09, 87); bar.style.width = p + '%'; }, 45); }
+        function barDone() { clearInterval(barTick); if (!bar) return; bar.style.width = '100%'; setTimeout(() => { bar.style.opacity = '0'; setTimeout(() => bar.style.width = '0%', 280); }, 180); }
+        // v4.2：短暂的软过渡veil，真正的翻页感由各区块自己的入场动画负责
+        async function fadeOut() { overlay.classList.add('active'); return new Promise(r => setTimeout(r, 120)); }
+        function fadeIn() { overlay.classList.remove('active'); }
+
+        // nav 元素本身在 SPA 换页时不会整体替换（只换 innerHTML），需要手动重放一次滑落动效
+        function replayEnter(el) {
+            if (!el) return;
+            el.classList.remove('cnfte-enter');
+            void el.offsetWidth;
+            el.classList.add('cnfte-enter');
+        }
+
+        const PREFETCHED = window._spaPrefetched || (window._spaPrefetched = new Set());
+        function prefetchUrl(url) {
+            if (!url || CACHE.has(url) || PREFETCHED.has(url)) return;
+            PREFETCHED.add(url);
+            fetch(url, { headers: { 'X-SPA': '1' } }).then(res => res.ok ? res.text() : null).then(html => {
+                if (!html) return;
+                if (CACHE.size >= CACHE_MAX) CACHE.delete(CACHE.keys().next().value);
+                CACHE.set(url, html);
+            }).catch(() => { });
+        }
+
+        function isSpaLink(href) {
+            if (!href || href.startsWith('#') || href.endsWith('.json') || href.startsWith('mailto:') || href.startsWith('tel:')) return false;
+            try { return new URL(href, location.origin).origin === location.origin; } catch { return false; }
+        }
+        async function navigate(url, push = true) {
+            if (push && url === location.href) return;
+            barStart(); await fadeOut();
+            try {
+                let html = CACHE.get(url);
+                if (!html) { const res = await fetch(url, { headers: { 'X-SPA': '1' } }); if (!res.ok) throw new Error('HTTP ' + res.status); html = await res.text(); if (CACHE.size >= CACHE_MAX) CACHE.delete(CACHE.keys().next().value); CACHE.set(url, html); }
+                const doc = new DOMParser().parseFromString(html, 'text/html');
+                document.title = doc.title;
+                document.body.dataset.page = doc.body.dataset.page || 'index';
+                const nStyle = doc.querySelector('style'), cStyle = document.querySelector('style');
+                if (nStyle && cStyle) cStyle.textContent = nStyle.textContent;
+                const nNav = doc.querySelector('nav'), cNav = document.querySelector('nav');
+                if (nNav && cNav) { cNav.className = nNav.className; cNav.innerHTML = nNav.innerHTML; }
+                const nHW = doc.getElementById('hero-wrap'), cHW = document.getElementById('hero-wrap');
+                if (nHW && cHW) cHW.outerHTML = nHW.outerHTML;
+                const nG = doc.querySelector('#main-grid,.layout-wrapper'), cG = document.querySelector('#main-grid,.layout-wrapper');
+                if (nG && cG) { cG.className = nG.className; cG.innerHTML = nG.innerHTML; }
+                const nF = doc.querySelector('footer'), cF = document.querySelector('footer');
+                if (nF && cF) cF.innerHTML = nF.innerHTML;
+                if (push) history.pushState({ url }, '', url);
+                reinitPage(); bindSpaLinks();
+                replayEnter(document.querySelector('nav'));
+                window.scrollTo({ top: 0, behavior: 'instant' });
+                barDone(); fadeIn();
+                searchReady = false; searchData = null;
+            } catch (e) { console.warn('[SPA] fallback:', e); barDone(); fadeIn(); location.href = url; }
+        }
+        function reinitPage() {
+            initClock(); initDays(); initHitokoto();
+            const si = document.getElementById('search-input');
+            if (si) si._bound = false;
+            const sb = document.getElementById('search-toggle');
+            if (sb) sb._bound = false;
+            window.removeEventListener('scroll', window._progressHandler);
+            if (document.querySelector('.post-body')) {
+                window._progressHandler = () => { if (!bar) return; const el = document.documentElement; bar.style.width = Math.min((el.scrollTop || document.body.scrollTop) / (el.scrollHeight - el.clientHeight) * 100, 100) + '%'; };
+            } else { window._progressHandler = () => { }; if (bar) bar.style.width = '0%'; }
+            window.addEventListener('scroll', window._progressHandler, { passive: true });
+            bindSearch();
+        }
+        function bindSpaLinks() {
+            document.querySelectorAll('a[data-spa],a[href]').forEach(a => {
+                if (a._spaBound) return; a._spaBound = true;
+                const href = a.getAttribute('href'); if (!isSpaLink(href)) return;
+                const full = new URL(href, location.origin).href;
+                a.addEventListener('click', e => { if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return; e.preventDefault(); navigate(full); });
+                a.addEventListener('mouseenter', () => prefetchUrl(full), { passive: true });
+                a.addEventListener('touchstart', () => prefetchUrl(full), { passive: true });
+            });
+        }
+        window.addEventListener('popstate', e => { const target = e.state?.url || location.href; navigate(target, false); });
+        history.replaceState({ url: location.href }, '', location.href);
+        bindSpaLinks();
+        replayEnter(document.querySelector('nav'));
+
+        // ── TOC 锚点平滑跳转（修复含特殊字符的 ID，如冒号） ──
+        document.addEventListener('click', function (e) {
+            const a = e.target.closest('a[href^="#"]');
+            if (!a) return;
+            const href = a.getAttribute('href');
+            if (!href || href === '#') return;
+            // 取出纯 hash（去掉 #）
+            const rawId = decodeURIComponent(href.slice(1));
+            if (!rawId) return;
+            // 先尝试原始 getElementById（兼容干净 ID）
+            let target = document.getElementById(rawId);
+            // 若找不到，用 CSS.escape 进行 querySelector
+            if (!target) {
+                try { target = document.querySelector('#' + CSS.escape(rawId)); } catch (_) { }
+            }
+            // 若仍找不到，对 ID 做 slugify 后再试（兼容旧构建产物）
+            if (!target) {
+                const slug = rawId.toLowerCase()
+                    .replace(/[\s\u3000/\\|]+/g, '-')
+                    .replace(/[^\w\u4e00-\u9fff\u3040-\u30ff\-]/g, '')
+                    .replace(/-{2,}/g, '-').replace(/^-|-$/g, '');
+                try { target = document.getElementById(slug) || document.querySelector('#' + CSS.escape(slug)); } catch (_) { }
+            }
+            if (!target) return;
+            e.preventDefault();
+            // 计算偏移（考虑固定导航栏）
+            const navH = document.querySelector('nav')?.offsetHeight || 0;
+            const top = target.getBoundingClientRect().top + window.scrollY - navH - 16;
+            window.scrollTo({ top, behavior: 'smooth' });
+            // 更新 URL hash（不触发跳转）
+            history.pushState(null, '', href);
+        }, true);
+
+        let searchData = null, searchReady = false, searchLoading = false, dTimer;
+        function getSearchPath() { return location.pathname.startsWith('/en/') ? '/en/search.json' : '/search.json'; }
+        function getSearchEls() { return { wrap: document.getElementById('search-wrap'), input: document.getElementById('search-input'), btn: document.getElementById('search-toggle'), drop: document.getElementById('search-dropdown') }; }
+        function toggleSearch(open) {
+            const { wrap, input, drop, btn } = getSearchEls(); if (!wrap) return;
+            const o = open !== undefined ? open : !wrap.classList.contains('open');
+            wrap.classList.toggle('open', o);
+            if (btn) btn.setAttribute('aria-expanded', o ? 'true' : 'false');
+            if (input) input.setAttribute('aria-expanded', o ? 'true' : 'false');
+            if (o) { input?.focus(); if (!searchReady && !searchLoading) loadSearchData(); }
+            else if (drop) { drop.classList.remove('open'); drop.innerHTML = ''; }
+        }
+        async function loadSearchData() { searchLoading = true; try { const r = await fetch(getSearchPath(), { cache: 'no-cache' }); if (!r.ok) throw 0; searchData = await r.json(); searchReady = true; } catch (e) { console.warn('[Search]', e); } finally { searchLoading = false; } }
+        function renderResults(q) {
+            const { drop } = getSearchEls(); if (!drop) return;
+            q = q.trim().toLowerCase(); drop.innerHTML = '';
+            if (!q) { drop.classList.remove('open'); return; }
+            if (!searchReady) { drop.innerHTML = '<div class="s-loading">加载中...</div>'; drop.classList.add('open'); if (!searchLoading) loadSearchData().then(() => { const { input } = getSearchEls(); renderResults(input?.value || ''); }); return; }
+            const hits = (searchData || []).filter(i => i.title?.toLowerCase().includes(q)).slice(0, 10);
+            if (!hits.length) { drop.innerHTML = '<div class="s-empty">无匹配结果</div>'; }
+            else {
+                const frag = document.createDocumentFragment();
+                const esc = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                hits.forEach(item => {
+                    const a = document.createElement('a'); a.className = 's-item'; a.href = item.url;
+                    a.setAttribute('role', 'option');
+                    a.innerHTML = item.title.replace(new RegExp(esc, 'gi'), m => `<mark style="background:var(--accent);color:#000;border-radius:3px;padding:0 2px">${m}</mark>`);
+                    a.addEventListener('click', () => toggleSearch(false)); frag.appendChild(a);
+                });
+                drop.appendChild(frag);
+            }
+            drop.classList.add('open');
+        }
+        function bindSearch() {
+            const { input, btn } = getSearchEls();
+            if (input && !input._bound) { input._bound = true; input.addEventListener('input', e => { clearTimeout(dTimer); dTimer = setTimeout(() => renderResults(e.target.value), 160); }); input.addEventListener('keydown', e => { if (e.key === 'Escape') toggleSearch(false); }); }
+            if (btn && !btn._bound) { btn._bound = true; btn.addEventListener('click', e => { e.stopPropagation(); toggleSearch(); }); }
+        }
+        document.addEventListener('click', e => { const { wrap } = getSearchEls(); if (wrap && !wrap.contains(e.target)) toggleSearch(false); }, { capture: true });
+        bindSearch();
+    </script>
+
+<style>
+    /* ── 侧边栏位置：左 / 右（默认）/ 不显示 ──
+       「左侧」这个选项只在双栏布局下有意义（对应 index.html/post.html 里
+       .layout-wrapper 在 >900px 时才是两栏，≤900px 会自己变成单栏堆叠）。
+       手机端不加这个媒体查询保护的话，选了「左侧」会被 #main-grid.sidebar-left
+       的 ID 选择器强行插入一条 grid-template-columns，把本该单栏的布局又拗成
+       双栏，导致内容被挤扁。这里用同一个 900px 断点把它锁在桌面/平板宽度内，
+       手机端该选项自动失效，不需要额外隐藏面板里的按钮或改 JS。 */
+    @media (min-width: 901px) {
+        #main-grid.sidebar-left {
+            grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+        }
+
+        #main-grid.sidebar-left #site-aside {
+            order: -1;
+        }
+    }
+
+    #main-grid.sidebar-none {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    #main-grid.sidebar-none #site-aside {
+        display: none !important;
+    }
+
+    /* ── 通用旋转图标工具类（受后台「启用图标旋转」开关控制）── */
+    .cnfte-spin-slow {
+        display: inline-block;
+        animation: cnfteSpin 5s linear infinite;
+    }
+
+    .cnfte-spin-hover {
+        display: inline-block;
+        transition: transform .5s var(--ease-out);
+    }
+
+    *:hover>.cnfte-spin-hover {
+        transform: rotate(180deg);
+    }
+
+    @keyframes cnfteSpin {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* ── 标签 / 分类 选中弹跳动画（受后台「启用标签弹跳」开关控制）── */
+    @keyframes cnfteTagBounce {
+        0% {
+            transform: scale(1);
+        }
+
+        35% {
+            transform: scale(1.28);
+        }
+
+        60% {
+            transform: scale(.9);
+        }
+
+        80% {
+            transform: scale(1.08);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+    }
+
+    .cnfte-chip.active {
+        animation: cnfteTagBounce .5s var(--ease-out);
+    }
+
+    .cnfte-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 11px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: var(--glass);
+        color: rgba(255, 255, 255, .68);
+        font-size: .72rem;
+        cursor: pointer;
+        transition: border-color .2s, color .2s, background .2s, transform .4s var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1));
+        user-select: none;
+    }
+
+    .cnfte-chip:hover {
+        border-color: var(--border-accent);
+        color: var(--accent);
+        transform: translateY(-2px) scale(1.06);
+    }
+
+    .cnfte-chip:active {
+        transform: scale(.9);
+        transition: transform .15s var(--ease-press, cubic-bezier(0.34, 1.2, 0.64, 1));
+    }
+
+    .cnfte-chip.active {
+        background: var(--grad);
+        color: #1a1620;
+        border-color: transparent;
+        font-weight: 700;
+    }
+
+    .cnfte-chip .chip-count {
+        opacity: .65;
+        font-size: .66rem;
+    }
+
+    /* ── 归档 widget：年 / 月 两级 ── */
+    .cnfte-archive-level {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .cnfte-archive-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 7px 10px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: var(--glass);
+        cursor: pointer;
+        font-size: .78rem;
+        color: rgba(255, 255, 255, .75);
+        transition: border-color .2s, transform .4s var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1));
+    }
+
+    .cnfte-archive-row:hover {
+        border-color: var(--border-accent);
+        transform: translateX(4px) scale(1.015);
+    }
+
+    .cnfte-archive-row:active {
+        transform: scale(.97);
+        transition: transform .12s var(--ease-press, cubic-bezier(0.34, 1.2, 0.64, 1));
+    }
+
+    .cnfte-archive-row.active {
+        border-color: var(--accent);
+        color: var(--accent);
+    }
+
+    .cnfte-archive-row .arc-count {
+        font-size: .68rem;
+        opacity: .6;
+    }
+
+    .cnfte-archive-back {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: .72rem;
+        color: var(--accent);
+        cursor: pointer;
+        margin-bottom: 4px;
+        width: fit-content;
+    }
+
+    /* ── 分页 ── */
+    #cnfte-pagination {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin: 28px 0 8px;
+        flex-wrap: wrap;
+    }
+
+    .cnfte-page-btn {
+        min-width: 34px;
+        height: 34px;
+        padding: 0 8px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: var(--glass);
+        color: rgba(255, 255, 255, .68);
+        font-size: .78rem;
+        cursor: pointer;
+        transition: border-color .2s, color .2s, background .2s, transform .4s var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1));
+    }
+
+    .cnfte-page-btn:hover:not(:disabled) {
+        border-color: var(--border-accent);
+        color: var(--accent);
+        transform: translateY(-3px) scale(1.08);
+    }
+
+    .cnfte-page-btn:active:not(:disabled) {
+        transform: scale(.88);
+        transition: transform .15s var(--ease-press, cubic-bezier(0.34, 1.2, 0.64, 1));
+    }
+
+    .cnfte-page-btn.active {
+        background: var(--grad);
+        color: #1a1620;
+        font-weight: 700;
+        border-color: transparent;
+    }
+
+    .cnfte-page-btn:disabled {
+        opacity: .35;
+        cursor: not-allowed;
+    }
+
+    #cnfte-filter-bar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-bottom: 16px;
+    }
+
+    #cnfte-clear-filter {
+        font-size: .72rem;
+        color: var(--accent2);
+        cursor: pointer;
+        display: none;
+        align-items: center;
+        gap: 4px;
+    }
+
+    #cnfte-clear-filter.show {
+        display: inline-flex;
+    }
+
+    /* ── Hero 副标题打字机效果：光标是紧跟在最后一个字符后面的独立 span，
+       不是贴在容器最右侧的 border（那样文字没写满一行时光标会离字很远）── */
+    .cnfte-typing-active {
+        white-space: pre-wrap;
+    }
+
+    .cnfte-cursor {
+        display: inline-block;
+        width: 2px;
+        height: 1em;
+        margin-left: 2px;
+        background: var(--accent);
+        vertical-align: -0.1em;
+        animation: cnfteBlink .9s step-end infinite;
+    }
+
+    @keyframes cnfteBlink {
+
+        0%,
+        100% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0;
+        }
+    }
+
+    /* ── 鼠标粒子跟随画布 ── */
+    #cnfte-particles {
+        position: fixed;
+        inset: 0;
+        z-index: 9997;
+        pointer-events: none;
+    }
+
+    /* ── 回到顶部 ── */
+    #cnfte-top-btn {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        z-index: 9000;
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        background: var(--glass-heavy);
+        border: 1px solid var(--border);
+        color: var(--accent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(12px) scale(.85);
+        transition: opacity .3s var(--ease-out), transform .3s var(--ease-out), visibility .3s, border-color .2s;
+        box-shadow: var(--shadow);
+    }
+
+    #cnfte-top-btn.show {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0) scale(1);
+    }
+
+    #cnfte-top-btn:hover {
+        transform: translateY(-4px) scale(1.05);
+        border-color: var(--accent);
+    }
+
+    #cnfte-top-btn:active {
+        transform: translateY(0) scale(.88);
+        transition: transform .15s var(--ease-press, cubic-bezier(0.34, 1.2, 0.64, 1));
+    }
+
+    /* ── 设置按钮 + 面板（左下角）── */
+    #cnfte-settings-btn {
+        position: fixed;
+        left: 20px;
+        bottom: 20px;
+        z-index: 9001;
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        background: var(--glass-heavy);
+        border: 1px solid var(--border);
+        color: var(--accent);
+        font-size: 1.05rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: var(--shadow);
+        transition: border-color .25s, transform .25s var(--ease-out);
+    }
+
+    #cnfte-settings-btn:hover {
+        border-color: var(--accent);
+        transform: scale(1.08) rotate(20deg);
+    }
+
+    #cnfte-settings-btn:active {
+        transform: scale(.88) rotate(-10deg);
+        transition: transform .15s var(--ease-press, cubic-bezier(0.34, 1.2, 0.64, 1));
+    }
+
+    #cnfte-settings-panel {
+        position: fixed;
+        left: 20px;
+        bottom: 78px;
+        z-index: 9001;
+        width: 272px;
+        max-height: 72vh;
+        overflow-y: auto;
+        background: var(--glass-heavy);
+        border: 1px solid var(--border);
+        border-radius: var(--r-md);
+        padding: 18px 18px 14px;
+        box-shadow: var(--shadow);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(14px) scale(.95);
+        transform-origin: bottom left;
+        transition: opacity .25s var(--ease-out), transform .25s var(--ease-out), visibility .25s;
+    }
+
+    #cnfte-settings-panel.open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0) scale(1);
+    }
+
+    #cnfte-settings-panel h3 {
+        font-size: .82rem;
+        color: var(--accent);
+        letter-spacing: .5px;
+        margin-bottom: 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .cs-row {
+        margin-bottom: 15px;
+    }
+
+    .cs-row:last-child {
+        margin-bottom: 4px;
+    }
+
+    .cs-row>label.cs-label {
+        display: block;
+        font-size: .7rem;
+        color: rgba(255, 255, 255, .5);
+        margin-bottom: 7px;
+        letter-spacing: .3px;
+    }
+
+    .cs-seg {
+        display: flex;
+        gap: 6px;
+    }
+
+    .cs-seg button {
+        flex: 1;
+        padding: 7px 2px;
+        border-radius: 9px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, .04);
+        color: rgba(255, 255, 255, .58);
+        font-size: .68rem;
+        font-family: inherit;
+        cursor: pointer;
+        transition: border-color .2s, color .2s, background .2s, transform .35s var(--ease-spring, cubic-bezier(0.34, 1.56, 0.64, 1));
+    }
+
+    .cs-seg button:hover {
+        transform: translateY(-2px) scale(1.04);
+        border-color: var(--border-accent);
+    }
+
+    .cs-seg button:active {
+        transform: scale(.92);
+        transition: transform .15s var(--ease-press, cubic-bezier(0.34, 1.2, 0.64, 1));
+    }
+
+    .cs-seg button.active {
+        border-color: var(--accent);
+        color: var(--accent);
+        background: rgba(255, 153, 204, .12);
+        font-weight: 700;
+    }
+
+    .cs-color-input {
+        width: 100%;
+        height: 32px;
+        border-radius: 8px;
+        border: 1px solid var(--border);
+        background: transparent;
+        cursor: pointer;
+        padding: 2px;
+    }
+
+    /* ── 文章封面缺省毛笔占位（没有 cover / 图池 / 随机图 API 时的兜底）── */
+    .post-cover-default {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.4rem;
+        background: var(--grad2);
+        opacity: .85;
+    }
+</style>
+
+<button id="cnfte-settings-btn" aria-label="打开显示设置" aria-expanded="false" aria-controls="cnfte-settings-panel">
+    <i class="fas fa-gear cnfte-spin-slow" aria-hidden="true"></i>
+</button>
+
+<div id="cnfte-settings-panel" role="dialog" aria-label="显示设置">
+    <h3><i class="fas fa-sliders" aria-hidden="true"></i> 显示设置</h3>
+
+    <div class="cs-row">
+        <label class="cs-label">侧边栏位置</label>
+        <div class="cs-seg" data-cs-group="sidebar">
+            <button type="button" data-val="left">左侧</button>
+            <button type="button" data-val="right">右侧</button>
+            <button type="button" data-val="none">不显示</button>
+        </div>
+    </div>
+
+    <div class="cs-row">
+        <label class="cs-label">主题色</label>
+        <input type="color" id="cs-color-input" class="cs-color-input" value="#98ba91">
+    </div>
+
+    <div class="cs-row">
+        <button type="button" class="cs-seg" id="cs-reset-btn"
+            style="width:100%;padding:8px;border-radius:9px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:rgba(255,255,255,.55);font-size:.7rem;cursor:pointer">
+            ↺ 恢复默认设置
+        </button>
+    </div>
+</div>
+
+<button id="cnfte-top-btn" aria-label="回到顶部">
+    <i class="fas fa-arrow-up" aria-hidden="true"></i>
+</button>
+
+<canvas id="cnfte-particles" aria-hidden="true"></canvas>
+
+<script>
+    // 后台配置直接注入，前台 JS 只读不写——深浅色/打字效果这类「网站设计层面」的开关
+    // 交给站长在管理面板统一决定，不再放到访客可自行切换的前台设置面板里。
+    window.__cnfteConfig = {
+        heroTyping: false
+    };
+</script>
+<script>
+    (function () {
+        'use strict';
+        const LS = {
+            sidebar: 'cnfte_sidebar', color: 'cnfte_color',
+        };
+        const DEFAULT_COLOR = document.getElementById('cs-color-input')?.value || '#ff99cc';
+        // 打字机效果逐字修改 .hero-text p 的 textContent 本身也是一次 DOM 变化，
+        // 如果不做处理会被下面的 MutationObserver 捕获，重新触发一轮初始化，
+        // 反而打断/搞乱正在进行的打字动画。这里用一个可被 initHeroTyping() 访问到
+        // 的观察者引用，在打字过程中临时 disconnect，打完再重新 observe。
+        let cnfteObserver = null;
+
+        function hexToRgb(hex) {
+            const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex || '');
+            return m ? { r: parseInt(m[1], 16), g: parseInt(m[2], 16), b: parseInt(m[3], 16) } : null;
+        }
+        function shiftHue(hex, deg) {
+            const rgb = hexToRgb(hex); if (!rgb) return hex;
+            let { r, g, b } = rgb; r /= 255; g /= 255; b /= 255;
+            const max = Math.max(r, g, b), min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
+            if (max === min) { h = s = 0; } else {
+                const d = max - min;
+                s = l > .5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    default: h = (r - g) / d + 4;
+                }
+                h /= 6;
+            }
+            h = (h + deg / 360) % 1;
+            function hue2rgb(p, q, t) {
+                if (t < 0) t += 1; if (t > 1) t -= 1;
+                if (t < 1 / 6) return p + (q - p) * 6 * t;
+                if (t < 1 / 2) return q;
+                if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+                return p;
+            }
+            let r2, g2, b2;
+            if (s === 0) { r2 = g2 = b2 = l; } else {
+                const q = l < .5 ? l * (1 + s) : l + s - l * s;
+                const p = 2 * l - q;
+                r2 = hue2rgb(p, q, h + 1 / 3); g2 = hue2rgb(p, q, h); b2 = hue2rgb(p, q, h - 1 / 3);
+            }
+            const to255 = v => Math.round(v * 255).toString(16).padStart(2, '0');
+            return `#${to255(r2)}${to255(g2)}${to255(b2)}`;
+        }
+
+        function applyThemeColor(hex) {
+            if (!hex) return;
+            const root = document.documentElement;
+            root.style.setProperty('--accent', hex);
+            root.style.setProperty('--accent2', shiftHue(hex, 30));
+            root.style.setProperty('--accent3', shiftHue(hex, 200));
+            root.style.setProperty('--grad', `linear-gradient(135deg, ${hex} 0%, ${shiftHue(hex, 30)} 100%)`);
+            root.style.setProperty('--grad2', `linear-gradient(135deg, ${shiftHue(hex, 200)} 0%, ${shiftHue(hex, 260)} 100%)`);
+            root.style.setProperty('--border-accent', hex + '73');
+        }
+
+        function syncPanelUI() {
+            const sidebar = localStorage.getItem(LS.sidebar) || 'right';
+            const color = localStorage.getItem(LS.color) || DEFAULT_COLOR;
+
+            document.querySelectorAll('[data-cs-group="sidebar"] button').forEach(b => b.classList.toggle('active', b.dataset.val === sidebar));
+            const colorInput = document.getElementById('cs-color-input');
+            if (colorInput) colorInput.value = color;
+        }
+
+        function applyPersistedUI() {
+            const sidebar = localStorage.getItem(LS.sidebar) || 'right';
+            const grid = document.getElementById('main-grid');
+            if (grid) {
+                grid.classList.remove('sidebar-left', 'sidebar-none');
+                if (sidebar === 'left') grid.classList.add('sidebar-left');
+                if (sidebar === 'none') grid.classList.add('sidebar-none');
+            }
+
+            const color = localStorage.getItem(LS.color);
+            if (color) applyThemeColor(color);
+
+            syncPanelUI();
+        }
+
+        // ── 设置面板交互 ──
+        function bindSettingsPanel() {
+            const btn = document.getElementById('cnfte-settings-btn');
+            const panel = document.getElementById('cnfte-settings-panel');
+            if (!btn || !panel || btn._bound) return;
+            btn._bound = true;
+
+            btn.addEventListener('click', () => {
+                const open = !panel.classList.contains('open');
+                panel.classList.toggle('open', open);
+                btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+            });
+            document.addEventListener('click', e => {
+                if (!panel.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
+                    panel.classList.remove('open');
+                    btn.setAttribute('aria-expanded', 'false');
+                }
+            });
+
+            panel.querySelectorAll('[data-cs-group="sidebar"]').forEach(group => {
+                group.querySelectorAll('button').forEach(b => {
+                    b.addEventListener('click', () => {
+                        localStorage.setItem(LS.sidebar, b.dataset.val);
+                        applyPersistedUI();
+                    });
+                });
+            });
+
+            const colorInput = document.getElementById('cs-color-input');
+            if (colorInput) {
+                colorInput.addEventListener('input', () => {
+                    localStorage.setItem(LS.color, colorInput.value);
+                    applyThemeColor(colorInput.value);
+                });
+            }
+
+            const resetBtn = document.getElementById('cs-reset-btn');
+            if (resetBtn) {
+                resetBtn.addEventListener('click', () => {
+                    localStorage.removeItem(LS.sidebar);
+                    localStorage.removeItem(LS.color);
+                    document.documentElement.style.removeProperty('--accent');
+                    document.documentElement.style.removeProperty('--accent2');
+                    document.documentElement.style.removeProperty('--accent3');
+                    document.documentElement.style.removeProperty('--grad');
+                    document.documentElement.style.removeProperty('--grad2');
+                    document.documentElement.style.removeProperty('--border-accent');
+                    applyPersistedUI();
+                });
+            }
+        }
+
+        // ── Hero 副标题打字机效果 ──
+        // 是否启用由后台配置决定（window.__cnfteConfig.heroTyping），不再放到前台
+        // 设置面板给访客自行切换——这是站长的网站设计选择，不是访客的个人偏好。
+        //
+        // 逐字修改 textContent 本身会触发下面的 MutationObserver，如果不做隔离，
+        // 40ms 防抖之后会重新调用本函数、把刚启动没多久的计时器 clear 掉，导致打字
+        // 动画卡死在空字符串上再也恢复不了。这里的做法：真正开始逐字输出前先
+        // disconnect 观察者，全部打完/被禁用后再重新 observe。
+        //
+        // 光标不用 CSS border-right（那样只会贴在容器最右侧，文字没占满整行时
+        // 光标就会离文字很远，跟文字长度对不上），改成动态插入一个跟着文字一起走的
+        // <span> 字符，天然贴在最后一个字后面，换行时也会跟着文字走。
+        function initHeroTyping(forceRestart) {
+            const el = document.querySelector('.hero-text p');
+            if (!el) return;
+            const enabled = !!(window.__cnfteConfig && window.__cnfteConfig.heroTyping);
+
+            if (!enabled) {
+                clearTimeout(el._cnfteTypeTimer);
+                el._cnfteTypeTimer = null;
+                el.classList.remove('cnfte-typing-active');
+                if (el.dataset.cnfteFull) el.textContent = el.dataset.cnfteFull;
+                if (cnfteObserver) cnfteObserver.observe(document.body, { childList: true, subtree: true });
+                return;
+            }
+
+            const full = el.dataset.cnfteFull || el.textContent;
+            el.dataset.cnfteFull = full;
+
+            // 已经打完这段文字、且不是强制重来 → 什么都不用做，避免被反复重复触发的
+            // MutationObserver 回调打断正在进行中的动画。
+            if (!forceRestart && el._cnfteTyped === full && (el._cnfteTypeTimer || el.querySelector('.cnfte-cursor'))) return;
+
+            clearTimeout(el._cnfteTypeTimer);
+            el._cnfteTyped = full;
+            el.classList.add('cnfte-typing-active');
+            if (cnfteObserver) cnfteObserver.disconnect();
+
+            // 用「文字文本节点 + 光标 span」两个子节点搭建：光标天然贴在最后一个已
+            // 打出的字符后面（而不是贴在容器最右侧），文字换行时光标也会跟着走。
+            el.textContent = '';
+            const textNode = document.createTextNode('');
+            const cursor = document.createElement('span');
+            cursor.className = 'cnfte-cursor';
+            el.appendChild(textNode);
+            el.appendChild(cursor);
+
+            let i = 0;
+            const PUNCT_PAUSE = '，。！？,.!?、；;:…—';
+            function tick() {
+                i++;
+                textNode.textContent = full.slice(0, i);
+                if (i >= full.length) {
+                    el._cnfteTypeTimer = null;
+                    if (cnfteObserver) cnfteObserver.observe(document.body, { childList: true, subtree: true });
+                    return;
+                }
+                // 慢一点、带自然抖动的节奏，标点符号后面额外停顿一下，
+                // 而不是匀速打字机那种生硬感。
+                const ch = full[i - 1];
+                let delay = 95 + Math.random() * 75;
+                if (PUNCT_PAUSE.includes(ch)) delay += 300 + Math.random() * 220;
+                else if (ch === ' ') delay += 50;
+                el._cnfteTypeTimer = setTimeout(tick, delay);
+            }
+            tick();
+        }
+
+        // ── 回到顶部 ──
+        function bindBackToTop() {
+            const btn = document.getElementById('cnfte-top-btn');
+            if (!btn || btn._bound) return;
+            btn._bound = true;
+            window.addEventListener('scroll', () => {
+                btn.classList.toggle('show', (window.scrollY || document.documentElement.scrollTop) > 420);
+            }, { passive: true });
+            btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        }
+
+        // ── 鼠标粒子跟随 ──
+        function initParticles() {
+            const canvas = document.getElementById('cnfte-particles');
+            if (!canvas || canvas._inited) return;
+            canvas._inited = true;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return;
+            let w, h, particles = [];
+            const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (reduceMotion) { canvas.style.display = 'none'; return; }
+            function resize() { w = canvas.width = innerWidth; h = canvas.height = innerHeight; }
+            resize();
+            window.addEventListener('resize', resize);
+            let last = 0;
+            window.addEventListener('pointermove', e => {
+                const now = Date.now();
+                if (now - last < 16) return;
+                last = now;
+                for (let i = 0; i < 2; i++) {
+                    particles.push({
+                        x: e.clientX, y: e.clientY,
+                        vx: (Math.random() - .5) * 1.4, vy: (Math.random() - .5) * 1.4 - .2,
+                        life: 1, r: Math.random() * 2 + 1.2
+                    });
+                }
+                if (particles.length > 140) particles.splice(0, particles.length - 140);
+            }, { passive: true });
+            function tick() {
+                ctx.clearRect(0, 0, w, h);
+                const color = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#ff99cc';
+                const rgb = hexToRgb(color.length === 7 ? color : DEFAULT_COLOR) || { r: 255, g: 153, b: 204 };
+                for (const p of particles) {
+                    p.x += p.vx; p.y += p.vy; p.vy += 0.01; p.life -= 0.022;
+                    if (p.life <= 0) continue;
+                    ctx.globalAlpha = Math.max(p.life, 0) * .8;
+                    ctx.fillStyle = `rgb(${rgb.r},${rgb.g},${rgb.b})`;
+                    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+                }
+                ctx.globalAlpha = 1;
+                particles = particles.filter(p => p.life > 0);
+                requestAnimationFrame(tick);
+            }
+            tick();
+        }
+
+        // ── 归档 / 分类 / 标签 筛选 + 分页（仅首页存在 .post-card 时生效） ──
+        // ── 「全部标签」聚合页视图（?tags=all 时切换展示，仅首页存在 #cnfte-tags-hub 时生效）──
+        function initTagsHubView() {
+            const hub = document.getElementById('cnfte-tags-hub');
+            if (!hub) return;
+            const main = document.getElementById('main-content');
+            if (!main) return;
+            let showHub = false;
+            try { showHub = new URLSearchParams(location.search).get('tags') === 'all'; } catch (_) { }
+
+            hub.style.display = showHub ? '' : 'none';
+            main.querySelectorAll('.post-card').forEach(c => { if (showHub) c.style.display = 'none'; });
+            const filterBar = document.getElementById('cnfte-filter-bar');
+            const pagination = document.getElementById('cnfte-pagination');
+            if (filterBar) filterBar.style.display = showHub ? 'none' : '';
+            if (pagination) pagination.style.display = showHub ? 'none' : '';
+            const empty = main.querySelector('.empty-state');
+            if (empty && showHub) empty.style.display = 'none';
+        }
+
+        function initArchiveFilters() {
+            const main = document.getElementById('main-content');
+            if (!main) return;
+            const cards = Array.from(main.querySelectorAll('.post-card'));
+            if (!cards.length) return;
+            if (main._cnfteFilterBound) return;
+            main._cnfteFilterBound = true;
+
+            const perPage = parseInt(main.dataset.perPage || '9', 10) || 9;
+            const state = { category: null, tag: null, year: null, month: null, page: 1 };
+
+            // 从 URL 带入初始筛选（例如文章详情页的分类/标签徽章跳转过来）
+            try {
+                const usp = new URLSearchParams(location.search);
+                if (usp.get('category')) state.category = usp.get('category');
+                if (usp.get('tag')) state.tag = usp.get('tag');
+            } catch (_) { }
+
+            function cardMatches(card) {
+                if (state.category && card.dataset.category !== state.category) return false;
+                if (state.tag && !(card.dataset.tags || '').split('|').includes(state.tag)) return false;
+                if (state.year && card.dataset.year !== state.year) return false;
+                if (state.month && card.dataset.month !== state.month) return false;
+                return true;
+            }
+
+            function render() {
+                const visible = cards.filter(cardMatches);
+                const totalPages = Math.max(1, Math.ceil(visible.length / perPage));
+                if (state.page > totalPages) state.page = totalPages;
+                if (state.page < 1) state.page = 1;
+                const startIdx = (state.page - 1) * perPage;
+                cards.forEach(c => c.style.display = 'none');
+                visible.slice(startIdx, startIdx + perPage).forEach(c => c.style.display = '');
+
+                const empty = main.querySelector('.empty-state');
+                if (empty) empty.style.display = visible.length ? 'none' : '';
+
+                renderPagination(totalPages, visible.length);
+                syncChipStates();
+            }
+
+            function renderPagination(totalPages, totalCount) {
+                const wrap = document.getElementById('cnfte-pagination');
+                if (!wrap) return;
+                wrap.innerHTML = '';
+                if (totalCount <= perPage) return;
+                const mk = (label, page, opts = {}) => {
+                    const b = document.createElement('button');
+                    b.type = 'button'; b.className = 'cnfte-page-btn';
+                    if (opts.active) b.classList.add('active');
+                    b.disabled = !!opts.disabled;
+                    b.innerHTML = label;
+                    if (!opts.disabled) b.addEventListener('click', () => { state.page = page; render(); scrollToGrid(); });
+                    return b;
+                };
+                wrap.appendChild(mk('<i class="fas fa-angle-left" aria-hidden="true"></i>', state.page - 1, { disabled: state.page <= 1 }));
+                const windowSize = 5;
+                let startP = Math.max(1, state.page - Math.floor(windowSize / 2));
+                let endP = Math.min(totalPages, startP + windowSize - 1);
+                startP = Math.max(1, endP - windowSize + 1);
+                for (let p = startP; p <= endP; p++) wrap.appendChild(mk(String(p), p, { active: p === state.page }));
+                wrap.appendChild(mk('<i class="fas fa-angle-right" aria-hidden="true"></i>', state.page + 1, { disabled: state.page >= totalPages }));
+            }
+
+            function scrollToGrid() {
+                const navH = document.querySelector('nav')?.offsetHeight || 0;
+                const top = main.getBoundingClientRect().top + window.scrollY - navH - 20;
+                window.scrollTo({ top, behavior: 'smooth' });
+            }
+
+            function syncChipStates() {
+                document.querySelectorAll('.cnfte-chip[data-cat]').forEach(el => el.classList.toggle('active', el.dataset.cat === state.category));
+                document.querySelectorAll('.cnfte-chip[data-tag]').forEach(el => el.classList.toggle('active', el.dataset.tag === state.tag));
+                document.querySelectorAll('.cnfte-archive-row[data-month]').forEach(el => el.classList.toggle('active', el.dataset.month === state.month && el.dataset.year === state.year));
+                const clearBtn = document.getElementById('cnfte-clear-filter');
+                if (clearBtn) clearBtn.classList.toggle('show', !!(state.category || state.tag || state.year));
+            }
+
+            document.querySelectorAll('.cnfte-chip[data-cat]').forEach(el => {
+                el.addEventListener('click', () => {
+                    state.category = state.category === el.dataset.cat ? null : el.dataset.cat;
+                    state.page = 1; render(); scrollToGrid();
+                });
+            });
+            document.querySelectorAll('.cnfte-chip[data-tag]').forEach(el => {
+                el.addEventListener('click', () => {
+                    state.tag = state.tag === el.dataset.tag ? null : el.dataset.tag;
+                    state.page = 1; render(); scrollToGrid();
+                });
+            });
+
+            // 归档：年 -> 月 两级钻取
+            const yearLevel = document.getElementById('cnfte-archive-years');
+            const monthLevel = document.getElementById('cnfte-archive-months');
+            const backBtn = document.getElementById('cnfte-archive-back');
+            const monthTitle = document.getElementById('cnfte-archive-month-title');
+            if (yearLevel && monthLevel) {
+                yearLevel.querySelectorAll('.cnfte-archive-row[data-year]').forEach(row => {
+                    row.addEventListener('click', () => {
+                        const y = row.dataset.year;
+                        yearLevel.style.display = 'none';
+                        monthLevel.style.display = '';
+                        monthLevel.querySelectorAll('.cnfte-archive-row').forEach(r => {
+                            r.style.display = r.dataset.year === y ? '' : 'none';
+                        });
+                        if (monthTitle) monthTitle.textContent = y + ' 年';
+                    });
+                });
+                if (backBtn) {
+                    backBtn.addEventListener('click', () => {
+                        monthLevel.style.display = 'none';
+                        yearLevel.style.display = '';
+                        state.year = null; state.month = null;
+                        state.page = 1; render();
+                    });
+                }
+                monthLevel.querySelectorAll('.cnfte-archive-row[data-month]').forEach(row => {
+                    row.addEventListener('click', () => {
+                        state.year = row.dataset.year; state.month = row.dataset.month;
+                        state.page = 1; render(); scrollToGrid();
+                    });
+                });
+            }
+
+            const clearBtn = document.getElementById('cnfte-clear-filter');
+            if (clearBtn) {
+                clearBtn.addEventListener('click', () => {
+                    state.category = null; state.tag = null; state.year = null; state.month = null; state.page = 1;
+                    if (yearLevel && monthLevel) { monthLevel.style.display = 'none'; yearLevel.style.display = ''; }
+                    render();
+                });
+            }
+
+            render();
+        }
+
+        // ── 首次初始化（每个功能独立 try/catch，避免其中一个异常导致后面的
+        //    全部不执行——例如某些环境下 canvas/IntersectionObserver 不可用）──
+        function safeRun(fn) {
+            try { fn(); } catch (e) { console.warn('[cnfte-enhance]', fn.name || 'init', 'failed:', e); }
+        }
+
+        // 非首屏必需的效果（鼠标粒子跟随 / hero 打字机）延后到浏览器空闲时再启动，
+        // 不占用首次渲染的关键路径；不支持 requestIdleCallback 的环境（如 Safari）
+        // 退化为一个短 setTimeout，效果一致只是没有"真正空闲"的调度精度。
+        const cnfteIdle = window.requestIdleCallback || function (cb) { return setTimeout(cb, 120); };
+
+        safeRun(applyPersistedUI);
+        safeRun(bindSettingsPanel);
+        safeRun(bindBackToTop);
+        safeRun(initTagsHubView);
+        safeRun(initArchiveFilters);
+        cnfteIdle(() => { safeRun(initParticles); safeRun(initHeroTyping); }, { timeout: 800 });
+
+        // ── SPA 换页后重新应用（不需要改动原有 navigate()/reinitPage()）──
+        let debounceTimer;
+        cnfteObserver = new MutationObserver(() => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                safeRun(applyPersistedUI);
+                safeRun(bindSettingsPanel);
+                safeRun(bindBackToTop);
+                safeRun(initTagsHubView);
+                safeRun(initArchiveFilters);
+                cnfteIdle(() => safeRun(initHeroTyping), { timeout: 500 });
+            }, 40);
+        });
+        cnfteObserver.observe(document.body, { childList: true, subtree: true });
+    })();
+</script></body>
+
+</html>
