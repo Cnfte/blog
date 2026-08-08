@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Cnfteの博客</title>
+    <meta name="robots" content="noindex, follow">
+    <link rel="icon" href="/favicon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@400;700;900&display=swap"
+        rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript>
+        <link
+            href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@400;700;900&display=swap"
+            rel="stylesheet">
+    </noscript>
+    <style>
+        :root {
+            --bg: #06060f;
+            --glass: rgba(255, 255, 255, 0.055);
+            --border: rgba(255, 255, 255, 0.10);
+            --border-accent: #98ba9173;
+            --accent: #98ba91;
+            --accent2: #91ba9e;
+            --accent3: #ba91b3;
+            --grad: linear-gradient(135deg, #98ba91 0%, #91ba9e 100%);
+            --text: #e4e4ef;
+            --dim: #8a8a9a;
+            --ease-out: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Noto Sans SC', 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: -20%;
+            background: var(--grad);
+            opacity: .18;
+            filter: blur(80px);
+            z-index: -1;
+        }
+
+        .wrap {
+            max-width: 480px;
+        }
+
+        .code {
+            font-family: 'ZCOOL KuaiLe', sans-serif;
+            font-size: clamp(72px, 18vw, 140px);
+            line-height: 1;
+            margin: 0;
+            background: var(--grad);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: floaty 3.2s ease-in-out infinite;
+        }
+
+        @keyframes floaty {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        h1 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin: 4px 0 8px;
+        }
+
+        p {
+            color: var(--dim);
+            font-size: .9rem;
+            line-height: 1.7;
+            margin: 0 0 28px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 11px 22px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-size: .82rem;
+            font-weight: 600;
+            border: 1px solid var(--border);
+            background: var(--glass);
+            color: var(--text);
+            transition: transform .4s var(--ease-spring), border-color .2s, background .2s, box-shadow .3s var(--ease-out);
+            will-change: transform;
+        }
+
+        .btn:hover {
+            transform: translateY(-4px) scale(1.045);
+            border-color: var(--border-accent);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, .35);
+        }
+
+        .btn:active {
+            transform: translateY(-1px) scale(.94);
+            transition: transform .18s cubic-bezier(0.34, 1.2, 0.64, 1);
+        }
+
+        .btn.primary {
+            background: var(--grad);
+            border: none;
+            color: #0a0a12;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .code,
+            .btn {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <p class="code">404</p>
+        <h1>没找到这个页面</h1>
+        <p>链接可能已经失效，或者页面被移动 / 删除了。<br>要不回首页看看，或者搜索一下你要找的内容？</p>
+        <div class="actions">
+            <a href="/" class="btn primary">
+                <i class="fas fa-house" aria-hidden="true"></i> 回到首页
+            </a>
+            <a href="javascript:history.back()" class="btn">
+                <i class="fas fa-arrow-left" aria-hidden="true"></i> 返回上一页
+            </a>
+        </div>
+    </div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        crossorigin="anonymous">
+</body>
+
+</html>
