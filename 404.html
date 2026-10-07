@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Cnfteの博客</title>
+    <meta name="robots" content="noindex, follow">
+    <link rel="icon" href="https://www.img520.com/AVcrrd.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&display=swap"
+        rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&display=swap"
+            rel="stylesheet">
+    </noscript>
+    <style>
+        :root {
+            --font-heading: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans SC", "PingFang SC", sans-serif;
+            --bg: #06060f;
+            --glass: rgba(255, 255, 255, 0.055);
+            --border: rgba(255, 255, 255, 0.10);
+            --border-accent: #6490e873;
+            --accent: #6490e8;
+            --accent2: #7a64e8;
+            --accent3: #e8e864;
+            --grad: linear-gradient(135deg, #6490e8 0%, #7a64e8 100%);
+            --text: #e4e4ef;
+            --dim: #8a8a9a;
+            --ease-out: linear;
+            --ease-spring: linear;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Noto Sans SC', 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: -20%;
+            background: var(--grad);
+            opacity: .18;
+            filter: blur(16px);
+            z-index: -1;
+        }
+
+        .wrap {
+            max-width: 480px;
+        }
+
+        .code {
+            font-family: var(--font-heading);
+            font-size: clamp(72px, 18vw, 140px);
+            line-height: 1;
+            margin: 0;
+            background: var(--grad);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: floaty 3.2s ease-in-out infinite;
+        }
+
+        @keyframes floaty {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        h1 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin: 4px 0 8px;
+        }
+
+        p {
+            color: var(--dim);
+            font-size: .9rem;
+            line-height: 1.7;
+            margin: 0 0 28px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 11px 22px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-size: .82rem;
+            font-weight: 600;
+            border: 1px solid var(--border);
+            background: var(--glass);
+            color: var(--text);
+            transition: transform .4s var(--ease-spring), border-color .2s, background .2s, box-shadow .3s var(--ease-out);
+            will-change: transform;
+        }
+
+        .btn:hover {
+            transform: translateY(-4px) scale(1.045);
+            border-color: var(--border-accent);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, .35);
+        }
+
+        .btn:active {
+            transform: translateY(-1px) scale(.94);
+            transition: transform .18s linear;
+        }
+
+        .btn.primary {
+            background: var(--grad);
+            background-size: 220% 220%;
+            background-position: 0% 50%;
+            border: none;
+            color: #0a0a12;
+            transition: transform .4s var(--ease-spring), border-color .2s, background-position .6s var(--ease-out), box-shadow .3s var(--ease-out);
+        }
+
+        .btn.primary:hover {
+            background-position: 100% 50%;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            .code,
+            .btn {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+    
+    .svg-icon {
+        width: 1em;
+        height: 1em;
+        vertical-align: -0.15em;
+        display: inline-block;
+        flex-shrink: 0;
+    }
+    .svg-icon[fill="none"] {
+        stroke: currentColor;
+    }
+
+    
+        @media (prefers-reduced-transparency: reduce) {
+            .bg-overlay, nav, .card, .widget, .post-card, .notice-box, .profile-card, #cnfte-settings-panel, .nav-menu-panel, .modal {
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+                background: #0d0f18 !important;
+            }
+        }
+        
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <p class="code">404</p>
+        <h1>没找到这个页面</h1>
+        <p>链接可能已经失效，或者页面被移动 / 删除了。<br>要不回首页看看，或者搜索一下你要找的内容？</p>
+        <div class="actions">
+            <a href="/" class="btn primary">
+                <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> 回到首页
+            </a>
+            <a href="javascript:history.back()" class="btn">
+                <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> 返回上一页
+            </a>
+        </div>
+    </div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        crossorigin="anonymous">
+</body>
+
+</html>
