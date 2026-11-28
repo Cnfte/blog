@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Cnfteの博客</title>
+    <meta name="robots" content="noindex, follow">
+    <link rel="icon" href="https://www.img520.com/AVcrrd.jpg">
+    <style>
+        :root {
+            --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", system-ui, sans-serif;
+            --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", system-ui, sans-serif;
+            --bg: #0b0b0e;
+            --accent: #6490e8;
+            --accent2: #7a64e8;
+            --label-primary: rgba(255, 255, 255, 0.96);
+            --label-secondary: rgba(235, 235, 245, 0.66);
+            --glass-surface: rgba(30, 30, 34, 0.72);
+            --glass-border: rgba(255, 255, 255, 0.16);
+            --glass-rim: inset 0 1px 0 rgba(255, 255, 255, 0.24), inset 0 -0.5px 0 rgba(255, 255, 255, 0.06);
+            --ease-spring: cubic-bezier(0.34, 1.48, 0.64, 1);
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body { height: 100%; }
+
+        body {
+            font-family: var(--font-text);
+            background: var(--bg);
+            color: var(--label-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .wrap {
+            width: min(460px, 100%);
+            padding: 40px 32px 36px;
+            border-radius: 28px;
+            background: var(--glass-surface);
+            backdrop-filter: blur(36px) saturate(200%);
+            -webkit-backdrop-filter: blur(36px) saturate(200%);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-rim), 0 28px 72px rgba(0, 0, 0, 0.56);
+            animation: cardIn .55s var(--ease-out) both;
+        }
+
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(16px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .code {
+            font-family: var(--font-display);
+            font-size: clamp(68px, 16vw, 112px);
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            line-height: 1;
+            margin-bottom: 12px;
+            color: #fff;
+            font-variant-numeric: tabular-nums;
+        }
+
+        h1 {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 650;
+            letter-spacing: -0.015em;
+            margin-bottom: 10px;
+            color: var(--label-primary);
+        }
+
+        p {
+            color: var(--label-secondary);
+            font-size: 0.92rem;
+            line-height: 1.65;
+            margin-bottom: 28px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            min-height: 44px;
+            padding: 0 22px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            background: rgba(120, 120, 128, 0.24);
+            color: var(--label-primary);
+            transition: transform .28s var(--ease-spring), background .2s, border-color .2s;
+        }
+
+        .btn:hover {
+            background: rgba(120, 120, 128, 0.36);
+            border-color: rgba(255, 255, 255, 0.24);
+            transform: translateY(-2px);
+        }
+
+        .btn:active { transform: scale(0.95); }
+
+        .btn.primary {
+            background: var(--accent);
+            border-color: transparent;
+            color: #0b0b0e;
+            box-shadow: 0 6px 20px color-mix(in srgb, var(--accent) 36%, transparent);
+        }
+
+        .btn.primary:hover {
+            background: var(--accent);
+            filter: brightness(1.08);
+        }
+
+        .svg-icon {
+            width: 1em;
+            height: 1em;
+            vertical-align: -0.15em;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .wrap, .btn { animation: none !important; transition: none !important; }
+        }
+
+        @media (prefers-reduced-transparency: reduce) {
+            .wrap {
+                backdrop-filter: none !important;
+                -webkit-backdrop-filter: none !important;
+                background: #1c1c1e !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <p class="code">404</p>
+        <h1>没找到这个页面</h1>
+        <p>链接可能已经失效，或者页面被移动 / 删除了。<br>要不回首页看看，或者返回上一页？</p>
+        <div class="actions">
+            <a href="/" class="btn primary">
+                <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> 回到首页
+            </a>
+            <a href="javascript:history.back()" class="btn">
+                <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> 返回上一页
+            </a>
+        </div>
+    </div>
+</body>
+
+</html>
